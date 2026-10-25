@@ -1,0 +1,114 @@
+# The Ultimate Nullifier [1.2.2]
+# by robber804
+streaming:
+  sectors:
+    ##########################################################
+    # [Westbrook - Near Paralez, big crates in the road]
+    ##########################################################
+    - path: base\worlds\03_night_city\_compiled\default\exterior_0_-2_0_0.streamingsector
+      expectedNodes: 455
+      nodeDeletions:
+        - index: 212
+          type: worldEntityNode
+          debugName: "disposal_device_crate_001"
+        - index: 211
+          type: worldEntityNode
+          debugName: "disposal_device_crate_004"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_1_-1_0_0.streamingsector
+      expectedNodes: 384
+      nodeDeletions:
+        - index: 131
+          type: worldEntityNode
+          debugName: "disposal_device_crate_003"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_0_-1_0_0.streamingsector
+      expectedNodes: 435
+      nodeDeletions:
+        - index: 167
+          type: worldEntityNode
+          debugName: "disposal_device_crate"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_1_-2_0_0.streamingsector
+      expectedNodes: 387
+      nodeDeletions:
+        - index: 125
+          type: worldEntityNode
+          debugName: "disposal_device_crate_002"
+    ##########################################################
+    # [GIM]
+    ##########################################################
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-5_-5_0_3.streamingsector
+      expectedNodes: 1237
+      nodeDeletions:
+        - index: 1263
+          type: worldGenericProxyMeshNode
+          debugName: "{q110_mall_front_door}_ProxyMesh"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-9_-9_0_2.streamingsector
+      expectedNodes: 1257
+      nodeDeletions:
+        - index: 1250
+          type: worldEntityProxyMeshNode
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-36_-33_0_0.streamingsector
+      expectedNodes: 1926
+      nodeDeletions:
+        - index: 1855
+          type: worldEntityNode
+    ##########################################################
+    # [Kabuki Fake Lights]
+    ##########################################################
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-10_15_0_1.streamingsector
+      expectedNodes: 2600 
+      nodeDeletions:
+        - index: 952
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}03"
+        - index: 953
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}02"
+        - index: 954
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}01"
+        - index: 955
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}04"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-10_16_0_1.streamingsector
+      expectedNodes: 2418 
+      nodeDeletions:
+        - index: 645
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}05"
+        - index: 646
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}06"
+        - index: 647
+          type: worldStaticLightNode
+          debugName: "{L_Zapiekanki_Main_Buildings_}07"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-19_31_0_0.streamingsector
+      expectedNodes: 5051
+      nodeDeletions:
+        - index: 768
+          type: worldStaticLightNode
+          debugName: "{L_portal_tunnel}"
+    ##########################################################
+    # [Pacifica]
+    ##########################################################
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-38_-34_0_0.streamingsector
+      expectedNodes: 1084
+      nodeDeletions:
+        - index: 169
+          type: worldStaticLightNode
+          debugName: "light_096"
+    - path: base\worlds\03_night_city\_compiled\default\ep1\exterior_-40_-39_0_0.streamingsector
+      expectedNodes: 287
+      nodeDeletions:
+        - index: 50
+          type: worldStaticLightNode
+          debugName: "{GIoutside}_001"
+    - path: base\worlds\03_night_city\_compiled\default\exterior_-29_-31_0_0.streamingsector
+      expectedNodes: 2122
+      nodeDeletions:
+        - index: 267
+          type: worldStaticLightNode
+          debugName: "{spot_}_054"
+        - index: 281
+          type: worldStaticLightNode
+          debugName: "{spot_}_044"
+

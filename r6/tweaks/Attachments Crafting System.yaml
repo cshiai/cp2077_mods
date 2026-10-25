@@ -1,0 +1,815 @@
+Items.$(instance):
+  $instances:
+    - { instance: WeaponScopeBase }
+    - { instance: WeaponScopeRailBase }
+    - { instance: Base_Long_Scope }
+    - { instance: Base_Short_Scope }
+    - { instance: Base_Sniper_Scope }
+    - { instance: w_att_scope_short_03 }
+    - { instance: w_att_scope_short_03_Craftable }
+    - { instance: w_att_scope_short_03_Generated }
+    - { instance: w_att_scope_long_03 }
+    - { instance: w_att_scope_short_04 }
+    - { instance: w_att_scope_long_02 }
+    - { instance: w_att_scope_long_02_Craftable }
+    - { instance: w_att_scope_long_02_Generated }
+    - { instance: w_att_scope_sniper_02 }
+    - { instance: w_att_scope_sniper_02_Common }
+    - { instance: w_att_scope_sniper_02_Uncommon }
+    - { instance: w_att_scope_sniper_02_Rare }
+    - { instance: w_att_scope_sniper_02_Epic }
+    - { instance: w_att_scope_sniper_02_Legendary }
+    - { instance: w_att_scope_sniper_03 }
+    - { instance: w_att_scope_sniper_03_legendary }
+    - { instance: w_att_scope_long_01 }
+    - { instance: w_att_scope_long_01_Generated }
+    - { instance: w_att_scope_short_06 }
+    - { instance: w_att_scope_short_06_Craftable }
+    - { instance: w_att_scope_short_06_Generated }
+    - { instance: w_att_scope_short_06_legendary }
+    - { instance: w_att_scope_sniper_01 }
+    - { instance: w_att_scope_sniper_01_Common }
+    - { instance: w_att_scope_sniper_01_Uncommon }
+    - { instance: w_att_scope_sniper_01_Rare }
+    - { instance: w_att_scope_sniper_01_Epic }
+    - { instance: w_att_scope_sniper_01_Legendary }
+    - { instance: w_att_scope_sniper_01_legendary }
+    - { instance: w_att_scope_short_02 }
+    - { instance: w_att_scope_long_05 }
+    - { instance: w_att_scope_long_05_legendary }
+    - { instance: w_att_scope_long_06 }
+    - { instance: w_att_scope_short_07 }
+    - { instance: w_att_scope_short_07_legendary }
+    - { instance: w_att_scope_short_01 }
+    - { instance: w_att_scope_short_01_Craftable }
+    - { instance: w_att_scope_short_01_Generated }
+    - { instance: w_att_scope_long_04 }
+    - { instance: w_att_scope_long_04_legendary }
+    - { instance: w_att_scope_short_05 }
+    - { instance: MuzzleBrakeBase }
+    - { instance: w_muzzle_brake_05 }
+    - { instance: w_muzzle_brake_10 }
+    - { instance: w_muzzle_brake_10_legendary }
+    - { instance: w_muzzle_brake_09 }
+    - { instance: w_muzzle_brake_09_Craftable }
+    - { instance: w_muzzle_brake_09_legendary }
+    - { instance: w_muzzle_brake_06 }
+    - { instance: w_muzzle_brake_08 }
+    - { instance: w_muzzle_brake_11 }
+    - { instance: w_muzzle_brake_01 }
+    - { instance: w_muzzle_brake_01_Craftable }
+    - { instance: w_muzzle_brake_01_legendary }
+    - { instance: w_muzzle_brake_03 }
+    - { instance: w_muzzle_brake_03_legendary }
+    - { instance: w_muzzle_brake_07 }
+    - { instance: w_muzzle_brake_02 }
+    - { instance: SilencerBase }
+    - { instance: w_handgun_silencer }
+    - { instance: w_silencer_01 }
+    - { instance: w_silencer_01_Craftable }
+    - { instance: w_silencer_04 }
+    - { instance: w_silencer_03 }
+    - { instance: w_silencer_03_legendary }
+    - { instance: w_silencer_02 }
+  tags:
+    - !append-once SkipActivityLog
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_03, prevTier: Epic, currentTier: Legendary }
+  $base: Items.$(instance)_legendary
+  quality: Quality.$(currentTier)
+  statModifierGroups:
+    - !remove Items.QualityRandomization_Attachments
+    - !remove Items.QualityRandomization_Attachments_Rare_to_Epic
+  tags:
+    - !append-once CraftableAndUpgradableScopes
+    - !remove SkipActivityLog
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_03, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_06, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_06, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_long_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_02, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_long_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_02, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_03, prevTier: Rare, currentTier: Epic }
+  $base: Items.$(instance)
+  quality: Quality.$(currentTier)
+  statModifierGroups:
+    - !remove Items.QualityRandomization_Attachments
+    - !remove Items.QualityRandomization_Attachments_Rare_to_Epic
+  tags:
+    - !append-once CraftableAndUpgradableScopes
+    - !remove SkipActivityLog
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_long_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_02, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_03, prevTier: Rare, currentTier: Epic }
+  CraftingData:
+      $type: gamedataCraftingPackage_Record
+      craftingExpModifier: 1.0
+      overcraftPenaltyModifier: 1.0
+      craftingRecipe:
+        - $type: gamedataRecipeElement_Record
+          amount: 10
+          ingredient: Items.$(currentTier)Material1
+  OnLooted:
+    - $type: gamedataGameplayLogicPackage_Record
+      items:
+        - $type: gamedataInventoryItem_Record
+          chanceInCrowd: 0
+          item:
+              $type: gamedataItemRecipe_Record
+              craftingResult:
+                  $type: gamedataCraftingResult_Record
+                  amount: 1
+                  item: Items.$(instance)_$(currentTier)
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_06, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_03, prevTier: Epic, currentTier: Legendary }
+  CraftingData:
+      $type: gamedataCraftingPackage_Record
+      craftingExpModifier: 1.0
+      overcraftPenaltyModifier: 1.0
+      craftingRecipe:
+        - $type: gamedataRecipeElement_Record
+          amount: 2
+          ingredient: Items.$(instance)_$(prevTier)
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_01, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_short_01, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_short_01, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_short_01, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_02, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_short_02, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_03, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_short_03, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_short_03, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_short_03, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_04, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_short_04, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_05, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_06, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_short_06, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_short_06, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_short_06, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_short_07, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_01, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_long_01, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_long_01, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_long_01, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_02, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_long_02, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_long_02, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_long_02, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_03, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_long_03, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_04, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_05, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_long_06, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_long_06, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_sniper_01, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_sniper_01, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_01, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_sniper_01, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_sniper_02, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_att_scope_sniper_02, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_02, nextTier: Epic, currentTier: Rare }
+    - {instance: w_att_scope_sniper_02, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_att_scope_sniper_03, nextTier: Legendary, currentTier: Epic }
+  OnLooted:
+    - $type: gamedataGameplayLogicPackage_Record
+      items:
+        - $type: gamedataInventoryItem_Record
+          chanceInCrowd: 0
+          item:
+              $type: gamedataItemRecipe_Record
+              craftingResult:
+                  $type: gamedataCraftingResult_Record
+                  amount: 1
+                  item: Items.$(instance)_$(nextTier)
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_09, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_10, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_03, prevTier: Epic, currentTier: Legendary }
+  $base: Items.$(instance)_legendary
+  quality: Quality.$(currentTier)
+  statModifierGroups:
+    - !remove Items.QualityRandomization_Attachments
+    - !remove Items.QualityRandomization_Attachments_Rare_to_Epic
+  tags:
+    - !append-once CraftableAndUpgradableScopes
+    - !remove SkipActivityLog
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_01, prevTier: None, currentTier: Common }
+    - {instance: w_silencer_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_silencer_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_07, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_08, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_08, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_08, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_09, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_09, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_09, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_09, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_10, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_10, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_10, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_10, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_11, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_11, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_01, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_03, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_06, prevTier: Epic, currentTier: Legendary }
+  $base: Items.$(instance)
+  quality: Quality.$(currentTier)
+  statModifierGroups:
+    - !remove Items.QualityRandomization_Attachments
+    - !remove Items.QualityRandomization_Attachments_Rare_to_Epic
+  tags:
+    - !append-once CraftableAndUpgradableScopes
+    - !remove SkipActivityLog
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_07, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_08, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_10, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_11, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_03, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_06, prevTier: Uncommon, currentTier: Rare }
+  CraftingData:
+      $type: gamedataCraftingPackage_Record
+      craftingExpModifier: 1.0
+      overcraftPenaltyModifier: 1.0
+      craftingRecipe:
+        - $type: gamedataRecipeElement_Record
+          amount: 10
+          ingredient: Items.$(currentTier)Material1
+  OnLooted:
+    - $type: gamedataGameplayLogicPackage_Record
+      items:
+        - $type: gamedataInventoryItem_Record
+          chanceInCrowd: 0
+          item:
+              $type: gamedataItemRecipe_Record
+              craftingResult:
+                  $type: gamedataCraftingResult_Record
+                  amount: 1
+                  item: Items.$(instance)_$(currentTier)
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_silencer_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_08, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_08, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_09, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_09, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_09, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_09, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_10, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_10, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_10, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_10, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_11, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_06, prevTier: Epic, currentTier: Legendary }
+  CraftingData:
+      $type: gamedataCraftingPackage_Record
+      craftingExpModifier: 1.0
+      overcraftPenaltyModifier: 1.0
+      craftingRecipe:
+        - $type: gamedataRecipeElement_Record
+          amount: 2
+          ingredient: Items.$(instance)_$(prevTier)
+
+Items.$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_01, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_silencer_01, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_silencer_01, nextTier: Epic, currentTier: Rare }
+    - {instance: w_silencer_01, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_silencer_02, nextTier: Epic, currentTier: Rare }
+    - {instance: w_silencer_02, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_silencer_03, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_silencer_04, nextTier: Epic, currentTier: Rare }
+    - {instance: w_silencer_04, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_07, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_07, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_08, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_08, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_09, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_muzzle_brake_09, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_09, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_09, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_10, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_muzzle_brake_10, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_10, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_10, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_11, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_01, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_muzzle_brake_01, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_01, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_01, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_muzzle_brake_02, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_02, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_02, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_03, nextTier: Uncommon, currentTier: Common }
+    - {instance: w_muzzle_brake_03, nextTier: Rare, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_03, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_03, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_05, nextTier: Legendary, currentTier: Epic }
+    - {instance: w_muzzle_brake_06, nextTier: Epic, currentTier: Rare }
+    - {instance: w_muzzle_brake_06, nextTier: Legendary, currentTier: Epic }
+  OnLooted:
+    - $type: gamedataGameplayLogicPackage_Record
+      items:
+        - $type: gamedataInventoryItem_Record
+          chanceInCrowd: 0
+          item:
+              $type: gamedataItemRecipe_Record
+              craftingResult:
+                  $type: gamedataCraftingResult_Record
+                  amount: 1
+                  item: Items.$(instance)_$(nextTier)
+
+Items.HandgunPCL_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_03, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_06, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_06, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_07, prevTier: Rare, currentTier: Epic }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.HandgunPossibleScopesList.itemPartList:
+  - !append-once Items.HandgunPCL_w_att_scope_short_06_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_07_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_01_Common
+  - !append-once Items.HandgunPCL_w_att_scope_short_01_Uncommon
+  - !append-once Items.HandgunPCL_w_att_scope_short_01_Rare
+  - !append-once Items.HandgunPCL_w_att_scope_short_01_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_01_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_02_Rare
+  - !append-once Items.HandgunPCL_w_att_scope_short_02_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_02_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_03_Common
+  - !append-once Items.HandgunPCL_w_att_scope_short_03_Uncommon
+  - !append-once Items.HandgunPCL_w_att_scope_short_03_Rare
+  - !append-once Items.HandgunPCL_w_att_scope_short_03_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_03_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_04_Rare
+  - !append-once Items.HandgunPCL_w_att_scope_short_04_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_04_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_05_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_05_Legendary
+  - !append-once Items.HandgunPCL_w_att_scope_short_06_Common
+  - !append-once Items.HandgunPCL_w_att_scope_short_06_Uncommon
+  - !append-once Items.HandgunPCL_w_att_scope_short_06_Rare
+  - !append-once Items.HandgunPCL_w_att_scope_short_06_Epic
+  - !append-once Items.HandgunPCL_w_att_scope_short_07_Epic
+
+Items.GradPCL_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_sniper_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_01, prevTier: Rare, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.GradPossibleScopesList.itemPartList:
+  - !append-once Items.GradPCL_w_att_scope_sniper_01_Common
+  - !append-once Items.GradPCL_w_att_scope_sniper_01_Uncommon
+  - !append-once Items.GradPCL_w_att_scope_sniper_01_Rare
+  - !append-once Items.GradPCL_w_att_scope_sniper_01_Epic
+  - !append-once Items.GradPCL_w_att_scope_sniper_01_Legendary
+
+Items.NekomataPCL_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_sniper_02, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_sniper_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_sniper_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_sniper_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_sniper_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_sniper_03, prevTier: Epic, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.NekomataPossibleScopesList.itemPartList:
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_02_Common
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_02_Uncommon
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_02_Rare
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_02_Epic
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_02_Legendary
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_03_Epic
+  - !append-once Items.NekomataPCL_w_att_scope_sniper_03_Legendary
+
+Items.RiflePCL_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_att_scope_short_06, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_03, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_04, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_short_06, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_short_06, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_short_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_short_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_short_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_long_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_02, prevTier: None, currentTier: Common }
+    - {instance: w_att_scope_long_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_att_scope_long_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_att_scope_long_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_att_scope_long_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_att_scope_long_06, prevTier: Epic, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.RiflePossibleScopesList.itemPartList:
+  - !append-once Items.RiflePCL_w_att_scope_short_06_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_07_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_long_04_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_long_05_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_01_Common
+  - !append-once Items.RiflePCL_w_att_scope_short_01_Uncommon
+  - !append-once Items.RiflePCL_w_att_scope_short_01_Rare
+  - !append-once Items.RiflePCL_w_att_scope_short_01_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_01_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_02_Rare
+  - !append-once Items.RiflePCL_w_att_scope_short_02_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_02_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_03_Common
+  - !append-once Items.RiflePCL_w_att_scope_short_03_Uncommon
+  - !append-once Items.RiflePCL_w_att_scope_short_03_Rare
+  - !append-once Items.RiflePCL_w_att_scope_short_03_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_03_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_04_Rare
+  - !append-once Items.RiflePCL_w_att_scope_short_04_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_04_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_05_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_05_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_short_06_Common
+  - !append-once Items.RiflePCL_w_att_scope_short_06_Uncommon
+  - !append-once Items.RiflePCL_w_att_scope_short_06_Rare
+  - !append-once Items.RiflePCL_w_att_scope_short_06_Epic
+  - !append-once Items.RiflePCL_w_att_scope_short_07_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_01_Common
+  - !append-once Items.RiflePCL_w_att_scope_long_01_Uncommon
+  - !append-once Items.RiflePCL_w_att_scope_long_01_Rare
+  - !append-once Items.RiflePCL_w_att_scope_long_01_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_01_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_long_02_Common
+  - !append-once Items.RiflePCL_w_att_scope_long_02_Uncommon
+  - !append-once Items.RiflePCL_w_att_scope_long_02_Rare
+  - !append-once Items.RiflePCL_w_att_scope_long_02_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_02_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_long_03_Rare
+  - !append-once Items.RiflePCL_w_att_scope_long_03_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_03_Legendary
+  - !append-once Items.RiflePCL_w_att_scope_long_04_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_05_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_06_Rare
+  - !append-once Items.RiflePCL_w_att_scope_long_06_Epic
+  - !append-once Items.RiflePCL_w_att_scope_long_06_Legendary
+
+Items.HandgunPML_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_muzzle_brake_09, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_10, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_07, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_07, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_07, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_08, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_08, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_08, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_09, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_09, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_09, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_09, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_10, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_10, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_10, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_10, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_11, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_11, prevTier: Epic, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.HandgunPossibleMuzzleBraksList.itemPartList:
+  - !append-once Items.HandgunPML_w_muzzle_brake_09_Legendary
+  - !append-once Items.HandgunPML_w_muzzle_brake_10_Legendary
+  - !append-once Items.HandgunPML_w_muzzle_brake_07_Rare
+  - !append-once Items.HandgunPML_w_muzzle_brake_07_Epic
+  - !append-once Items.HandgunPML_w_muzzle_brake_07_Legendary
+  - !append-once Items.HandgunPML_w_muzzle_brake_08_Rare
+  - !append-once Items.HandgunPML_w_muzzle_brake_08_Epic
+  - !append-once Items.HandgunPML_w_muzzle_brake_08_Legendary
+  - !append-once Items.HandgunPML_w_muzzle_brake_09_Common
+  - !append-once Items.HandgunPML_w_muzzle_brake_09_Uncommon
+  - !append-once Items.HandgunPML_w_muzzle_brake_09_Rare
+  - !append-once Items.HandgunPML_w_muzzle_brake_09_Epic
+  - !append-once Items.HandgunPML_w_muzzle_brake_10_Common
+  - !append-once Items.HandgunPML_w_muzzle_brake_10_Uncommon
+  - !append-once Items.HandgunPML_w_muzzle_brake_10_Rare
+  - !append-once Items.HandgunPML_w_muzzle_brake_10_Epic
+  - !append-once Items.HandgunPML_w_muzzle_brake_11_Epic
+  - !append-once Items.HandgunPML_w_muzzle_brake_11_Legendary
+
+Items.RangedWeaponPML_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_silencer_01, prevTier: None, currentTier: Common }
+    - {instance: w_silencer_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_silencer_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_silencer_04, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_silencer_04, prevTier: Rare, currentTier: Epic }
+    - {instance: w_silencer_04, prevTier: Epic, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.RangedWeaponPossibleMuzzleList.itemPartList:
+  - !append-once Items.RangedWeaponPML_w_silencer_01_Common
+  - !append-once Items.RangedWeaponPML_w_silencer_01_Uncommon
+  - !append-once Items.RangedWeaponPML_w_silencer_01_Rare
+  - !append-once Items.RangedWeaponPML_w_silencer_01_Epic
+  - !append-once Items.RangedWeaponPML_w_silencer_01_Legendary
+  - !append-once Items.RangedWeaponPML_w_silencer_02_Rare
+  - !append-once Items.RangedWeaponPML_w_silencer_02_Epic
+  - !append-once Items.RangedWeaponPML_w_silencer_02_Legendary
+  - !append-once Items.RangedWeaponPML_w_silencer_03_Epic
+  - !append-once Items.RangedWeaponPML_w_silencer_03_Legendary
+  - !append-once Items.RangedWeaponPML_w_silencer_04_Rare
+  - !append-once Items.RangedWeaponPML_w_silencer_04_Epic
+  - !append-once Items.RangedWeaponPML_w_silencer_04_Legendary
+
+Items.RiflePML_$(instance)_$(currentTier):
+  $instances:
+    - {instance: w_muzzle_brake_01, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_01, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_01, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_01, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_01, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_02, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_02, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_02, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_02, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_02, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_03, prevTier: None, currentTier: Common }
+    - {instance: w_muzzle_brake_03, prevTier: Common, currentTier: Uncommon }
+    - {instance: w_muzzle_brake_03, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_03, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_03, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_05, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_05, prevTier: Epic, currentTier: Legendary }
+    - {instance: w_muzzle_brake_06, prevTier: Uncommon, currentTier: Rare }
+    - {instance: w_muzzle_brake_06, prevTier: Rare, currentTier: Epic }
+    - {instance: w_muzzle_brake_06, prevTier: Epic, currentTier: Legendary }
+  $base: Items.HandgunPossibleScopesList_inline0
+  item: Items.$(instance)_$(currentTier)
+
+Items.RiflePossibleMuzzleBrakeList.itemPartList:
+  - !append-once Items.RiflePML_w_muzzle_brake_01_Common
+  - !append-once Items.RiflePML_w_muzzle_brake_01_Uncommon
+  - !append-once Items.RiflePML_w_muzzle_brake_01_Rare
+  - !append-once Items.RiflePML_w_muzzle_brake_01_Epic
+  - !append-once Items.RiflePML_w_muzzle_brake_01_Legendary
+  - !append-once Items.RiflePML_w_muzzle_brake_02_Common
+  - !append-once Items.RiflePML_w_muzzle_brake_02_Uncommon
+  - !append-once Items.RiflePML_w_muzzle_brake_02_Rare
+  - !append-once Items.RiflePML_w_muzzle_brake_02_Epic
+  - !append-once Items.RiflePML_w_muzzle_brake_02_Legendary
+  - !append-once Items.RiflePML_w_muzzle_brake_03_Common
+  - !append-once Items.RiflePML_w_muzzle_brake_03_Uncommon
+  - !append-once Items.RiflePML_w_muzzle_brake_03_Rare
+  - !append-once Items.RiflePML_w_muzzle_brake_03_Epic
+  - !append-once Items.RiflePML_w_muzzle_brake_03_Legendary
+  - !append-once Items.RiflePML_w_muzzle_brake_05_Epic
+  - !append-once Items.RiflePML_w_muzzle_brake_05_Legendary
+  - !append-once Items.RiflePML_w_muzzle_brake_06_Rare
+  - !append-once Items.RiflePML_w_muzzle_brake_06_Epic
+  - !append-once Items.RiflePML_w_muzzle_brake_06_Legendary

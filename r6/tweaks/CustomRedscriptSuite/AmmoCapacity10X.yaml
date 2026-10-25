@@ -1,0 +1,6 @@
+# 10x+ Reserve Ammo Capacity (surpassing 999 for all ammo types)
+# BaseStats.Quantity on every item starts at 1.0; Ammo.*_inline0 adds to Quantity.
+Ammo.HandgunAmmo_inline0.value: 8999.0
+Ammo.RifleAmmo_inline0.value: 8999.0
+Ammo.ShotgunAmmo_inline0.value: 1499.0
+Ammo.SniperRifleAmmo_inline0.value: 1199.0

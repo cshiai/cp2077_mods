@@ -1,0 +1,1930 @@
+# Power_AR_SMG_LMG======================================================
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod3:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod3
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod4:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod4
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod5:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod5
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod6:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod6
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod7:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod7
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod8:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod8
+
+Items.Power_AR_SMG_LMG_WeaponMod3Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod3
+
+Items.Power_AR_SMG_LMG_WeaponMod4Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod4
+
+Items.Power_AR_SMG_LMG_WeaponMod5Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod5
+
+Items.Power_AR_SMG_LMG_WeaponMod6Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod6
+
+Items.Power_AR_SMG_LMG_WeaponMod7Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod7
+
+Items.Power_AR_SMG_LMG_WeaponMod8Element:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod8
+
+# Tech_AR_SMG_LMG======================================================
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod3:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod3
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod4:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod4
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod5:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod5
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod6:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod6
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod7:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod7
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod8:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod8
+
+Items.Tech_AR_SMG_LMG_WeaponMod3Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod3
+
+Items.Tech_AR_SMG_LMG_WeaponMod4Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod4
+
+Items.Tech_AR_SMG_LMG_WeaponMod5Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod5
+
+Items.Tech_AR_SMG_LMG_WeaponMod6Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod6
+
+Items.Tech_AR_SMG_LMG_WeaponMod7Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod7
+
+Items.Tech_AR_SMG_LMG_WeaponMod8Element:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod8
+
+# Smart_AR_SMG_LMG======================================================
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod3:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod3
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod4:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod4
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod5:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod5
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod6:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod6
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod7:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod7
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod8:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod8
+
+Items.Smart_AR_SMG_LMG_WeaponMod3Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod3
+
+Items.Smart_AR_SMG_LMG_WeaponMod4Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod4
+
+Items.Smart_AR_SMG_LMG_WeaponMod5Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod5
+
+Items.Smart_AR_SMG_LMG_WeaponMod6Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod6
+
+Items.Smart_AR_SMG_LMG_WeaponMod7Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod7
+
+Items.Smart_AR_SMG_LMG_WeaponMod8Element:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod8
+
+# Power_Handgun======================================================
+
+AttachmentSlots.Power_Handgun_WeaponMod3:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod3
+
+AttachmentSlots.Power_Handgun_WeaponMod4:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod4
+
+AttachmentSlots.Power_Handgun_WeaponMod5:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod5
+
+AttachmentSlots.Power_Handgun_WeaponMod6:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod6
+
+AttachmentSlots.Power_Handgun_WeaponMod7:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod7
+
+AttachmentSlots.Power_Handgun_WeaponMod8:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod8
+
+Items.Power_Handgun_WeaponMod3Element:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod3
+
+Items.Power_Handgun_WeaponMod4Element:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod4
+
+Items.Power_Handgun_WeaponMod5Element:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod5
+
+Items.Power_Handgun_WeaponMod6Element:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod6
+
+Items.Power_Handgun_WeaponMod7Element:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod7
+
+Items.Power_Handgun_WeaponMod8Element:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod8
+
+# Tech_Handgun======================================================
+
+AttachmentSlots.Tech_Handgun_WeaponMod5:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod5
+
+AttachmentSlots.Tech_Handgun_WeaponMod6:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod6
+
+AttachmentSlots.Tech_Handgun_WeaponMod7:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod7
+
+AttachmentSlots.Tech_Handgun_WeaponMod8:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod8
+
+Items.Tech_Handgun_WeaponMod3Element:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod3
+
+Items.Tech_Handgun_WeaponMod4Element:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod4
+
+Items.Tech_Handgun_WeaponMod5Element:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod5
+
+Items.Tech_Handgun_WeaponMod6Element:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod6
+
+Items.Tech_Handgun_WeaponMod7Element:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod7
+
+Items.Tech_Handgun_WeaponMod8Element:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod8
+
+# Smart_Handgun======================================================
+
+AttachmentSlots.Smart_Handgun_WeaponMod3:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod3
+
+AttachmentSlots.Smart_Handgun_WeaponMod4:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod4
+
+AttachmentSlots.Smart_Handgun_WeaponMod5:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod5
+
+AttachmentSlots.Smart_Handgun_WeaponMod6:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod6
+
+AttachmentSlots.Smart_Handgun_WeaponMod7:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod7
+
+AttachmentSlots.Smart_Handgun_WeaponMod8:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod8
+
+Items.Smart_Handgun_WeaponMod3Element:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod3
+
+Items.Smart_Handgun_WeaponMod4Element:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod4
+
+Items.Smart_Handgun_WeaponMod5Element:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod5
+
+Items.Smart_Handgun_WeaponMod6Element:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod6
+
+Items.Smart_Handgun_WeaponMod7Element:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod7
+
+Items.Smart_Handgun_WeaponMod8Element:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod8
+
+# Power_Shotgun======================================================
+
+AttachmentSlots.Power_Shotgun_WeaponMod3:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod3
+
+AttachmentSlots.Power_Shotgun_WeaponMod4:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod4
+
+AttachmentSlots.Power_Shotgun_WeaponMod5:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod5
+
+AttachmentSlots.Power_Shotgun_WeaponMod6:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod6
+
+AttachmentSlots.Power_Shotgun_WeaponMod7:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod7
+
+AttachmentSlots.Power_Shotgun_WeaponMod8:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod8
+
+Items.Power_Shotgun_WeaponMod3Element:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod3
+
+Items.Power_Shotgun_WeaponMod4Element:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod4
+
+Items.Power_Shotgun_WeaponMod5Element:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod5
+
+Items.Power_Shotgun_WeaponMod6Element:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod6
+
+Items.Power_Shotgun_WeaponMod7Element:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod7
+
+Items.Power_Shotgun_WeaponMod8Element:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod8
+
+# Tech_Shotgun======================================================
+
+AttachmentSlots.Tech_Shotgun_WeaponMod3:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod3
+
+AttachmentSlots.Tech_Shotgun_WeaponMod4:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod4
+
+AttachmentSlots.Tech_Shotgun_WeaponMod5:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod5
+
+AttachmentSlots.Tech_Shotgun_WeaponMod6:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod6
+
+AttachmentSlots.Tech_Shotgun_WeaponMod7:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod7
+
+AttachmentSlots.Tech_Shotgun_WeaponMod8:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod8
+
+Items.Tech_Shotgun_WeaponMod3Element:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod3
+
+Items.Tech_Shotgun_WeaponMod4Element:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod4
+
+Items.Tech_Shotgun_WeaponMod5Element:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod5
+
+Items.Tech_Shotgun_WeaponMod6Element:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod6
+
+Items.Tech_Shotgun_WeaponMod7Element:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod7
+
+Items.Tech_Shotgun_WeaponMod8Element:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod8
+
+# Smart_Shotgun======================================================
+
+AttachmentSlots.Smart_Shotgun_WeaponMod3:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod3
+
+AttachmentSlots.Smart_Shotgun_WeaponMod4:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod4
+
+AttachmentSlots.Smart_Shotgun_WeaponMod5:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod5
+
+AttachmentSlots.Smart_Shotgun_WeaponMod6:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod6
+
+AttachmentSlots.Smart_Shotgun_WeaponMod7:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod7
+
+AttachmentSlots.Smart_Shotgun_WeaponMod8:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod8
+
+Items.Smart_Shotgun_WeaponMod3Element:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod3
+
+Items.Smart_Shotgun_WeaponMod4Element:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod4
+
+Items.Smart_Shotgun_WeaponMod5Element:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod5
+
+Items.Smart_Shotgun_WeaponMod6Element:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod6
+
+Items.Smart_Shotgun_WeaponMod7Element:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod7
+
+Items.Smart_Shotgun_WeaponMod8Element:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod8
+
+# Power_Precision_Sniper_Rifle======================================================
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod3:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod3
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod4:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod4
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod5:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod5
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod6:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod6
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod7:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod7
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod8:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod8
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod3Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod3
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod4Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod4
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod5Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod5
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod6Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod6
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod7Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod7
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod8Element:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod8
+
+# Tech_Precision_Sniper_Rifle======================================================
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod3:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod3
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod4:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod4
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod5:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod5
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod6:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod6
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod7:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod7
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod8:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod8
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod3Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod3
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod4Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod4
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod5Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod5
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod6Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod6
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod7Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod7
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod8Element:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod8
+
+# Smart_Precision_Sniper_Rifle======================================================
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod3:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod3
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod4:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod4
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod5:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod5
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod6:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod6
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod7:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod7
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod8:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod8
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod3Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod3
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod4Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod4
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod5Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod5
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod6Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod6
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod7Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod7
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod8Element:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod8
+
+# Blade======================================================
+
+AttachmentSlots.Blade_WeaponMod3:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod3
+
+AttachmentSlots.Blade_WeaponMod4:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod4
+
+AttachmentSlots.Blade_WeaponMod5:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod5
+
+AttachmentSlots.Blade_WeaponMod6:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod6
+
+AttachmentSlots.Blade_WeaponMod7:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod7
+
+AttachmentSlots.Blade_WeaponMod8:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod8
+
+Items.Blade_WeaponMod3Element:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod3
+
+Items.Blade_WeaponMod4Element:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod4
+
+Items.Blade_WeaponMod5Element:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod5
+
+Items.Blade_WeaponMod6Element:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod6
+
+Items.Blade_WeaponMod7Element:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod7
+
+Items.Blade_WeaponMod8Element:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod8
+
+# Blunt======================================================
+
+AttachmentSlots.Blunt_WeaponMod3:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod3
+
+AttachmentSlots.Blunt_WeaponMod4:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod4
+
+AttachmentSlots.Blunt_WeaponMod5:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod5
+
+AttachmentSlots.Blunt_WeaponMod6:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod6
+
+AttachmentSlots.Blunt_WeaponMod7:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod7
+
+AttachmentSlots.Blunt_WeaponMod8:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod8
+
+Items.Blunt_WeaponMod3Element:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod3
+
+Items.Blunt_WeaponMod4Element:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod4
+
+Items.Blunt_WeaponMod5Element:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod5
+
+Items.Blunt_WeaponMod6Element:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod6
+
+Items.Blunt_WeaponMod7Element:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod7
+
+Items.Blunt_WeaponMod8Element:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod8
+
+# Throwable======================================================
+
+AttachmentSlots.Throwable_WeaponMod3:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod3
+
+AttachmentSlots.Throwable_WeaponMod4:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod4
+
+AttachmentSlots.Throwable_WeaponMod5:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod5
+
+AttachmentSlots.Throwable_WeaponMod6:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod6
+
+AttachmentSlots.Throwable_WeaponMod7:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod7
+
+AttachmentSlots.Throwable_WeaponMod8:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod8
+
+Items.Throwable_WeaponMod3Element:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod3
+
+Items.Throwable_WeaponMod4Element:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod4
+
+Items.Throwable_WeaponMod5Element:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod5
+
+Items.Throwable_WeaponMod6Element:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod6
+
+Items.Throwable_WeaponMod7Element:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod7
+
+Items.Throwable_WeaponMod8Element:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod8
+
+# Power_AR_SMG_LMG iconic==================================================
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod1_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod2_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod3_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod4_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod5_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod6_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod7_Iconic
+
+AttachmentSlots.Power_AR_SMG_LMG_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Power_AR_SMG_LMG_WeaponMod8_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod1_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod2_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod3_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod3_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod4_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod4_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod5_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod5_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod6_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod6_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod7_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod7_Iconic
+
+Items.Power_AR_SMG_LMG_WeaponMod8_IconicElement:
+    $base: Items.Power_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Power_AR_SMG_LMG_WeaponMod8_Iconic
+
+# Tech_AR_SMG_LMG iconic==================================================
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod1_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod2_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod3_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod4_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod5_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod6_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod7_Iconic
+
+AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Tech_AR_SMG_LMG_WeaponMod8_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod1_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod2_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod3_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod3_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod4_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod4_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod5_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod5_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod6_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod6_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod7_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod7_Iconic
+
+Items.Tech_AR_SMG_LMG_WeaponMod8_IconicElement:
+    $base: Items.Tech_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod8_Iconic
+
+# Smart_AR_SMG_LMG iconic==================================================
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod1_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod2_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod3_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod4_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod5_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod6_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod7_Iconic
+
+AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2
+    entitySlotName: Smart_AR_SMG_LMG_WeaponMod8_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod1_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod2_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod3_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod3_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod4_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod4_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod5_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod5_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod6_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod6_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod7_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod1Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod7_Iconic
+
+Items.Smart_AR_SMG_LMG_WeaponMod8_IconicElement:
+    $base: Items.Smart_AR_SMG_LMG_WeaponMod2Element
+    slot: AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod8_Iconic
+
+# Power_Handgun iconic==================================================
+
+AttachmentSlots.Power_Handgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod1_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod2_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod3_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod4_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod5_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod6_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod1
+    entitySlotName: Power_Handgun_WeaponMod7_Iconic
+
+AttachmentSlots.Power_Handgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Power_Handgun_WeaponMod2
+    entitySlotName: Power_Handgun_WeaponMod8_Iconic
+
+Items.Power_Handgun_WeaponMod1_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod1_Iconic
+
+Items.Power_Handgun_WeaponMod2_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod2_Iconic
+
+Items.Power_Handgun_WeaponMod3_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod3_Iconic
+
+Items.Power_Handgun_WeaponMod4_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod4_Iconic
+
+Items.Power_Handgun_WeaponMod5_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod5_Iconic
+
+Items.Power_Handgun_WeaponMod6_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod6_Iconic
+
+Items.Power_Handgun_WeaponMod7_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod7_Iconic
+
+Items.Power_Handgun_WeaponMod8_IconicElement:
+    $base: Items.Power_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Handgun_WeaponMod8_Iconic
+
+# Tech_Handgun iconic==================================================
+
+AttachmentSlots.Tech_Handgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod1_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod2_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod3_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod4_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod5_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod6_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod1
+    entitySlotName: Tech_Handgun_WeaponMod7_Iconic
+
+AttachmentSlots.Tech_Handgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Tech_Handgun_WeaponMod2
+    entitySlotName: Tech_Handgun_WeaponMod8_Iconic
+
+Items.Tech_Handgun_WeaponMod1_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod1_Iconic
+
+Items.Tech_Handgun_WeaponMod2_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod2_Iconic
+
+Items.Tech_Handgun_WeaponMod3_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod3_Iconic
+
+Items.Tech_Handgun_WeaponMod4_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod4_Iconic
+
+Items.Tech_Handgun_WeaponMod5_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod5_Iconic
+
+Items.Tech_Handgun_WeaponMod6_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod6_Iconic
+
+Items.Tech_Handgun_WeaponMod7_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod7_Iconic
+
+Items.Tech_Handgun_WeaponMod8_IconicElement:
+    $base: Items.Tech_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Handgun_WeaponMod8_Iconic
+
+# Smart_Handgun iconic==================================================
+
+AttachmentSlots.Smart_Handgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod1_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod2_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod3_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod4_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod5_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod6_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod1
+    entitySlotName: Smart_Handgun_WeaponMod7_Iconic
+
+AttachmentSlots.Smart_Handgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Smart_Handgun_WeaponMod2
+    entitySlotName: Smart_Handgun_WeaponMod8_Iconic
+
+Items.Smart_Handgun_WeaponMod1_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod1_Iconic
+
+Items.Smart_Handgun_WeaponMod2_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod2_Iconic
+
+Items.Smart_Handgun_WeaponMod3_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod3_Iconic
+
+Items.Smart_Handgun_WeaponMod4_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod4_Iconic
+
+Items.Smart_Handgun_WeaponMod5_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod5_Iconic
+
+Items.Smart_Handgun_WeaponMod6_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod6_Iconic
+
+Items.Smart_Handgun_WeaponMod7_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod7_Iconic
+
+Items.Smart_Handgun_WeaponMod8_IconicElement:
+    $base: Items.Smart_Handgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Handgun_WeaponMod8_Iconic
+
+# Power_Shotgun iconic==================================================
+
+AttachmentSlots.Power_Shotgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod1_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod2_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod3_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod4_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod5_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod6_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod1
+    entitySlotName: Power_Shotgun_WeaponMod7_Iconic
+
+AttachmentSlots.Power_Shotgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Power_Shotgun_WeaponMod2
+    entitySlotName: Power_Shotgun_WeaponMod8_Iconic
+
+Items.Power_Shotgun_WeaponMod1_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod1_Iconic
+
+Items.Power_Shotgun_WeaponMod2_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod2_Iconic
+
+Items.Power_Shotgun_WeaponMod3_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod3_Iconic
+
+Items.Power_Shotgun_WeaponMod4_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod4_Iconic
+
+Items.Power_Shotgun_WeaponMod5_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod5_Iconic
+
+Items.Power_Shotgun_WeaponMod6_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod6_Iconic
+
+Items.Power_Shotgun_WeaponMod7_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod7_Iconic
+
+Items.Power_Shotgun_WeaponMod8_IconicElement:
+    $base: Items.Power_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Power_Shotgun_WeaponMod8_Iconic
+
+# Tech_Shotgun iconic==================================================
+
+AttachmentSlots.Tech_Shotgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod1_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod2_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod3_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod4_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod5_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod6_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod7_Iconic
+
+AttachmentSlots.Tech_Shotgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod8_Iconic
+
+Items.Tech_Shotgun_WeaponMod1_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod1_Iconic
+
+Items.Tech_Shotgun_WeaponMod2_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod2_Iconic
+
+Items.Tech_Shotgun_WeaponMod3_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod3_Iconic
+
+Items.Tech_Shotgun_WeaponMod4_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod4_Iconic
+
+Items.Tech_Shotgun_WeaponMod5_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod5_Iconic
+
+Items.Tech_Shotgun_WeaponMod6_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod6_Iconic
+
+Items.Tech_Shotgun_WeaponMod7_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod7_Iconic
+
+Items.Tech_Shotgun_WeaponMod8_IconicElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod8_Iconic
+
+# Smart_Shotgun iconic==================================================
+
+AttachmentSlots.Smart_Shotgun_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod1_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod2_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod3_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod4_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod5_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod6_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod1
+    entitySlotName: Smart_Shotgun_WeaponMod7_Iconic
+
+AttachmentSlots.Smart_Shotgun_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Smart_Shotgun_WeaponMod2
+    entitySlotName: Smart_Shotgun_WeaponMod8_Iconic
+
+Items.Smart_Shotgun_WeaponMod1_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod1_Iconic
+
+Items.Smart_Shotgun_WeaponMod2_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod2_Iconic
+
+Items.Smart_Shotgun_WeaponMod3_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod3_Iconic
+
+Items.Smart_Shotgun_WeaponMod4_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod4_Iconic
+
+Items.Smart_Shotgun_WeaponMod5_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod5_Iconic
+
+Items.Smart_Shotgun_WeaponMod6_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod6_Iconic
+
+Items.Smart_Shotgun_WeaponMod7_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod7_Iconic
+
+Items.Smart_Shotgun_WeaponMod8_IconicElement:
+    $base: Items.Smart_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Shotgun_WeaponMod8_Iconic
+
+# Power_Precision_Sniper_Rifle iconic==================================================
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Power_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod1_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod2_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod3_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod4_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod5_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod6_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod7_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+Items.Power_Precision_Sniper_Rifle_WeaponMod8_IconicElement:
+    $base: Items.Power_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+# Tech_Precision_Sniper_Rifle iconic==================================================
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Tech_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod1_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod2_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod3_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod4_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod5_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod6_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod7_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+Items.Tech_Precision_Sniper_Rifle_WeaponMod8_IconicElement:
+    $base: Items.Tech_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+# Smart_Precision_Sniper_Rifle iconic==================================================
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2
+    entitySlotName: Smart_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod1_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod2_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod3_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod3_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod4_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod4_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod5_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod5_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod6_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod6_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod7_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod1Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod7_Iconic
+
+Items.Smart_Precision_Sniper_Rifle_WeaponMod8_IconicElement:
+    $base: Items.Smart_Precision_Sniper_Rifle_WeaponMod2Element
+    slot: AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod8_Iconic
+
+# Blade iconic==================================================
+
+AttachmentSlots.Blade_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod1_Iconic
+
+AttachmentSlots.Blade_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod2_Iconic
+
+AttachmentSlots.Blade_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod3_Iconic
+
+AttachmentSlots.Blade_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod4_Iconic
+
+AttachmentSlots.Blade_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod5_Iconic
+
+AttachmentSlots.Blade_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod6_Iconic
+
+AttachmentSlots.Blade_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod7_Iconic
+
+AttachmentSlots.Blade_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod8_Iconic
+
+Items.Blade_WeaponMod1_IconicElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod1_Iconic
+
+Items.Blade_WeaponMod2_IconicElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod2_Iconic
+
+Items.Blade_WeaponMod3_IconicElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod3_Iconic
+
+Items.Blade_WeaponMod4_IconicElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod4_Iconic
+
+Items.Blade_WeaponMod5_IconicElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod5_Iconic
+
+Items.Blade_WeaponMod6_IconicElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod6_Iconic
+
+Items.Blade_WeaponMod7_IconicElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod7_Iconic
+
+Items.Blade_WeaponMod8_IconicElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod8_Iconic
+
+# Blunt iconic==================================================
+
+AttachmentSlots.Blunt_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod1_Iconic
+
+AttachmentSlots.Blunt_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod2_Iconic
+
+AttachmentSlots.Blunt_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod3_Iconic
+
+AttachmentSlots.Blunt_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod4_Iconic
+
+AttachmentSlots.Blunt_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod5_Iconic
+
+AttachmentSlots.Blunt_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod6_Iconic
+
+AttachmentSlots.Blunt_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod7_Iconic
+
+AttachmentSlots.Blunt_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod8_Iconic
+
+Items.Blunt_WeaponMod1_IconicElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod1_Iconic
+
+Items.Blunt_WeaponMod2_IconicElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod2_Iconic
+
+Items.Blunt_WeaponMod3_IconicElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod3_Iconic
+
+Items.Blunt_WeaponMod4_IconicElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod4_Iconic
+
+Items.Blunt_WeaponMod5_IconicElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod5_Iconic
+
+Items.Blunt_WeaponMod6_IconicElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod6_Iconic
+
+Items.Blunt_WeaponMod7_IconicElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod7_Iconic
+
+Items.Blunt_WeaponMod8_IconicElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod8_Iconic
+
+# Throwable iconic==================================================
+
+AttachmentSlots.Throwable_WeaponMod1_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod1_Iconic
+
+AttachmentSlots.Throwable_WeaponMod2_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod2_Iconic
+
+AttachmentSlots.Throwable_WeaponMod3_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod3_Iconic
+
+AttachmentSlots.Throwable_WeaponMod4_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod4_Iconic
+
+AttachmentSlots.Throwable_WeaponMod5_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod5_Iconic
+
+AttachmentSlots.Throwable_WeaponMod6_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod6_Iconic
+
+AttachmentSlots.Throwable_WeaponMod7_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod1
+    entitySlotName: Throwable_WeaponMod7_Iconic
+
+AttachmentSlots.Throwable_WeaponMod8_Iconic:
+    $base: AttachmentSlots.Throwable_WeaponMod2
+    entitySlotName: Throwable_WeaponMod8_Iconic
+
+Items.Throwable_WeaponMod1_IconicElement:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod1_Iconic
+
+Items.Throwable_WeaponMod2_IconicElement:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod2_Iconic
+
+Items.Throwable_WeaponMod3_IconicElement:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod3_Iconic
+
+Items.Throwable_WeaponMod4_IconicElement:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod4_Iconic
+
+Items.Throwable_WeaponMod5_IconicElement:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod5_Iconic
+
+Items.Throwable_WeaponMod6_IconicElement:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod6_Iconic
+
+Items.Throwable_WeaponMod7_IconicElement:
+    $base: Items.Throwable_WeaponMod1Element
+    slot: AttachmentSlots.Throwable_WeaponMod7_Iconic
+
+Items.Throwable_WeaponMod8_IconicElement:
+    $base: Items.Throwable_WeaponMod2Element
+    slot: AttachmentSlots.Throwable_WeaponMod8_Iconic
+
+# Blunt arms====================================================
+
+AttachmentSlots.Blunt_WeaponMod1_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod1_Arms
+
+AttachmentSlots.Blunt_WeaponMod2_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod2_Arms
+
+AttachmentSlots.Blunt_WeaponMod3_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod3_Arms
+
+AttachmentSlots.Blunt_WeaponMod4_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod4_Arms
+
+AttachmentSlots.Blunt_WeaponMod5_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod5_Arms
+
+AttachmentSlots.Blunt_WeaponMod6_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod6_Arms
+
+AttachmentSlots.Blunt_WeaponMod7_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod1
+    entitySlotName: Blunt_WeaponMod7_Arms
+
+AttachmentSlots.Blunt_WeaponMod8_Arms:
+    $base: AttachmentSlots.Blunt_WeaponMod2
+    entitySlotName: Blunt_WeaponMod8_Arms
+
+Items.Blunt_WeaponMod1_ArmsElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod1_Arms
+
+Items.Blunt_WeaponMod2_ArmsElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod2_Arms
+
+Items.Blunt_WeaponMod3_ArmsElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod3_Arms
+
+Items.Blunt_WeaponMod4_ArmsElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod4_Arms
+
+Items.Blunt_WeaponMod5_ArmsElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod5_Arms
+
+Items.Blunt_WeaponMod6_ArmsElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod6_Arms
+
+Items.Blunt_WeaponMod7_ArmsElement:
+    $base: Items.Blunt_WeaponMod1Element
+    slot: AttachmentSlots.Blunt_WeaponMod7_Arms
+
+Items.Blunt_WeaponMod8_ArmsElement:
+    $base: Items.Blunt_WeaponMod2Element
+    slot: AttachmentSlots.Blunt_WeaponMod8_Arms
+
+# Blade arms====================================================
+
+AttachmentSlots.Blade_WeaponMod1_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod1_Arms
+
+AttachmentSlots.Blade_WeaponMod2_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod2_Arms
+
+AttachmentSlots.Blade_WeaponMod3_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod3_Arms
+
+AttachmentSlots.Blade_WeaponMod4_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod4_Arms
+
+AttachmentSlots.Blade_WeaponMod5_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod5_Arms
+
+AttachmentSlots.Blade_WeaponMod6_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod6_Arms
+
+AttachmentSlots.Blade_WeaponMod7_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod1
+    entitySlotName: Blade_WeaponMod7_Arms
+
+AttachmentSlots.Blade_WeaponMod8_Arms:
+    $base: AttachmentSlots.Blade_WeaponMod2
+    entitySlotName: Blade_WeaponMod8_Arms
+
+Items.Blade_WeaponMod1_ArmsElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod1_Arms
+
+Items.Blade_WeaponMod2_ArmsElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod2_Arms
+
+Items.Blade_WeaponMod3_ArmsElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod3_Arms
+
+Items.Blade_WeaponMod4_ArmsElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod4_Arms
+
+Items.Blade_WeaponMod5_ArmsElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod5_Arms
+
+Items.Blade_WeaponMod6_ArmsElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod6_Arms
+
+Items.Blade_WeaponMod7_ArmsElement:
+    $base: Items.Blade_WeaponMod1Element
+    slot: AttachmentSlots.Blade_WeaponMod7_Arms
+
+Items.Blade_WeaponMod8_ArmsElement:
+    $base: Items.Blade_WeaponMod2Element
+    slot: AttachmentSlots.Blade_WeaponMod8_Arms
+
+# Tech_Shotgun arms====================================================
+
+AttachmentSlots.Tech_Shotgun_WeaponMod1_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod1_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod2_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod2_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod3_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod3_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod4_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod4_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod5_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod5_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod6_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod6_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod7_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod1
+    entitySlotName: Tech_Shotgun_WeaponMod7_Arms
+
+AttachmentSlots.Tech_Shotgun_WeaponMod8_Arms:
+    $base: AttachmentSlots.Tech_Shotgun_WeaponMod2
+    entitySlotName: Tech_Shotgun_WeaponMod8_Arms
+
+Items.Tech_Shotgun_WeaponMod1_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod1_Arms
+
+Items.Tech_Shotgun_WeaponMod2_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod2_Arms
+
+Items.Tech_Shotgun_WeaponMod3_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod3_Arms
+
+Items.Tech_Shotgun_WeaponMod4_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod4_Arms
+
+Items.Tech_Shotgun_WeaponMod5_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod5_Arms
+
+Items.Tech_Shotgun_WeaponMod6_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod6_Arms
+
+Items.Tech_Shotgun_WeaponMod7_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod1Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod7_Arms
+
+Items.Tech_Shotgun_WeaponMod8_ArmsElement:
+    $base: Items.Tech_Shotgun_WeaponMod2Element
+    slot: AttachmentSlots.Tech_Shotgun_WeaponMod8_Arms
+
