@@ -145,9 +145,11 @@ public abstract class CyberwareConfig {
             ExpansionSlot.Create(gamedataNewPerkType.Intelligence_Central_Milestone_3, 2)
         ]),
         ExpansionArea.Create(gamedataEquipmentArea.CardiovascularSystemCW, [
+            ExpansionSlot.Create(gamedataNewPerkType.Body_Central_Perk_1_4, 1),
             ExpansionSlot.Create(gamedataNewPerkType.Body_Central_Perk_1_4, 1)
         ]),
         ExpansionArea.Create(gamedataEquipmentArea.NervousSystemCW, [
+            ExpansionSlot.Create(gamedataNewPerkType.Tech_Central_Milestone_3, 2),
             ExpansionSlot.Create(gamedataNewPerkType.Tech_Central_Milestone_3, 2)
         ]),
         ExpansionArea.Create(gamedataEquipmentArea.IntegumentarySystemCW, [
@@ -159,6 +161,12 @@ public abstract class CyberwareConfig {
         ]),
         ExpansionArea.Create(gamedataEquipmentArea.HandsCW, [
             ExpansionSlot.Create(gamedataNewPerkType.Tech_Central_Perk_3_2, 1)
+        ]),
+        ExpansionArea.Create(gamedataEquipmentArea.EyesCW, [
+            ExpansionSlot.Create(gamedataNewPerkType.Tech_Central_Perk_3_2, 1)
+        ]),
+        ExpansionArea.Create(gamedataEquipmentArea.MusculoskeletalSystemCW, [
+            ExpansionSlot.Create(gamedataNewPerkType.Tech_Central_Milestone_3, 3)
         ]),
         ExpansionArea.Create(gamedataEquipmentArea.LegsCW, [
             ExpansionSlot.Create(gamedataNewPerkType.Reflexes_Central_Perk_1_3, 1),
@@ -296,37 +304,12 @@ public class CyberwareHelper {
         return equipSlotID;
     }
 
+    public static func GetSlotCountFactName(equipArea: gamedataEquipmentArea) -> CName {
+        return StringToName("CyberwareEx_SlotCount_" + ToString(equipArea));
+    }
+
     public static func CreateEquipSlotRecord(equipArea: gamedataEquipmentArea, slotIndex: Int32, requiredPerk: gamedataNewPerkType, requiredLevel: Int32) -> TweakDBID {
-        let equipAreaName = ToString(equipArea);
-        let equipSlotName = s"EquipmentArea.\(equipAreaName)_Slot_\(slotIndex)_Perk_\(requiredPerk)_\(requiredLevel)";
-        let equipSlotID = TDBID.Create(equipSlotName);
-
-        if !IsDefined(TweakDBInterface.GetEquipSlotRecord(equipSlotID)) {
-            let prereqName = s"Prereqs.HasPerk_\(requiredPerk)_\(requiredLevel)";
-            let prereqID = TDBID.Create(prereqName);
-
-            if !IsDefined(TweakDBInterface.GetPrereqRecord(prereqID)) {
-                TweakDBManager.CreateRecord(prereqID, n"PlayerIsNewPerkBoughtPrereq");
-                TweakDBManager.SetFlat(prereqID + t".perkType", ToString(requiredPerk));
-                TweakDBManager.SetFlat(prereqID + t".level", requiredLevel);
-                TweakDBManager.UpdateRecord(prereqID);
-                TweakDBManager.RegisterName(StringToName(prereqName));
-            }
-
-            TweakDBManager.CreateRecord(equipSlotID, n"EquipSlot");
-            TweakDBManager.SetFlat(equipSlotID + t".unlockPrereqRecord", prereqID);
-            TweakDBManager.SetFlat(equipSlotID + t".visibleWhenLocked", true);
-
-            if Equals(equipArea, gamedataEquipmentArea.MusculoskeletalSystemCW) {
-                let powerUpID = CyberwareHelper.CreatePowerUpRecord(equipArea, slotIndex);
-                TweakDBManager.SetFlat(equipSlotID + t".OnInsertion", [powerUpID]);
-            }
-
-            TweakDBManager.UpdateRecord(equipSlotID);
-            TweakDBManager.RegisterName(StringToName(equipSlotName));
-        }
-
-        return equipSlotID;
+        return CyberwareHelper.CreateEquipSlotRecord(equipArea, slotIndex);
     }
 
     public static func CreatePowerUpRecord(equipArea: gamedataEquipmentArea, slotIndex: Int32) -> TweakDBID {
@@ -356,11 +339,7 @@ public class CyberwareHelper {
     }
 }
 
-@if(ModuleExists("CyberwareEx.ExtendedMode"))
 public func IsExtendedMode() -> Bool = true
-
-@if(!ModuleExists("CyberwareEx.ExtendedMode"))
-public func IsExtendedMode() -> Bool = false
 
 public struct OverrideArea {
     public let areaType: gamedataEquipmentArea;
@@ -423,13 +402,20 @@ public class OverrideManager {
     private let m_playerData: ref<EquipmentSystemPlayerData>;
 
     public func Initialize(playerData: ref<EquipmentSystemPlayerData>) {
+        if !IsDefined(playerData) || !IsDefined(playerData.m_owner) {
+            this.m_playerData = null;
+            ArrayClear(this.m_overrides);
+            return;
+        }
         this.m_playerData = playerData;
         this.m_overrides = OverrideConfig.SlotOverrides();
 
         let i = 0;
         while i < ArraySize(this.m_overrides) {
             let areaRecord = this.m_playerData.GetEquipAreaRecordByType(this.m_overrides[i].areaType);
-            this.m_overrides[i].defaultSlots = areaRecord.GetEquipSlotsCount();
+            if IsDefined(areaRecord) {
+                this.m_overrides[i].defaultSlots = areaRecord.GetEquipSlotsCount();
+            }
             i += 1;
         }
     }
@@ -437,6 +423,9 @@ public class OverrideManager {
     public func GetOverrideState(areaType: gamedataEquipmentArea) -> ref<OverrideState> {
         let overrideState = new OverrideState();
         overrideState.areaType = areaType;
+        if !IsDefined(this.m_playerData) || !IsDefined(this.m_playerData.m_owner) {
+            return overrideState;
+        }
         overrideState.areaIndex = this.GetEquipAreaIndex(areaType);
         overrideState.currentSlots = this.GetEquipAreaNumberOfSlots(areaType);
 
@@ -446,8 +435,11 @@ public class OverrideManager {
             overrideState.maxSlots = overrideArea.maxSlots;
             overrideState.isOverridable = true;
 
-            let playerMoney = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame())
-                .GetItemQuantity(this.m_playerData.m_owner, MarketSystem.Money());
+            let transactionSystem = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame());
+            if !IsDefined(transactionSystem) {
+                return overrideState;
+            }
+            let playerMoney = transactionSystem.GetItemQuantity(this.m_playerData.m_owner, MarketSystem.Money());
 
             overrideState.canBuyOverride = (playerMoney >= OverrideConfig.UpgradePrice());
             overrideState.canBuyReset = (playerMoney >= OverrideConfig.ResetPrice());
@@ -459,24 +451,36 @@ public class OverrideManager {
     public func UpgradeSlot(areaType: gamedataEquipmentArea, opt free: Bool, opt vendor: wref<GameObject>) -> Bool {
         let overrideState = this.GetOverrideState(areaType);
 
-        if !overrideState.isOverridable || overrideState.currentSlots == overrideState.maxSlots {
+        if !IsDefined(this.m_playerData) || !overrideState.isOverridable || overrideState.areaIndex < 0
+            || overrideState.currentSlots < 0 || overrideState.currentSlots >= overrideState.maxSlots {
             return false;
         }
 
         if !overrideState.canBuyOverride && !free {
             return false;
         }
+        let transactionSystem: ref<TransactionSystem>;
+        if !free {
+            transactionSystem = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame());
+            if !IsDefined(transactionSystem) { return false; }
+        }
 
         let newSlotIndex = overrideState.currentSlots;
         let equipSlotID = CyberwareHelper.CreateEquipSlotRecord(areaType, newSlotIndex);
+        let equipSlotRecord = TweakDBInterface.GetEquipSlotRecord(equipSlotID);
+        if !IsDefined(equipSlotRecord) {
+            return false;
+        }
 
         ArrayResize(this.m_playerData.m_equipment.equipAreas[overrideState.areaIndex].equipSlots, overrideState.currentSlots + 1);
 
-        this.m_playerData.InitializeEquipSlotFromRecord(TweakDBInterface.GetEquipSlotRecord(equipSlotID),
+        this.m_playerData.InitializeEquipSlotFromRecord(equipSlotRecord,
             this.m_playerData.m_equipment.equipAreas[overrideState.areaIndex].equipSlots[newSlotIndex]);
 
+        GameInstance.GetQuestsSystem(this.m_playerData.m_owner.GetGame())
+            .SetFact(CyberwareHelper.GetSlotCountFactName(areaType), overrideState.currentSlots + 1);
+
         if !free {
-            let transactionSystem = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame());
             if IsDefined(vendor) {
                 transactionSystem.TransferItem(this.m_playerData.m_owner, vendor, MarketSystem.Money(), OverrideConfig.UpgradePrice());
             } else {
@@ -490,16 +494,22 @@ public class OverrideManager {
     public func ResetSlot(areaType: gamedataEquipmentArea, opt free: Bool, opt vendor: wref<GameObject>) -> Bool {
         let overrideState = this.GetOverrideState(areaType);
 
-        if !overrideState.isOverridable || overrideState.currentSlots == overrideState.defaultSlots {
+        if !IsDefined(this.m_playerData) || !overrideState.isOverridable || overrideState.areaIndex < 0
+            || overrideState.currentSlots < overrideState.defaultSlots {
             return false;
         }
 
         if !overrideState.canBuyReset && !free {
             return false;
         }
+        let transactionSystem: ref<TransactionSystem>;
+        if !free {
+            transactionSystem = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame());
+            if !IsDefined(transactionSystem) { return false; }
+        }
 
-        let slotIndex = overrideState.defaultSlots + 1;
-        while slotIndex <= overrideState.currentSlots {
+        let slotIndex = overrideState.defaultSlots;
+        while slotIndex < overrideState.currentSlots {
             if ItemID.IsValid(this.m_playerData.m_equipment.equipAreas[overrideState.areaIndex].equipSlots[slotIndex].itemID) {
                 this.m_playerData.UnequipItem(overrideState.areaIndex, slotIndex);
             }
@@ -508,8 +518,10 @@ public class OverrideManager {
 
         ArrayResize(this.m_playerData.m_equipment.equipAreas[overrideState.areaIndex].equipSlots, overrideState.defaultSlots);
 
+        GameInstance.GetQuestsSystem(this.m_playerData.m_owner.GetGame())
+            .SetFact(CyberwareHelper.GetSlotCountFactName(areaType), overrideState.defaultSlots);
+
         if !free {
-            let transactionSystem = GameInstance.GetTransactionSystem(this.m_playerData.m_owner.GetGame());
             if IsDefined(vendor) {
                 transactionSystem.TransferItem(this.m_playerData.m_owner, vendor, MarketSystem.Money(), OverrideConfig.ResetPrice());
             } else {
@@ -553,11 +565,7 @@ public class OverrideManager {
     }
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 public func IsOverrideMode() -> Bool = true
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-public func IsOverrideMode() -> Bool = false
 
 public class EnglishPackage extends ModLocalizationPackage {
   protected func DefineTexts() {
@@ -580,31 +588,42 @@ public class LocalizationProvider extends ModLocalizationProvider {
 }
 
 class AdjustCyberwareCompatibility extends ScriptableTweak {
-    protected func OnApply() {
+    protected cb func OnApply() -> Void {
+        RegisterAttachmentSlots.RegisterAll();
+
         let attachmentSlots = CyberwareConfig.Attachments();
         let cyberwareRemappings = CyberwareConfig.Remappings();
         for record in TweakDBInterface.GetRecords(n"Item_Record") {
             let cyberwareTypeFlat = TweakDBInterface.GetFlat(record.GetID() + t".cyberwareType");
             if IsDefined(cyberwareTypeFlat) {
                 let cyberwareType = FromVariant<CName>(cyberwareTypeFlat);
+                let displayName = TweakDBInterface.GetLocKeyDefault(record.GetID() + t".displayName");
+                for cyberwareRemapping in cyberwareRemappings {
+                    if Equals(displayName, cyberwareRemapping.displayName) {
+                        cyberwareType = cyberwareRemapping.cyberwareType;
+                        TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
+                        TweakDBManager.UpdateRecord(record.GetID());
+                        break;
+                    }
+                }
                 let placementSlots = TweakDBInterface.GetForeignKeyArray(record.GetID() + t".placementSlots");
                 if ArraySize(placementSlots) > 0 {
                     if Equals(cyberwareType, n"IconicJenkinsTendons") {
                         cyberwareType = n"JenkinsTendons";
                         TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
+                        TweakDBManager.UpdateRecord(record.GetID());
                     }
                     for attachmentSlot in attachmentSlots {
                         if Equals(cyberwareType, attachmentSlot.cyberwareType) {
-                            TweakDBManager.SetFlat(record.GetID() + t".placementSlots", [attachmentSlot.slotID]);
+                            let newPlacementSlots: array<TweakDBID>;
+                            ArrayPush(newPlacementSlots, attachmentSlot.slotID);
+                            for existingSlot in placementSlots {
+                                if !ArrayContains(newPlacementSlots, existingSlot) {
+                                    ArrayPush(newPlacementSlots, existingSlot);
+                                }
+                            }
+                            TweakDBManager.SetFlat(record.GetID() + t".placementSlots", newPlacementSlots);
                             TweakDBManager.UpdateRecord(record.GetID());
-                            break;
-                        }
-                    }
-                } else {
-                    for cyberwareRemapping in cyberwareRemappings {
-                        let displayName = TweakDBInterface.GetLocKeyDefault(record.GetID() + t".displayName");
-                        if Equals(displayName, cyberwareRemapping.displayName) {
-                            TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareRemapping.cyberwareType);
                             break;
                         }
                     }
@@ -622,17 +641,22 @@ class AdjustCyberwareCompatibility extends ScriptableTweak {
             ArrayPush(chargeJumpConditions, "");
             TweakDBManager.SetFlat(t"playerStateMachineLocomotion.chargeJump.transitionTo", chargeJumpTransitions);
             TweakDBManager.SetFlat(t"playerStateMachineLocomotion.chargeJump.transitionCondition", chargeJumpConditions);
+            TweakDBManager.UpdateRecord(t"playerStateMachineLocomotion.chargeJump");
         }
     }
 }
 
 class RegisterAttachmentSlots extends ScriptableTweak {
-    protected func OnApply() {
+    public static func RegisterAll() -> Void {
         let attachmentSlots = CyberwareConfig.Attachments();
 
         for attachmentSlot in attachmentSlots {
-            TweakDBManager.CreateRecord(attachmentSlot.slotID, n"AttachmentSlot_Record");
-            TweakDBManager.RegisterName(attachmentSlot.slotName);
+            if !IsDefined(TweakDBInterface.GetAttachmentSlotRecord(attachmentSlot.slotID)) {
+                TweakDBManager.CreateRecord(attachmentSlot.slotID, n"AttachmentSlot");
+                TweakDBManager.SetFlat(attachmentSlot.slotID + t".entitySlotName", NameToString(attachmentSlot.cyberwareType));
+                TweakDBManager.UpdateRecord(attachmentSlot.slotID);
+                TweakDBManager.RegisterName(attachmentSlot.slotName);
+            }
         }
 
         let playerEntityTemplates = [
@@ -667,16 +691,16 @@ class RegisterAttachmentSlots extends ScriptableTweak {
             }
         }
     }
+
+    protected cb func OnApply() -> Void {
+        RegisterAttachmentSlots.RegisterAll();
+    }
 }
 
 class RegisterCyberwareSlots extends ScriptableTweak {
-    protected func OnApply() {
+    protected cb func OnApply() -> Void {
         if !IsDefined(TweakDBInterface.GetRecord(t"EquipmentArea.SkeletonEquipSlot")) {
             TweakDBManager.CloneRecord(n"EquipmentArea.SkeletonEquipSlot", t"EquipmentArea.SimpleEquipSlot");
-        }
-
-        if IsOverrideMode() {
-            return;
         }
 
         for expansion in CyberwareConfig.SlotExpansions() {
@@ -688,6 +712,13 @@ class RegisterCyberwareSlots extends ScriptableTweak {
                 defaultNumSlots = ArraySize(equipmentAreaSlots);
             } else {
                 ArrayResize(equipmentAreaSlots, defaultNumSlots);
+            }
+
+            for existingSlotID in equipmentAreaSlots {
+                if TDBID.IsValid(existingSlotID) {
+                    TweakDBManager.SetFlat(existingSlotID + t".unlockPrereqRecord", TDBID.None());
+                    TweakDBManager.UpdateRecord(existingSlotID);
+                }
             }
 
             for extraSlot in expansion.extraSlots {
@@ -735,11 +766,12 @@ public class OverrideConfirmationPopup {
 
     public static func IsConfirmed(data: ref<inkGameNotificationData>) -> Bool {
         let popupData = data as GenericMessageNotificationCloseData;
-        return Equals(popupData.result, GenericMessageNotificationResult.Confirm);
+        return IsDefined(popupData) && Equals(popupData.result, GenericMessageNotificationResult.Confirm);
     }
 
     public static func GetAreaType(data: ref<inkGameNotificationData>) -> gamedataEquipmentArea {
         let popupData = data as GenericMessageNotificationCloseData;
+        if !IsDefined(popupData) { return gamedataEquipmentArea.Invalid; }
         return IntEnum<gamedataEquipmentArea>(popupData.identifier);
     }
 
@@ -767,8 +799,10 @@ public class OverrideConfirmationPopup {
     }
 
     private static func GetAreaName(slotState: ref<OverrideState>) -> String {
+        if !IsDefined(slotState) { return ""; }
         let name = EnumValueToString("gamedataEquipmentArea", Cast<Int64>(EnumInt(slotState.areaType)));
         let record = TweakDBInterface.GetEquipmentAreaRecord(TDBID.Create("EquipmentArea." + name));
+        if !IsDefined(record) { return name; }
         let result = record.LocalizedName();
         return NotEquals(result, "") ? GetLocalizedText(result) : name;
     }

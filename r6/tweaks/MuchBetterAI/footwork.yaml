@@ -1,0 +1,269 @@
+MBAI.ThreatHopKerenzikovOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.HasKerenzikov
+  target: AIActionTarget.Owner
+  invert: false
+
+MBAI.ThreatHopNotMechanicalOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsMechanical
+  target: AIActionTarget.Owner
+  invert: true
+
+MBAI.ThreatHopNotKerenzikovOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.HasKerenzikov
+  target: AIActionTarget.Owner
+  invert: true
+
+MBAI.ThreatHopNotAggressiveOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsAggressive
+  target: AIActionTarget.Owner
+  invert: true
+
+MBAI.ThreatHopAggressiveOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsAggressive
+  target: AIActionTarget.Owner
+  invert: false
+
+MBAI.ThreatHopBalancedOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsBalanced
+  target: AIActionTarget.Owner
+  invert: false
+
+MBAI.ThreatHopDefensiveOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsDefensive
+  target: AIActionTarget.Owner
+  invert: false
+
+MBAI.ThreatHopCautiousOwner:
+  $type: gamedataAIAbilityCond_Record
+  abilities:
+    - Ability.IsCautious
+  target: AIActionTarget.Owner
+  invert: false
+
+MBAI.ThreatHopDisciplinedOwner:
+  $type: gamedataAIActionOR_Record
+  OR:
+    - MBAI.ThreatHopBalancedOwner
+    - MBAI.ThreatHopDefensiveOwner
+    - MBAI.ThreatHopCautiousOwner
+
+MBAI.ThreatHopCommon:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.CombatEligibility
+    - Condition.TargetPOVBelow10deg
+    - Condition.TargetBelow120deg
+    - Condition.NotInCover
+    - Condition.TargetInStatesAim
+    - Condition.TargetHasRangedWeapon
+    - Condition.NotTicketEquip
+    - Condition.HitDodgeCooldown
+    - Condition.NotManMassive
+    - MBAI.ThreatHopNotMechanicalOwner
+    - Condition.TargetIsVisible
+    - Condition.NotIsEnteringOrLeavingCover
+    - Condition.NotTicketGrenadeThrow
+    - Condition.NotTicketQuickhack
+    - Condition.NotTicketTakeCover
+    - Condition.NotTicketReload
+    - Condition.NotInStatesEquip
+    - Condition.NotInStatesReload
+    - Condition.AbilityCanUseLegs
+    - Condition.NotStatusEffectTagDismembered
+    - Condition.NotStatusEffectTagWounded
+
+MBAI.ThreatHopKerenzikovCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline5
+  name: OutOfLineOfSightDodge
+  duration: 4.0
+
+MBAI.ThreatHopDisciplinedCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline5
+  name: OutOfLineOfSightDodge
+  duration: 7.0
+
+MBAI.ThreatHopAggressiveCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline5
+  name: OutOfLineOfSightDodge
+  duration: 10.0
+
+MBAI.ThreatHopKerenzikovCooldownCond:
+  $base: Condition.LineOfSightDodgeCooldown
+  cooldowns:
+    - MBAI.ThreatHopKerenzikovCooldown
+
+MBAI.ThreatHopDisciplinedCooldownCond:
+  $base: Condition.LineOfSightDodgeCooldown
+  cooldowns:
+    - MBAI.ThreatHopDisciplinedCooldown
+
+MBAI.ThreatHopAggressiveCooldownCond:
+  $base: Condition.LineOfSightDodgeCooldown
+  cooldowns:
+    - MBAI.ThreatHopAggressiveCooldown
+
+MBAI.ThreatHopKerenzikovStartCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline4
+  cooldowns:
+    - MBAI.ThreatHopKerenzikovCooldown
+
+MBAI.ThreatHopDisciplinedStartCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline4
+  cooldowns:
+    - MBAI.ThreatHopDisciplinedCooldown
+
+MBAI.ThreatHopAggressiveStartCooldown:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight_inline4
+  cooldowns:
+    - MBAI.ThreatHopAggressiveCooldown
+
+MBAI.ThreatHopKerenzikovAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.ThreatHopCommon
+    - MBAI.ThreatHopKerenzikovOwner
+    - MBAI.ThreatHopKerenzikovCooldownCond
+
+MBAI.ThreatHopDisciplinedAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.ThreatHopCommon
+    - MBAI.ThreatHopDisciplinedOwner
+    - MBAI.ThreatHopNotKerenzikovOwner
+    - MBAI.ThreatHopNotAggressiveOwner
+    - MBAI.ThreatHopDisciplinedCooldownCond
+
+MBAI.ThreatHopAggressiveAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.ThreatHopCommon
+    - MBAI.ThreatHopAggressiveOwner
+    - MBAI.ThreatHopNotKerenzikovOwner
+    - MBAI.ThreatHopAggressiveCooldownCond
+
+MBAI.ThreatHopKerenzikovGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.ThreatHopKerenzikovAnd
+
+MBAI.ThreatHopDisciplinedGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.ThreatHopDisciplinedAnd
+
+MBAI.ThreatHopAggressiveGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.ThreatHopAggressiveAnd
+
+MBAI.ThreatHopKerenzikov:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight
+  activationCondition: MBAI.ThreatHopKerenzikovGate
+  startupSubActions:
+    - DashAndDodgeActions.DodgeApproachingCars_inline3
+    - MBAI.ThreatHopKerenzikovStartCooldown
+
+MBAI.ThreatHopDisciplined:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight
+  activationCondition: MBAI.ThreatHopDisciplinedGate
+  startupSubActions:
+    - DashAndDodgeActions.DodgeApproachingCars_inline3
+    - MBAI.ThreatHopDisciplinedStartCooldown
+
+MBAI.ThreatHopAggressive:
+  $base: DashAndDodgeActions.DodgeOutFromLineOfSight
+  activationCondition: MBAI.ThreatHopAggressiveGate
+  startupSubActions:
+    - DashAndDodgeActions.DodgeApproachingCars_inline3
+    - MBAI.ThreatHopAggressiveStartCooldown
+
+MBAI.NormalStrafeCooldown:
+  $base: MovementActions.StrafeCooldown
+  name: MBAINormalStrafe
+  duration: 6.0
+
+MBAI.NormalStrafeCooldownCond:
+  $base: Condition.StrafeEvadeCooldown
+  cooldowns:
+    - MBAI.NormalStrafeCooldown
+
+MBAI.NormalStrafeAndL:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.CombatEligibility
+    - Condition.CalculatePathStraightLeftClose
+    - Condition.TargetPOVRight
+    - Condition.TargetIsVisible
+    - MBAI.NormalStrafeCooldownCond
+
+MBAI.NormalStrafeAndR:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.CombatEligibility
+    - Condition.CalculatePathStraightRightClose
+    - Condition.TargetPOVLeft
+    - Condition.TargetIsVisible
+    - MBAI.NormalStrafeCooldownCond
+
+MBAI.NormalStrafeGateL:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.NormalStrafeAndL
+
+MBAI.NormalStrafeGateR:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.NormalStrafeAndR
+
+MBAI.NormalStrafeLeft:
+  $base: MovementActions.StrafeLeft
+  activationCondition: MBAI.NormalStrafeGateL
+  cooldowns:
+    - MBAI.NormalStrafeCooldown
+
+MBAI.NormalStrafeRight:
+  $base: MovementActions.StrafeRight
+  activationCondition: MBAI.NormalStrafeGateR
+  cooldowns:
+    - MBAI.NormalStrafeCooldown
+
+MBAI.NormalStrafeLeftHitAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MovementActions.StrafeLeftHit_inline1
+    - MBAI.CombatEligibility
+
+MBAI.NormalStrafeRightHitAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MovementActions.StrafeRightHit_inline1
+    - MBAI.CombatEligibility
+
+MBAI.NormalStrafeLeftHitGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.NormalStrafeLeftHitAnd
+
+MBAI.NormalStrafeRightHitGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.NormalStrafeRightHitAnd
+
+MBAI.NormalStrafeLeftHit:
+  $base: MovementActions.StrafeLeftHit
+  activationCondition: MBAI.NormalStrafeLeftHitGate
+  cooldowns:
+    - MBAI.NormalStrafeCooldown
+
+MBAI.NormalStrafeRightHit:
+  $base: MovementActions.StrafeRightHit
+  activationCondition: MBAI.NormalStrafeRightHitGate
+  cooldowns:
+    - MBAI.NormalStrafeCooldown

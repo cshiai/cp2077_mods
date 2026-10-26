@@ -1,6 +1,6 @@
 // WeaponMagazineAndAmmo5X:
-// 1. Keeps weapon magazine capacity unchanged (1x vanilla) and actively strips any
-//    previously saved MagazineCapacityBase modifiers from existing save-game weapons.
+// 1. Keeps weapon magazine capacity unchanged (1x vanilla) without touching any
+//    saved MagazineCapacityBase modifiers owned by the player or another mod.
 // 2. Increases max reserve/backup ammo capacity by 10x+ (surpassing 999 across all ammo
 //    types: 9,000 Handgun, 9,000 Rifle, 1,500 Shotgun, 1,200 Sniper) at both the TweakDB
 //    record level (Ammo.*_inline0.value) and the per-item gameItemData level.
@@ -59,17 +59,10 @@ public class WeaponMagazineAndAmmo5XHelper {
   }
 
   public final static func RestoreVanillaWeaponMagazine(game: GameInstance, itemData: ref<gameItemData>) -> Void {
-    if !IsDefined(itemData) || !RPGManager.IsItemWeapon(itemData.GetID()) {
-      return;
-    };
-    let stats: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
-    if !IsDefined(stats) {
-      return;
-    };
-    let statsId: StatsObjectID = itemData.GetStatsObjectID();
-    // Strip any saved MagazineCapacityBase modifiers baked into existing save-game weapons
-    // so weapon magazine capacity returns to authentic 1x vanilla values.
-    stats.RemoveSavedModifiers(statsId, gamedataStatType.MagazineCapacityBase);
+    // This feature never owned the saved weapon modifiers and the native API
+    // only offers a stat-wide removal operation.  Calling it erased iconic,
+    // crafting, and other mod modifiers from the save.  Leave saved magazine
+    // state intact; this module does not add a magazine modifier.
   }
 
   public final static func ApplyAmmoCapacity(game: GameInstance, itemData: ref<gameItemData>) -> Void {
@@ -93,20 +86,29 @@ public class WeaponMagazineAndAmmo5XHelper {
     let statsId: StatsObjectID = itemData.GetStatsObjectID();
     let targetCap: Float = WeaponMagazineAndAmmo5XHelper.GetTargetAmmoCap(itemTDBID);
 
-    // Clear any previously saved Quantity modifiers so we never double-stack across loads.
-    stats.RemoveSavedModifiers(statsId, gamedataStatType.Quantity);
-
+    // Do not clear saved Quantity modifiers: that native operation is global to
+    // the item and destroys unrelated player/mod state.  The current quantity
+    // already includes our saved modifier, so this check is idempotent across
+    // inventory refreshes and save/load without a destructive sweep.
     let currentCap: Float = itemData.GetStatValueByType(gamedataStatType.Quantity);
     if currentCap < targetCap - 0.50 {
       let delta: Float = targetCap - currentCap;
-      let modifier: ref<gameStatModifierData> = RPGManager.CreateStatModifier(
+      let savedModifier: ref<gameStatModifierData> = RPGManager.CreateStatModifier(
         gamedataStatType.Quantity,
         gameStatModifierType.Additive,
         delta
       );
-      stats.AddSavedModifier(statsId, modifier);
+      stats.AddSavedModifier(statsId, savedModifier);
       if itemData.GetStatValueByType(gamedataStatType.Quantity) < targetCap - 0.50 {
-        stats.AddModifier(statsId, modifier);
+        // Keep the transient and saved modifier objects separate.  Sharing a
+        // ref between both stores lets one store's cleanup invalidate the
+        // other and can produce duplicate application after a reload.
+        let runtimeModifier: ref<gameStatModifierData> = RPGManager.CreateStatModifier(
+          gamedataStatType.Quantity,
+          gameStatModifierType.Additive,
+          delta
+        );
+        stats.AddModifier(statsId, runtimeModifier);
       };
     };
   }
@@ -152,18 +154,22 @@ protected cb func OnMakePlayerVisibleAfterSpawn(evt: ref<EndGracePeriodAfterSpaw
 @wrapMethod(PlayerPuppet)
 protected cb func OnItemAddedToInventory(evt: ref<ItemAddedEvent>) -> Bool {
   let result: Bool = wrappedMethod(evt);
-  let itemData: ref<gameItemData> = evt.itemData;
-  WeaponMagazineAndAmmo5XHelper.RestoreVanillaWeaponMagazine(this.GetGame(), itemData);
-  WeaponMagazineAndAmmo5XHelper.ApplyAmmoCapacity(this.GetGame(), itemData);
+  if IsDefined(evt) {
+    let itemData: ref<gameItemData> = evt.itemData;
+    WeaponMagazineAndAmmo5XHelper.RestoreVanillaWeaponMagazine(this.GetGame(), itemData);
+    WeaponMagazineAndAmmo5XHelper.ApplyAmmoCapacity(this.GetGame(), itemData);
+  };
   return result;
 }
 
 @wrapMethod(PlayerPuppet)
 protected cb func OnItemChangedEvent(evt: ref<ItemChangedEvent>) -> Bool {
   let result: Bool = wrappedMethod(evt);
-  let itemData: ref<gameItemData> = evt.itemData;
-  WeaponMagazineAndAmmo5XHelper.RestoreVanillaWeaponMagazine(this.GetGame(), itemData);
-  WeaponMagazineAndAmmo5XHelper.ApplyAmmoCapacity(this.GetGame(), itemData);
+  if IsDefined(evt) {
+    let itemData: ref<gameItemData> = evt.itemData;
+    WeaponMagazineAndAmmo5XHelper.RestoreVanillaWeaponMagazine(this.GetGame(), itemData);
+    WeaponMagazineAndAmmo5XHelper.ApplyAmmoCapacity(this.GetGame(), itemData);
+  };
   return result;
 }
 

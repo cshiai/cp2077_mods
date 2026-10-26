@@ -1,4 +1,4 @@
-// Codeware 1.21.0
+// Codeware 1.21.1
 
 public abstract native class Codeware {
     public static native func Require(version: String) -> Bool

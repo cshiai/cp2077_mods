@@ -303,6 +303,17 @@ public abstract class UniversalSlotsHelper {
     return false;
   }
 
+  @if(ModuleExists("SlotsSlotsSlots.Core"))
+  public final static func IsSSSArmsSlot(slotID: TweakDBID) -> Bool {
+    let slots: array<TweakDBID> = SSS_Ids.Arms();
+    return ArrayContains(slots, slotID);
+  }
+
+  @if(!ModuleExists("SlotsSlotsSlots.Core"))
+  public final static func IsSSSArmsSlot(slotID: TweakDBID) -> Bool {
+    return false;
+  }
+
   public final static func IsRangedWeaponModSlot(slotID: TweakDBID) -> Bool {
     let slots: array<TweakDBID> = UniversalSlotsHelper.GetAllRangedWeaponModSlots();
     return ArrayContains(slots, slotID)
@@ -317,7 +328,8 @@ public abstract class UniversalSlotsHelper {
 
   public final static func IsCyberwareArmModSlot(slotID: TweakDBID) -> Bool {
     let slots: array<TweakDBID> = UniversalSlotsHelper.GetAllCyberwareArmModSlots();
-    return ArrayContains(slots, slotID);
+    return ArrayContains(slots, slotID)
+      || UniversalSlotsHelper.IsSSSArmsSlot(slotID);
   }
 
   public final static func IsUniversalPartCompatibleWithSlot(partType: gamedataItemType, slotID: TweakDBID) -> Bool {
@@ -327,10 +339,10 @@ public abstract class UniversalSlotsHelper {
     if slotID == t"AttachmentSlots.PowerModule" && UniversalSlotsHelper.IsMuzzlePartType(partType) {
       return true;
     }
-    if UniversalSlotsHelper.IsRangedWeaponModSlot(slotID) && UniversalSlotsHelper.IsRangedWeaponModType(partType) {
+    if UniversalSlotsHelper.IsRangedWeaponModSlot(slotID) && UniversalSlotsHelper.IsAnyWeaponModType(partType) {
       return true;
     }
-    if UniversalSlotsHelper.IsMeleeWeaponModSlot(slotID) && UniversalSlotsHelper.IsMeleeWeaponModType(partType) {
+    if UniversalSlotsHelper.IsMeleeWeaponModSlot(slotID) && UniversalSlotsHelper.IsAnyWeaponModType(partType) {
       return true;
     }
     if UniversalSlotsHelper.IsCyberwareArmModSlot(slotID) && UniversalSlotsHelper.IsAnyWeaponModType(partType) {
@@ -340,7 +352,8 @@ public abstract class UniversalSlotsHelper {
   }
 
   public final static func NormalizeSlotForUI(slotID: TweakDBID) -> TweakDBID {
-    if UniversalSlotsHelper.IsCyberwareArmModSlot(slotID) {
+    let vanillaArmSlots: array<TweakDBID> = UniversalSlotsHelper.GetAllCyberwareArmModSlots();
+    if ArrayContains(vanillaArmSlots, slotID) {
       return t"AttachmentSlots.GenericWeaponMod1";
     }
     return slotID;
@@ -390,6 +403,15 @@ private final func ShouldSlotBeAvailable(itemData: wref<gameItemData>, attachmen
 
 @replaceMethod(UIInventoryItemModsManager)
 private final func GetAttachements(owner: wref<GameObject>, inventoryItem: wref<UIInventoryItem>) -> Void {
+  // This method is a rebuild, not an append.  Clear our owned presentation
+  // state first so repeated UI refreshes cannot duplicate mods or retain a
+  // dedicated attachment from a previous item.
+  ArrayClear(this.m_mods);
+  ArrayClear(this.m_attachments);
+  this.m_dedicatedMod = null;
+  if !IsDefined(inventoryItem) || !IsDefined(inventoryItem.GetItemData()) {
+    return;
+  }
   let itemData: wref<gameItemData> = inventoryItem.GetItemData();
   let usedSlots: array<TweakDBID> = this.m_usedSlots;
   let emptySlots: array<TweakDBID> = this.m_emptySlots;
@@ -432,7 +454,7 @@ private final func GetAttachements(owner: wref<GameObject>, inventoryItem: wref<
       if !slotsData[i].empty {
         itemData.GetItemPart(partData, slotsData[i].slotId);
         staticData = InnerItemData.GetStaticData(partData);
-        if staticData.TagsContains(n"DummyPart") {
+        if IsDefined(staticData) && staticData.TagsContains(n"DummyPart") {
           // skip DummyPart
         } else {
           attachmentType = UIInventoryItemModsStaticData.IsAttachmentDedicated(slotsData[i].slotId) ? InventoryItemAttachmentType.Dedicated : InventoryItemAttachmentType.Generic;
@@ -489,6 +511,11 @@ private final func GetAttachements(owner: wref<GameObject>, inventoryItem: wref<
 
 @replaceMethod(InventoryDataManagerV2)
 public final func GetAttachements(owner: wref<GameObject>, itemData: wref<gameItemData>, usedSlots: array<TweakDBID>, emptySlots: array<TweakDBID>, mods: script_ref<array<ref<MinimalItemTooltipModData>>>, dedicatedMods: script_ref<array<ref<MinimalItemTooltipModAttachmentData>>>) -> Void {
+  ArrayClear(Deref(mods));
+  ArrayClear(Deref(dedicatedMods));
+  if !IsDefined(itemData) {
+    return;
+  }
   let emptySlotsSize: Int32 = ArraySize(emptySlots);
   let usedSlotsSize: Int32 = ArraySize(usedSlots);
   if emptySlotsSize < 1 && usedSlotsSize < 1 {
@@ -528,7 +555,7 @@ public final func GetAttachements(owner: wref<GameObject>, itemData: wref<gameIt
       if !slotsData[i].empty {
         itemData.GetItemPart(partData, slotsData[i].slotId);
         staticData = InnerItemData.GetStaticData(partData);
-        if staticData.TagsContains(n"DummyPart") {
+        if IsDefined(staticData) && staticData.TagsContains(n"DummyPart") {
           // skip DummyPart
         } else {
           attachmentType = this.IsAttachmentDedicated(slotsData[i].slotId) ? InventoryItemAttachmentType.Dedicated : InventoryItemAttachmentType.Generic;
@@ -653,10 +680,10 @@ public final static func PlacementSlotsContains(self: script_ref<InventoryItemDa
   return false;
 }
 
-@wrapMethod(InventoryItemModeLogicController)
-private final func IsMatchingSlot(itemData: script_ref<InventoryItemData>, partItemData: script_ref<InventoryItemData>, targetSlot: TweakDBID) -> Bool {
-  if wrappedMethod(itemData, partItemData, targetSlot) {
-    return true;
+@replaceMethod(InventoryItemModeLogicController)
+private final func IsMatchingSlot(const itemData: script_ref<InventoryItemData>, const partItemData: script_ref<InventoryItemData>, targetSlot: TweakDBID) -> Bool {
+  if !TDBID.IsValid(targetSlot) {
+    return false;
   }
   let attachments: array<ref<InventoryItemAttachments>> = InventoryItemData.GetAttachments(itemData);
   let hasTargetSlot: Bool = false;
@@ -672,26 +699,230 @@ private final func IsMatchingSlot(itemData: script_ref<InventoryItemData>, partI
     return false;
   }
   let partType: gamedataItemType = InventoryItemData.GetItemType(partItemData);
-  return UniversalSlotsHelper.IsUniversalPartCompatibleWithSlot(partType, targetSlot);
+  if UniversalSlotsHelper.IsUniversalPartCompatibleWithSlot(partType, targetSlot) {
+    return true;
+  }
+  if InventoryItemData.PlacementSlotsContains(partItemData, targetSlot) {
+    return true;
+  }
+  if RPGManager.IsClothingMod(partType) {
+    let validSlots: array<TweakDBID> = RPGManager.GetModsSlotIDs(InventoryItemData.GetItemType(itemData));
+    return ArrayContains(validSlots, targetSlot);
+  }
+  return false;
 }
 
-@wrapMethod(InventoryItemModeLogicController)
-private final func GetMatchingSlot(itemData: script_ref<InventoryItemData>, partItemData: script_ref<InventoryItemData>) -> TweakDBID {
-  let res: TweakDBID = wrappedMethod(itemData, partItemData);
-  if TDBID.IsValid(res) {
-    return res;
-  }
-  let partType: gamedataItemType = InventoryItemData.GetItemType(partItemData);
+@replaceMethod(InventoryItemModeLogicController)
+private final func GetMatchingSlot(const itemData: script_ref<InventoryItemData>, const partItemData: script_ref<InventoryItemData>) -> TweakDBID {
   let attachments: array<ref<InventoryItemAttachments>> = InventoryItemData.GetAttachments(itemData);
+  let selectedSlot: TweakDBID = IsDefined(this.m_selectedItemChooser) ? this.m_selectedItemChooser.GetSelectedSlotID() : TDBID.None();
   let i: Int32 = 0;
+
+  // 1. If the currently selected slot is compatible and empty, use it immediately
+  if TDBID.IsValid(selectedSlot) && this.IsMatchingSlot(itemData, partItemData, selectedSlot) {
+    i = 0;
+    while i < ArraySize(attachments) {
+      if attachments[i].SlotID == selectedSlot && InventoryItemData.IsEmpty(attachments[i].ItemData) {
+        return selectedSlot;
+      }
+      i += 1;
+    }
+  }
+
+  // 2. Otherwise choose the first empty compatible slot in attachment order
+  let firstCompatible: TweakDBID = TDBID.None();
+  i = 0;
   while i < ArraySize(attachments) {
     let slotID: TweakDBID = attachments[i].SlotID;
-    if UniversalSlotsHelper.IsUniversalPartCompatibleWithSlot(partType, slotID) {
-      return slotID;
+    if this.IsMatchingSlot(itemData, partItemData, slotID) {
+      if !TDBID.IsValid(firstCompatible) {
+        firstCompatible = slotID;
+      }
+      if InventoryItemData.IsEmpty(attachments[i].ItemData) {
+        return slotID;
+      }
     }
     i += 1;
   }
-  return res;
+
+  // 3. If all compatible slots are occupied, prefer the selected slot if compatible
+  if TDBID.IsValid(selectedSlot) && this.IsMatchingSlot(itemData, partItemData, selectedSlot) {
+    return selectedSlot;
+  }
+
+  // 4. Fallback to the first compatible slot (if any)
+  return firstCompatible;
+}
+
+@replaceMethod(InventoryItemModeLogicController)
+private final func EquipPart(const itemData: script_ref<InventoryItemData>, slotID: TweakDBID) -> Void {
+  let equippedItemData: InventoryItemData = this.m_selectedItemChooser.GetModifiedItemData();
+  if this.m_InventoryManager.CanInstallPart(itemData) && TDBID.IsValid(slotID) {
+    this.m_InventoryManager.InstallPart(InventoryItemData.GetID(equippedItemData), InventoryItemData.GetID(itemData), slotID);
+    this.TelemetryLogPartInstalled(equippedItemData, itemData, slotID);
+    this.SetPingTutorialFact(InventoryItemData.GetID(itemData), false);
+  }
+}
+
+@replaceMethod(InventoryItemModeLogicController)
+private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>, opt displayContext: ItemDisplayContext, opt isPlayerLocked: Bool) -> Void {
+  let isClothing: Bool;
+  let isEquippedItemBlocked: Bool;
+  let item: ItemModParams;
+  let localEquippedData: wref<gameItemData>;
+  let shouldUpdate: Bool;
+  if actionName.IsAction(n"drop_item") {
+    if Equals(this.m_playerState, gamePSMVehicle.Default) && !InventoryItemData.IsEquipped(itemData) && RPGManager.CanItemBeDropped(this.m_player, InventoryItemData.GetGameItemData(itemData)) {
+      if isPlayerLocked {
+        this.ShowNotification(this.m_player.GetGame(), UIMenuNotificationType.InventoryActionBlocked);
+        return;
+      }
+      if InventoryItemData.GetQuantity(itemData) > 1 {
+        this.OpenQuantityPicker(itemData, QuantityPickerActionType.Drop);
+      } else {
+        item.itemID = InventoryItemData.GetID(itemData);
+        item.quantity = 1;
+        this.AddToDropQueue(item);
+        this.RefreshAvailableItems(true);
+        this.PlaySound(n"Item", n"OnDrop");
+        this.PlayRumble(RumbleStrength.SuperLight, RumbleType.Pulse, RumblePosition.Right);
+        if IsDefined(this.m_leftItemChooser) {
+          this.m_leftItemChooser.RefreshItems(shouldUpdate, -1);
+        }
+        this.itemChooser.RefreshItems(shouldUpdate, -1);
+      }
+    }
+  } else {
+    if actionName.IsAction(n"preview_item") && (InventoryItemData.IsWeapon(Deref(itemData)) || InventoryItemData.IsGarment(Deref(itemData))) && !InventoryItemData.IsEmpty(itemData) && Equals(displayContext, ItemDisplayContext.Backpack) && this.m_pressedItemDisplay != null {
+      this.PlaySound(n"MapPin", n"OnCreate");
+      this.m_pressedItemDisplay = null;
+      isClothing = this.IsEquipmentAreaClothing(InventoryItemData.GetEquipmentArea(itemData)) || Equals(InventoryItemData.GetEquipmentArea(itemData), gamedataEquipmentArea.Outfit);
+      this.m_itemPreviewPopupToken = ItemPreviewHelper.ShowPreviewItem(this, itemData, isClothing, n"OnItemPreviewPopup");
+    } else {
+      if actionName.IsAction(n"click") && NotEquals(displayContext, ItemDisplayContext.Attachment) {
+        if InventoryItemData.IsEquipped(itemData) || InventoryItemData.IsEmpty(itemData) {
+          if Equals(Deref(itemData), this.itemChooser.GetModifiedItemData()) {
+            this.SelectItemChooserWithoutCallback(this.itemChooser);
+          } else {
+            if Equals(Deref(itemData), this.m_leftItemChooser.GetModifiedItemData()) {
+              this.SelectItemChooserWithoutCallback(this.m_leftItemChooser);
+            }
+          }
+        } else {
+          if !(InventoryItemData.IsEquipped(itemData) && Equals(this.m_currentHotkey, EHotkey.INVALID)) {
+            localEquippedData = InventoryItemData.GetGameItemData(this.m_selectedItemChooser.GetModifiedItemData());
+            shouldUpdate = true;
+            isEquippedItemBlocked = IsDefined(localEquippedData) && localEquippedData.HasTag(n"UnequipBlocked");
+            if isEquippedItemBlocked || !InventoryGPRestrictionHelper.CanEquip(itemData, this.m_player) {
+              this.ShowNotification(this.m_player.GetGame(), this.DetermineUIMenuNotificationType());
+              return;
+            }
+            if Equals(InventoryItemData.GetItemType(itemData), gamedataItemType.Clo_Outfit) {
+              if this.m_outfitInCooldown {
+                return;
+              }
+              if this.ScheduleOutfitCooldownReset() {
+                this.SetOutfitCooldown(true);
+              }
+            }
+            this.EquipItem(itemData, this.m_selectedItemChooser.GetSlotIndex());
+            this.PlayRumble(RumbleStrength.Heavy, RumbleType.Pulse, RumblePosition.Right);
+            this.m_inventoryController.HandleCyberwareStyleUpdate(InventoryItemData.GetEquipmentArea(itemData), Deref(itemData).SlotID, true);
+            if ArrayContains(this.m_lastEquipmentAreas, gamedataEquipmentArea.Outfit) {
+              if NotEquals(this.m_wardrobeSystem.GetActiveClothingSetIndex(), gameWardrobeClothingSetIndex.INVALID) && InventoryItemData.IsEmpty(itemData) {
+                shouldUpdate = false;
+              }
+            }
+            if IsDefined(this.m_leftItemChooser) {
+              this.m_leftItemChooser.RefreshItems(shouldUpdate, -1);
+            }
+            this.itemChooser.RefreshItems(shouldUpdate, -1);
+            if !InventoryItemData.IsPart(itemData) {
+              this.m_viewMode = ItemViewModes.Item;
+              this.m_currentFilter = ItemFilterCategory.Invalid;
+              this.RefreshAvailableItems();
+            }
+            this.NotifyItemUpdate();
+          }
+        }
+      }
+    }
+  }
+}
+
+@replaceMethod(ItemModificationSystem)
+private final func InstallItemPart(obj: ref<GameObject>, itemID: ItemID, partItemID: ItemID, opt slotID: TweakDBID) -> Bool {
+  let partData: InnerItemData;
+  let partInstallRequest: ref<PartInstallRequest>;
+  let previousItemType: gamedataItemType;
+  let previousPartID: ItemID;
+  let result: Bool;
+  if !IsDefined(obj) || !ItemID.IsValid(itemID) || !ItemID.IsValid(partItemID) {
+    return false;
+  }
+  let ts: ref<TransactionSystem> = GameInstance.GetTransactionSystem(obj.GetGame());
+  let partRecord: wref<Item_Record> = RPGManager.GetItemRecord(partItemID);
+  if !IsDefined(ts) || !IsDefined(partRecord) || !IsDefined(partRecord.ItemType()) {
+    return false;
+  }
+  let itemType: gamedataItemType = partRecord.ItemType().Type();
+  let itemData: ref<gameItemData> = ts.GetItemData(obj, itemID);
+  if !IsDefined(itemData) {
+    return false;
+  }
+  if !IsDefined(TweakDBInterface.GetAttachmentSlotRecord(slotID)) {
+    slotID = EquipmentSystem.GetPlacementSlot(partItemID);
+  }
+  if !TDBID.IsValid(slotID) {
+    return false;
+  }
+  itemData.GetItemPart(partData, slotID);
+  previousPartID = InnerItemData.GetItemID(partData);
+  if ItemID.IsValid(previousPartID) {
+    this.RemovePartEquipGLPs(obj, previousPartID);
+  }
+  result = ts.ForcePartInSlot(obj, itemID, partItemID, slotID);
+  if Equals(itemType, gamedataItemType.Prt_Program) {
+    this.RemoveOtherShards(obj, itemID, partItemID);
+  }
+  previousItemType = RPGManager.GetItemType(previousPartID);
+  if result && ItemID.IsValid(previousPartID) && (RPGManager.IsWeaponMod(previousPartID) || Equals(previousItemType, gamedataItemType.CyberwareStatsShard) || RPGManager.IsClothingMod(previousPartID)) {
+    ts.RemoveItem(obj, previousPartID, 1);
+  }
+  if result {
+    partInstallRequest = new PartInstallRequest();
+    partInstallRequest.owner = obj;
+    partInstallRequest.itemID = itemID;
+    partInstallRequest.partID = partItemID;
+    GameInstance.GetScriptableSystemsContainer(this.GetGameInstance()).Get(n"EquipmentSystem").QueueRequest(partInstallRequest);
+    GameInstance.GetScriptableSystemsContainer(this.GetGameInstance()).Get(n"UIInventoryScriptableSystem").QueueRequest(partInstallRequest);
+  }
+  PlayerPuppet.ChacheQuickHackListCleanup(obj as PlayerPuppet);
+  return result;
+}
+
+@wrapMethod(InventoryDataManagerV2)
+private final func GetInventoryItemDataInternal(owner: wref<GameObject>, itemData: wref<gameItemData>, opt itemRecord: wref<Item_Record>) -> InventoryItemData {
+  let result: InventoryItemData = wrappedMethod(owner, itemData, itemRecord);
+  let rec: wref<Item_Record> = itemRecord;
+  if !IsDefined(rec) && IsDefined(itemData) {
+    rec = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemData.GetID()));
+  }
+  if IsDefined(rec) && rec.IsPart() {
+    InventoryItemData.SetIsPart(result, true);
+    InventoryItemData.SetIsRequirementMet(result, true);
+    InventoryItemData.SetIsEquippable(result, true);
+    if ArraySize(result.PlacementSlots) == 0 {
+      let placementSlots: array<wref<AttachmentSlot_Record>>;
+      rec.PlacementSlots(placementSlots);
+      let i: Int32 = 0;
+      while i < ArraySize(placementSlots) {
+        InventoryItemData.AddPlacementSlot(result, placementSlots[i].GetID());
+        i += 1;
+      }
+    }
+  }
+  return result;
 }
 
 // Replaces InventoryDataManagerV2.GetPlayerInventoryPartsDataForItem so that:
@@ -713,8 +944,9 @@ public final func GetPlayerInventoryPartsDataForItem(item: ItemID, slotIDs: scri
   let j: Int32 = 0;
 
   while i < ArraySize(tempItems) {
-    currentItemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(tempItems[i].GetID()));
-    if IsDefined(currentItemRecord) && currentItemRecord.IsPart() {
+    if IsDefined(tempItems[i]) {
+      currentItemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(tempItems[i].GetID()));
+      if IsDefined(currentItemRecord) && currentItemRecord.IsPart() {
       matchAnySlot = false;
       ArrayClear(parts);
       tempItems[i].GetItemParts(parts);
@@ -742,6 +974,7 @@ public final func GetPlayerInventoryPartsDataForItem(item: ItemID, slotIDs: scri
       if matchAnySlot {
         ArrayPush(inventoryItems, tempItems[i]);
       }
+      }
     }
     i += 1;
   }
@@ -756,6 +989,9 @@ public final func GetPlayerInventoryPartsDataForItem(item: ItemID, slotIDs: scri
 
 @replaceMethod(InventoryDataManagerV2)
 public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs: script_ref<array<TweakDBID>>, opt filteredItems: array<ItemModParams>, outputItems: script_ref<array<InventoryItemData>>) -> Void {
+  if !IsDefined(this.m_Player) || !ItemID.IsValid(item) {
+    return;
+  }
   let inventoryItems: array<InventoryItemData> = this.GetPlayerPartsInventoryData(slotIDs);
   let isDeckOrMonoWire: Bool = GameInstance.GetTransactionSystem(this.m_Player.GetGame()).HasTag(this.m_Player, n"Cyberdeck", item)
     || Equals(RPGManager.GetItemType(item), gamedataItemType.Cyb_NanoWires);
@@ -794,10 +1030,7 @@ public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs:
 
 @wrapMethod(CraftingSystem)
 private final func ClearNonIconicSlots(itemData: wref<gameItemData>) -> Void {
-  if IsDefined(itemData) && RPGManager.IsItemIconic(itemData) {
-    return;
-  }
-  wrappedMethod(itemData);
+  return;
 }
 
 // ============================================================================

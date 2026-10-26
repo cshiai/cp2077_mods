@@ -84,7 +84,9 @@ public class SSS_Ids {
 
   public static func Concat(a: array<TweakDBID>, b: array<TweakDBID>) -> array<TweakDBID> {
     for x in b {
-      ArrayPush(a, x);
+      if !ArrayContains(a, x) {
+        ArrayPush(a, x);
+      }
     }
     return a;
   }

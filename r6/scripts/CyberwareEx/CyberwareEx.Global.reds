@@ -7,15 +7,21 @@ public abstract class CyberwareEx {
 
     public static func ResetSlot(game: GameInstance, areaType: gamedataEquipmentArea) {
         let player = GetPlayer(game);
+        if !IsDefined(player) { return; }
+        let data = EquipmentSystem.GetData(player);
+        if !IsDefined(data) { return; }
         let overrideManager = new OverrideManager();
-        overrideManager.Initialize(EquipmentSystem.GetData(player));
+        overrideManager.Initialize(data);
         overrideManager.ResetSlot(areaType, true);
     }
 
     public static func ResetAllSlots(game: GameInstance) {
         let player = GetPlayer(game);
+        if !IsDefined(player) { return; }
+        let data = EquipmentSystem.GetData(player);
+        if !IsDefined(data) { return; }
         let overrideManager = new OverrideManager();
-        overrideManager.Initialize(EquipmentSystem.GetData(player));
+        overrideManager.Initialize(data);
         for override in OverrideConfig.SlotOverrides() {
             overrideManager.ResetSlot(override.areaType, true);
         }
@@ -24,8 +30,11 @@ public abstract class CyberwareEx {
     public static func UpgradeSlot(game: GameInstance, areaType: gamedataEquipmentArea, opt count: Int32) {
         if IsOverrideMode() {
             let player = GetPlayer(game);
+            if !IsDefined(player) { return; }
+            let data = EquipmentSystem.GetData(player);
+            if !IsDefined(data) { return; }
             let overrideManager = new OverrideManager();
-            overrideManager.Initialize(EquipmentSystem.GetData(player));
+            overrideManager.Initialize(data);
             if count == 0 {
                 count = 1;
             }
@@ -39,8 +48,11 @@ public abstract class CyberwareEx {
     public static func UpgradeAllSlotsToMax(game: GameInstance) {
         if IsOverrideMode() {
             let player = GetPlayer(game);
+            if !IsDefined(player) { return; }
+            let data = EquipmentSystem.GetData(player);
+            if !IsDefined(data) { return; }
             let overrideManager = new OverrideManager();
-            overrideManager.Initialize(EquipmentSystem.GetData(player));
+            overrideManager.Initialize(data);
             for override in OverrideConfig.SlotOverrides() {
                 while (overrideManager.UpgradeSlot(override.areaType, true)) {}
             }
@@ -50,12 +62,15 @@ public abstract class CyberwareEx {
 
 @replaceMethod(Device)
 protected final const func IsCyberdeckEquippedOnPlayer() -> Bool {
-    return CyberwareHelper.IsCyberdeckEquipped(GetPlayer(this.GetGame()));
+    let player = GetPlayer(this.GetGame());
+    return IsDefined(player) && CyberwareHelper.IsCyberdeckEquipped(player);
 }
 
 @replaceMethod(EquipmentSystem)
 public final static func IsCyberdeckEquipped(owner: ref<GameObject>) -> Bool {
-    return GameInstance.GetStatsSystem(owner.GetGame()).GetStatBoolValue(Cast(owner.GetEntityID()), gamedataStatType.HasCyberdeck);
+    if !IsDefined(owner) { return false; }
+    let stats = GameInstance.GetStatsSystem(owner.GetGame());
+    return IsDefined(stats) && stats.GetStatBoolValue(Cast(owner.GetEntityID()), gamedataStatType.HasCyberdeck);
 }
 
 @addMethod(EquipmentSystemPlayerData)
@@ -71,6 +86,9 @@ public func GetTaggedItem(equipArea: gamedataEquipmentArea, requiredTag: CName) 
 @addMethod(EquipmentSystemPlayerData)
 public func GetTaggedItem(equipArea: gamedataEquipmentArea, requiredTags: array<CName>) -> ItemID {
     let equipAreaIndex = this.GetEquipAreaIndex(equipArea);
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas) {
+        return ItemID.None();
+    }
     let numSlots = ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots);
     let slotIndex = 0;
 
@@ -90,6 +108,9 @@ public func GetTaggedItem(equipArea: gamedataEquipmentArea, requiredTags: array<
 @addMethod(EquipmentSystemPlayerData)
 public func ApplyAreaPowerUps(equipArea: gamedataEquipmentArea) {
     let equipAreaIndex = this.GetEquipAreaIndex(equipArea);
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas) {
+        return;
+    }
     let numSlots = ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots);
     let slotIndex = 0;
 
@@ -102,15 +123,127 @@ public func ApplyAreaPowerUps(equipArea: gamedataEquipmentArea) {
 @wrapMethod(EquipmentSystemPlayerData)
 public final const func GetActiveItem(equipArea: gamedataEquipmentArea, opt isLeftHandWeapon: Bool) -> ItemID {
     if Equals(equipArea, gamedataEquipmentArea.SystemReplacementCW) {
-        return this.GetTaggedItem(equipArea, n"Cyberdeck");
+        let deckID = this.GetTaggedItem(equipArea, n"Cyberdeck");
+        if ItemID.IsValid(deckID) {
+            return deckID;
+        }
     }
 
     return wrappedMethod(equipArea, isLeftHandWeapon);
 }
 
+@replaceMethod(EquipmentSystemPlayerData)
+private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSlotsUpdate: Bool, opt forceEquipWeapon: Bool) -> Void {
+    let currentItem: ItemID;
+    let currentItemData: ref<gameItemData>;
+    let cyberwareType: CName;
+    let equipArea: SEquipArea;
+    let equipAreaIndex: Int32;
+    let equipSlot: SEquipSlot;
+    let equipmentArea: gamedataEquipmentArea;
+    let i: Int32;
+    let isLeftWeapon: Bool;
+    let oppositeSlotIndex: Int32;
+    let placementSlot: TweakDBID;
+    let transactionSystem: ref<TransactionSystem>;
+    let weaponRecord: ref<WeaponItem_Record>;
+    if !IsDefined(this.m_owner) || !ItemID.IsValid(itemID) {
+        return;
+    }
+    let itemData: ref<gameItemData> = RPGManager.GetItemData(this.m_owner.GetGame(), this.m_owner, itemID);
+    if !this.IsEquippable(itemData) {
+        return;
+    }
+    equipmentArea = EquipmentSystem.GetEquipAreaType(itemID);
+    equipAreaIndex = this.GetEquipAreaIndex(equipmentArea);
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas)
+        || slotIndex < 0 || slotIndex >= ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots) {
+        return;
+    }
+    equipArea = this.m_equipment.equipAreas[equipAreaIndex];
+    equipSlot = equipArea.equipSlots[slotIndex];
+    currentItem = equipSlot.itemID;
+    currentItemData = RPGManager.GetItemData(this.m_owner.GetGame(), this.m_owner, currentItem);
+    if IsDefined(currentItemData) && currentItemData.HasTag(n"UnequipBlocked") {
+        return;
+    }
+    if Equals(equipmentArea, gamedataEquipmentArea.Outfit) && this.IsVisualSetActive() {
+        this.UnequipWardrobeSet();
+    }
+    transactionSystem = GameInstance.GetTransactionSystem(this.m_owner.GetGame());
+    this.m_equipPending = true;
+    if !this.HandleEquipWeapon(itemID, slotIndex, blockActiveSlotsUpdate, forceEquipWeapon, isLeftWeapon) {
+        this.UnequipItem(equipAreaIndex, slotIndex);
+        // Only enforce same-cyberwareType uniqueness for SystemReplacementCW (e.g. 1 Sandevistan + 1 Cyberdeck + 1 Berserk),
+        // allowing multiple EyesCW, HandsCW, ArmsCW, LegsCW, and internal cyberware items to coexist across extra slots.
+        if Equals(equipmentArea, gamedataEquipmentArea.SystemReplacementCW) {
+            cyberwareType = TweakDBInterface.GetCName(ItemID.GetTDBID(itemID) + t".cyberwareType", n"None");
+            i = 0;
+            while i < ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots) {
+                if Equals(cyberwareType, TweakDBInterface.GetCName(ItemID.GetTDBID(this.m_equipment.equipAreas[equipAreaIndex].equipSlots[i].itemID) + t".cyberwareType", n"type")) {
+                    this.UnequipItem(equipAreaIndex, i);
+                }
+                i += 1;
+            }
+        }
+    }
+    this.m_equipPending = false;
+    this.m_equipment.equipAreas[equipAreaIndex].equipSlots[slotIndex].itemID = itemID;
+    placementSlot = this.GetPlacementSlot(equipAreaIndex, slotIndex, isLeftWeapon);
+    if Equals(itemData.GetItemType(), gamedataItemType.Cyb_StrongArms) {
+        this.HandleStrongArmsEquip(itemID);
+    }
+    if placementSlot == t"AttachmentSlots.WeaponRight" || placementSlot == t"AttachmentSlots.WeaponLeft" {
+        weaponRecord = TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(itemID));
+        if IsDefined(weaponRecord) && IsDefined(weaponRecord.HolsteredItem()) {
+            EquipmentSystemPlayerData.UpdateArmSlot(this.m_owner as PlayerPuppet, itemID, true);
+        }
+    }
+    if placementSlot != t"AttachmentSlots.WeaponRight" && placementSlot != t"AttachmentSlots.WeaponLeft" && placementSlot != t"AttachmentSlots.Consumable" {
+        if !transactionSystem.HasItemInSlot(this.m_owner, placementSlot, itemID) {
+            transactionSystem.RemoveItemFromSlot(this.m_owner, placementSlot);
+            this.AddItemToSlot(transactionSystem, placementSlot, itemID, equipmentArea);
+        }
+    }
+    this.ApplyEquipGLPs(itemID);
+    this.ApplySlotGLPs(equipSlot.slotID);
+    if itemData.UsesVariants() && NotEquals(equipArea.areaType, gamedataEquipmentArea.ArmsCW) || Equals(equipArea.areaType, gamedataEquipmentArea.RightArm) {
+        itemData.AddStatsOnEquip(this.m_owner);
+    }
+    equipArea = this.m_equipment.equipAreas[equipAreaIndex];
+    this.UpdateWeaponWheel();
+    this.UpdateQuickWheel();
+    this.UpdateUIBBAreaChanged(equipmentArea, slotIndex);
+    oppositeSlotIndex = EquipmentSystemPlayerData.GetOppositeWeaponSlotIndex(slotIndex);
+    this.SendPaperdollUpdate(equipArea, true, placementSlot, slotIndex, true);
+    this.SendPaperdollUpdate(equipArea, ItemID.IsValid(equipArea.equipSlots[oppositeSlotIndex].itemID), isLeftWeapon ? t"AttachmentSlots.WeaponRight" : t"AttachmentSlots.WeaponLeft", oppositeSlotIndex, true);
+    i = 0;
+    while i < ArraySize(this.m_hotkeys) {
+        if this.m_hotkeys[i].IsCompatible(itemData.GetItemType()) || this.m_hotkeys[i].IsCompatible(EquipmentSystem.GetEquipAreaType(itemData.GetID())) {
+            this.AssignItemToHotkey(itemData.GetID(), this.m_hotkeys[i].GetHotkey());
+        }
+        i += 1;
+    }
+    EquipmentSystem.GetInstance(this.m_owner).Debug_FillESSlotData(slotIndex, this.m_equipment.equipAreas[equipAreaIndex].areaType, itemID, this.m_owner);
+    if ItemID.IsValid(currentItem) && currentItem != itemID {
+        transactionSystem.OnItemRemovedFromEquipmentSlot(this.m_owner, currentItem);
+    }
+    transactionSystem.OnItemAddedToEquipmentSlot(this.m_owner, itemID);
+    if this.IsItemOfCategory(itemID, gamedataItemCategory.Cyberware) || Equals(equipArea.areaType, gamedataEquipmentArea.ArmsCW) {
+        this.CheckCyberjunkieAchievement();
+    }
+    if EquipmentSystem.IsItemCyberdeck(itemID) {
+        PlayerPuppet.ChacheQuickHackListCleanup(this.m_owner);
+    }
+}
+
 @wrapMethod(EquipmentSystemPlayerData)
 private final func UnequipItem(equipAreaIndex: Int32, slotIndex: Int32, opt forceRemove: Bool) {
     wrappedMethod(equipAreaIndex, slotIndex, forceRemove);
+
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas) {
+        return;
+    }
 
     switch this.m_equipment.equipAreas[equipAreaIndex].areaType {
         case gamedataEquipmentArea.EyesCW:
@@ -136,7 +269,12 @@ public final func AssignItemToHotkey(newID: ItemID, hotkey: EHotkey) {
         return;
     }
 
-    let oldID = this.m_hotkeys[EnumInt(hotkey)].GetItemID();
+    let hotkeyIndex: Int32 = EnumInt(hotkey);
+    if hotkeyIndex < 0 || hotkeyIndex >= ArraySize(this.m_hotkeys) || !IsDefined(this.m_owner) {
+        return;
+    }
+
+    let oldID = this.m_hotkeys[hotkeyIndex].GetItemID();
     if newID == oldID {
         if Equals(hotkey, EHotkey.LBRB) {
             this.SyncHotkeyData(hotkey);
@@ -145,6 +283,7 @@ public final func AssignItemToHotkey(newID: ItemID, hotkey: EHotkey) {
     }
 
     let transactionSystem = GameInstance.GetTransactionSystem(this.m_owner.GetGame());
+    if !IsDefined(transactionSystem) { return; }
 
     let oldCategory = RPGManager.GetItemCategory(oldID);
     if NotEquals(oldCategory, gamedataItemCategory.Cyberware) {
@@ -154,7 +293,7 @@ public final func AssignItemToHotkey(newID: ItemID, hotkey: EHotkey) {
         this.RemoveEquipGLPs(oldID);
     }
 
-    this.m_hotkeys[EnumInt(hotkey)].StoreItem(newID);
+    this.m_hotkeys[hotkeyIndex].StoreItem(newID);
 
     let newCategory = RPGManager.GetItemCategory(newID);
     if NotEquals(newCategory, gamedataItemCategory.Cyberware) {
@@ -167,7 +306,6 @@ public final func AssignItemToHotkey(newID: ItemID, hotkey: EHotkey) {
     this.SyncHotkeyData(hotkey);
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @wrapMethod(EquipmentSystemPlayerData)
 private final const func IsSlotLocked(slot: SEquipSlot, out visibleWhenLocked: Bool) -> Bool {
     if !slot.visibleWhenLocked {
@@ -177,18 +315,26 @@ private final const func IsSlotLocked(slot: SEquipSlot, out visibleWhenLocked: B
     return false;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @replaceMethod(EquipmentSystemPlayerData)
 private final func InitializeEquipmentArea(equipAreaRecord: ref<EquipmentArea_Record>, out equipArea: SEquipArea) {
+    if !IsDefined(equipAreaRecord) {
+        return;
+    }
     let equipSlotRecords: array<wref<EquipSlot_Record>>;
     equipAreaRecord.EquipSlots(equipSlotRecords);
 
     if CyberwareHelper.IsCyberwareArea(equipArea.areaType) {
         let numberOfRecords = ArraySize(equipSlotRecords);
         let numberOfSlots = ArraySize(equipArea.equipSlots);
-        if numberOfSlots > numberOfRecords {
+        let savedFactSlots = 0;
+        if IsDefined(this.m_owner) {
+            savedFactSlots = GameInstance.GetQuestsSystem(this.m_owner.GetGame())
+                .GetFact(CyberwareHelper.GetSlotCountFactName(equipArea.areaType));
+        }
+        let targetSlots = Max(numberOfSlots, Max(numberOfRecords, savedFactSlots));
+        if targetSlots > numberOfRecords {
             let slotIndex = numberOfRecords;
-            while slotIndex < numberOfSlots {
+            while slotIndex < targetSlots {
                 let equipSlotID = CyberwareHelper.CreateEquipSlotRecord(equipArea.areaType, slotIndex);
                 ArrayPush(equipSlotRecords, TweakDBInterface.GetEquipSlotRecord(equipSlotID));
                 slotIndex += 1;
@@ -199,7 +345,6 @@ private final func InitializeEquipmentArea(equipAreaRecord: ref<EquipmentArea_Re
     this.InitializeEquipSlotsFromRecords(equipSlotRecords, equipArea.equipSlots);
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @replaceMethod(EquipmentSystemPlayerData)
 private final func InitializeEquipSlotsFromRecords(slotRecords: array<wref<EquipSlot_Record>>, out equipSlots: array<SEquipSlot>) {
     let numberOfRecords = ArraySize(slotRecords);
@@ -207,29 +352,26 @@ private final func InitializeEquipSlotsFromRecords(slotRecords: array<wref<Equip
     let finalSize = Max(numberOfRecords, numberOfSlots);
     let i = 0;
     while i < finalSize {
+        let savedID = i < numberOfSlots ? equipSlots[i].itemID : ItemID.None();
         if i < numberOfRecords {
             let equipSlot: SEquipSlot;
             this.InitializeEquipSlotFromRecord(slotRecords[i], equipSlot);
+            if ItemID.IsValid(savedID) {
+                equipSlot.itemID = savedID;
+            }
             if i < numberOfSlots {
-                if !IsDefined(equipSlot.unlockPrereq) || equipSlot.visibleWhenLocked || equipSlot.unlockPrereq.IsFulfilled(this.m_owner.GetGame(), this.m_owner) {
-                    equipSlot.itemID = equipSlots[i].itemID;
-                }
                 equipSlots[i] = equipSlot;
             } else {
                 ArrayPush(equipSlots, equipSlot);
             }
         } else {
             this.InitializeEquipSlotFromRecord(TweakDBInterface.GetEquipSlotRecord(t"EquipmentArea.SimpleEquipSlot"), equipSlots[i]);
+            if ItemID.IsValid(savedID) {
+                equipSlots[i].itemID = savedID;
+            }
         }
         i += 1;
     }
-}
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@wrapMethod(EquipmentSystemPlayerData)
-private final func InitializeEquipSlotsFromRecords(slotRecords: array<wref<EquipSlot_Record>>, out equipSlots: array<SEquipSlot>) {
-    wrappedMethod(slotRecords, equipSlots);
-    ArrayResize(equipSlots, ArraySize(slotRecords));
 }
 
 @if(!ModuleExists("CyberarmOverhaul"))
@@ -271,22 +413,28 @@ public final static func UpdateArmSlot(owner: ref<gamePuppet>, itemToDraw: ItemI
     }
 
     let transactionSystem = GameInstance.GetTransactionSystem(owner.GetGame());
-    let rightWeaponID = transactionSystem.GetItemInSlot(owner, t"AttachmentSlots.WeaponRight").GetItemID();
-    let leftWeaponID = transactionSystem.GetItemInSlot(owner, t"AttachmentSlots.WeaponLeft").GetItemID();
+    if !IsDefined(transactionSystem) { return; }
+    let rightItem = transactionSystem.GetItemInSlot(owner, t"AttachmentSlots.WeaponRight");
+    let leftItem = transactionSystem.GetItemInSlot(owner, t"AttachmentSlots.WeaponLeft");
+    let rightWeaponID: ItemID = IsDefined(rightItem) ? rightItem.GetItemID() : ItemID.None();
+    let leftWeaponID: ItemID = IsDefined(leftItem) ? leftItem.GetItemID() : ItemID.None();
 
-    let cyberArmsInUse = ItemID.IsValid(rightWeaponID) && TweakDBInterface.GetItemRecord(ItemID.GetTDBID(rightWeaponID)).TagsContains(n"Meleeware");
-    let launcherInUse = ItemID.IsValid(leftWeaponID) && TweakDBInterface.GetItemRecord(ItemID.GetTDBID(leftWeaponID)).TagsContains(n"ProjectileLauncher");
+    let rightRecord = ItemID.IsValid(rightWeaponID) ? TweakDBInterface.GetItemRecord(ItemID.GetTDBID(rightWeaponID)) : null;
+    let leftRecord = ItemID.IsValid(leftWeaponID) ? TweakDBInterface.GetItemRecord(ItemID.GetTDBID(leftWeaponID)) : null;
+    let cyberArmsInUse = IsDefined(rightRecord) && rightRecord.TagsContains(n"Meleeware");
+    let launcherInUse = IsDefined(leftRecord) && leftRecord.TagsContains(n"ProjectileLauncher");
 
     let meleeWareID = ItemID.None();
     let slotIndex = 0;
     let equipAreaIndex = equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.ArmsCW);
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(equipmentData.m_equipment.equipAreas) { return; }
     let numberOfSlots = ArraySize(equipmentData.m_equipment.equipAreas[equipAreaIndex].equipSlots);
     while slotIndex < numberOfSlots {
         let itemID = equipmentData.m_equipment.equipAreas[equipAreaIndex].equipSlots[slotIndex].itemID;
         if ItemID.IsValid(itemID) {
             meleeWareID = itemID;
             let itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID));
-            if !itemRecord.TagsContains(n"ProjectileLauncher") {
+            if IsDefined(itemRecord) && !itemRecord.TagsContains(n"ProjectileLauncher") {
                 break;
             }
         }
@@ -298,7 +446,9 @@ public final static func UpdateArmSlot(owner: ref<gamePuppet>, itemToDraw: ItemI
     }
 
     if !launcherInUse && !cyberArmsInUse {
-        let holsteredArmsID = ItemID.CreateQuery(TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(meleeWareID)).HolsteredItem().GetID());
+        let meleeRecord = TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(meleeWareID));
+        if !IsDefined(meleeRecord) || !IsDefined(meleeRecord.HolsteredItem()) { return; }
+        let holsteredArmsID = ItemID.CreateQuery(meleeRecord.HolsteredItem().GetID());
 
         if !transactionSystem.HasItem(owner, holsteredArmsID) {
             transactionSystem.GiveItem(owner, holsteredArmsID, 1);
@@ -316,6 +466,14 @@ public final static func UpdateArmSlot(owner: ref<gamePuppet>, itemToDraw: ItemI
 
 @wrapMethod(PlayerDevelopmentData)
 private final func HandleAddingPerkLevel(i: Int32, j: Int32) {
+    // Preserve vanilla perk bookkeeping first.  This hook used to omit the
+    // wrapped call entirely, which could leave perk progression/state stale.
+    wrappedMethod(i, j);
+    if i < 0 || i >= ArraySize(this.m_attributesData)
+        || j < 0 || j >= ArraySize(this.m_attributesData[i].unlockedPerks)
+        || !IsDefined(this.m_owner) {
+        return;
+    }
     if Equals(this.m_attributesData[i].unlockedPerks[j].type, gamedataNewPerkType.Tech_Central_Milestone_3) && this.m_attributesData[i].unlockedPerks[j].currLevel == 3 {
         EquipmentSystem.GetData(this.m_owner).ApplyAreaPowerUps(gamedataEquipmentArea.MusculoskeletalSystemCW);
     }
@@ -357,6 +515,7 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
 private final func ActivateIconicCyberware() {
     let equipmentData = EquipmentSystem.GetData(this);
     let characterData = PlayerDevelopmentSystem.GetData(this);
+    if !IsDefined(equipmentData) || !IsDefined(characterData) { return; }
 
     let hasBerserk = equipmentData.HasTaggedItem(gamedataEquipmentArea.SystemReplacementCW, n"Berserk");
     let hasSandevistan = equipmentData.HasTaggedItem(gamedataEquipmentArea.SystemReplacementCW, n"Sandevistan");
@@ -372,11 +531,13 @@ private final func ActivateIconicCyberware() {
     let isCombinedAbilityMode = IsCombinedAbilityMode();
 
     let statsSystem = GameInstance.GetStatsSystem(this.GetGame());
+    if !IsDefined(statsSystem) { return; }
     let playerStatsId = Cast<StatsObjectID>(this.GetEntityID());
     let canUseBerserk = statsSystem.GetStatBoolValue(playerStatsId, gamedataStatType.HasBerserk);
     let canUseSandevistan = statsSystem.GetStatBoolValue(playerStatsId, gamedataStatType.HasSandevistan);
 
     let psmBlackboard = this.GetPlayerStateMachineBlackboard();
+    if !IsDefined(psmBlackboard) { return; }
     let meleeWeaponState = IntEnum<gamePSMMeleeWeapon>(psmBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.MeleeWeapon));
 
     let isFocusMode = Equals(IntEnum<gamePSMVision>(psmBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.Vision)), gamePSMVision.Focus);
@@ -438,9 +599,10 @@ private final func ActivateIconicCyberware() {
 @wrapMethod(PlayerPuppet)
 protected cb func OnCleanUpTimeDilationEvent(evt: ref<CleanUpTimeDilationEvent>) -> Bool {
     let timeSystem = GameInstance.GetTimeSystem(this.GetGame());
-    if !timeSystem.IsTimeDilationActive() {
-        wrappedMethod(evt);
+    if IsDefined(timeSystem) && timeSystem.IsTimeDilationActive() {
+        return false;
     }
+    return wrappedMethod(evt);
 }
 
 @addField(QuestTrackerGameController)
@@ -448,20 +610,21 @@ private let m_cyberwareExPopup: ref<inkGameNotificationToken>;
 
 @wrapMethod(QuestTrackerGameController)
 protected cb func OnInitialize() -> Bool {
-    wrappedMethod();
+    let result: Bool = wrappedMethod();
 
     if !CompatibilityManager.IsUserNotified() {
         if !CompatibilityManager.CheckRequirements() {
             this.m_cyberwareExPopup = RequirementsPopup.Show(this);
             this.m_cyberwareExPopup.RegisterListener(this, n"OnCyberwareExPopupClose");
         } else {
-            if !CompatibilityManager.CheckConflicts(this.m_player.GetGame()) {
+            if IsDefined(this.m_player) && !CompatibilityManager.CheckConflicts(this.m_player.GetGame()) {
                 this.m_cyberwareExPopup = ConflictsPopup.Show(this);
                 this.m_cyberwareExPopup.RegisterListener(this, n"OnCyberwareExPopupClose");
             }
         }
         CompatibilityManager.MarkAsNotified();
     }
+    return result;
 }
 
 @addMethod(QuestTrackerGameController)
@@ -469,32 +632,12 @@ protected cb func OnCyberwareExPopupClose(data: ref<inkGameNotificationData>) {
     this.m_cyberwareExPopup = null;
 }
 
-@replaceMethod(DoubleJumpDecisions)
+// CyberNinjaParkour owns this high-risk hook when present.  Keep CyberwareEx
+// as a transparent wrapper instead of a competing replacement so load order
+// cannot silently discard one feature.
+@wrapMethod(DoubleJumpDecisions)
 protected const func EnterCondition(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-    let jumpPressedFlag = stateContext.GetConditionBool(n"JumpPressed");
-    if !jumpPressedFlag && !this.m_jumpPressed {
-        this.EnableOnEnterCondition(false);
-    }
-    if !scriptInterface.HasStatFlag(gamedataStatType.HasDoubleJump) {
-        return false;
-    }
-    if StatusEffectSystem.ObjectHasStatusEffect(scriptInterface.executionOwner, t"BaseStatusEffect.HealFood3") {
-        return false;
-    }
-    if this.IsCurrentFallSpeedTooFastToEnter(stateContext, scriptInterface) {
-        return false;
-    }
-    if scriptInterface.localBlackboard.GetBool(GetAllBlackboardDefs().PlayerStateMachine.IsPlayerInsideMovingElevator) {
-        return false;
-    }
-    let currentNumberOfJumps = stateContext.GetIntParameter(n"currentNumberOfJumps", true);
-    if currentNumberOfJumps >= this.GetStaticIntParameterDefault("numberOfMultiJumps", 1) {
-        return false;
-    }
-    if jumpPressedFlag || scriptInterface.IsActionJustPressed(n"Jump") {
-        return true;
-    }
-    return false;
+    return wrappedMethod(stateContext, scriptInterface);
 }
 
 @wrapMethod(EquippedDecisions)
@@ -613,9 +756,23 @@ protected func UpdateCurrentItem() {
 
 @replaceMethod(CyberwareInventoryMiniGrid)
 public final func GetSlotToEquipe(itemID: ItemID) -> Int32 {
+    let equipArea = this.GetEquipmentArea();
     let cyberwareType = TweakDBInterface.GetCName(ItemID.GetTDBID(itemID) + t".cyberwareType", n"None");
+
+    // If the user explicitly selected an unlocked empty slot, equip directly into it
+    let i = 0;
+    while i < ArraySize(this.m_gridData) {
+        if this.m_gridData[i].GetSlotIndex() == this.m_selectedSlotIndex && !this.m_gridData[i].IsLocked() && !IsDefined(this.m_gridData[i].GetUIInventoryItem()) {
+            if !Equals(equipArea, gamedataEquipmentArea.SystemReplacementCW) {
+                return this.m_selectedSlotIndex;
+            }
+        }
+        i += 1;
+    }
+
     let slotIndex = ArraySize(this.m_gridData) - 1;
     let emptyIndex = -1;
+    let matchingTypeIndex = -1;
     while slotIndex >= 0 {
         if !this.m_gridData[slotIndex].IsLocked() {
             if !IsDefined(this.m_gridData[slotIndex].GetUIInventoryItem()) {
@@ -623,14 +780,22 @@ public final func GetSlotToEquipe(itemID: ItemID) -> Int32 {
             } else {
                 let equippedType = TweakDBInterface.GetCNameDefault(this.m_gridData[slotIndex].GetUIInventoryItem().GetTweakDBID() + t".cyberwareType");
                 if Equals(cyberwareType, equippedType) {
-                    emptyIndex = this.m_gridData[slotIndex].GetSlotIndex();
-                    break;
+                    matchingTypeIndex = this.m_gridData[slotIndex].GetSlotIndex();
+                    if Equals(equipArea, gamedataEquipmentArea.SystemReplacementCW) {
+                        return matchingTypeIndex;
+                    }
                 }
             }
         }
         slotIndex -= 1;
     }
-    return emptyIndex != -1 ? emptyIndex : (this.m_selectedSlotIndex != -1 ? this.m_selectedSlotIndex : 0);
+    if emptyIndex != -1 {
+        return emptyIndex;
+    }
+    if matchingTypeIndex != -1 {
+        return matchingTypeIndex;
+    }
+    return this.m_selectedSlotIndex != -1 ? this.m_selectedSlotIndex : 0;
 }
 
 @replaceMethod(gameuiInventoryGameController)
@@ -699,10 +864,17 @@ private final func RefreshPlayerCyberware() {
 
 @replaceMethod(gameuiInventoryGameController)
 protected cb func OnSlotSpawned(widget: ref<inkWidget>, userData: ref<IScriptable>) -> Bool {
+    if !IsDefined(widget) {
+        return false;
+    }
     let controller = widget.GetController() as InventoryItemDisplayController;
     let data = userData as CyberwareSlotSpawnData;
+    if !IsDefined(controller) || !IsDefined(data) || data.index < 0 || data.index >= ArraySize(this.m_cyberwareItems) {
+        return false;
+    }
     let itemData = this.m_cyberwareItems[data.index];
     controller.Setup(itemData, InventoryItemData.GetEquipmentArea(itemData), "", InventoryItemData.GetSlotIndex(itemData));
+    return true;
 }
 
 @replaceMethod(healthbarWidgetGameController)
@@ -712,30 +884,36 @@ protected final const func IsCyberdeckEquipped() -> Bool {
 
 @wrapMethod(HotkeyConsumableWidgetController)
 protected cb func OnInitialize() -> Bool {
-    wrappedMethod();
+    let result: Bool = wrappedMethod();
 
     let container = inkWidgetRef.Get(this.m_container) as inkCompoundWidget;
-    container.GetWidgetByIndex(container.GetNumChildren() - 1).SetName(n"Sandevistan");
+    if IsDefined(container) && container.GetNumChildren() > 0 {
+        let widget = container.GetWidgetByIndex(container.GetNumChildren() - 1);
+        if IsDefined(widget) { widget.SetName(n"Sandevistan"); }
+    }
+    return result;
 }
 
 @wrapMethod(HotkeysWidgetController)
 protected cb func OnInitialize() -> Bool {
-    wrappedMethod();
+    let result: Bool = wrappedMethod();
 
     this.FixHudSlotSize();
     this.SpawnCyberwareExtraSlots();
+    return result;
 }
 
 @addMethod(HotkeysWidgetController)
 protected func SpawnCyberwareExtraSlots() {
     let container = inkWidgetRef.Get(this.m_dpadHintsPanel) as inkCompoundWidget;
+    if !IsDefined(container) { return; }
 
     let cyberwarePos = 0;
     let cyberwareWidget: wref<inkWidget>;
     let numWidgets = container.GetNumChildren();
     while cyberwarePos < container.GetNumChildren() {
         cyberwareWidget = container.GetWidgetByIndex(cyberwarePos);
-        if Equals(cyberwareWidget.GetName(), n"cyberware") {
+        if IsDefined(cyberwareWidget) && Equals(cyberwareWidget.GetName(), n"cyberware") {
             break;
         }
 
@@ -753,7 +931,7 @@ protected func SpawnCyberwareExtraSlots() {
     let i = 0;
     let cyberwareTypes = [n"Cyberdeck", n"Sandevistan", n"Berserk"];
     while i < ArraySize(cyberwareTypes) {
-        cyberwares[i].SetName(cyberwareTypes[i]);
+        if IsDefined(cyberwares[i]) { cyberwares[i].SetName(cyberwareTypes[i]); }
         if i >= 1 {
             container.ReorderChild(cyberwares[i], cyberwarePos + i);
         }
@@ -769,8 +947,10 @@ protected func FixHudSlotSize() {}
 @if(!ModuleExists("CustomQuickslots"))
 @addMethod(HotkeysWidgetController)
 protected func FixHudSlotSize() {
-    let hudEntryInfo = this.GetRootWidget().GetUserData(n"inkHudEntryInfo") as inkHudEntryInfo;
-    hudEntryInfo.size = Vector2(2400, 300);
+    let root = this.GetRootWidget();
+    if !IsDefined(root) { return; }
+    let hudEntryInfo = root.GetUserData(n"inkHudEntryInfo") as inkHudEntryInfo;
+    if IsDefined(hudEntryInfo) { hudEntryInfo.size = Vector2(2400, 300); }
 }
 
 @wrapMethod(InventoryItemDisplayController)
@@ -787,7 +967,8 @@ public final func SetPerkRequiredCyberware(area: gamedataEquipmentArea) {
 protected func UpdateLocked() {
     wrappedMethod();
 
-    this.GetRootWidget().SetVisible(!this.m_isLocked || this.m_visibleWhenLocked);
+    let root = this.GetRootWidget();
+    if IsDefined(root) { root.SetVisible(!this.m_isLocked || this.m_visibleWhenLocked); }
 }
 
 @wrapMethod(ItemDisplayUtils)
@@ -860,6 +1041,9 @@ private final func Init() {
 
 @wrapMethod(RipperDocGameController)
 protected cb func OnSlotClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
+    if !IsDefined(evt) {
+        return false;
+    }
     if this.m_isActivePanel && IsDefined(evt.uiInventoryItem) && Equals(this.m_hoverArea, gamedataEquipmentArea.EyesCW) {
         if evt.actionName.IsAction(n"unequip_item") && evt.uiInventoryItem.IsEquipped() {
             this.m_isInEquipPopup = true;
@@ -868,92 +1052,15 @@ protected cb func OnSlotClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
         }
     }
 
-    wrappedMethod(evt);
+    return wrappedMethod(evt);
 }
 
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@replaceMethod(RipperDocGameController)
-private final func IsEquipmentAreaRequiringPerk(equipmentArea: gamedataEquipmentArea) -> Bool {
-    let playerData = EquipmentSystem.GetData(this.GetPlayerControlledObject());
-    let visibleWhenLocked: Bool;
-    return playerData.IsSlotLocked(
-        this.m_hoveredItemDisplay.GetEquipmentArea(),
-        this.m_hoveredItemDisplay.GetSlotIndex(),
-        visibleWhenLocked
-    );
-}
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@wrapMethod(RipperDocGameController)
-private final func ShowCWPerkTooltip(widget: wref<inkWidget>) {
-    if Equals(this.m_dollHoverArea, gamedataEquipmentArea.HandsCW) {
-        wrappedMethod(widget);
-        return;
-    }
-
-    this.m_ripperdocHoverState = RipperdocHoverState.SlotSkeleton;
-
-    let tooltipData = new RipperdocPerkTooltipData();
-    tooltipData.equipArea = this.m_hoveredItemDisplay.GetEquipmentArea();
-    tooltipData.slotIndex = this.m_hoveredItemDisplay.GetSlotIndex();
-    tooltipData.ripperdocHoverState = this.m_ripperdocHoverState;
-
-    this.m_TooltipsManager.ShowTooltipAtWidget(n"RipperdocPerkTooltip", widget, tooltipData,
-        gameuiETooltipPlacement.RightTop, false, new inkMargin(this.m_defaultTooltipGap, 0.00, 0.00, 0.00));
-}
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@wrapMethod(RipperDocGameController)
-protected cb func OnSlotHover(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
-    this.m_hoveredItemDisplay = evt.display;
-    wrappedMethod(evt);
-}
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@replaceMethod(RipperDocGameController)
-private final func GetRequiredPerk(hoverArea: RipperdocHoverState) -> gamedataNewPerkType {
-    return CyberwareHelper.GetRequiredPerkType(
-        this.m_hoveredItemDisplay.GetEquipmentArea(),
-        this.m_hoveredItemDisplay.GetSlotIndex()
-    );
-}
-
-@if(!ModuleExists("CyberwareEx.OverrideMode"))
-@replaceMethod(RipperDocGameController)
-private final func OpenPerkTree() {
-    let userData = new PerkUserData();
-    userData.cyberwareScreenType = this.m_screen;
-    userData.statType = CyberwareHelper.GetRequiredPerkStatType(
-        this.m_hoveredItemDisplay.GetEquipmentArea(),
-        this.m_hoveredItemDisplay.GetSlotIndex()
-    );
-    userData.perkType = CyberwareHelper.GetRequiredPerkType(
-        this.m_hoveredItemDisplay.GetEquipmentArea(),
-        this.m_hoveredItemDisplay.GetSlotIndex()
-    );
-
-    if Equals(this.m_screen, CyberwareScreenType.Inventory) {
-        let evt = new OpenMenuRequest();
-        evt.m_menuName = n"new_perks";
-        evt.m_isMainMenu = true;
-        evt.m_jumpBack = true;
-        evt.m_eventData.userData = userData;
-        evt.m_eventData.m_overrideDefaultUserData = true;
-        this.QueueBroadcastEvent(evt);
-    } else {
-        this.m_menuEventDispatcher.SpawnEvent(n"OnSwitchToCharacter", userData);
-    }
-}
-
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addField(RipperDocGameController)
 private let m_overrideManager: ref<OverrideManager>;
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addField(RipperDocGameController)
 private let m_overrideConfirmationToken: ref<inkGameNotificationToken>;
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @wrapMethod(RipperDocGameController)
 private final func Init() {
     wrappedMethod();
@@ -962,14 +1069,17 @@ private final func Init() {
     this.m_overrideManager.Initialize(EquipmentSystem.GetData(this.m_player));
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @wrapMethod(RipperDocGameController)
 protected cb func OnSlotHover(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
-    wrappedMethod(evt);
+    if !IsDefined(evt) || !IsDefined(evt.display) {
+        return false;
+    }
+    this.m_hoveredItemDisplay = evt.display;
+    let result: Bool = wrappedMethod(evt);
 
     if Equals(this.m_screen, CyberwareScreenType.Ripperdoc) {
 
-        if Equals(this.m_filterMode, RipperdocModes.Default) {
+        if Equals(this.m_filterMode, RipperdocModes.Default) && IsDefined(this.m_overrideManager) {
             let overrideState = this.m_overrideManager.GetOverrideState(evt.display.GetEquipmentArea());
             if overrideState.isOverridable {
 
@@ -988,9 +1098,9 @@ protected cb func OnSlotHover(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
         }
 
     }
+    return result;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @wrapMethod(RipperDocGameController)
 private final func SetButtonHintsUnhover() {
     wrappedMethod();
@@ -998,13 +1108,17 @@ private final func SetButtonHintsUnhover() {
     this.m_buttonHintsController.RemoveButtonHint(n"drop_item");
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @wrapMethod(RipperDocGameController)
 protected cb func OnPreviewCyberwareClick(evt: ref<inkPointerEvent>) -> Bool {
-    wrappedMethod(evt);
+    if !IsDefined(evt) {
+        return false;
+    }
+    let result: Bool = wrappedMethod(evt);
 
-    if Equals(this.m_screen, CyberwareScreenType.Ripperdoc) && Equals(this.m_filterMode, RipperdocModes.Default) {
-        let areaType = this.GetCyberwareSlotControllerFromTarget(evt).GetEquipmentArea();
+    let slotController = this.GetCyberwareSlotControllerFromTarget(evt);
+    if Equals(this.m_screen, CyberwareScreenType.Ripperdoc) && Equals(this.m_filterMode, RipperdocModes.Default)
+        && IsDefined(this.m_overrideManager) && IsDefined(slotController) {
+        let areaType = slotController.GetEquipmentArea();
         let overrideState = this.m_overrideManager.GetOverrideState(areaType);
 
         switch (true) {
@@ -1030,9 +1144,9 @@ protected cb func OnPreviewCyberwareClick(evt: ref<inkPointerEvent>) -> Bool {
                 break;
         }
     }
+    return result;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addMethod(RipperDocGameController)
 protected func ShowNotEnoughMoneyNotification() {
     let notification = new UIMenuNotificationEvent();
@@ -1041,7 +1155,6 @@ protected func ShowNotEnoughMoneyNotification() {
     this.QueueEvent(notification);
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addMethod(RipperDocGameController)
 protected cb func OnSlotUpgradeConfirmed(data: ref<inkGameNotificationData>) -> Bool {
     if OverrideConfirmationPopup.IsConfirmed(data) {
@@ -1057,9 +1170,9 @@ protected cb func OnSlotUpgradeConfirmed(data: ref<inkGameNotificationData>) -> 
     }
 
     this.m_overrideConfirmationToken = null;
+    return true;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addMethod(RipperDocGameController)
 protected cb func OnSlotResetConfirmed(data: ref<inkGameNotificationData>) -> Bool {
     if OverrideConfirmationPopup.IsConfirmed(data) {
@@ -1075,15 +1188,14 @@ protected cb func OnSlotResetConfirmed(data: ref<inkGameNotificationData>) -> Bo
     }
 
     this.m_overrideConfirmationToken = null;
+    return true;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @replaceMethod(RipperDocGameController)
 private final func IsEquipmentAreaRequiringPerk(equipmentArea: gamedataEquipmentArea) -> Bool {
     return false;
 }
 
-@if(ModuleExists("CyberwareEx.OverrideMode"))
 @addMethod(RipperDocGameController)
 private final func UpdateMoney() {
     let blackBoardDef = GetAllBlackboardDefs().UI_Vendor;
@@ -1093,66 +1205,80 @@ private final func UpdateMoney() {
 
 @wrapMethod(RipperdocMetersArmor)
 protected cb func OnInitialize() -> Bool {
-    wrappedMethod();
+    let result: Bool = wrappedMethod();
 
     if IsExtendedMode() || IsOverrideMode() || IsCustomMode() {
         let root = this.GetRootWidget();
+        if !IsDefined(root) { return result; }
 
         let margin = root.GetMargin();
         margin.right = 370;
         root.SetMargin(margin);
     }
+    return result;
 }
 
 @wrapMethod(RipperdocMetersArmor)
 protected cb func OnIntroAnimationFinished_METER(proxy: ref<inkAnimProxy>) -> Bool {
-    wrappedMethod(proxy);
+    let result: Bool = wrappedMethod(proxy);
 
     if IsExtendedMode() || IsOverrideMode() || IsCustomMode() {
         let root = this.GetRootWidget();
+        if !IsDefined(root) || !IsDefined(root.parentWidget) { return result; }
         let parent = root.parentWidget as inkCompoundWidget;
+        if !IsDefined(parent) { return result; }
         let wrapper = parent.GetWidget(n"wrapper") as inkCompoundWidget;
+        if !IsDefined(wrapper) { return result; }
 
         let oldIndex = ArrayFindFirst(parent.children.children, root);
         let newIndex = ArrayFindFirst(wrapper.children.children, wrapper.GetWidget(n"paperDollWrapper")) + 1;
+        if newIndex < 0 { return result; }
         root.Reparent(wrapper, newIndex);
 
         let dummy = new inkCanvas();
         parent.AddChildWidget(dummy);
         parent.ReorderChild(dummy, oldIndex);
     }
+    return result;
 }
 
 @wrapMethod(RipperdocMetersCapacity)
 protected cb func OnInitialize() -> Bool {
-    wrappedMethod();
+    let result: Bool = wrappedMethod();
 
     if IsExtendedMode() || IsOverrideMode() || IsCustomMode() {
         let root = this.GetRootWidget();
+        if !IsDefined(root) { return result; }
 
         let margin = root.GetMargin();
         margin.left = 240;
         root.SetMargin(margin);
     }
+    return result;
 }
 
 @wrapMethod(RipperdocMetersCapacity)
 protected cb func OnIntroAnimationFinished_METER(proxy: ref<inkAnimProxy>) -> Bool {
-    wrappedMethod(proxy);
+    let result: Bool = wrappedMethod(proxy);
 
     if IsExtendedMode() || IsOverrideMode() || IsCustomMode() {
         let root = this.GetRootWidget();
+        if !IsDefined(root) || !IsDefined(root.parentWidget) { return result; }
         let parent = root.parentWidget as inkCompoundWidget;
+        if !IsDefined(parent) { return result; }
         let wrapper = parent.GetWidget(n"wrapper") as inkCompoundWidget;
+        if !IsDefined(wrapper) { return result; }
 
         let oldIndex = ArrayFindFirst(parent.children.children, root);
         let newIndex = ArrayFindFirst(wrapper.children.children, wrapper.GetWidget(n"paperDollWrapper")) + 1;
+        if newIndex < 0 { return result; }
         root.Reparent(wrapper, newIndex);
 
         let dummy = new inkCanvas();
         parent.AddChildWidget(dummy);
         parent.ReorderChild(dummy, oldIndex);
     }
+    return result;
 }
 
 @wrapMethod(RipperdocMetersCapacity)
@@ -1174,6 +1300,10 @@ public let slotIndex: Int32;
 @wrapMethod(RipperdocPerkTooltip)
 public func SetData(tooltipData: ref<ATooltipData>) {
     let perkTooltipData = tooltipData as RipperdocPerkTooltipData;
+    if !IsDefined(perkTooltipData) {
+        wrappedMethod(tooltipData);
+        return;
+    }
     let perkRecord = CyberwareHelper.GetRequiredPerkRecord(perkTooltipData.equipArea, perkTooltipData.slotIndex);
     if IsDefined(perkRecord) {
         let requiredLevel = CyberwareHelper.GetRequiredPerkLevel(perkTooltipData.equipArea, perkTooltipData.slotIndex);

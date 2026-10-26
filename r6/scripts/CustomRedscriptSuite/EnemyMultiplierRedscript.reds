@@ -32,14 +32,8 @@ public class EMRS_Settings extends ScriptableSystem {
   // Snapped to the nearest walkable point on the human navmesh.
   public let cloneSpacing: Int32 = 15;
 
-  // Include Elite and Rare rarity enemies. Bosses, MaxTac, Officers, and police are never cloned.
-  public let cloneElites: Bool = true;
-
-  // Also clone gang members who are not yet hostile to V.
-  public let cloneNeutralGangers: Bool = true;
-
-  // Also clone corporate, military, and security NPCs who are not yet hostile to V.
-  public let cloneNeutralCorpos: Bool = false;
+  // Elite and Rare enemies are intentionally included. Bosses, MaxTac,
+  // Officers, police, civilians, and every non-hostile NPC are never cloned.
 
   // Clones roll their own outfit from the character's appearance list instead of copying the original's.
   public let randomizeAppearance: Bool = true;
@@ -103,19 +97,6 @@ public func EMRS_MaxPool() -> Int32 {
   return 256;
 }
 
-public func EMRS_IsCorpoOrSecurity(affiliation: gamedataAffiliation) -> Bool {
-  return Equals(affiliation, gamedataAffiliation.Arasaka)
-    || Equals(affiliation, gamedataAffiliation.Militech)
-    || Equals(affiliation, gamedataAffiliation.KangTao)
-    || Equals(affiliation, gamedataAffiliation.NetWatch)
-    || Equals(affiliation, gamedataAffiliation.Biotechnica)
-    || Equals(affiliation, gamedataAffiliation.Zetatech)
-    || Equals(affiliation, gamedataAffiliation.SSI)
-    || Equals(affiliation, gamedataAffiliation.NUSA)
-    || Equals(affiliation, gamedataAffiliation.Barghest)
-    || Equals(affiliation, gamedataAffiliation.UnaffiliatedCorpo);
-}
-
 public func EMRS_MinDeferredMetres() -> Float {
   return 20.0;
 }
@@ -154,7 +135,7 @@ public func EMRS_ReasonText(code: Int32) -> String {
     return "boss, MaxTac or officer";
   };
   if code == 10 {
-    return "elite or rare, setting off";
+    return "unsupported rarity";
   };
   if code == 11 {
     return "named quest character";
@@ -221,6 +202,8 @@ public class EMRS_System extends ScriptableSystem {
   }
 
   private func OnPlayerAttach(request: ref<PlayerAttachRequest>) -> Void {
+    // Never drop IDs for live dynamic entities without deleting them first.
+    this.DeleteAllClones("player reattached");
     this.ResetTracking();
     this.m_tickGen += 1;
     this.m_active = true;
@@ -245,8 +228,6 @@ public class EMRS_System extends ScriptableSystem {
     ArrayClear(this.m_pending);
     ArrayClear(this.m_pendingDist);
     ArrayClear(this.m_seen);
-    ArrayClear(this.m_clones);
-    ArrayClear(this.m_cloneOwner);
     this.m_tickCount = 0;
   }
 
@@ -432,7 +413,11 @@ public class EMRS_System extends ScriptableSystem {
     if wanted <= 0 {
       return EMRS_OutcomeSettled();
     };
-    let room: Int32 = s.maxClones - ArraySize(this.m_clones);
+    // Keep the upstream safety ceiling even if a future settings surface
+    // supplies a larger value.  The user-requested cap is exactly 24.
+    let hardCap: Int32 = s.maxClones;
+    if hardCap > 24 { hardCap = 24; }
+    let room: Int32 = hardCap - ArraySize(this.m_clones);
     if room <= 0 {
       if s.verboseLogging {
         EMRS_Log("skip " + TDBID.ToStringDEBUG(npc.GetRecordID()) + ": " + EMRS_ReasonText(23) + " (" + ToString(ArraySize(this.m_clones)) + ")");
@@ -487,9 +472,6 @@ public class EMRS_System extends ScriptableSystem {
     if Equals(rarity, gamedataNPCRarity.Boss) || Equals(rarity, gamedataNPCRarity.MaxTac) || Equals(rarity, gamedataNPCRarity.Officer) {
       return 9;
     };
-    if !s.cloneElites && (Equals(rarity, gamedataNPCRarity.Elite) || Equals(rarity, gamedataNPCRarity.Rare)) {
-      return 10;
-    };
     let record: wref<Character_Record> = npc.GetRecord();
     if IsDefined(record) {
       let nameplate: wref<UINameplate_Record> = record.UiNameplate();
@@ -497,24 +479,17 @@ public class EMRS_System extends ScriptableSystem {
         return 11;
       };
     };
-    if IsDefined(record) {
-      this.RememberRecord(record, rarity);
-    };
     if VehicleComponent.IsMountedToVehicle(gi, npc) {
       return 20;
     };
     let hostile: Bool = Equals(npc.GetAttitudeTowards(player), EAIAttitude.AIA_Hostile);
     if !hostile {
-      let neutralOk: Bool = s.cloneNeutralGangers && npc.IsCharacterGanger();
-      if !neutralOk && s.cloneNeutralCorpos && IsDefined(record) {
-        let faction: wref<Affiliation_Record> = record.Affiliation();
-        if IsDefined(faction) && EMRS_IsCorpoOrSecurity(faction.Type()) {
-          neutralOk = true;
-        };
-      };
-      if !neutralOk {
-        return 21;
-      };
+      // Deliberately clone hostile combat enemies only; neutral gangers and
+      // neutral corpos are not enemies and must never be multiplied.
+      return 21;
+    };
+    if IsDefined(record) {
+      this.RememberRecord(record, rarity);
     };
     if dist > Cast<Float>(s.cloneRange) {
       return 22;
@@ -568,7 +543,7 @@ public class EMRS_System extends ScriptableSystem {
     if ArraySize(candidates) == 0 {
       return own;
     };
-    return candidates[RandRange(0, ArraySize(candidates))];
+    return candidates[RandRange(0, ArraySize(candidates) - 1)];
   }
 
   private func PlaceOnNavmesh(gi: GameInstance, originalPos: Vector4, wished: Vector4, spacing: Float, out placed: Vector4) -> Int32 {
@@ -592,7 +567,7 @@ public class EMRS_System extends ScriptableSystem {
 
   private func SpawnClone(gi: GameInstance, s: ref<EMRS_Settings>, original: ref<NPCPuppet>, index: Int32, count: Int32) -> Bool {
     let des: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
-    if !IsDefined(des) || !des.IsReady() {
+    if !IsDefined(des) || !des.IsReady() || ArraySize(this.m_clones) >= 24 {
       return false;
     };
     let pos: Vector4 = original.GetWorldPosition();
@@ -650,9 +625,12 @@ public class EMRS_System extends ScriptableSystem {
       let cloneID: EntityID = this.m_clones[i];
       if IsDefined(des) && !des.IsManaged(cloneID) {
         ArrayErase(this.m_clones, i);
-        ArrayErase(this.m_cloneOwner, i);
+        if i < ArraySize(this.m_cloneOwner) { ArrayErase(this.m_cloneOwner, i); }
       } else {
-        let owner: ref<Entity> = GameInstance.FindEntityByID(gi, this.m_cloneOwner[i]);
+        let owner: ref<Entity>;
+        if i < ArraySize(this.m_cloneOwner) {
+          owner = GameInstance.FindEntityByID(gi, this.m_cloneOwner[i]);
+        };
         let shouldDelete: Bool = !IsDefined(owner);
         if !shouldDelete && IsDefined(player) {
           let cloneNpc: ref<NPCPuppet> = GameInstance.FindEntityByID(gi, cloneID) as NPCPuppet;
@@ -667,7 +645,7 @@ public class EMRS_System extends ScriptableSystem {
             des.DeleteEntity(cloneID);
           };
           ArrayErase(this.m_clones, i);
-          ArrayErase(this.m_cloneOwner, i);
+          if i < ArraySize(this.m_cloneOwner) { ArrayErase(this.m_cloneOwner, i); }
           if this.Verbose() {
             EMRS_Log("clone removed, original gone or distant corpse");
           };
@@ -743,12 +721,10 @@ public static exec func EMRS_Status(gi: GameInstance) -> Void {
   let s: ref<EMRS_Settings> = EMRS_Settings.Get(gi);
   if IsDefined(sys) && IsDefined(s) {
     let line: String = "enabled=" + ToString(s.enabled) + " multiplier=" + ToString(s.multiplier)
-      + " range=" + ToString(s.cloneRange) + " spacing=" + ToString(s.cloneSpacing) + " elites=" + ToString(s.cloneElites)
-      + " neutralGangers=" + ToString(s.cloneNeutralGangers)
-      + " neutralCorpos=" + ToString(s.cloneNeutralCorpos)
+      + " range=" + ToString(s.cloneRange) + " spacing=" + ToString(s.cloneSpacing) + " hostileOnly=true"
       + " randomLook=" + ToString(s.randomizeAppearance) + " siblings=" + ToString(s.cloneSiblingRecords)
       + " pool=" + ToString(sys.PoolCount())
-      + " clones=" + ToString(sys.CloneCount()) + " cap=" + ToString(s.maxClones)
+      + " clones=" + ToString(sys.CloneCount()) + " cap=24"
       + " pending=" + ToString(sys.PendingCount());
     EMRS_Log(line);
   };

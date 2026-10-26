@@ -1,0 +1,28 @@
+MBAI.FieldMedicineStatusEffect:
+  $base: SpecialActions.UseCombatStimConsumable_inline1
+
+MBAI.FieldMedicineAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - Condition.AbilityCanUseCombatStims
+    - Condition.HealthBelow30perc
+    - Condition.NotIsInWorkspot
+    - Condition.NotInCover
+    - Condition.NotIsEnteringOrLeavingCover
+    - Condition.NotIsUsingOffMeshLink
+    - Condition.NotHasMeleeWeapon
+    - Condition.NotTicketEquip
+    - Condition.NotTicketTakeCover
+    - Condition.NotTicketCatchUp
+    - Condition.NotTicketSync
+    - Condition.NotWounded
+
+MBAI.FieldMedicineGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.FieldMedicineAnd
+
+MBAI.FieldMedicineAction:
+  $base: SpecialActions.UseCombatStimConsumable
+  activationCondition: MBAI.FieldMedicineGate
+  loopSubActions:
+    - MBAI.FieldMedicineStatusEffect

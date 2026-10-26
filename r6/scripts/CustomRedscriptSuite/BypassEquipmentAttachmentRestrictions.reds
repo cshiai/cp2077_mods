@@ -14,12 +14,44 @@ private let bypassEquipHumanityModifier: ref<gameStatModifierData>;
 @addMethod(PlayerPuppet)
 public final func ApplyBypassEquipHumanity() -> Void {
   let stats = GameInstance.GetStatsSystem(this.GetGame());
+  if !IsDefined(stats) { return; }
   let id = Cast<StatsObjectID>(this.GetEntityID());
 
   if !IsDefined(this.bypassEquipHumanityModifier) {
     this.bypassEquipHumanityModifier = RPGManager.CreateStatModifier(gamedataStatType.Humanity, gameStatModifierType.Additive, 9000.0);
     stats.AddModifier(id, this.bypassEquipHumanityModifier);
   };
+}
+
+public func BypassIsConvenienceEquipment(itemData: wref<gameItemData>) -> Bool {
+  if !IsDefined(itemData) || RPGManager.IsItemBroken(itemData) || itemData.HasTag(n"UnequipBlocked") {
+    return false;
+  }
+  let itemID = itemData.GetID();
+  let area = EquipmentSystem.GetEquipAreaType(itemID);
+  return RPGManager.IsItemWeapon(itemID) || BypassIsCyberwareArea(area)
+    || Equals(itemData.GetItemType(), gamedataItemType.Clo_Head)
+    || Equals(itemData.GetItemType(), gamedataItemType.Clo_OuterChest)
+    || Equals(itemData.GetItemType(), gamedataItemType.Clo_InnerChest)
+    || Equals(itemData.GetItemType(), gamedataItemType.Clo_Legs)
+    || Equals(itemData.GetItemType(), gamedataItemType.Clo_Feet);
+}
+
+public func BypassIsCyberwareArea(area: gamedataEquipmentArea) -> Bool {
+  switch area {
+    case gamedataEquipmentArea.ArmsCW:
+    case gamedataEquipmentArea.CardiovascularSystemCW:
+    case gamedataEquipmentArea.EyesCW:
+    case gamedataEquipmentArea.FrontalCortexCW:
+    case gamedataEquipmentArea.HandsCW:
+    case gamedataEquipmentArea.IntegumentarySystemCW:
+    case gamedataEquipmentArea.LegsCW:
+    case gamedataEquipmentArea.MusculoskeletalSystemCW:
+    case gamedataEquipmentArea.NervousSystemCW:
+    case gamedataEquipmentArea.SystemReplacementCW:
+      return true;
+  }
+  return false;
 }
 
 @wrapMethod(PlayerPuppet)
@@ -43,51 +75,66 @@ protected func OnResurrected() -> Void {
 
 @wrapMethod(EquipmentSystemPlayerData)
 public final const func IsEquippable(itemData: wref<gameItemData>) -> Bool {
-  if itemData == null {
+  if !IsDefined(itemData) {
     return false;
   };
-  return !RPGManager.IsItemBroken(itemData);
+  if wrappedMethod(itemData) {
+    return true;
+  }
+  // Only waive ordinary player equipment prerequisites.  Broken, quest-
+  // protected, and non-equipment records retain vanilla rejection.
+  return BypassIsConvenienceEquipment(itemData);
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final const func CheckEquipPrereqs(itemID: ItemID, randomVariant: Int32) -> Bool {
-  return true;
+  let vanilla: Bool = wrappedMethod(itemID, randomVariant);
+  if vanilla || !ItemID.IsValid(itemID) || !IsDefined(this.m_owner) {
+    return vanilla;
+  }
+  let itemData: ref<gameItemData> = RPGManager.GetItemData(this.m_owner.GetGame(), this.m_owner, itemID);
+  return BypassIsConvenienceEquipment(itemData);
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final const func IsSlotLocked(slot: SEquipSlot, out visibleWhenLocked: Bool) -> Bool {
-  visibleWhenLocked = true;
-  return false;
+  return wrappedMethod(slot, visibleWhenLocked);
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
 public final const func IsSlotLocked(equipAreaType: gamedataEquipmentArea, index: Int32, out visibleWhenLocked: Bool) -> Bool {
+  let vanilla: Bool = wrappedMethod(equipAreaType, index, visibleWhenLocked);
+  if !vanilla || index < 0 || !BypassIsCyberwareArea(equipAreaType) {
+    return vanilla;
+  }
   visibleWhenLocked = true;
   return false;
 }
 
 @wrapMethod(InventoryDataManagerV2)
 public final func IsSlotLocked(equipmentArea: gamedataEquipmentArea, slotIndex: Int32, out visibleWhenLocked: Bool) -> Bool {
+  let vanilla: Bool = wrappedMethod(equipmentArea, slotIndex, visibleWhenLocked);
+  if !vanilla || slotIndex < 0 || !BypassIsCyberwareArea(equipmentArea) {
+    return vanilla;
+  }
   visibleWhenLocked = true;
   return false;
 }
 
 @wrapMethod(InventoryDataManagerV2)
 public final func CanInstallPart(const itemData: script_ref<InventoryItemData>) -> Bool {
-  if InventoryItemData.IsEmpty(itemData) || InventoryItemData.IsEquipped(itemData) {
+  let vanilla: Bool = wrappedMethod(itemData);
+  if vanilla || InventoryItemData.IsEmpty(itemData) || InventoryItemData.IsEquipped(itemData) {
+    return vanilla;
+  };
+  let partID: ItemID = InventoryItemData.GetID(itemData);
+  let partData: ref<gameItemData> = InventoryItemData.GetGameItemData(itemData);
+  if !ItemID.IsValid(partID) || !IsDefined(partData) || partData.HasTag(n"UnequipBlocked") {
     return false;
-  };
-  return true;
-}
-
-@wrapMethod(InventoryDataManagerV2)
-public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs: script_ref<array<TweakDBID>>, opt filteredItems: array<ItemModParams>, outputItems: script_ref<array<InventoryItemData>>) -> Void {
-  wrappedMethod(item, slotIDs, filteredItems, outputItems);
-  let i: Int32 = 0;
-  while i < ArraySize(Deref(outputItems)) {
-    InventoryItemData.SetIsRequirementMet(Deref(outputItems)[i], true);
-    i += 1;
-  };
+  }
+  return InventoryItemData.IsPart(itemData)
+    && (RPGManager.IsWeaponMod(partID) || RPGManager.IsClothingMod(partID)
+      || Equals(partData.GetItemType(), gamedataItemType.CyberwareStatsShard));
 }
 
 @wrapMethod(RPGManager)
@@ -98,10 +145,10 @@ public static final func GetFirstUnmetEquipRequirement(owner: ref<GameObject>, c
 
 @wrapMethod(RPGManager)
 public static final func CanPartBeUnequipped(data: InventoryItemData, slotId: TweakDBID) -> Bool {
-  return true;
+  return wrappedMethod(data, slotId);
 }
 
 @wrapMethod(RPGManager)
 private static final func IsNonModifableSlot(slot: TweakDBID) -> Bool {
-  return false;
+  return wrappedMethod(slot);
 }

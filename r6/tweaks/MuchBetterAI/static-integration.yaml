@@ -1,0 +1,106 @@
+# Much Better AI — CET-free static integration
+#
+# The upstream package used a CET Lua bootstrap to mutate these arrays and
+# scalar flats at onInit.  This profile has CET disabled and no runtime tuning
+# surface, so the fixed balanced values are expressed as ordinary TweakXL
+# edits.  `append-once` keeps this
+# file idempotent when another compatible source already contributes one of
+# the actions.  The REDscript hooks still own eligibility, cooldowns, and
+# reaction arbitration; these records only make the actions reachable from the
+# vanilla AI graphs.
+
+# Punish windows: expose the action in the weapon/ring selectors used by the
+# normal hostile combat graphs.
+Gang_Handgun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+Corpo_Handgun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+Gang_SubmachineGun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+Corpo_SubmachineGun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+Gang_Rifle.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+Corpo_Rifle.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+Gang_LightMachineGun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+Corpo_LightMachineGun.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+Gang_HMGHybrid.RingSelector.actions:
+  - !append-once MBAI.PunishPush
+
+# Melee block/parry punish branches.  Appending rather than replacing keeps
+# vanilla actions and other mods intact; the REDscript conditions gate use.
+MovementActions.RingSelector.actions:
+  - !append-once MBAI.MeleePunishPressBlocked
+  - !append-once MBAI.MeleePunishPressParried
+GenericArchetype.RingSelector.actions:
+  - !append-once MBAI.MeleePunishPressBlocked
+  - !append-once MBAI.MeleePunishPressParried
+MovementActions.MeleeRingSelector.actions:
+  - !append-once MBAI.MeleePunishPressBlocked
+  - !append-once MBAI.MeleePunishPressParried
+DefaultRingSelector.actions:
+  - !append-once MBAI.MeleePunishPressBlocked
+  - !append-once MBAI.MeleePunishPressParried
+
+# Weapon temperament/ring discipline is deliberately additive; the
+# temperament system and vanilla ring tests remain authoritative.
+Gang_Shotgun.RingSelector.actions:
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+Corpo_Shotgun.RingSelector.actions:
+  - !append-once MovementActions.CloseRing1stFilterLOS
+  - !append-once MovementActions.CloseRing2ndFilterLOS
+
+# Footwork actions and the catch-up condition.
+MovementActions.StrafeSelector.actions:
+  - !append-once MBAI.ThreatHopKerenzikov
+  - !append-once MBAI.ThreatHopAggressive
+  - !append-once MBAI.ThreatHopDisciplined
+  - !append-once MBAI.NormalStrafeLeftHit
+  - !append-once MBAI.NormalStrafeRightHit
+  - !append-once MBAI.NormalStrafeLeft
+  - !append-once MBAI.NormalStrafeRight
+MovementActions.CatchUpSprint_inline8.OR:
+  - !append-once Condition.TargetBelow12m
+
+# Field medicine is only attached to existing ranged branches.  The action's
+# activation condition and REDscript ownership checks prevent civilian,
+# boss/MaxTac, workspot, and already-owned fireteam/nerve actors from using it.
+GangNetrunner.WeaponHandlingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+GenericArchetype.WeaponHandlingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+ItemHandling.WeaponHandlingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+ItemHandling.WeaponHandlingCompositeDecorator.nodes:
+  - !append-once MBAI.FieldMedicineAction
+ItemHandling.WeaponHandlingWhileMovingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+MaxTacNetrunner.WeaponHandlingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+CorpoNetrunner.WeaponHandlingComposite.nodes:
+  - !append-once MBAI.FieldMedicineAction
+
+# Fixed scalar flats formerly written by the CET bootstrap.  They are part of
+# the selected gameplay profile, not user-facing configuration.
+AIGeneralSettings.keepRecentThreatAfterRelaxedDuration: 90.0
+Tickets.CloseRing.maxNumberOfTickets: 5
+Tickets.MeleeRing.maxNumberOfTickets: 4
+Tickets.Melee.maxNumberOfTickets: 4
+Tickets.MeleeApproach.maxNumberOfTickets: 5
+Tickets.MediumRing.maxNumberOfTickets: -1
+Tickets.MediumRing.minNumberOfTickets: 2
+Tickets.FarRing.minNumberOfTickets: 1
+MovementActions.StrafeEvadeCooldown.duration: 1.3
+Tickets.StrafeEvade_inline0.duration: 1.3

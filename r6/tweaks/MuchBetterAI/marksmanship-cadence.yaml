@@ -1,0 +1,290 @@
+MBAI.BandClose:
+  $type: gamedataAIActionCondition_Record
+  spatialAND:
+    - Condition.TargetBelow15m
+
+MBAI.BandFar:
+  $type: gamedataAIActionCondition_Record
+  spatialAND:
+    - Condition.TargetAbove12m
+
+MBAI.Windup_$(tier):
+  $instances:
+    - { tier: TrashWeak, secs: 0.7 }
+    - { tier: Normal, secs: 0.5 }
+    - { tier: Rare, secs: 0.35 }
+    - { tier: Officer, secs: 0.15 }
+    - { tier: Elite, secs: 0.1 }
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: $(secs)
+
+MBAI.BurstGap_$(tier)_$(slot):
+  $instances:
+    - { tier: TrashWeak, slot: a, shot: 7, secs: 0.9 }
+    - { tier: TrashWeak, slot: b, shot: 15, secs: 0.9 }
+    - { tier: Normal, slot: a, shot: 6, secs: 0.7 }
+    - { tier: Normal, slot: b, shot: 12, secs: 0.7 }
+    - { tier: Rare, slot: a, shot: 5, secs: 0.5 }
+    - { tier: Rare, slot: b, shot: 10, secs: 0.5 }
+    - { tier: Officer, slot: a, shot: 5, secs: 0.4 }
+    - { tier: Officer, slot: b, shot: 10, secs: 0.4 }
+    - { tier: Elite, slot: a, shot: 4, secs: 0.3 }
+    - { tier: Elite, slot: b, shot: 8, secs: 0.3 }
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: $(shot)
+  delay: $(secs)
+
+MBAI.BurstClose_TrashWeak:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandClose
+  patternSize: 15
+  delays:
+    - MBAI.Windup_TrashWeak
+    - MBAI.BurstGap_TrashWeak_a
+    - MBAI.BurstGap_TrashWeak_b
+
+MBAI.BurstFar_TrashWeak:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandFar
+  patternSize: 15
+  delays:
+    - MBAI.Windup_TrashWeak
+    - MBAI.BurstGap_TrashWeak_a
+    - MBAI.BurstGap_TrashWeak_b
+
+MBAI.BurstClose_Normal:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandClose
+  patternSize: 12
+  delays:
+    - MBAI.Windup_Normal
+    - MBAI.BurstGap_Normal_a
+    - MBAI.BurstGap_Normal_b
+
+MBAI.BurstFar_Normal:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandFar
+  patternSize: 12
+  delays:
+    - MBAI.Windup_Normal
+    - MBAI.BurstGap_Normal_a
+    - MBAI.BurstGap_Normal_b
+
+MBAI.BurstClose_Rare:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandClose
+  patternSize: 10
+  delays:
+    - MBAI.Windup_Rare
+    - MBAI.BurstGap_Rare_a
+    - MBAI.BurstGap_Rare_b
+
+MBAI.BurstFar_Rare:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandFar
+  patternSize: 10
+  delays:
+    - MBAI.Windup_Rare
+    - MBAI.BurstGap_Rare_a
+    - MBAI.BurstGap_Rare_b
+
+MBAI.BurstClose_Officer:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandClose
+  patternSize: 10
+  delays:
+    - MBAI.Windup_Officer
+    - MBAI.BurstGap_Officer_a
+    - MBAI.BurstGap_Officer_b
+
+MBAI.BurstFar_Officer:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandFar
+  patternSize: 10
+  delays:
+    - MBAI.Windup_Officer
+    - MBAI.BurstGap_Officer_a
+    - MBAI.BurstGap_Officer_b
+
+MBAI.BurstClose_Elite:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandClose
+  patternSize: 8
+  delays:
+    - MBAI.Windup_Elite
+    - MBAI.BurstGap_Elite_a
+    - MBAI.BurstGap_Elite_b
+
+MBAI.BurstFar_Elite:
+  $type: gamedataAIPattern_Record
+  activationConditions:
+    - MBAI.BandFar
+  patternSize: 8
+  delays:
+    - MBAI.Windup_Elite
+    - MBAI.BurstGap_Elite_a
+    - MBAI.BurstGap_Elite_b
+
+MBAI.Cadence_TrashWeak:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.BurstClose_TrashWeak
+    - MBAI.BurstFar_TrashWeak
+
+MBAI.Cadence_Normal:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.BurstClose_Normal
+    - MBAI.BurstFar_Normal
+
+MBAI.Cadence_Rare:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.BurstClose_Rare
+    - MBAI.BurstFar_Rare
+
+MBAI.Cadence_Officer:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.BurstClose_Officer
+    - MBAI.BurstFar_Officer
+
+MBAI.Cadence_Elite:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.BurstClose_Elite
+    - MBAI.BurstFar_Elite
+
+MBAI.SniperWindup:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: 0.5
+MBAI.SniperGap:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 1
+  delay: 2.2
+MBAI.SniperShots:
+  $type: gamedataAIPattern_Record
+  activationConditions: []
+  patternSize: 2
+  delays:
+    - MBAI.SniperWindup
+    - MBAI.SniperGap
+MBAI.Cadence_Sniper:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.SniperShots
+
+MBAI.ShotgunWindup:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: 0.3
+MBAI.ShotgunGap1:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 1
+  delay: 0.7
+MBAI.ShotgunGap2:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 2
+  delay: 1.1
+MBAI.ShotgunShots:
+  $type: gamedataAIPattern_Record
+  activationConditions: []
+  patternSize: 3
+  delays:
+    - MBAI.ShotgunWindup
+    - MBAI.ShotgunGap1
+    - MBAI.ShotgunGap2
+MBAI.Cadence_Shotgun:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.ShotgunShots
+
+MBAI.HeavyWindup:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: 0.15
+MBAI.HeavyGap:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 16
+  delay: 0.5
+MBAI.HeavyShots:
+  $type: gamedataAIPattern_Record
+  activationConditions: []
+  patternSize: 20
+  delays:
+    - MBAI.HeavyWindup
+    - MBAI.HeavyGap
+MBAI.Cadence_Heavy:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.HeavyShots
+
+MBAI.SmgWindup:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: 0.1
+MBAI.SmgGap:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 8
+  delay: 0.35
+MBAI.SmgShots:
+  $type: gamedataAIPattern_Record
+  activationConditions: []
+  patternSize: 14
+  delays:
+    - MBAI.SmgWindup
+    - MBAI.SmgGap
+MBAI.Cadence_SMG:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.SmgShots
+
+MBAI.SuppressWindup:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 0
+  delay: 0.12
+
+MBAI.SuppressGapA:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 6
+  delay: 0.25
+
+MBAI.SuppressGapB:
+  $type: gamedataAIPatternDelay_Record
+  shotNumber: 12
+  delay: 0.4
+
+MBAI.SuppressShots:
+  $type: gamedataAIPattern_Record
+  activationConditions: []
+  patternSize: 16
+  delays:
+    - MBAI.SuppressWindup
+    - MBAI.SuppressGapA
+    - MBAI.SuppressGapB
+
+MBAI.Cadence_Suppress:
+  $type: gamedataAIPatternsPackage_Record
+  activationConditions: []
+  patterns:
+    - MBAI.SuppressShots

@@ -31,6 +31,8 @@ public class IUS_ScannerRequest extends ScriptableSystemRequest {
 }
 
 public class IUS_System extends ScriptableSystem {
+  private let m_applied: array<EntityID>;
+
   public final static func Get(gi: GameInstance) -> ref<IUS_System> {
     return GameInstance.GetScriptableSystemsContainer(gi).Get(n"IUS_System") as IUS_System;
   }
@@ -40,11 +42,18 @@ public class IUS_System extends ScriptableSystem {
       return;
     };
     let gi: GameInstance = this.GetGameInstance();
+    if ArrayContains(this.m_applied, request.entityID) {
+      return;
+    };
     let obj: ref<GameObject> = GameInstance.FindEntityByID(gi, request.entityID) as GameObject;
     if IsDefined(obj) && obj.IsAttached() {
       let setScannerTime: ref<SetScanningTimeEvent> = new SetScanningTimeEvent();
       setScannerTime.time = 0.0;
       obj.QueueEvent(setScannerTime);
+      ArrayPush(this.m_applied, request.entityID);
+      while ArraySize(this.m_applied) > 1024 {
+        ArrayErase(this.m_applied, 0);
+      };
     };
   }
 }
@@ -81,7 +90,7 @@ private final func SetTimeToScan(timeVal: Float) -> Void {
 @wrapMethod(NewPerksAttributeButtonController)
 protected cb func OnAttributeInvestPress(evt: ref<inkPointerEvent>) -> Bool {
   let res: Bool = wrappedMethod(evt);
-  if this.m_isPressed && this.m_totalPoints > 0 {
+  if IsDefined(evt) && this.m_isPressed && this.m_totalPoints > 0 {
     let holdFinishedEvent: ref<NewPerksTabAttributeInvestHoldFinished> = new NewPerksTabAttributeInvestHoldFinished();
     holdFinishedEvent.attribute = this.m_initData.perkMenuAttribute;
     this.QueueEvent(holdFinishedEvent);
@@ -94,7 +103,7 @@ protected cb func OnAttributeInvestPress(evt: ref<inkPointerEvent>) -> Bool {
 
 @wrapMethod(PerksMenuAttributeItemController)
 protected cb func OnAttributeItemHold(evt: ref<inkPointerEvent>) -> Bool {
-  if evt.IsAction(n"upgrade_attribute") && evt.GetHoldProgress() > 0.0 && !this.m_recentlyPurchased {
+  if IsDefined(evt) && evt.IsAction(n"upgrade_attribute") && evt.GetHoldProgress() > 0.0 && !this.m_recentlyPurchased {
     if this.m_data.availableToUpgrade && this.m_dataManager.IsAttributeUpgradeable(this.m_attributeType) {
       this.m_recentlyPurchased = true;
       let upgradeEvent: ref<AttributeUpgradePurchased> = new AttributeUpgradePurchased();

@@ -30,6 +30,7 @@ public class SSS_Weapons {
     SSS.ApplyWeaponBlueprints(s.normal, s.iconic, s.iconic + 2);
     SSS_Unlock.Apply(SSS.Normal(), s.normal);
     SSS_Unlock.Apply(SSS.Iconic(), s.iconic);
+    SSS.ApplyPlacement();
   }
 }
 

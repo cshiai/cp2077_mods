@@ -139,8 +139,10 @@ RED4ext::Handle<RED4ext::game::LightComponent> CreateCameraSpotlight(
     light->shadowFadeRange = 25.0f;
     light->shadowSoftnessMode = RED4ext::ELightShadowSoftnessMode::LSSM_Soft;
     light->allowDistantLight = true;
-    light->rayTracingIntensityScale = 1.5f;
-    light->rtxdiShadowStartingDistance = 0.5f;
+    // Balanced profile: keep local raster shadows on the main beam, but do
+    // not add a second ray-traced lighting/shadow contribution.
+    light->rayTracingIntensityScale = 0.0f;
+    light->rtxdiShadowStartingDistance = 0.0f;
 
     // game::LightComponent
     light->emissiveOnly = false;
@@ -181,14 +183,14 @@ void Entity_CreateAimFlashlightComponent(RED4ext::IScriptable* aContext, RED4ext
     {
         auto mainLight = CreateCameraSpotlight(
             entity, "Flashlight", 0x2077F1A541164701ULL ^ (entitySeed * 0x9E3779B97F4A7C15ULL),
-            RED4ext::Color{255, 250, 242, 255}, 5800.0f, 4500.0f, 6.0f, 120.0f, 22.0f, 55.0f, 2.5f, 0, true);
+            RED4ext::Color{255, 250, 242, 255}, 5800.0f, 3200.0f, 5.0f, 85.0f, 20.0f, 50.0f, 2.5f, 0, true);
         created = mainLight;
     }
     else if (componentName == fillName)
     {
         auto fillLight = CreateCameraSpotlight(
             entity, "FlashlightFill", 0x2077F1A541164702ULL ^ (entitySeed * 0xBF58476D1CE4E5B9ULL),
-            RED4ext::Color{255, 248, 238, 255}, 5400.0f, 1800.0f, 4.5f, 55.0f, 42.0f, 95.0f, 4.0f, 0, false);
+            RED4ext::Color{255, 248, 238, 255}, 4600.0f, 900.0f, 3.5f, 40.0f, 38.0f, 85.0f, 4.0f, 0, false);
         created = fillLight;
     }
 
@@ -259,7 +261,7 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::v1::PluginHandle aHandle, RED4e
 
         if (aSdk && aSdk->logger)
         {
-            aSdk->logger->Info(aHandle, "UniversalAimFlashlight 1.1.0 initialized for Cyberpunk 2077 2.50.");
+            aSdk->logger->Info(aHandle, "UniversalAimFlashlight 1.2.0 balanced profile initialized for Cyberpunk 2077 2.50 (ray tracing off).");
         }
         break;
     }
@@ -276,7 +278,7 @@ RED4EXT_C_EXPORT void RED4EXT_CALL Query(RED4ext::v1::PluginInfo* aInfo)
 {
     aInfo->name = L"UniversalAimFlashlight";
     aInfo->author = L"CustomRedscriptSuite";
-    aInfo->version = RED4EXT_V1_SEMVER(1, 1, 0);
+    aInfo->version = RED4EXT_V1_SEMVER(1, 2, 0);
     aInfo->runtime = RED4EXT_V1_RUNTIME_VERSION_2_50;
     aInfo->sdk = RED4EXT_V1_SDK_VERSION_CURRENT;
 }

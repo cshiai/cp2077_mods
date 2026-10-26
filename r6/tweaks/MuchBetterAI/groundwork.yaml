@@ -1,0 +1,17 @@
+MBAI.OwnerNotFollower:
+  $base: Condition.TargetNotPlayerFollower
+  target: AIActionTarget.Owner
+
+MBAI.CombatEligibility:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - Condition.OwnerIsActive
+    - Condition.TargetIsPlayer
+    - Condition.CombatTarget
+    - Condition.Human
+    - Condition.NotAbilityIsCrowd
+    - Condition.NotIsCivilian
+    - Condition.NotIsInWorkspot
+    - Condition.NotIsBossNPCRarity
+    - Condition.NotIsMaxTacNPCRarity
+    - MBAI.OwnerNotFollower

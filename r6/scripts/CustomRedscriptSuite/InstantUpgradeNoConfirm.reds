@@ -8,11 +8,15 @@
 
 // --- 1. Inventory Item Upgrading & Crafting: Instant Click (0 Hold Time) ---
 
+@addField(CraftingMainLogicController)
+private let iusProcessInFlight: Bool;
+
 @wrapMethod(CraftingMainLogicController)
 private final func StartProcess() -> Void {
-  if !this.m_isCraftable {
+  if !this.m_isCraftable || this.iusProcessInFlight {
     return;
   }
+  this.iusProcessInFlight = true;
   this.m_isProcessing = false;
   if IsDefined(this.m_progressButtonController) {
     this.m_progressButtonController.Unlock();
@@ -57,6 +61,7 @@ public final func UpdateCraftProcess(evt: ref<inkPointerEvent>) -> Void {
 @wrapMethod(UpgradingScreenController)
 protected cb func OnHoldFinished(evt: ref<ProgressBarFinishedProccess>) -> Bool {
   let result: Bool = wrappedMethod(evt);
+  this.iusProcessInFlight = false;
   this.m_isProcessing = false;
   if IsDefined(this.m_craftingGameController) {
     this.m_craftingGameController.EnableTabs();
@@ -67,6 +72,7 @@ protected cb func OnHoldFinished(evt: ref<ProgressBarFinishedProccess>) -> Bool 
 @wrapMethod(CraftingLogicController)
 protected cb func OnHoldFinished(evt: ref<ProgressBarFinishedProccess>) -> Bool {
   let result: Bool = wrappedMethod(evt);
+  this.iusProcessInFlight = false;
   this.m_isProcessing = false;
   if IsDefined(this.m_craftingGameController) {
     this.m_craftingGameController.EnableTabs();
@@ -86,7 +92,7 @@ private final func UpdateTooltipData() -> Void {
 @replaceMethod(RipperDocGameController)
 private final func StartCWUpgrade() -> Void {
   let equippedItemData: wref<UIInventoryItem> = this.m_hoveredItem;
-  if !IsDefined(equippedItemData) {
+  if !IsDefined(equippedItemData) || this.m_isInEquipPopup {
     return;
   }
   this.m_isInEquipPopup = true;
@@ -127,7 +133,7 @@ private final func UpdateMinigrids() -> Void {
 // Fallback: if RipperdocTokenPopup is ever opened directly, complete on single press without hold/outro delay
 @wrapMethod(RipperdocTokenPopup)
 protected cb func OnOption1Press(evt: ref<inkPointerEvent>) -> Bool {
-  if evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click") {
+  if IsDefined(evt) && (evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click")) {
     this.m_choice = 0;
     this.m_result = true;
     this.Close();
@@ -138,7 +144,7 @@ protected cb func OnOption1Press(evt: ref<inkPointerEvent>) -> Bool {
 
 @wrapMethod(RipperdocTokenPopup)
 protected cb func OnOption2Press(evt: ref<inkPointerEvent>) -> Bool {
-  if evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click") {
+  if IsDefined(evt) && (evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click")) {
     this.m_choice = 1;
     this.m_result = true;
     this.Close();
@@ -149,7 +155,7 @@ protected cb func OnOption2Press(evt: ref<inkPointerEvent>) -> Bool {
 
 @wrapMethod(RipperdocTokenPopup)
 protected cb func OnOption3Press(evt: ref<inkPointerEvent>) -> Bool {
-  if evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click") {
+  if IsDefined(evt) && (evt.IsAction(this.m_holdInputName) || evt.IsAction(n"click")) {
     this.m_choice = 2;
     this.m_result = true;
     this.Close();

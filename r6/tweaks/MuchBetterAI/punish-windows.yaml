@@ -1,0 +1,175 @@
+MBAI.DoPunishEffect_DurMod:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.MaxDuration
+  value: 4.0
+
+MBAI.DoPunishEffect_Dur:
+  $type: gamedataStatModifierGroup_Record
+  drawBasedOnStatType: False
+  optimiseCombinedModifiers: False
+  saveBasedOnStatType: False
+  statModsLimit: -1
+  relatedModifierGroups: []
+  statModifiers:
+    - MBAI.DoPunishEffect_DurMod
+
+MBAI.DoPunishEffect:
+  $type: gamedataStatusEffect_Record
+  duration: MBAI.DoPunishEffect_Dur
+  dynamicDuration: False
+  isAffectedByTimeDilationNPC: False
+  isAffectedByTimeDilationPlayer: False
+  maxStacks: RTDB.StatusEffect_inline0
+  reapplyPackagesOnMaxStacks: False
+  removeAllStacksWhenDurationEnds: True
+  removeOnStoryTier: False
+  replicated: False
+  savable: False
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: False
+  debugTags: []
+  gameplayTags:
+    - MBAI_DoPunish
+  immunityStats: []
+  packages: []
+  SFX: []
+  VFX: []
+
+MBAI.PunishCooldownEffect_DurMod:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.MaxDuration
+  value: 8.0
+
+MBAI.PunishCooldownEffect_Dur:
+  $type: gamedataStatModifierGroup_Record
+  drawBasedOnStatType: False
+  optimiseCombinedModifiers: False
+  saveBasedOnStatType: False
+  statModsLimit: -1
+  relatedModifierGroups: []
+  statModifiers:
+    - MBAI.PunishCooldownEffect_DurMod
+
+MBAI.PunishCooldownEffect:
+  $type: gamedataStatusEffect_Record
+  duration: MBAI.PunishCooldownEffect_Dur
+  dynamicDuration: False
+  isAffectedByTimeDilationNPC: False
+  isAffectedByTimeDilationPlayer: False
+  maxStacks: RTDB.StatusEffect_inline0
+  reapplyPackagesOnMaxStacks: False
+  removeAllStacksWhenDurationEnds: True
+  removeOnStoryTier: False
+  replicated: False
+  savable: False
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: False
+  debugTags: []
+  gameplayTags:
+    - MBAI_PunishCooldown
+  immunityStats: []
+  packages: []
+  SFX: []
+  VFX: []
+
+MBAI.OwnerDoPunish:
+  $type: gamedataAIStatusEffectCond_Record
+  gameplayTag: MBAI_DoPunish
+  target: AIActionTarget.Owner
+
+MBAI.PunishPushAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.OwnerDoPunish
+    - Condition.TargetIsVisible
+    - Condition.NotTargetInVehicle
+
+MBAI.PunishPushGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.PunishPushAnd
+
+MBAI.PunishPush:
+  $base: MovementActions.CloseRing1stFilterLOS
+  activationCondition: MBAI.PunishPushGate
+
+MBAI.PlayerBlockedMelee:
+  $type: gamedataAIBlockCountCond_Record
+  maxBlockCount: -1
+  maxParryCount: -1
+  minBlockCount: -1
+  minParryCount: -1
+  ownerAttackBlockedCount: 1
+  ownerAttackParriedCount: -1
+
+MBAI.PlayerParriedMelee:
+  $type: gamedataAIBlockCountCond_Record
+  maxBlockCount: -1
+  maxParryCount: -1
+  minBlockCount: -1
+  minParryCount: -1
+  ownerAttackBlockedCount: -1
+  ownerAttackParriedCount: 1
+
+MBAI.MeleePunishBlocked:
+  $type: gamedataAIActionCondition_Record
+  blockCount: MBAI.PlayerBlockedMelee
+
+MBAI.MeleePunishParried:
+  $type: gamedataAIActionCondition_Record
+  blockCount: MBAI.PlayerParriedMelee
+
+MBAI.MeleePunishCooldown:
+  $base: MovementActions.StrafeEvadeCooldown
+  name: MBAIMeleePunish
+  duration: 3.0
+
+MBAI.MeleePunishCooldownCond:
+  $base: Condition.StrafeEvadeCooldown
+  cooldowns:
+    - MBAI.MeleePunishCooldown
+
+MBAI.MeleePunishBlockedAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.MeleePunishBlocked
+    - MBAI.MeleePunishCooldownCond
+    - Condition.TargetHasMeleeWeapon
+    - Condition.TargetBelow5m
+    - Condition.TargetBelow120deg
+    - Condition.TargetIsVisible
+    - Condition.NotTargetInVehicle
+    - Condition.CalculatePathStraightFullCheckToTarget
+
+MBAI.MeleePunishParriedAnd:
+  $type: gamedataAIActionAND_Record
+  AND:
+    - MBAI.MeleePunishParried
+    - MBAI.MeleePunishCooldownCond
+    - Condition.TargetHasMeleeWeapon
+    - Condition.TargetBelow5m
+    - Condition.TargetBelow120deg
+    - Condition.TargetIsVisible
+    - Condition.NotTargetInVehicle
+    - Condition.CalculatePathStraightFullCheckToTarget
+
+MBAI.MeleePunishBlockedGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.MeleePunishBlockedAnd
+
+MBAI.MeleePunishParriedGate:
+  $type: gamedataAIActionCondition_Record
+  condition: MBAI.MeleePunishParriedAnd
+
+MBAI.MeleePunishPressBlocked:
+  $base: MovementActions.MeleeRing1stFilter
+  activationCondition: MBAI.MeleePunishBlockedGate
+  cooldowns:
+    - MBAI.MeleePunishCooldown
+
+MBAI.MeleePunishPressParried:
+  $base: MovementActions.MeleeRing1stFilter
+  activationCondition: MBAI.MeleePunishParriedGate
+  cooldowns:
+    - MBAI.MeleePunishCooldown

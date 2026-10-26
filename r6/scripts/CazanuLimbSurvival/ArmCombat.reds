@@ -310,6 +310,7 @@ private final func CLS_DropMissingHandWeapon(slot: TweakDBID, attempt: Int32) ->
 
 @addMethod(NPCPuppet)
 protected cb func OnCLS_ArmWeaponCleanupEvent(evt: ref<CLS_ArmWeaponCleanupEvent>) -> Bool {
+  if !IsDefined(evt) { return false; }
   // Check both sides without short-circuiting. Coalesce events and verify the
   // async native drop, with at most three requests per affected slot.
   let left = this.CLS_DropMissingHandWeapon(t"AttachmentSlots.WeaponLeft", evt.attempts);
@@ -325,6 +326,7 @@ protected cb func OnCLS_ArmWeaponCleanupEvent(evt: ref<CLS_ArmWeaponCleanupEvent
       Diagnostics.Write(s"ARM_WEAPON_CLEANUP npc=\(EntityID.ToDebugString(this.GetEntityID())) verifiedNoMissingHandWeapon=\(!left && !right) attached=\(this.IsAttached()) alive=\(ScriptedPuppet.IsAlive(this))");
     }
   }
+  return true;
 }
 
 @wrapMethod(NPCPuppet)

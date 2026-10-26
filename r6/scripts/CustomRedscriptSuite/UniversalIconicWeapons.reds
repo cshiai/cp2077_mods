@@ -42,8 +42,13 @@ public class UniversalIconicWeaponHelper {
     modType: gameStatModifierType,
     value: Float
   ) -> Void {
+    if !IsDefined(statsSystem) || !StatsObjectID.IsDefined(statsId) {
+      return;
+    }
     let mod: ref<gameStatModifierData> = RPGManager.CreateStatModifier(statType, modType, value);
-    statsSystem.AddSavedModifier(statsId, mod);
+    if IsDefined(mod) {
+      statsSystem.AddSavedModifier(statsId, mod);
+    }
   }
 
   private final static func ApplyCoreOffensiveRoll(
@@ -475,6 +480,9 @@ public class UniversalIconicWeaponHelper {
     };
 
     let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
+    if !IsDefined(statsSystem) {
+      return;
+    }
     let statsId: StatsObjectID = itemData.GetStatsObjectID();
 
     // Layer 1: Ensure BaseStats.IsItemIconic = 1.0 is saved on the weapon

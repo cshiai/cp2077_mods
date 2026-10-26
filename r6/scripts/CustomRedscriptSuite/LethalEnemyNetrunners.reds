@@ -75,6 +75,44 @@ public let m_cenHackStart: Float;
 @addField(ScriptedPuppet)
 public let m_cenUploadTime: Float;
 
+@addField(ScriptedPuppet)
+private let m_cenRevealNetrunnerID: EntityID;
+
+@addField(ScriptedPuppet)
+private let m_cenRevealProxyID: EntityID;
+
+@addField(ScriptedPuppet)
+private let m_cenRevealNetrunnerModifier: ref<gameStatModifierData>;
+
+@addField(ScriptedPuppet)
+private let m_cenRevealProxyModifier: ref<gameStatModifierData>;
+
+@addMethod(ScriptedPuppet)
+private final func CEN_ClearRevealModifiers() -> Void {
+  let stats: ref<StatsSystem> = GameInstance.GetStatsSystem(this.GetGame());
+  if IsDefined(stats) {
+    if EntityID.IsDefined(this.m_cenRevealNetrunnerID) && IsDefined(this.m_cenRevealNetrunnerModifier) {
+      stats.RemoveModifier(Cast<StatsObjectID>(this.m_cenRevealNetrunnerID), this.m_cenRevealNetrunnerModifier);
+    };
+    if EntityID.IsDefined(this.m_cenRevealProxyID) && IsDefined(this.m_cenRevealProxyModifier) {
+      stats.RemoveModifier(Cast<StatsObjectID>(this.m_cenRevealProxyID), this.m_cenRevealProxyModifier);
+    };
+  };
+  if EntityID.IsDefined(this.m_cenRevealNetrunnerID) {
+    let netrunner = GameInstance.FindEntityByID(this.GetGame(), this.m_cenRevealNetrunnerID) as GameObject;
+    if IsDefined(netrunner) { this.ForceVisionAppearanceNetrunner(netrunner, this.m_cenRevealNetrunnerID, n"EnemyNetrunner", false); };
+  };
+  if EntityID.IsDefined(this.m_cenRevealProxyID) {
+    let proxy = GameInstance.FindEntityByID(this.GetGame(), this.m_cenRevealProxyID) as GameObject;
+    if IsDefined(proxy) { this.ForceVisionAppearanceNetrunner(proxy, this.m_cenRevealNetrunnerID, n"EnemyNetrunner", false); };
+  };
+  let emptyID: EntityID;
+  this.m_cenRevealNetrunnerID = emptyID;
+  this.m_cenRevealProxyID = emptyID;
+  this.m_cenRevealNetrunnerModifier = null;
+  this.m_cenRevealProxyModifier = null;
+}
+
 @addMethod(ScriptedPuppet)
 public final func CEN_BeginRelease(now: Float) -> Void {
   this.m_cenUploading = true;
@@ -205,7 +243,7 @@ public final static func ApplyStatusEffect(target: wref<GameObject>, statusEffec
 @wrapMethod(AISubActionStatusEffect_Record_Implementation)
 public final static func ApplyStatusEffect(context: ScriptExecutionContext, record: wref<AISubActionStatusEffect_Record>) -> Void {
   let target: wref<GameObject>;
-  if AIActionTarget.GetObject(context, record.Target(), target) {
+  if IsDefined(record) && AIActionTarget.GetObject(context, record.Target(), target) {
     let puppet: ref<ScriptedPuppet> = target as ScriptedPuppet;
     if IsDefined(puppet) && puppet.m_cenUploading && !puppet.m_cenCancelling {
       let i: Int32 = 0;
@@ -280,6 +318,7 @@ protected cb func OnHit(evt: ref<gameHitEvent>) -> Bool {
 
 @replaceMethod(ScriptedPuppet)
 protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent>) -> Bool {
+  if !IsDefined(evt) { return false; }
   let settings: ref<CENSettings> = new CENSettings();
   let statMod: ref<gameStatModifierData>;
   let bb: ref<IBlackboard> = this.GetAIControllerComponent().GetActionBlackboard();
@@ -288,21 +327,38 @@ protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent
     bb.SetVariant(GetAllBlackboardDefs().AIAction.netrunnerProxy, ToVariant(evt.proxyID));
     bb.SetVariant(GetAllBlackboardDefs().AIAction.netrunnerTarget, ToVariant(evt.targetID));
   };
-  if evt.targetID == GetPlayer(this.GetGame()).GetEntityID() {
+  let player = GetPlayer(this.GetGame());
+  let stats: ref<StatsSystem> = GameInstance.GetStatsSystem(this.GetGame());
+  if IsDefined(player) && IsDefined(stats) && evt.targetID == player.GetEntityID() {
+    this.CEN_ClearRevealModifiers();
     this.ToggleForcedVisibilityInAnimSystem(n"pingNetworkLink", true, 0.00, evt.from);
     if NotEquals(settings.linkLine, CENRevealMode.Hidden) {
       this.GetPS().DrawBetweenEntities(true, false, this.GetFxResourceByKey(n"pingNetworkLink"), evt.to, evt.from, false, false, false, false, true);
     };
     if GameInstance.GetStatsSystem(this.GetGame()).GetStatValue(Cast<StatsObjectID>(evt.targetID), gamedataStatType.RevealNetrunnerWhenHacked) > 0.00 {
-      this.ForceVisionAppearanceNetrunner(GameInstance.FindEntityByID(this.GetGame(), evt.netrunnerID) as GameObject, evt.netrunnerID, n"EnemyNetrunner", true);
+      let netrunner = GameInstance.FindEntityByID(this.GetGame(), evt.netrunnerID) as GameObject;
+      if IsDefined(netrunner) && EntityID.IsDefined(evt.netrunnerID) {
+        this.ForceVisionAppearanceNetrunner(netrunner, evt.netrunnerID, n"EnemyNetrunner", true);
+      }
       statMod = RPGManager.CreateStatModifier(gamedataStatType.RevealNetrunnerWhenHacked, gameStatModifierType.Additive, 1.00);
-      GameInstance.GetStatsSystem(this.GetGame()).AddModifier(Cast<StatsObjectID>(evt.netrunnerID), statMod);
+      if IsDefined(statMod) && EntityID.IsDefined(evt.netrunnerID) {
+        stats.AddModifier(Cast<StatsObjectID>(evt.netrunnerID), statMod);
+        this.m_cenRevealNetrunnerID = evt.netrunnerID;
+        this.m_cenRevealNetrunnerModifier = statMod;
+      }
       if EntityID.IsDefined(evt.proxyID) {
-        this.ForceVisionAppearanceNetrunner(GameInstance.FindEntityByID(this.GetGame(), evt.proxyID) as GameObject, evt.netrunnerID, n"EnemyNetrunner", true);
-        GameInstance.GetStatsSystem(this.GetGame()).AddModifier(Cast<StatsObjectID>(evt.proxyID), statMod);
+        let proxy = GameInstance.FindEntityByID(this.GetGame(), evt.proxyID) as GameObject;
+        let proxyMod: ref<gameStatModifierData> = RPGManager.CreateStatModifier(gamedataStatType.RevealNetrunnerWhenHacked, gameStatModifierType.Additive, 1.00);
+        if IsDefined(proxy) { this.ForceVisionAppearanceNetrunner(proxy, evt.netrunnerID, n"EnemyNetrunner", true); }
+        if IsDefined(proxyMod) {
+          stats.AddModifier(Cast<StatsObjectID>(evt.proxyID), proxyMod);
+          this.m_cenRevealProxyID = evt.proxyID;
+          this.m_cenRevealProxyModifier = proxyMod;
+        }
       };
     };
   };
+  return true;
 }
 
 @wrapMethod(MinimapStealthMappinController)
@@ -400,7 +456,7 @@ public func EQF_DifficultyHack(id: TweakDBID, difficulty: gameDifficulty) -> Twe
     t"AIQuickHack.HackLocomotion", t"AIQuickHack.HackLocomotion_Hard", t"AIQuickHack.HackLocomotion_VeryHard",
     t"AIQuickHack.HackCyberware", t"AIQuickHack.HackCyberware_Hard", t"AIQuickHack.HackCyberware_VeryHard",
     t"AIQuickHack.HackWeaponMalfunction", t"AIQuickHack.HackWeaponMalfunction_Hard", t"AIQuickHack.HackWeaponMalfunction_VeryHard",
-    t"AIQuickHack.HackWeaponJam", t"AIQuickHack.HackWeaponJam", t"AIQuickHack.HackWeaponJam_VeryHard",
+    t"AIQuickHack.HackWeaponJam", t"AIQuickHack.HackWeaponJam_Hard", t"AIQuickHack.HackWeaponJam_VeryHard",
     t"AIQuickHack.HackBlind", t"AIQuickHack.HackBlind_Hard", t"AIQuickHack.HackBlind_VeryHard",
     t"AIQuickHack.HackDeath", t"AIQuickHack.HackDeath_Hard", t"AIQuickHack.HackDeath_VeryHard"
   ];
@@ -463,7 +519,12 @@ public final func AddLinkedStatusEffect(netrunner: EntityID, target: EntityID, o
 
 @wrapMethod(AIActionHelper)
 public final static func UpdateLinkedStatusEffects(owner: wref<GameObject>, linkedStatusEffect: script_ref<LinkedStatusEffect>) -> Void {
-  if ArraySize(Deref(linkedStatusEffect).netrunnerIDs) == 0 {
-    wrappedMethod(owner, linkedStatusEffect);
-  };
+  wrappedMethod(owner, linkedStatusEffect);
+}
+
+@wrapMethod(ScriptedPuppet)
+public final func RemoveLinkedStatusEffects(opt ssAction: Bool) -> Bool {
+  let result: Bool = wrappedMethod(ssAction);
+  this.CEN_ClearRevealModifiers();
+  return result;
 }

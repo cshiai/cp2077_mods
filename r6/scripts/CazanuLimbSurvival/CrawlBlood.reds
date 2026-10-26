@@ -2,12 +2,14 @@
 module CazanuLimbSurvival
 
 public abstract class CrawlBlood {
-  public static func SampleSeconds() -> Float = 0.10
+  // Five samples per second is visually indistinguishable at one-metre
+  // spacing and avoids a physics/event burst for every animation frame.
+  public static func SampleSeconds() -> Float = 0.20
   public static func Spacing() -> Float = 1.0
   public static func LegOffset() -> Float = 0.15
   public static func HipOffset() -> Float = 0.20
   public static func Lifetime() -> Float = 240.0
-  public static func MaxMarks() -> Int32 = 256
+  public static func MaxMarks() -> Int32 = 128
 
   public static func Valid(v: Vector4) -> Bool {
     return v.X == v.X && v.Y == v.Y && v.Z == v.Z
@@ -33,8 +35,12 @@ public abstract class CrawlBlood {
     let hitNormal: Vector4;
     let found = false;
     let queries = GameInstance.GetSpatialQueriesSystem(game);
+    if !IsDefined(queries) { return false; }
     let i = 0;
-    while i < ArraySize(groups) {
+    // Prefer the first usable surface.  The old implementation always ran
+    // all three groups to select a theoretical higher hit, multiplying sync
+    // raycasts for no visible gain on a shallow ground projection.
+    while i < ArraySize(groups) && !found {
       if queries.SyncRaycastByCollisionGroup(from, to, groups[i], result, true, false) {
         hitPosition = new Vector4(result.position.X, result.position.Y, result.position.Z, 1.0);
         hitNormal = new Vector4(result.normal.X, result.normal.Y, result.normal.Z, 0.0);
@@ -240,7 +246,7 @@ public class CrawlBloodSystem extends ScriptableSystem {
 
 @addMethod(NPCPuppet)
 protected cb func OnCLS_CrawlBloodContactEvent(evt: ref<CLS_CrawlBloodContactEvent>) -> Bool {
-  if !this.CLS_CanSmearCrawlBlood() || !CrawlBlood.Fresh(this.GetGame(), evt.time)
+  if !IsDefined(evt) || !this.CLS_CanSmearCrawlBlood() || !CrawlBlood.Fresh(this.GetGame(), evt.time)
     || !CrawlBlood.Valid(evt.center) || !CrawlBlood.Valid(evt.heading)
     || Vector4.Length(evt.heading) < 0.01 { return false; }
   let contact = evt.center;
@@ -400,7 +406,7 @@ public final func CLS_UpdateCrawlBlood() -> Void {
   let consumed = 0.0;
   let needed = CrawlBlood.Spacing() - this.cls_bloodCarry;
   let steps = 0;
-  while distance - consumed + 0.0001 >= needed && steps < 3 {
+  while distance - consumed + 0.0001 >= needed && steps < 2 {
     consumed += needed;
     let request = new CLS_CrawlBloodSpawn();
     request.owner = this;

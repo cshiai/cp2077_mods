@@ -17,6 +17,7 @@ public abstract class WoundTiming {
   public static func CrawlLongSeconds() -> Float = 50.0
   public static func CrawlBlockedSeconds() -> Float = 3.0
   public static func ShootSeconds() -> Float = 25.0
+  public static func ObstacleProbeCooldownSeconds() -> Float = 0.35
 
   public static func IsSequence(id: TweakDBID) -> Bool {
     return Equals(id, t"CazanuLimbSurvival.LegCrawlSequence")
@@ -245,6 +246,8 @@ private let cls_crawlProbePending: Bool;
 @addField(NPCPuppet)
 private let cls_crawlProbeGeneration: Int32;
 @addField(NPCPuppet)
+private let cls_crawlProbeQueuedAt: Float;
+@addField(NPCPuppet)
 private let cls_crawlProbeBlocked: Bool;
 @addField(NPCPuppet)
 private let cls_crawlProbeTime: Float;
@@ -363,6 +366,7 @@ protected func OnIncapacitated() -> Void {
 private final func CLS_ResetCrawlProbe() -> Void {
   this.cls_crawlProbeGeneration += 1;
   this.cls_crawlProbePending = false;
+  this.cls_crawlProbeQueuedAt = 0.0;
   this.cls_crawlProbeBlocked = false;
 }
 
@@ -377,6 +381,9 @@ private final func CLS_CanProbeCrawlObstacle() -> Bool {
 @addMethod(NPCPuppet)
 private final func CLS_QueueCrawlObstacleProbe() -> Void {
   if this.cls_crawlProbePending || !this.CLS_CanProbeCrawlObstacle() { return; }
+  let now = EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGame()).GetSimTime());
+  if this.cls_crawlProbeQueuedAt > 0.0
+    && now - this.cls_crawlProbeQueuedAt < WoundTiming.ObstacleProbeCooldownSeconds() { return; }
   let center = this.GetWorldPosition();
   let forward = this.GetWorldForward();
   if !CrawlBlood.Valid(center) || !CrawlBlood.Valid(forward) { return; }
@@ -385,6 +392,7 @@ private final func CLS_QueueCrawlObstacleProbe() -> Void {
   if Vector4.Length(forward) < 0.001 { return; }
   this.cls_crawlProbeGeneration += 1;
   this.cls_crawlProbePending = true;
+  this.cls_crawlProbeQueuedAt = now;
   let evt = new CLS_CrawlObstacleProbe();
   evt.owner = this;
   evt.generation = this.cls_crawlProbeGeneration;
@@ -411,13 +419,15 @@ protected cb func OnCLS_CrawlObstacleProbe(evt: ref<CLS_CrawlObstacleProbe>) -> 
   if Vector4.Length(heading) < 0.001
     || Vector4.Dot(Vector4.Normalize(heading), evt.forward) < 0.95 { return false; }
   let right = new Vector4(evt.forward.Y, -evt.forward.X, 0.0, 0.0);
-  // Static/Vehicle match the native space-in-front helper. Destructible
-  // covers loose props without querying the owner's NPC collision group.
-  let groups: array<CName> = [n"Static", n"Vehicle", n"Destructible"];
+  // A single center lane and the two high-value groups cover nav/static and
+  // vehicle blockers.  Nav/influence checks above handle most loose props;
+  // avoiding three lanes x three groups keeps this fallback cheap.
+  let groups: array<CName> = [n"Static", n"Vehicle"];
   let queries = GameInstance.GetSpatialQueriesSystem(this.GetGame());
+  if !IsDefined(queries) { return false; }
   let result: TraceResult;
-  let lane = -1;
-  while lane <= 1 {
+  let lane = 0;
+  while lane <= 0 {
     let from = evt.center + right * (Cast<Float>(lane) * 0.18);
     from.Z += 0.30;
     let to = from + evt.forward * 0.45;

@@ -56,6 +56,9 @@ public class SSS {
   }
 
   public static func Suffix(cat: Int32) -> String {
+    if cat == SSS.Collectible() {
+      return "_Collectible";
+    }
     if cat == SSS.Iconic() {
       return "_Iconic";
     }
@@ -266,65 +269,141 @@ public class SSS {
   }
 
   public static func HasMoreModsMoreFun() -> Bool {
-    let slots: array<TweakDBID> = SSS.PlacementSlots(t"Items.PowerMod1_Base");
-    return ArrayContains(slots, t"AttachmentSlots.Tech_Handgun_WeaponMod1");
+    return true;
+  }
+
+  public static func IsWeaponModItemType(itemType: gamedataItemType) -> Bool {
+    switch itemType {
+      case gamedataItemType.Prt_Mod:
+      case gamedataItemType.Prt_RangedMod:
+      case gamedataItemType.Prt_PowerMod:
+      case gamedataItemType.Prt_TechMod:
+      case gamedataItemType.Prt_SmartMod:
+      case gamedataItemType.Prt_AR_SMG_LMGMod:
+      case gamedataItemType.Prt_HandgunMod:
+      case gamedataItemType.Prt_Precision_Sniper_RifleMod:
+      case gamedataItemType.Prt_ShotgunMod:
+      case gamedataItemType.Prt_MeleeMod:
+      case gamedataItemType.Prt_BladeMod:
+      case gamedataItemType.Prt_BluntMod:
+      case gamedataItemType.Prt_ThrowableMod:
+        return true;
+      default:
+        return RPGManager.IsWeaponMod(itemType);
+    }
+  }
+
+  public static func IsScopeItemType(itemType: gamedataItemType) -> Bool {
+    switch itemType {
+      case gamedataItemType.Prt_ShortScope:
+      case gamedataItemType.Prt_LongScope:
+      case gamedataItemType.Prt_PowerSniperScope:
+      case gamedataItemType.Prt_TechSniperScope:
+        return true;
+      default:
+        return RPGManager.IsScopeAttachment(itemType);
+    }
+  }
+
+  public static func IsMuzzleItemType(itemType: gamedataItemType) -> Bool {
+    switch itemType {
+      case gamedataItemType.Prt_Muzzle:
+      case gamedataItemType.Prt_HandgunMuzzle:
+      case gamedataItemType.Prt_RifleMuzzle:
+        return true;
+      default:
+        return false;
+    }
   }
 
   public static func ApplyPlacement() -> Void {
     let fam: String;
     let n: Int32;
     let col: Bool;
-    let crossFamily: Bool = SSS.HasMoreModsMoreFun();
+    let allWeaponModSlots: array<TweakDBID>;
+
+    for f in SSS.Families() {
+      for c in [SSS.Normal(), SSS.Iconic(), SSS.Arms(), SSS.Collectible()] {
+        n = 1;
+        while n <= SSS.MaxSlots() {
+          let s: TweakDBID = SSS.SlotIdCat(f, n, c);
+          if !ArrayContains(allWeaponModSlots, s) && IsDefined(TweakDBInterface.GetAttachmentSlotRecord(s)) {
+            ArrayPush(allWeaponModSlots, s);
+          }
+          n += 1;
+        }
+      }
+    }
+
+    let extraModSlots: array<TweakDBID> = [
+      t"AttachmentSlots.GenericWeaponMod1",
+      t"AttachmentSlots.GenericWeaponMod2",
+      t"AttachmentSlots.GenericWeaponMod3",
+      t"AttachmentSlots.GenericWeaponMod4",
+      t"AttachmentSlots.MeleeWeaponMod1",
+      t"AttachmentSlots.MeleeWeaponMod2",
+      t"AttachmentSlots.MeleeWeaponMod3",
+      t"AttachmentSlots.StrongArmsBattery",
+      t"AttachmentSlots.MantisBladesRotor",
+      t"AttachmentSlots.NanoWiresBattery",
+      t"AttachmentSlots.ProjectileLauncherWiring",
+      t"AttachmentSlots.ArmsCyberwareGeneralSlot"
+    ];
+    for extraSlot in extraModSlots {
+      if !ArrayContains(allWeaponModSlots, extraSlot) && IsDefined(TweakDBInterface.GetAttachmentSlotRecord(extraSlot)) {
+        ArrayPush(allWeaponModSlots, extraSlot);
+      }
+    }
 
     for rec in TweakDBInterface.GetRecords(n"gamedataItem_Record") {
       let item: ref<Item_Record> = rec as Item_Record;
-      if IsDefined(item) && item.GetPlacementSlotsCount() > 0 {
+      if IsDefined(item) && (item.GetPlacementSlotsCount() > 0 || item.IsPart()) {
         let id: TweakDBID = item.GetID();
         let slots: array<TweakDBID> = SSS.PlacementSlots(id);
-        let fams: array<String>;
-        let ranged: Bool = false;
-        let melee: Bool = false;
+        let result: array<TweakDBID>;
+        for existingSlot in slots {
+          if !ArrayContains(result, existingSlot) {
+            ArrayPush(result, existingSlot);
+          }
+        }
+        let itemType: gamedataItemType = IsDefined(item.ItemType()) ? item.ItemType().Type() : gamedataItemType.Invalid;
+        let isWeaponMod: Bool = SSS.IsWeaponModItemType(itemType);
 
-        for slot in slots {
-          if SSS.ParseSlot(slot, fam, n, col) {
-            if !SSS.HasString(fams, fam) {
-              ArrayPush(fams, fam);
-            }
-            if SSS.IsMelee(fam) {
-              melee = true;
-            } else {
-              ranged = true;
+        if !isWeaponMod {
+          for slot in slots {
+            if SSS.ParseSlot(slot, fam, n, col)
+              || slot == t"AttachmentSlots.GenericWeaponMod1"
+              || slot == t"AttachmentSlots.GenericWeaponMod2"
+              || slot == t"AttachmentSlots.GenericWeaponMod3"
+              || slot == t"AttachmentSlots.GenericWeaponMod4"
+              || slot == t"AttachmentSlots.MeleeWeaponMod1"
+              || slot == t"AttachmentSlots.MeleeWeaponMod2"
+              || slot == t"AttachmentSlots.MeleeWeaponMod3" {
+              isWeaponMod = true;
+              break;
             }
           }
         }
 
-        if ArraySize(fams) > 0 {
-          if crossFamily {
-            for f in SSS.Families() {
-              if !SSS.HasString(fams, f) && ((SSS.IsMelee(f) && melee) || (!SSS.IsMelee(f) && ranged)) {
-                ArrayPush(fams, f);
-              }
+        if isWeaponMod {
+          for modSlot in allWeaponModSlots {
+            if !ArrayContains(result, modSlot) {
+              ArrayPush(result, modSlot);
             }
           }
-
-          let result: array<TweakDBID> = slots;
-          for f in fams {
-            for c in [SSS.Normal(), SSS.Iconic(), SSS.Arms()] {
-              n = 1;
-              while n <= SSS.MaxSlots() {
-                let s: TweakDBID = SSS.SlotIdCat(f, n, c);
-                if !ArrayContains(result, s) && IsDefined(TweakDBInterface.GetAttachmentSlotRecord(s)) {
-                  ArrayPush(result, s);
-                }
-                n += 1;
-              }
-            }
+        } else if SSS.IsScopeItemType(itemType) {
+          if !ArrayContains(result, t"AttachmentSlots.Scope") {
+            ArrayPush(result, t"AttachmentSlots.Scope");
           }
-
-          if ArraySize(result) != ArraySize(slots) {
-            TweakDBManager.SetFlat(id + t".placementSlots", ToVariant(result));
-            TweakDBManager.UpdateRecord(id);
+        } else if SSS.IsMuzzleItemType(itemType) {
+          if !ArrayContains(result, t"AttachmentSlots.PowerModule") {
+            ArrayPush(result, t"AttachmentSlots.PowerModule");
           }
+        }
+
+        if !SSS.SameList(result, slots) {
+          TweakDBManager.SetFlat(id + t".placementSlots", ToVariant(result));
+          TweakDBManager.UpdateRecord(id);
         }
       }
     }
@@ -346,7 +425,7 @@ public class SSS_UnlockSettings {
   @runtimeProperty("ModSettings.displayValues.ByRarity", "By rarity")
   @runtimeProperty("ModSettings.displayValues.VanillaPairs", "Vanilla pairs")
   @runtimeProperty("ModSettings.displayValues.AllCommon", "All from Common")
-  public let mode: SSS_UnlockMode = SSS_UnlockMode.ByRarity;
+  public let mode: SSS_UnlockMode = SSS_UnlockMode.AllCommon;
 }
 
 public class SSS_Unlock {
@@ -406,6 +485,7 @@ public class SSS_Unlock {
         TweakDBManager.SetFlat(flat, ToVariant(StringToName(quality)));
       }
     }
+    TweakDBManager.UpdateRecord(slot);
   }
 
   public static func Apply(cat: Int32, max: Int32) -> Void {

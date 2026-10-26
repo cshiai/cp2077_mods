@@ -25,10 +25,13 @@ public struct QGQuest {
 }
 
 public func QGFixerCount() -> Int32 {
-  return 9;
+  // There are eight district labels (0..7).  Returning nine created an empty
+  // phantom section and made the final section/save index drift.
+  return 8;
 }
 
 public func QGFixerName(idx: Int32) -> String {
+  if idx < 0 || idx >= QGFixerCount() { return ""; }
   switch idx {
     case 0: return QGFixerTitle(10891, 10947);
     case 1: return QGFixerTitle(10928, 10948);
@@ -147,6 +150,7 @@ public func QGCategoryFromPath(path: String) -> QGCategory {
 }
 
 public func QGEntryPath(jm: ref<JournalManager>, entry: wref<JournalEntry>) -> String {
+  if !IsDefined(jm) || !IsDefined(entry) { return ""; }
   let path: String = entry.GetId();
   let parent: wref<JournalEntry> = jm.GetParentEntry(entry);
   let guard: Int32 = 0;
@@ -167,7 +171,7 @@ public func QGSlotOf(item: QGQuest) -> Int32 {
     case QGCategory.Ncpd: return 4;
     case QGCategory.Cosmetic: return 5;
     case QGCategory.PhantomLibertySide: return 6;
-    default: return 7 + item.fixer;
+    default: return 7 + Clamp(item.fixer, 0, QGFixerCount() - 1);
   };
 }
 
@@ -177,6 +181,7 @@ public func QGSlotCount() -> Int32 {
 
 public func QGBuildQuestList(game: GameInstance, alpha: Bool) -> array<QGQuest> {
   let result: array<QGQuest>;
+  if !GameInstance.IsValid(game) { return result; }
   let jm: ref<JournalManager> = GameInstance.GetJournalManager(game);
   if !IsDefined(jm) {
     return result;
@@ -213,6 +218,7 @@ public func QGBuildQuestList(game: GameInstance, alpha: Bool) -> array<QGQuest> 
 }
 
 func QGQuestText(jm: ref<JournalManager>, entry: wref<JournalQuest>) -> String {
+  if !IsDefined(jm) || !IsDefined(entry) { return ""; }
   let filter: JournalRequestStateFilter;
   filter.active = true;
   filter.succeeded = true;
@@ -276,7 +282,9 @@ public func QGWhite() -> HDRColor {
 }
 
 public func QGTrackQuest(game: GameInstance, entry: wref<JournalQuest>) {
-  GameInstance.GetJournalManager(game).TrackEntry(entry);
+  if !GameInstance.IsValid(game) || !IsDefined(entry) { return; }
+  let jm: ref<JournalManager> = GameInstance.GetJournalManager(game);
+  if IsDefined(jm) { jm.TrackEntry(entry); }
 }
 
 
@@ -318,7 +326,8 @@ func QGIsDecisionQuest(item: QGQuest) -> Bool {
   if Equals(item.state, gameJournalEntryState.Succeeded) || Equals(item.state, gameJournalEntryState.Failed) {
     return false;
   };
-  return Equals(item.category, QGCategory.Ending) || QGIsPointOfNoReturn(item.entry.GetId());
+  return Equals(item.category, QGCategory.Ending)
+    || (IsDefined(item.entry) && QGIsPointOfNoReturn(item.entry.GetId()));
 }
 
 func QGStateShowLabel(idx: Int32, loc: ref<LocalizationSystem>) -> String {
@@ -354,6 +363,7 @@ func QGStateShowColor(idx: Int32) -> HDRColor {
 }
 
 func QGEstLines(text: String, charsPerLine: Int32) -> Int32 {
+  if charsPerLine <= 0 { return 1; }
   return StrLen(text) / charsPerLine + 1;
 }
 
@@ -406,6 +416,10 @@ func QGEndingReason(id: String, loc: ref<LocalizationSystem>) -> String {
   return "";
 }
 
+public class QGRebuildEvent extends Event {
+  public let generation: Int32;
+}
+
 func QGLocText(raw: String) -> String {
   let loc: String = GetLocalizedText(raw);
   return Equals(loc, "") ? raw : loc;
@@ -456,6 +470,8 @@ public class QuestGuidePopup extends InGamePopup {
   protected let m_focusSlot: Int32;
   protected let m_fromMenu: Bool;
   protected let m_pushedContext: Bool;
+  protected let m_qgRebuildGeneration: Int32;
+  protected let m_qgDisposed: Bool;
 
   public func QGSetFromMenu(value: Bool) -> Void {
     this.m_fromMenu = value;
@@ -487,6 +503,8 @@ public class QuestGuidePopup extends InGamePopup {
 
   protected cb func OnCreate() {
     super.OnCreate();
+    this.m_qgDisposed = false;
+    this.m_qgRebuildGeneration = 0;
     this.m_container.SetSize(Vector2(2600.0, 1360.0));
     let loc: ref<LocalizationSystem> = this.QGLoc();
 
@@ -749,6 +767,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func UpdateSortBtn() {
+    if !IsDefined(this.m_sortBtn) { return; }
     this.m_sortBtn.SetText(this.QGLoc().GetText(this.m_alpha
       ? "Mod-QuestGuide-Sort-Alpha" : "Mod-QuestGuide-Sort-State"));
   }
@@ -756,7 +775,7 @@ public class QuestGuidePopup extends InGamePopup {
   protected func UpdateStateToggles() {
     let loc: ref<LocalizationSystem> = this.QGLoc();
     let i: Int32 = 0;
-    while i < ArraySize(this.m_stateToggles) {
+    while i < ArraySize(this.m_stateToggles) && i < ArraySize(this.m_stateShow) {
       this.m_stateToggles[i].SetText((this.m_stateShow[i] ? "[x] " : "[ ] ")
         + QGStateShowLabel(i, loc));
       this.m_stateToggles[i].SetTintColor(this.m_stateShow[i]
@@ -769,17 +788,36 @@ public class QuestGuidePopup extends InGamePopup {
     if !Equals(needle, "") && !StrContains(item.search, needle) {
       return false;
     };
+    if QGDecisionFilterIdx() < 0 || QGDecisionFilterIdx() >= ArraySize(this.m_stateShow) {
+      return false;
+    }
     if this.m_stateShow[QGDecisionFilterIdx()] && !QGIsDecisionQuest(item) {
       return false;
     };
-    return this.m_stateShow[QGStateToggleIdx(item.state)];
+    let stateIdx: Int32 = QGStateToggleIdx(item.state);
+    return stateIdx >= 0 && stateIdx < ArraySize(this.m_stateShow) && this.m_stateShow[stateIdx];
   }
 
   protected cb func OnSearchInput(widget: wref<inkWidget>) {
+    if this.m_qgDisposed { return; }
+    this.m_qgRebuildGeneration += 1;
+    let evt: ref<QGRebuildEvent> = new QGRebuildEvent();
+    evt.generation = this.m_qgRebuildGeneration;
+    GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, evt, 0.08, true);
+  }
+
+  protected cb func OnQGRebuildEvent(evt: ref<QGRebuildEvent>) -> Bool {
+    if !IsDefined(evt) || this.m_qgDisposed || evt.generation != this.m_qgRebuildGeneration {
+      return false;
+    }
     this.Rebuild();
+    return true;
   }
 
   protected func Rebuild() {
+    if this.m_qgDisposed || !IsDefined(this.m_listPanel) || !IsDefined(this.m_search) {
+      return;
+    }
     let loc: ref<LocalizationSystem> = this.QGLoc();
     this.m_listPanel.RemoveAllChildren();
     ArrayClear(this.m_hoverRows);
@@ -870,6 +908,7 @@ public class QuestGuidePopup extends InGamePopup {
         || Equals(category, QGCategory.Cyberpsycho) || Equals(category, QGCategory.Ncpd)) {
       return;
     };
+    if slot < 0 || slot >= ArraySize(this.m_sectionOpen) { return; }
     let open: Bool = this.m_sectionOpen[slot] || !Equals(needle, "");
 
     let head: ref<inkText> = new inkText();
@@ -1015,6 +1054,8 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnDetach() {
+    this.m_qgDisposed = true;
+    this.m_qgRebuildGeneration += 1;
     if this.m_fromMenu {
       let holder: ref<QGMenuHolder> = QGMenuHolder.Get(this.GetGame());
       if IsDefined(holder) {
@@ -1044,7 +1085,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnQGPadKey(event: ref<KeyInputEvent>) {
-    if !Equals(event.GetAction(), EInputAction.IACT_Press) {
+    if !IsDefined(event) || !Equals(event.GetAction(), EInputAction.IACT_Press) {
       return;
     };
     let key: EInputKey = event.GetKey();
@@ -1085,7 +1126,8 @@ public class QuestGuidePopup extends InGamePopup {
   protected func FirstListFocus() -> Int32 {
     let i: Int32 = 0;
     while i < ArraySize(this.m_navKinds) {
-      if this.m_navKinds[i] == 1 && this.m_hoverQuests[this.m_navRefs[i]] == this.m_selected {
+      if this.m_navKinds[i] == 1 && this.m_navRefs[i] >= 0 && this.m_navRefs[i] < ArraySize(this.m_hoverQuests)
+          && this.m_hoverQuests[this.m_navRefs[i]] == this.m_selected {
         return i;
       };
       i += 1;
@@ -1094,15 +1136,19 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func PaintNav(i: Int32, focused: Bool) {
-    if i < 0 || i >= ArraySize(this.m_navWidgets) {
+    if i < 0 || i >= ArraySize(this.m_navWidgets) || i >= ArraySize(this.m_navKinds)
+        || i >= ArraySize(this.m_navRefs) {
       return;
     };
     let w: wref<inkText> = this.m_navWidgets[i];
     w.SetFontStyle(focused ? n"Semi-Bold" : n"Medium");
     if this.m_navKinds[i] == 0 {
+      if this.m_navRefs[i] < 0 || this.m_navRefs[i] >= ArraySize(this.m_sectionColors) { return; }
       w.SetTintColor(focused ? QGWhite() : this.m_sectionColors[this.m_navRefs[i]]);
     } else {
+      if this.m_navRefs[i] < 0 || this.m_navRefs[i] >= ArraySize(this.m_hoverQuests) { return; }
       let q: Int32 = this.m_hoverQuests[this.m_navRefs[i]];
+      if q < 0 || q >= ArraySize(this.m_quests) { return; }
       w.SetTintColor(focused || q == this.m_selected ? QGWhite() : QGStateColor(this.m_quests[q].state));
     };
   }
@@ -1131,9 +1177,13 @@ public class QuestGuidePopup extends InGamePopup {
       this.m_focusSlot = -1;
       if this.m_focusIdx >= 0 {
         if this.m_navKinds[this.m_focusIdx] == 0 {
-          this.m_focusSlot = this.m_sectionSlots[this.m_navRefs[this.m_focusIdx]];
+          if this.m_navRefs[this.m_focusIdx] >= 0 && this.m_navRefs[this.m_focusIdx] < ArraySize(this.m_sectionSlots) {
+            this.m_focusSlot = this.m_sectionSlots[this.m_navRefs[this.m_focusIdx]];
+          }
         } else {
-          this.m_focusQuest = this.m_hoverQuests[this.m_navRefs[this.m_focusIdx]];
+          if this.m_navRefs[this.m_focusIdx] >= 0 && this.m_navRefs[this.m_focusIdx] < ArraySize(this.m_hoverQuests) {
+            this.m_focusQuest = this.m_hoverQuests[this.m_navRefs[this.m_focusIdx]];
+          }
         };
         this.PaintNav(this.m_focusIdx, true);
         this.EnsureFocusVisible();
@@ -1153,6 +1203,8 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func EnsureFocusVisible() {
+    if this.m_focusIdx < 0 || this.m_focusIdx >= ArraySize(this.m_navTops)
+        || this.m_focusIdx >= ArraySize(this.m_navKinds) { return; }
     let top: Float = this.m_navTops[this.m_focusIdx];
     let height: Float = this.m_navKinds[this.m_focusIdx] == 0 ? 84.0 : 52.0;
     if top < -this.m_scrollOffset {
@@ -1231,6 +1283,7 @@ public class QuestGuidePopup extends InGamePopup {
       return;
     };
     let slot: Int32 = QGSlotOf(this.m_quests[q]);
+    if slot < 0 || slot >= ArraySize(this.m_sectionOpen) { return; }
     if !this.m_sectionOpen[slot] {
       this.m_sectionOpen[slot] = true;
       this.Rebuild();
@@ -1247,7 +1300,12 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func ToggleSection(s: Int32) {
-    this.m_sectionOpen[this.m_sectionSlots[s]] = !this.m_sectionOpen[this.m_sectionSlots[s]];
+    if s < 0 || s >= ArraySize(this.m_sectionSlots) {
+      return;
+    }
+    let slot: Int32 = this.m_sectionSlots[s];
+    if slot < 0 || slot >= ArraySize(this.m_sectionOpen) { return; }
+    this.m_sectionOpen[slot] = !this.m_sectionOpen[slot];
     let keep: Float = this.m_scrollOffset;
     this.Rebuild();
     this.m_scrollOffset = keep;
@@ -1255,6 +1313,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func ToggleFilter(t: Int32) {
+    if t < 0 || t >= ArraySize(this.m_stateShow) { return; }
     this.m_stateShow[t] = !this.m_stateShow[t];
     this.UpdateStateToggles();
     this.Rebuild();
@@ -1262,7 +1321,8 @@ public class QuestGuidePopup extends InGamePopup {
 
   protected func ToggleSort() {
     this.m_alpha = !this.m_alpha;
-    let selectedEntry: wref<JournalQuest> = this.m_selected >= 0 ? this.m_quests[this.m_selected].entry : null;
+    let selectedEntry: wref<JournalQuest> = this.m_selected >= 0 && this.m_selected < ArraySize(this.m_quests)
+      ? this.m_quests[this.m_selected].entry : null;
     this.m_quests = QGResort(this.m_quests, this.m_alpha);
     this.m_selected = -1;
     let i: Int32 = 0;
@@ -1281,7 +1341,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnQGRelativeInput(evt: ref<inkPointerEvent>) -> Bool {
-    if evt.IsAction(n"mouse_wheel") && NotEquals(evt.GetAxisData(), 0.0) {
+    if IsDefined(evt) && evt.IsAction(n"mouse_wheel") && NotEquals(evt.GetAxisData(), 0.0) {
       if this.m_overDetail {
         this.m_detailScroll += evt.GetAxisData() * 105.0;
         this.ApplyDetailScroll();
@@ -1304,7 +1364,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnGlobalReleaseInput(evt: ref<inkPointerEvent>) -> Bool {
-    if evt.IsAction(n"mouse_left") && !evt.IsHandled() {
+    if IsDefined(evt) && evt.IsAction(n"mouse_left") && !evt.IsHandled() {
       let target: wref<inkWidget> = evt.GetTarget();
       if IsDefined(target) && Equals(target, this.m_trackBtn) {
         this.TrackSelected();
@@ -1347,9 +1407,11 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func SelectQuest(idx: Int32) {
+    if idx < 0 || idx >= ArraySize(this.m_quests) { return; }
     let j: Int32 = 0;
     while j < ArraySize(this.m_hoverQuests) {
-      if this.m_hoverQuests[j] == this.m_selected {
+      if this.m_hoverQuests[j] == this.m_selected && this.m_selected >= 0 && this.m_selected < ArraySize(this.m_quests)
+          && IsDefined(this.m_hoverNames[j]) {
         this.m_hoverNames[j].SetTintColor(QGStateColor(this.m_quests[this.m_selected].state));
       };
       j += 1;
@@ -1358,7 +1420,7 @@ public class QuestGuidePopup extends InGamePopup {
     j = 0;
     while j < ArraySize(this.m_hoverQuests) {
       if this.m_hoverQuests[j] == idx {
-        this.m_hoverNames[j].SetTintColor(new HDRColor(1.0, 1.0, 1.0, 1.0));
+        if IsDefined(this.m_hoverNames[j]) { this.m_hoverNames[j].SetTintColor(new HDRColor(1.0, 1.0, 1.0, 1.0)); }
       };
       j += 1;
     };
@@ -1366,7 +1428,9 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func TrackSelected() {
-    if this.m_selected < 0 || NotEquals(this.m_quests[this.m_selected].state, gameJournalEntryState.Active) {
+    if this.m_selected < 0 || this.m_selected >= ArraySize(this.m_quests)
+        || !IsDefined(this.m_quests[this.m_selected].entry)
+        || NotEquals(this.m_quests[this.m_selected].state, gameJournalEntryState.Active) {
       return;
     };
     QGTrackQuest(this.GetGame(), this.m_quests[this.m_selected].entry);
@@ -1379,6 +1443,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnRowHoverOver(evt: ref<inkPointerEvent>) -> Bool {
+    if !IsDefined(evt) { return false; }
     let target: wref<inkWidget> = evt.GetCurrentTarget();
     let i: Int32 = 0;
     while i < ArraySize(this.m_hoverRows) {
@@ -1392,6 +1457,7 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected cb func OnRowHoverOut(evt: ref<inkPointerEvent>) -> Bool {
+    if !IsDefined(evt) { return false; }
     let target: wref<inkWidget> = evt.GetCurrentTarget();
     let i: Int32 = 0;
     while i < ArraySize(this.m_hoverRows) {
@@ -1407,8 +1473,11 @@ public class QuestGuidePopup extends InGamePopup {
   }
 
   protected func ShowDetail(idx: Int32) {
+    if idx < 0 || idx >= ArraySize(this.m_quests) || !IsDefined(this.m_quests[idx].entry)
+        || !IsDefined(this.m_detailTitle) || !IsDefined(this.m_detailObjectives) { return; }
     let loc: ref<LocalizationSystem> = this.QGLoc();
     let jm: ref<JournalManager> = GameInstance.GetJournalManager(this.GetGame());
+    if !IsDefined(jm) { return; }
     let item: QGQuest = this.m_quests[idx];
     this.m_detailTitle.SetTintColor(QGStateColor(item.state));
     this.m_detailTitle.SetText(item.title);
@@ -1518,6 +1587,7 @@ public class QuestGuidePopup extends InGamePopup {
 
   protected func RefreshTracked() {
     let jm: ref<JournalManager> = GameInstance.GetJournalManager(this.GetGame());
+    if !IsDefined(jm) { return; }
     let tracked: wref<JournalEntry> = jm.GetTrackedEntry();
     let i: Int32 = 0;
     while i < ArraySize(this.m_quests) {

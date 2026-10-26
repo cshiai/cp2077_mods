@@ -7,6 +7,11 @@ public abstract class Settings {
   public static func Enabled() -> Bool = true
   public static func ArmThreshold() -> Float = 0.15
   public static func LegThreshold() -> Float = 0.25
+  // Keep the survivor floor small enough that a protected limb is not a
+  // second health bar.  The requested tuning range is 3--5%; 5% is the
+  // default and is centralized so it can be tuned without touching damage
+  // plumbing.
+  public static func SurvivorHealthFloor() -> Float = 0.05
 }
 
 // Match Shellrain's record-name exclusions. Metal hit shapes alone are not
@@ -22,6 +27,13 @@ public abstract class NPCFilter {
       || StrContains(name, "cerberus") || StrContains(name, "basilisk")
       || StrContains(name, "flathead") || StrContains(name, "adam_smasher")
       || StrContains(name, "militech_barghest");
+  }
+
+  public static func QualifyingRarity(rarity: gamedataNPCRarity) -> Bool {
+    return Equals(rarity, gamedataNPCRarity.Elite)
+      || Equals(rarity, gamedataNPCRarity.Rare)
+      || Equals(rarity, gamedataNPCRarity.Boss)
+      || Equals(rarity, gamedataNPCRarity.MaxTac);
   }
 }
 
@@ -56,15 +68,8 @@ public final func CLS_IsMechanical() -> Bool {
 @addMethod(NPCPuppet)
 public final func CLS_IsEligibleHumanTarget() -> Bool {
   return !this.CLS_IsMechanical() && this.IsHuman()
-    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !this.IsCrowd();
-}
-
-@addMethod(NPCPuppet)
-public final func CLS_ClearElementalDotsOnSurvivor() -> Void {
-  StatusEffectHelper.RemoveAllStatusEffectsByType(this, gamedataStatusEffectType.Bleeding);
-  StatusEffectHelper.RemoveAllStatusEffectsByType(this, gamedataStatusEffectType.Burning);
-  StatusEffectHelper.RemoveAllStatusEffectsByType(this, gamedataStatusEffectType.Poisoned);
-  StatusEffectHelper.RemoveAllStatusEffectsByType(this, gamedataStatusEffectType.Electrocuted);
+    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !this.IsCrowd()
+    && NPCFilter.QualifyingRarity(this.GetNPCRarity());
 }
 
 // Accumulate wound and dismemberment frame damage across multishot projectiles
@@ -109,10 +114,16 @@ protected cb func OnResetTotalFrameDamage(evt: ref<ResetFrameDamage>) -> Bool {
 // Suppress stale potential-death events if a limb survival clamp kept health positive.
 @wrapMethod(NPCPuppet)
 protected cb func OnPotentialDeath(evt: ref<gamePotentialDeathEvent>) -> Bool {
-  if Settings.Enabled() && (this.CLS_IsTrackedSurvivor() || this.cls_forceSurviveCurrentLimbHit) {
-    let hp: Float = GameInstance.GetStatPoolsSystem(this.GetGame()).GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false);
-    if hp > 1.0 && !this.IsDead() && !this.IsAboutToDie() {
-      return false;
+  // Only the direct limb-hit transaction may defer a potential-death event.
+  // A tracked survivor must still be killable by ordinary follow-up damage or
+  // natural bleeding/burning/poison/electrocution.
+  if Settings.Enabled() && this.cls_forceSurviveCurrentLimbHit {
+    let pools = GameInstance.GetStatPoolsSystem(this.GetGame());
+    if IsDefined(pools) {
+      let hp: Float = pools.GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false);
+      if hp > 1.0 && !this.IsDead() && !this.IsAboutToDie() {
+        return false;
+      }
     }
   }
   return wrappedMethod(evt);
@@ -149,7 +160,7 @@ protected func SetCumulatedDamages(target: wref<GameObject>, out guardBreakImpul
 @wrapMethod(HitReactionComponent)
 protected final func GetHitIntensity(defeatedOverride: Bool) -> Void {
   if Settings.Enabled() && IsDefined(this.m_ownerNPC)
-    && (this.m_ownerNPC.CLS_IsTrackedSurvivor() || this.m_ownerNPC.cls_forceSurviveCurrentLimbHit || this.CLS_CanSurviveLimbLoss()) {
+    && (this.m_ownerNPC.cls_forceSurviveCurrentLimbHit || this.CLS_CanSurviveLimbLoss()) {
     wrappedMethod(true);
     return;
   }
@@ -270,6 +281,9 @@ private final func CLS_LimbBlockReason() -> CName {
   if npc.CLS_IsMechanical() { return n"mechanical_npc"; }
   if !npc.IsHuman() || npc.IsCharacterCivilian() || npc.IsPlayerCompanion() || npc.IsCrowd() {
     return n"excluded_npc_type";
+  }
+  if !NPCFilter.QualifyingRarity(npc.GetNPCRarity()) {
+    return n"not_elite_rare_boss_maxtac";
   }
   if !this.m_isAlive || !ScriptedPuppet.IsAlive(npc) || npc.IsDead() || npc.IsAboutToDie() {
     return n"dead_dying_defeated_or_killing_blow";
@@ -432,7 +446,7 @@ public final func CLS_IsLimbReserved(part: gameDismBodyPart) -> Bool {
 @addMethod(NPCPuppet)
 public final func CLS_IsTrackedSurvivor() -> Bool {
   return (this.cls_leftArmReserved || this.cls_rightArmReserved
-    || this.cls_leftLegReserved || this.cls_rightLegReserved) && !this.CLS_IsMechanical();
+    || this.cls_leftLegReserved || this.cls_rightLegReserved) && this.CLS_IsEligibleHumanTarget();
 }
 
 @addMethod(NPCPuppet)
@@ -468,7 +482,6 @@ public final func CLS_ReserveLimb(part: gameDismBodyPart) -> Void {
     default: return;
   }
   this.cls_lastLimbDismemberTime = EngineTime.ToFloat(GameInstance.GetSimTime(this.GetGame()));
-  this.CLS_ClearElementalDotsOnSurvivor();
   // Snapshot the actual equipped weapons and target before the native wound
   // status/AI transition; compare with the later seated decision for this NPC.
   if firstLeg {
@@ -520,8 +533,9 @@ protected func ActionOn(owner: ref<GameObject>) -> Void {
   wrappedMethod(owner);
 }
 
-// Prevent living limb hits, same-blast multishot follow-ups, and elemental DOT ticks
-// from draining health to the 0.10% defeat threshold before or right after limb dismemberment.
+// Keep a direct limb hit from crossing the small survivor floor while the
+// native dismemberment transaction is being completed.  DOT/effect damage is
+// deliberately left untouched so natural status effects remain lethal.
 @wrapMethod(StatPoolsManager)
 private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType: gamedataDamageType, initialDamageValue: Float, forReal: Bool, valuesLost: script_ref<[SDamageDealt]>) -> Void {
   if Settings.Enabled() && IsDefined(hitEvent) && IsDefined(hitEvent.target) && IsDefined(hitEvent.attackData) {
@@ -535,12 +549,10 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
         || attackData.HasFlag(hitFlag.DamageOverTime)
         || attackData.HasFlag(hitFlag.BleedingDot);
 
-      // 1. Suppress elemental / bleed DOT ticks on tracked limb survivors so crafted
-      // weapons with 3 elemental packages do not kill the survivor 1s after dismemberment.
-      if isDotOrEffect && npc.CLS_IsTrackedSurvivor() {
-        initialDamageValue = 0.0;
-        npc.CLS_ClearElementalDotsOnSurvivor();
-      } else {
+      // Do not modify DOT/effect damage.  This is intentionally the opposite
+      // of the former suppression behavior: bleeding, burning, poison and
+      // electrocution can finish an already dismembered enemy.
+      if !isDotOrEffect {
         let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(npc.GetGame()));
         let isUnreservedLimbHit: Bool = false;
         let isHeadHit: Bool = false;
@@ -587,13 +599,16 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
         if !isHeadHit && (isUnreservedLimbHit || inSameBlastLimbWindow || inPostDismemberGraceWindow) {
           let targetID: StatsObjectID = Cast<StatsObjectID>(npc.GetEntityID());
           let statPoolsSystem: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(npc.GetGame());
-          let currentHealthValue: Float = statPoolsSystem.GetStatPoolValue(targetID, gamedataStatPoolType.Health, false);
-          let maxHealth: Float = GameInstance.GetStatsSystem(npc.GetGame()).GetStatValue(targetID, gamedataStatType.Health);
-          let minSafeHealth: Float = MaxF(maxHealth * 0.12, 10.0);
-          if currentHealthValue > 0.0 && (currentHealthValue - initialDamageValue) < minSafeHealth {
-            initialDamageValue = MaxF(0.0, currentHealthValue - minSafeHealth);
-            if isUnreservedLimbHit || inSameBlastLimbWindow {
-              npc.cls_forceSurviveCurrentLimbHit = true;
+          let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(npc.GetGame());
+          if IsDefined(statPoolsSystem) && IsDefined(statsSystem) {
+            let currentHealthValue: Float = statPoolsSystem.GetStatPoolValue(targetID, gamedataStatPoolType.Health, false);
+            let maxHealth: Float = statsSystem.GetStatValue(targetID, gamedataStatType.Health);
+            let minSafeHealth: Float = MaxF(maxHealth * Settings.SurvivorHealthFloor(), 1.0);
+            if currentHealthValue > 0.0 && (currentHealthValue - initialDamageValue) < minSafeHealth {
+              initialDamageValue = MaxF(0.0, currentHealthValue - minSafeHealth);
+              if isUnreservedLimbHit || inSameBlastLimbWindow {
+                npc.cls_forceSurviveCurrentLimbHit = true;
+              }
             }
           }
         }

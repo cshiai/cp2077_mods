@@ -1,7 +1,27 @@
 // Pure redscript Enemy Health Auto-Scaling by Level for Cyberpunk 2077 2.5 (no TweakXL/Codeware required)
-// Curved smoothstep ramp from 200% (2x) at level 10 to 500% (5x) at level 60.
-// Levels below 10 also use 200% health; level 60 and above cap at 500%.
+// Quintic smootherstep ramp from 125% (1.25x) at level 10 to 300% (3x) at level 60.
+// Levels below 10 also use 125% health; level 60 and above cap at 300%.
 // Non-Johnny enemies additionally regenerate 0.1% of max health per second.
+
+// Scale only populated damage channels.  The no-argument MultAttackValue()
+// overload also touches derived/untyped attack data, which can double-apply
+// status/effect components after vanilla damage processing.  Applying the
+// correction per concrete damage type preserves the health curve while leaving
+// unrelated computed fields alone.
+public func EHSL_ScaleAttackHealthChannels(computed: ref<gameAttackComputed>, factor: Float) -> Void {
+  if !IsDefined(computed) || factor <= 0.0 || factor == 1.0 {
+    return;
+  }
+  let i: Int32 = 0;
+  let count: Int32 = EnumInt(gamedataDamageType.Count);
+  while i < count {
+    let damageType: gamedataDamageType = IntEnum<gamedataDamageType>(i);
+    if AbsF(computed.GetAttackValue(damageType)) > 0.0001 {
+      computed.MultAttackValue(factor, damageType);
+    }
+    i += 1;
+  }
+}
 
 @addField(NPCPuppet)
 private let m_customEnemyHealthRegenActive: Bool;
@@ -65,15 +85,16 @@ public final func ApplyCustomEnemyHealthRegeneration(enabled: Bool) -> Void {
 public final static func CalculateCustomHealthMultiplier(level: Float) -> Float {
   let effectiveLevel: Float = MaxF(level, 1.0);
   if effectiveLevel <= 10.0 {
-    return 2.0;
+    return 1.25;
   }
   let rawT: Float = (effectiveLevel - 10.0) / 50.0;
   let t: Float = ClampF(rawT, 0.0, 1.0);
   if t >= 1.0 {
-    return 5.0;
+    return 3.0;
   }
-  let smoothT: Float = (3.0 * t * t) - (2.0 * t * t * t);
-  return 2.0 + (3.0 * smoothT);
+  // Quintic smootherstep: zero slope and zero curvature at both endpoints.
+  let smoothT: Float = t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+  return 1.25 + (1.75 * smoothT);
 }
 
 @addMethod(NPCPuppet)
@@ -294,7 +315,7 @@ private final func ScalePlayerDamage(hitEvent: ref<gameHitEvent>) -> Void {
   if IsDefined(targetPuppet) && NotEquals(targetPuppet.GetNPCRarity(), gamedataNPCRarity.Boss) && NotEquals(targetPuppet.GetNPCRarity(), gamedataNPCRarity.MaxTac) {
     let mult: Float = targetPuppet.GetCustomScaledHealthMultiplier();
     if mult > 1.0 {
-      hitEvent.attackComputed.MultAttackValue(1.0 / mult);
+      EHSL_ScaleAttackHealthChannels(hitEvent.attackComputed, 1.0 / mult);
     }
   }
 }
@@ -315,7 +336,7 @@ private final func ProcessDeviceExplosionDamageToTierNPC(hitEvent: ref<gameHitEv
     if IsDefined(npc) {
       let mult: Float = npc.GetCustomScaledHealthMultiplier();
       if mult > 1.0 {
-        hitEvent.attackComputed.MultAttackValue(1.0 / mult);
+        EHSL_ScaleAttackHealthChannels(hitEvent.attackComputed, 1.0 / mult);
       }
     }
   }

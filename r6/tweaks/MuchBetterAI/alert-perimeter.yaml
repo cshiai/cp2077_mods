@@ -1,0 +1,20 @@
+Senses.MBAIAlerted50m:
+  $base: Senses.SniperAlerted50m
+  detectionFactor: 400.0
+
+Senses.MBAICombat50m:
+  $base: Senses.SniperCombat50m
+
+Senses.MBAIPreventionAlerted50m:
+  $base: Senses.SniperAlerted50m
+  detectionFactor: 1000.0
+
+Senses.MBAIPreventionCombat50m:
+  $base: Senses.SniperCombat50m
+  detectionDropFactor: 1.0
+
+Character.Gameplay_NPC_Base.alertedSensesPreset: MBAIAlerted50m
+Character.Gameplay_NPC_Base.combatSensesPreset: MBAICombat50m
+
+Character.ncpd_base.alertedSensesPreset: MBAIPreventionAlerted50m
+Character.ncpd_base.combatSensesPreset: MBAIPreventionCombat50m

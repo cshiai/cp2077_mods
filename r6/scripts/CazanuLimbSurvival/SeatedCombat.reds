@@ -359,7 +359,9 @@ public final func CLS_TryStartSeated(context: ScriptExecutionContext) -> Bool {
 
 @addMethod(NPCPuppet)
 private final func CLS_QueueSeatedTick() -> Void {
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, new CLS_SeatedTickEvent(), 0.10, true);
+  // UI/workspot state does not need a 10 Hz poll; 6.7 Hz keeps aim/reload
+  // transitions responsive while reducing per-survivor event pressure.
+  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, new CLS_SeatedTickEvent(), 0.15, true);
 }
 
 @addMethod(NPCPuppet)

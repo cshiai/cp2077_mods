@@ -11,7 +11,7 @@ public class QGPerksButton extends inkLogicController {
   }
 
   protected cb func OnQGClick(evt: ref<inkPointerEvent>) -> Bool {
-    if !evt.IsAction(n"click") {
+    if !IsDefined(evt) || !evt.IsAction(n"click") {
       return false;
     };
     if IsDefined(this.m_owner) && IsDefined(this.m_screen) {

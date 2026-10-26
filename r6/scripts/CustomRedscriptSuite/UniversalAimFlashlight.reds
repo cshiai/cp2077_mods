@@ -102,24 +102,24 @@ public final func ApplyWeaponFlashlightProfile(weapon: ref<WeaponObject>, enable
   mainSettings.strength = 1.00;
 
   if Equals(weaponType, gamedataItemType.Wea_SniperRifle) || Equals(weaponType, gamedataItemType.Wea_PrecisionRifle) {
-    // Ultra-long-throw precision spotter beam (160m throw, 6500 lm)
-    mainSettings.radius = 160.00;
-    mainSettings.innerAngle = 14.00;
-    mainSettings.outerAngle = 36.00;
-    mainSettings.intensity = 6500.00;
+    // Balanced precision beam (105m throw, moderate output).
+    mainSettings.radius = 105.00;
+    mainSettings.innerAngle = 16.00;
+    mainSettings.outerAngle = 34.00;
+    mainSettings.intensity = 3800.00;
   } else {
     if Equals(weaponType, gamedataItemType.Wea_Shotgun) || Equals(weaponType, gamedataItemType.Wea_ShotgunDual) || Equals(weaponType, gamedataItemType.Wea_LightMachineGun) || Equals(weaponType, gamedataItemType.Wea_HeavyMachineGun) || (IsDefined(weapon) && weapon.IsMelee()) {
-      // High-output wide CQB flood beam (90m throw, 3800 lm)
-      mainSettings.radius = 90.00;
-      mainSettings.innerAngle = 30.00;
-      mainSettings.outerAngle = 70.00;
-      mainSettings.intensity = 3800.00;
+      // Balanced wide CQB beam (70m throw, 2800 lm).
+      mainSettings.radius = 70.00;
+      mainSettings.innerAngle = 28.00;
+      mainSettings.outerAngle = 65.00;
+      mainSettings.intensity = 2800.00;
     } else {
-      // High-output tactical beam for Handguns, Revolvers, SMGs, Assault Rifles, Unarmed (120m throw, 4500 lm)
-      mainSettings.radius = 120.00;
-      mainSettings.innerAngle = 22.00;
-      mainSettings.outerAngle = 55.00;
-      mainSettings.intensity = 4500.00;
+      // Balanced tactical beam for standard weapons (85m throw, 3200 lm).
+      mainSettings.radius = 85.00;
+      mainSettings.innerAngle = 20.00;
+      mainSettings.outerAngle = 50.00;
+      mainSettings.intensity = 3200.00;
     };
   };
 
@@ -128,17 +128,19 @@ public final func ApplyWeaponFlashlightProfile(weapon: ref<WeaponObject>, enable
   if IsDefined(fillLight) {
     let fillSettings: gameLightSettings = fillLight.GetDefaultSettings();
     fillSettings.strength = 1.00;
-    fillSettings.radius = 55.00;
-    fillSettings.innerAngle = 42.00;
-    fillSettings.outerAngle = 95.00;
-    fillSettings.intensity = 1800.00;
+    fillSettings.radius = 40.00;
+    fillSettings.innerAngle = 38.00;
+    fillSettings.outerAngle = 85.00;
+    fillSettings.intensity = 900.00;
     fillLight.SetParameters(fillSettings, 0.03);
   };
 }
 
 @addMethod(PlayerPuppet)
 public final func SetAimFlashlightState(enable: Bool) -> Void {
-  let rightWeapon: ref<WeaponObject> = GameInstance.GetTransactionSystem(this.GetGame()).GetItemInSlot(this, t"AttachmentSlots.WeaponRight") as WeaponObject;
+  let transaction = GameInstance.GetTransactionSystem(this.GetGame());
+  if !IsDefined(transaction) { return; }
+  let rightWeapon: ref<WeaponObject> = transaction.GetItemInSlot(this, t"AttachmentSlots.WeaponRight") as WeaponObject;
   this.ApplyWeaponFlashlightProfile(rightWeapon, enable);
 }
 
@@ -184,6 +186,7 @@ protected cb func OnUpperBodyStateChange(newState: Int32) -> Bool {
 
 @wrapMethod(PlayerPuppet)
 protected cb func OnToggleNewPlayerFlashlightEvent(evt: ref<ToggleNewPlayerFlashlightEvent>) -> Bool {
+  if !IsDefined(evt) { return false; }
   this.m_aimFlashlightManualOverride = !this.m_aimFlashlightManualOverride;
   let shouldEnable: Bool = this.m_aimFlashlightManualOverride || this.m_aimFlashlightActiveFromAim;
   this.SetAimFlashlightState(shouldEnable);
@@ -194,6 +197,7 @@ protected cb func OnToggleNewPlayerFlashlightEvent(evt: ref<ToggleNewPlayerFlash
 @wrapMethod(PlayerVisionModeController)
 protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsumer) -> Bool {
   if IsFinal() && Equals(ListenerAction.GetName(action), this.m_inputActionsNames.m_buttonHold) {
+    if !IsDefined(this.m_owner) { return wrappedMethod(action, consumer); }
     let time: Float = EngineTime.ToFloat(GameInstance.GetEngineTime(this.m_owner.GetGame()));
     if ListenerAction.IsButtonJustPressed(action) {
       this.m_otherVars.m_buttonHoldPressTime = time;
@@ -202,7 +206,8 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
       };
       if this.m_otherVars.m_buttonHoldTapCount % 2 == 1 {
         let evt: ref<ToggleNewPlayerFlashlightEvent> = new ToggleNewPlayerFlashlightEvent();
-        GetPlayer(this.m_owner.GetGame()).QueueEvent(evt);
+        let player = GetPlayer(this.m_owner.GetGame());
+        if IsDefined(player) { player.QueueEvent(evt); }
         return true;
       };
     } else {
