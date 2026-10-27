@@ -1,15 +1,32 @@
-// LevelCap150XP150: dependency-free Level Cap 150 & +50% XP multiplier (1.5x).
-// Raises Player Level and Street Cred caps to 150, ensures XP thresholds and
+// LevelCap300XP300: dependency-free Level Cap 300 & +50% XP multiplier (1.5x).
+// Raises Player Level and Street Cred caps to 300, ensures XP thresholds and
 // Perk/Attribute point rewards continue past level 60, raises the Attribute cap
-// to 150 so additional points can be spent, and increases all XP gained by 50%.
+// to 300 so additional points can be spent, and increases all XP gained by 50%.
 
-module LevelCap150XP150
+module LevelCap300XP300
+
+@wrapMethod(StatPrereq)
+protected func Initialize(recordID: TweakDBID) -> Void {
+  wrappedMethod(recordID);
+
+  if Equals(this.m_statType, gamedataStatType.Level) {
+    switch recordID {
+      case t"LootPrereqs.LegendaryCWLevelAvailabilityAtVendor_inline1":
+      case t"LootPrereqs.CyberpsychoWeaponInLootPrereq_end_inline1":
+      case t"LootPrereqs.LegendaryQuickhackRecipesPlayerPrereq_inline1":
+      case t"LootPrereqs.MaxPlayerLevelPrereq":
+      case t"LootPrereqs.BelowMaxPlayerLevelPrereq":
+        this.m_valueToCheck = MaxF(this.m_valueToCheck, 300.0);
+        break;
+    }
+  }
+}
 
 @wrapMethod(PlayerDevelopmentData)
 public final const func GetProficiencyAbsoluteMaxLevel(type: gamedataProficiencyType) -> Int32 {
   let baseMax: Int32 = wrappedMethod(type);
   if Equals(type, gamedataProficiencyType.Level) || Equals(type, gamedataProficiencyType.StreetCred) {
-    return Max(baseMax, 150);
+    return Max(baseMax, 300);
   };
   return baseMax;
 }
@@ -18,7 +35,7 @@ public final const func GetProficiencyAbsoluteMaxLevel(type: gamedataProficiency
 private final const func GetProficiencyMaxLevel(type: gamedataProficiencyType) -> Int32 {
   let baseMax: Int32 = wrappedMethod(type);
   if Equals(type, gamedataProficiencyType.Level) || Equals(type, gamedataProficiencyType.StreetCred) {
-    return Max(baseMax, 150);
+    return Max(baseMax, 300);
   };
   return baseMax;
 }
@@ -46,7 +63,7 @@ private final const func GetDevPointsForLevel(level: Int32, profType: gamedataPr
 @wrapMethod(PlayerDevelopmentData)
 private final const func GetAttributeDevCap(type: gamedataStatType) -> Int32 {
   let cap: Int32 = wrappedMethod(type);
-  return Max(cap, 150);
+  return Max(cap, 300);
 }
 
 @wrapMethod(PlayerDevelopmentData)

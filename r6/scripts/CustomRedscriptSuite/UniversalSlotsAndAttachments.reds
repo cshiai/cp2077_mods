@@ -336,6 +336,22 @@ public abstract class UniversalSlotsHelper {
     return false;
   }
 
+  public final static func IsVanillaCyberdeckProgramSlot(slotID: TweakDBID) -> Bool {
+    switch slotID {
+      case t"AttachmentSlots.CyberdeckProgram1":
+      case t"AttachmentSlots.CyberdeckProgram2":
+      case t"AttachmentSlots.CyberdeckProgram3":
+      case t"AttachmentSlots.CyberdeckProgram4":
+      case t"AttachmentSlots.CyberdeckProgram5":
+      case t"AttachmentSlots.CyberdeckProgram6":
+      case t"AttachmentSlots.CyberdeckProgram7":
+      case t"AttachmentSlots.CyberdeckProgram8":
+        return true;
+      default:
+        return false;
+    }
+  }
+
   public final static func NormalizeSlotForUI(slotID: TweakDBID) -> TweakDBID {
     let vanillaArmSlots: array<TweakDBID> = UniversalSlotsHelper.GetAllCyberwareArmModSlots();
     if ArrayContains(vanillaArmSlots, slotID) {
@@ -348,6 +364,127 @@ public abstract class UniversalSlotsHelper {
 // ============================================================================
 // 1. Unlock All Blueprint Slots Regardless of Quality/Tier + Monowire Slot
 // ============================================================================
+
+@replaceMethod(BackpackMainGameController)
+private final func PopulateInventory() -> Void {
+  if !IsDefined(this.m_uiInventorySystem) {
+    return;
+  }
+  let filterManager = ItemCategoryFliterManager.Make();
+  filterManager.AddFilterToCheck(ItemFilterCategory.Quest);
+
+  let tagsToFilterOut: array<CName> = [n"HideInBackpackUI"];
+  this.m_uiInventorySystem.FlushTempData();
+
+  let playerItems = this.m_uiInventorySystem.GetPlayerItemsMap();
+  let values: array<wref<IScriptable>>;
+  playerItems.GetValues(values);
+  let wrappedItems: array<ref<IScriptable>>;
+  ArrayClear(this.m_junkItems);
+
+  let i = 0;
+  while i < ArraySize(values) {
+    let uiInventoryItem = values[i] as UIInventoryItem;
+    let includeItem = IsDefined(uiInventoryItem)
+      && !ItemID.HasFlag(uiInventoryItem.GetID(), gameEItemIDFlag.Preview)
+      && !uiInventoryItem.HasAnyTag(tagsToFilterOut);
+    if includeItem && ArrayContains(this.m_itemDropQueueItems, uiInventoryItem.ID) {
+      let quantity = uiInventoryItem.GetQuantity(true);
+      let dropItem = this.GetDropQueueItem(uiInventoryItem.ID);
+      if dropItem.quantity >= quantity {
+        includeItem = false;
+      } else {
+        uiInventoryItem.SetQuantity(quantity - dropItem.quantity);
+      }
+    }
+    if includeItem {
+      if uiInventoryItem.IsJunk() {
+        ArrayPush(this.m_junkItems, uiInventoryItem);
+      }
+      let wrappedItem = new WrappedInventoryItemData();
+      wrappedItem.DisplayContextData = this.m_itemDisplayContext;
+      wrappedItem.IsNew = uiInventoryItem.IsNew();
+      wrappedItem.IsPlayerFavourite = uiInventoryItem.IsPlayerFavourite();
+      wrappedItem.Item = uiInventoryItem;
+      wrappedItem.NotificationListener = this.m_immediateNotificationListener;
+      filterManager.AddItem(uiInventoryItem.GetFilterCategory());
+      ArrayPush(wrappedItems, wrappedItem);
+    }
+    i += 1;
+  }
+
+  filterManager.SortFiltersList();
+  filterManager.AddFilter(ItemFilterCategory.AllItems);
+  this.RefreshFilterButtons(filterManager.GetFiltersList());
+  this.m_backpackItemsDataSource.Reset(wrappedItems);
+}
+
+@wrapMethod(BackpackMainGameController)
+public final func EquipItem(itemData: wref<UIInventoryItem>) -> Void {
+  if IsDefined(itemData)
+    && Equals(itemData.GetItemType(), gamedataItemType.Prt_Program)
+    && IsDefined(this.m_player)
+    && IsDefined(this.m_InventoryManager) {
+    let equipData = EquipmentSystem.GetData(this.m_player);
+    let deckID: ItemID = IsDefined(equipData)
+      ? equipData.GetTaggedItem(gamedataEquipmentArea.SystemReplacementCW, n"Cyberdeck")
+      : ItemID.None();
+    if !ItemID.IsValid(deckID)
+      || ItemModificationSystem.HasThisShardInstalled(this.m_player, deckID, itemData.GetID()) {
+      this.ShowNotification(this.m_player.GetGame(), UIMenuNotificationType.InventoryActionBlocked);
+      return;
+    }
+
+    let allSlots = ItemModificationSystem.GetAllSlots(this.m_player, deckID);
+    let targetSlot: TweakDBID = TDBID.None();
+    let shardType = TweakDBInterface.GetCName(ItemID.GetTDBID(itemData.GetID()) + t".shardType", n"");
+    let i = 0;
+
+    while i < ArraySize(allSlots) {
+      if UniversalSlotsHelper.IsVanillaCyberdeckProgramSlot(allSlots[i].slotID)
+        && ItemID.IsValid(allSlots[i].installedPart)
+        && NotEquals(shardType, n"")
+        && Equals(TweakDBInterface.GetCName(ItemID.GetTDBID(allSlots[i].installedPart) + t".shardType", n""), shardType) {
+        targetSlot = allSlots[i].slotID;
+        break;
+      }
+      i += 1;
+    }
+
+    if !TDBID.IsValid(targetSlot) {
+      i = 0;
+      while i < ArraySize(allSlots) {
+        if UniversalSlotsHelper.IsVanillaCyberdeckProgramSlot(allSlots[i].slotID)
+          && !ItemID.IsValid(allSlots[i].installedPart) {
+          targetSlot = allSlots[i].slotID;
+          break;
+        }
+        i += 1;
+      }
+    }
+
+    if !TDBID.IsValid(targetSlot) {
+      i = 0;
+      while i < ArraySize(allSlots) {
+        if UniversalSlotsHelper.IsVanillaCyberdeckProgramSlot(allSlots[i].slotID)
+          && ItemID.IsValid(allSlots[i].installedPart) {
+          targetSlot = allSlots[i].slotID;
+          break;
+        }
+        i += 1;
+      }
+    }
+
+    if TDBID.IsValid(targetSlot) {
+      this.m_InventoryManager.InstallPart(deckID, itemData.GetID(), targetSlot);
+      this.m_InventoryManager.MarkToRebuild();
+      this.RefreshUINextFrame();
+      return;
+    }
+  }
+
+  wrappedMethod(itemData);
+}
 
 @wrapMethod(InventoryDataManagerV2)
 private final func ShouldSlotBeAvailable(itemData: wref<gameItemData>, attachmentSlotRecord: wref<AttachmentSlot_Record>, owner: wref<GameObject>, itemId: ItemID) -> Bool {
@@ -600,6 +737,52 @@ public final static func GetAttachmentSlotsForInventory() -> array<TweakDBID> {
   UniversalSlotsHelper.AppendAllUnique(slots, UniversalSlotsHelper.GetAllMeleeWeaponModSlots());
   UniversalSlotsHelper.AppendAllUnique(slots, UniversalSlotsHelper.GetAllCyberwareArmModSlots());
   return slots;
+}
+
+// Vanilla removes weapon scopes and muzzles that are absent from the weapon's
+// SlotPartList even when the selected universal Scope/PowerModule slot accepts
+// them.  Restore only those erased weapon parts here; leave the vanilla
+// cyberdeck shard filtering and HasThisShardInstalled deduplication untouched.
+@wrapMethod(InventoryDataManagerV2)
+public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs: script_ref<array<TweakDBID>>, opt filteredItems: array<ItemModParams>, outputItems: script_ref<array<InventoryItemData>>) -> Void {
+  wrappedMethod(item, slotIDs, filteredItems, outputItems);
+
+  if NotEquals(RPGManager.GetItemCategory(item), gamedataItemCategory.Weapon) {
+    return;
+  }
+
+  let slotIndex = 0;
+  while slotIndex < ArraySize(Deref(slotIDs)) {
+    let candidates = this.GetPlayerInventoryParts(Deref(slotIDs)[slotIndex]);
+    let candidateIndex = 0;
+    while candidateIndex < ArraySize(candidates) {
+      let candidate = candidates[candidateIndex];
+      let partType = InventoryItemData.GetItemType(candidate);
+      if UniversalSlotsHelper.IsScopePartType(partType) || UniversalSlotsHelper.IsMuzzlePartType(partType) {
+        let alreadyPresent = false;
+        let outputIndex = 0;
+        while outputIndex < ArraySize(Deref(outputItems)) {
+          if InventoryItemData.GetID(Deref(outputItems)[outputIndex]) == InventoryItemData.GetID(candidate) {
+            alreadyPresent = true;
+            break;
+          }
+          outputIndex += 1;
+        }
+
+        if !alreadyPresent {
+          let quantity = InventoryItemData.GetQuantity(candidate)
+            - this.GetQunatityToFilterOut(InventoryItemData.GetID(candidate), filteredItems);
+          if quantity > 0 {
+            InventoryItemData.SetQuantity(candidate, quantity);
+            InventoryItemData.SetIsRequirementMet(candidate, true);
+            ArrayPush(Deref(outputItems), candidate);
+          }
+        }
+      }
+      candidateIndex += 1;
+    }
+    slotIndex += 1;
+  }
 }
 
 // ============================================================================

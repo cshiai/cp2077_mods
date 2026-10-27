@@ -4,3 +4,10 @@ Ammo.HandgunAmmo_inline0.value: 8999.0
 Ammo.RifleAmmo_inline0.value: 8999.0
 Ammo.ShotgunAmmo_inline0.value: 1499.0
 Ammo.SniperRifleAmmo_inline0.value: 1199.0
+
+# Keep the level-gating prerequisite records aligned with LevelCap300XP300.
+LootPrereqs.LegendaryCWLevelAvailabilityAtVendor_inline1.valueToCheck: 300.0
+LootPrereqs.CyberpsychoWeaponInLootPrereq_end_inline1.valueToCheck: 300.0
+LootPrereqs.LegendaryQuickhackRecipesPlayerPrereq_inline1.valueToCheck: 300.0
+LootPrereqs.MaxPlayerLevelPrereq.valueToCheck: 300.0
+LootPrereqs.BelowMaxPlayerLevelPrereq.valueToCheck: 300.0

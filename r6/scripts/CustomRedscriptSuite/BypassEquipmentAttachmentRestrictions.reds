@@ -132,9 +132,38 @@ public final func CanInstallPart(const itemData: script_ref<InventoryItemData>) 
   if !ItemID.IsValid(partID) || !IsDefined(partData) || partData.HasTag(n"UnequipBlocked") {
     return false;
   }
+  let partType: gamedataItemType = partData.GetItemType();
   return InventoryItemData.IsPart(itemData)
     && (RPGManager.IsWeaponMod(partID) || RPGManager.IsClothingMod(partID)
-      || Equals(partData.GetItemType(), gamedataItemType.CyberwareStatsShard));
+      || Equals(partType, gamedataItemType.CyberwareStatsShard)
+      || Equals(partType, gamedataItemType.Prt_Program)
+      || RPGManager.IsScopeAttachment(partType) || RPGManager.IsMuzzleAttachment(partType));
+}
+
+@wrapMethod(InventoryGPRestrictionHelper)
+public static final func CanEquip(const itemData: script_ref<InventoryItemData>, player: wref<PlayerPuppet>) -> Bool {
+  let vanilla: Bool = wrappedMethod(itemData, player);
+  if vanilla {
+    return true;
+  }
+  if InventoryItemData.IsPart(itemData) && !InventoryItemData.IsEmpty(itemData) {
+    let partData: ref<gameItemData> = InventoryItemData.GetGameItemData(itemData);
+    if IsDefined(partData) && !partData.HasTag(n"UnequipBlocked") {
+      return true;
+    }
+  }
+  return false;
+}
+
+@wrapMethod(InventoryDataManagerV2)
+public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs: script_ref<array<TweakDBID>>, opt filteredItems: array<ItemModParams>, outputItems: script_ref<array<InventoryItemData>>) -> Void {
+  wrappedMethod(item, slotIDs, filteredItems, outputItems);
+
+  let i = 0;
+  while i < ArraySize(Deref(outputItems)) {
+    InventoryItemData.SetIsRequirementMet(Deref(outputItems)[i], true);
+    i += 1;
+  }
 }
 
 @wrapMethod(RPGManager)

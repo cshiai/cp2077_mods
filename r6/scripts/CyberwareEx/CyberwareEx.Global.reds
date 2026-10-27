@@ -849,8 +849,26 @@ private final func RefreshPlayerCyberware() {
     ArrayClear(this.m_cyberwareItems);
     let dummyItems: array<InventoryItemData>;
 
+    let systemReplacementIndex = playerData.GetEquipAreaIndex(gamedataEquipmentArea.SystemReplacementCW);
+    if systemReplacementIndex >= 0 && systemReplacementIndex < ArraySize(playerData.m_equipment.equipAreas) {
+        let systemSlotIndex = 0;
+        let systemSlotCount = ArraySize(playerData.m_equipment.equipAreas[systemReplacementIndex].equipSlots);
+        while systemSlotIndex < systemSlotCount {
+            let deckID = playerData.m_equipment.equipAreas[systemReplacementIndex].equipSlots[systemSlotIndex].itemID;
+            if ItemID.IsValid(deckID) && EquipmentSystem.IsItemCyberdeck(deckID) {
+                let deckData = this.m_InventoryManager.GetItemDataFromIDInLoadout(deckID);
+                if !InventoryItemData.IsEmpty(deckData) {
+                    ArrayPush(this.m_cyberwareItems, deckData);
+                    requiredSlotWidgets = ArraySize(this.m_cyberwareItems);
+                    break;
+                }
+            }
+            systemSlotIndex += 1;
+        }
+    }
+
     let i = 0;
-    while i < ArraySize(cyberwareAreas) {
+    while i < ArraySize(cyberwareAreas) && requiredSlotWidgets < maxSlotWidgets {
         let areaIndex = playerData.GetEquipAreaIndex(cyberwareAreas[i]);
         if areaIndex >= 0 && areaIndex < ArraySize(playerData.m_equipment.equipAreas) {
             let slotIndex = 0;
@@ -859,19 +877,20 @@ private final func RefreshPlayerCyberware() {
                 let itemID = playerData.m_equipment.equipAreas[areaIndex].equipSlots[slotIndex].itemID;
                 if ItemID.IsValid(itemID) {
                     let itemData = this.m_InventoryManager.GetItemDataFromIDInLoadout(itemID);
-                    if !InventoryItemData.IsEmpty(itemData) {
-                        let abilities: array<InventoryItemAbility>;
-                        let attachments: array<ref<InventoryItemAttachments>>;
-                        this.m_InventoryManager.GetAttachements(player, itemID, itemData.GameItemData, attachments, abilities, false);
-                        if ArraySize(attachments) > 0 {
-                            ArrayPush(this.m_cyberwareItems, itemData);
-                            requiredSlotWidgets = ArraySize(this.m_cyberwareItems);
-                            if requiredSlotWidgets == maxSlotWidgets {
-                                break;
+                    if !InventoryItemData.IsEmpty(itemData)
+                        && !(Equals(cyberwareAreas[i], gamedataEquipmentArea.SystemReplacementCW) && EquipmentSystem.IsItemCyberdeck(itemID)) {
+                            let abilities: array<InventoryItemAbility>;
+                            let attachments: array<ref<InventoryItemAttachments>>;
+                            this.m_InventoryManager.GetAttachements(player, itemID, itemData.GameItemData, attachments, abilities, false);
+                            if ArraySize(attachments) > 0 {
+                                ArrayPush(this.m_cyberwareItems, itemData);
+                                requiredSlotWidgets = ArraySize(this.m_cyberwareItems);
+                                if requiredSlotWidgets == maxSlotWidgets {
+                                    break;
+                                }
+                            } else {
+                                ArrayPush(dummyItems, itemData);
                             }
-                        } else {
-                            ArrayPush(dummyItems, itemData);
-                        }
                     }
                 }
                 slotIndex += 1;
@@ -1118,6 +1137,106 @@ private let m_overrideManager: ref<OverrideManager>;
 @addField(RipperDocGameController)
 private let m_overrideConfirmationToken: ref<inkGameNotificationToken>;
 
+@addMethod(Vendor)
+private final func MaterializeCyberwareStock(ts: ref<TransactionSystem>) -> Void {
+    if !IsDefined(ts) || !IsDefined(this.m_vendorObject) {
+        return;
+    }
+
+    let i = 0;
+    while i < ArraySize(this.m_stock) {
+        let itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(this.m_stock[i].itemID));
+        if IsDefined(itemRecord) && !IsDefined(ts.GetItemData(this.m_vendorObject, this.m_stock[i].itemID)) {
+            ts.GiveItem(this.m_vendorObject, this.m_stock[i].itemID, this.m_stock[i].quantity, itemRecord.Tags());
+        }
+        i += 1;
+    }
+}
+
+@addMethod(Vendor)
+public final func EnsureRipperdocStockAndInventory() -> Void {
+    if !IsDefined(this.m_vendorObject) {
+        return;
+    }
+    this.m_gameInstance = this.m_vendorObject.GetGame();
+
+    this.m_vendorRecord = TweakDBInterface.GetVendorRecord(this.m_tweakID);
+    if !IsDefined(this.m_vendorRecord) {
+        return;
+    }
+
+    this.LazyInitStock();
+
+    let itemPool: array<wref<VendorItem_Record>>;
+    this.m_vendorRecord.ItemStock(itemPool);
+    let player = GetPlayer(this.m_gameInstance);
+    let ts = GameInstance.GetTransactionSystem(this.m_gameInstance);
+    let stockChanged = false;
+    let i = 0;
+
+    while i < ArraySize(itemPool) {
+        if IsDefined(itemPool[i]) && IsDefined(itemPool[i].Item()) && itemPool[i].Item().TagsContains(n"Cyberware") {
+            let stockContainsItem = false;
+            let j = 0;
+            while j < ArraySize(this.m_stock) {
+                if this.m_stock[j].vendorItemID == itemPool[i].GetID()
+                    || ItemID.GetTDBID(this.m_stock[j].itemID) == itemPool[i].Item().GetID() {
+                    stockContainsItem = true;
+                    break;
+                }
+                j += 1;
+            }
+
+            let alreadyOwned = !itemPool[i].Item().UsesVariants()
+                && IsDefined(ts)
+                && IsDefined(player)
+                && ts.HasItem(player, ItemID.CreateQuery(itemPool[i].Item().GetID()));
+            if !stockContainsItem && !alreadyOwned {
+                this.CreateStacksFromVendorItem(this.m_stock, itemPool[i], player);
+                if !ArrayContains(this.m_newItems, itemPool[i].Item().GetID()) {
+                    ArrayPush(this.m_newItems, itemPool[i].Item().GetID());
+                }
+                stockChanged = true;
+            }
+        }
+        i += 1;
+    }
+
+    this.MaterializeCyberwareStock(ts);
+
+    if ArraySize(this.GetCyberwareForSale(true)) == 0 {
+        this.m_stockInit = false;
+        this.LazyInitStock();
+        this.MaterializeCyberwareStock(ts);
+        stockChanged = true;
+    }
+
+    let inventoryNeedsRefresh = stockChanged;
+    i = 0;
+    while i < ArraySize(this.m_stock) && !inventoryNeedsRefresh {
+        let itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(this.m_stock[i].itemID));
+        if IsDefined(itemRecord)
+            && itemRecord.TagsContains(n"Cyberware")
+            && IsDefined(ts)
+            && !IsDefined(ts.GetItemData(this.m_vendorObject, this.m_stock[i].itemID)) {
+            inventoryNeedsRefresh = true;
+        }
+        i += 1;
+    }
+
+    if inventoryNeedsRefresh {
+        this.m_inventoryInit = false;
+        this.m_inventoryReinitWithPlayerStats = false;
+        this.FillVendorInventory(false);
+
+        if IsDefined(ts) {
+            this.MaterializeCyberwareStock(ts);
+            ts.ReinitializeStatsOnEntityItems(this.m_vendorObject);
+            this.m_inventoryReinitWithPlayerStats = true;
+        }
+    }
+}
+
 @wrapMethod(RipperDocGameController)
 private final func Init() {
     wrappedMethod();
@@ -1127,12 +1246,10 @@ private final func Init() {
     this.m_overrideManager.Initialize(equipmentData);
 }
 
-// A vendor's stock is persistent in the save.  If a previous profile emptied
-// or cached a ripperdoc with no stock, the vanilla controller will faithfully
-// display only already-owned items and never rebuild the catalog until the
-// long restock timer expires.  Reinitialize only the empty-stock case before
-// the normal UI preparation; populated vendors, sold items, and ordinary
-// vendor behavior remain untouched.
+// A vendor's stock is persistent in the save.  Repair missing cyberware stacks
+// and materialized vendor inventory before the vanilla ripperdoc UI caches its
+// item list; populated vendors, sold items, and ordinary vendor behavior remain
+// untouched.
 @wrapMethod(RipperDocGameController)
 private final func PrepareVendorItems() {
     let vendorObject: wref<GameObject> = IsDefined(this.m_VendorDataManager)
@@ -1143,10 +1260,7 @@ private final func PrepareVendorItems() {
         if IsDefined(market) {
             let vendor: ref<Vendor> = market.GetVendor(vendorObject);
             if IsDefined(vendor) {
-                let stock: array<SItemStack> = vendor.GetStock();
-                if ArraySize(stock) == 0 {
-                    vendor.OnRestored(vendorObject.GetGame(), true);
-                }
+                vendor.EnsureRipperdocStockAndInventory();
             }
         }
     }

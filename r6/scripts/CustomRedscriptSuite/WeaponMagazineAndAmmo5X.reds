@@ -14,6 +14,17 @@ public class AmmoCapacity10XTweak extends ScriptableTweak {
 
   protected cb func OnApply() -> Void {
     WeaponMagazineAndAmmo5XHelper.ApplyAmmoTweakDBRecords();
+
+    TweakDBManager.SetFlat(t"LootPrereqs.LegendaryCWLevelAvailabilityAtVendor_inline1.valueToCheck", 300.0);
+    TweakDBManager.UpdateRecord(t"LootPrereqs.LegendaryCWLevelAvailabilityAtVendor_inline1");
+    TweakDBManager.SetFlat(t"LootPrereqs.CyberpsychoWeaponInLootPrereq_end_inline1.valueToCheck", 300.0);
+    TweakDBManager.UpdateRecord(t"LootPrereqs.CyberpsychoWeaponInLootPrereq_end_inline1");
+    TweakDBManager.SetFlat(t"LootPrereqs.LegendaryQuickhackRecipesPlayerPrereq_inline1.valueToCheck", 300.0);
+    TweakDBManager.UpdateRecord(t"LootPrereqs.LegendaryQuickhackRecipesPlayerPrereq_inline1");
+    TweakDBManager.SetFlat(t"LootPrereqs.MaxPlayerLevelPrereq.valueToCheck", 300.0);
+    TweakDBManager.UpdateRecord(t"LootPrereqs.MaxPlayerLevelPrereq");
+    TweakDBManager.SetFlat(t"LootPrereqs.BelowMaxPlayerLevelPrereq.valueToCheck", 300.0);
+    TweakDBManager.UpdateRecord(t"LootPrereqs.BelowMaxPlayerLevelPrereq");
   }
 }
 
