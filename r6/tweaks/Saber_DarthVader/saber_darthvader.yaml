@@ -9,17 +9,72 @@ Items.Saber_Vader_Grip:
   appearanceResourceName: saber_vader_grip
 
 # --- The lightsaber -----------------------------------------------------------
+Items.Saber_DarthVader_TriggerDismembermentChance:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.TriggerDismembermentChance
+  value: 0.40
+
+Items.Saber_DarthVader_HitDismembermentFactor:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.HitDismembermentFactor
+  value: 1.50
+
+Items.Saber_DarthVader_TriggerWoundedChance:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.TriggerWoundedChance
+  value: 0.40
+
+Items.Saber_DarthVader_HitWoundsFactor:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.HitWoundsFactor
+  value: 1.50
+
+Items.Saber_DarthVader_CanWeaponIgnoreArmor:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.CanWeaponIgnoreArmor
+  value: 1.00
+
+Items.Saber_DarthVader_CanDealFullDamageToArmored:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.CanDealFullDamageToArmored
+  value: 1.00
+
+Items.Saber_DarthVader_Dismemberment_Stats:
+  $type: gamedataStatModifierGroup_Record
+  drawBasedOnStatType: False
+  optimiseCombinedModifiers: False
+  saveBasedOnStatType: False
+  statModsLimit: -1
+  relatedModifierGroups: []
+  statModifiers:
+    - Items.Saber_DarthVader_TriggerDismembermentChance
+    - Items.Saber_DarthVader_HitDismembermentFactor
+    - Items.Saber_DarthVader_TriggerWoundedChance
+    - Items.Saber_DarthVader_HitWoundsFactor
+    - Items.Saber_DarthVader_CanWeaponIgnoreArmor
+    - Items.Saber_DarthVader_CanDealFullDamageToArmored
+
 Items.Saber_DarthVader:
   $base: Items.Preset_Katana_Default
   displayName: l"Saber-Vader-Name"
   localizedDescription: l"Saber-Vader-Desc"
-  quality: Quality.Legendary
+  quality: Quality.IconicItem
   appearanceResourceName: Saber_Vader_Default
   # The SWBF2 Audioware event bank owns this weapon's audio; avoid katana bleed-through.
   audioWeaponConfiguration: saber_silent
   visualTags: [ Default ]                   # fixed tag, so the inventory icon name below is known
   tags:
     - !append-once IconicWeapon
+  statModifierGroups:
+    - !remove Items.QualityRandomization
+    - !append-once Items.IconicQualityRandomization
+    - !append-once Items.Saber_DarthVader_Dismemberment_Stats
   hudIcon: UIIcon.Saber_Vader_HUD
   CraftingData: Items.Saber_DarthVader_CraftingPackage
   slotPartListPreset:

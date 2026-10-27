@@ -207,18 +207,6 @@ public class UniversalIconicWeaponHelper {
     };
   }
 
-  private final static func ApplyAllHiddenIconicMechanics(
-    statsSystem: ref<StatsSystem>,
-    statsId: StatsObjectID,
-    isRanged: Bool
-  ) -> Void {
-    let hiddenRoll: Int32 = 0;
-    while hiddenRoll < 5 {
-      UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hiddenRoll);
-      hiddenRoll += 1;
-    };
-  }
-
   private final static func ApplyHiddenIconicMechanicRoll(
     statsSystem: ref<StatsSystem>,
     statsId: StatsObjectID,
@@ -264,6 +252,123 @@ public class UniversalIconicWeaponHelper {
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanQuickMeleeStagger, gameStatModifierType.Additive, 1.00);
         break;
     };
+  }
+
+  private final static func ApplyCraftedHiddenMechanic(
+    statsSystem: ref<StatsSystem>,
+    statsId: StatsObjectID
+  ) -> Void {
+    // V-crafted weapons get this deterministic hidden package instead of the
+    // single random world/purchased roll: 40% dismemberment and full armor
+    // bypass.  Cazanu's living-limb path also consumes the wound pair, so keep
+    // both pairs together instead of leaving the visible dismemberment stat
+    // disconnected from the accumulated wound threshold.
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitDismembermentFactor, gameStatModifierType.Additive, 1.50);
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerDismembermentChance, gameStatModifierType.Additive, 0.40);
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 1.50);
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 0.40);
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanWeaponIgnoreArmor, gameStatModifierType.Additive, 1.00);
+    UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanDealFullDamageToArmored, gameStatModifierType.Additive, 1.00);
+  }
+
+  private final static func ApplyCraftedWoundBridge(
+    statsSystem: ref<StatsSystem>,
+    statsId: StatsObjectID,
+    itemData: ref<gameItemData>
+  ) -> Void {
+    // Marker 4.0 was shipped before the wound pair was added.  Repair only
+    // that missing bridge so existing dismemberment/armor rolls are not doubled.
+    if !IsDefined(itemData) || itemData.GetStatValueByType(gamedataStatType.HitWoundsFactor) < 1.50 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 1.50);
+    }
+    if !IsDefined(itemData) || itemData.GetStatValueByType(gamedataStatType.TriggerWoundedChance) < 0.40 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 0.40);
+    }
+    if IsDefined(itemData) && Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader") {
+      if itemData.GetStatValueByType(gamedataStatType.TriggerDismembermentChance) < 0.40 {
+        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerDismembermentChance, gameStatModifierType.Additive, 0.40);
+      }
+      if itemData.GetStatValueByType(gamedataStatType.HitDismembermentFactor) < 1.50 {
+        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitDismembermentFactor, gameStatModifierType.Additive, 1.50);
+      }
+      if itemData.GetStatValueByType(gamedataStatType.CanWeaponIgnoreArmor) < 1.00 {
+        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanWeaponIgnoreArmor, gameStatModifierType.Additive, 1.00);
+      }
+      if itemData.GetStatValueByType(gamedataStatType.CanDealFullDamageToArmored) < 1.00 {
+        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanDealFullDamageToArmored, gameStatModifierType.Additive, 1.00);
+      }
+    }
+  }
+
+  public final static func RepairIconicUpgradeCurvesIfNeeded(
+    statsSystem: ref<StatsSystem>,
+    statsId: StatsObjectID,
+    itemData: ref<gameItemData>
+  ) -> Void {
+    if !IsDefined(statsSystem) || !StatsObjectID.IsDefined(statsId) || !IsDefined(itemData) {
+      return;
+    }
+
+    let isSaber: Bool = Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader");
+    let quality: Float = itemData.GetStatValueByType(gamedataStatType.Quality);
+    let plus: Float = itemData.GetStatValueByType(gamedataStatType.IsItemPlus);
+    let upgrades: Float = itemData.GetStatValueByType(gamedataStatType.WasItemUpgraded);
+    let needsCurveRepair: Bool = isSaber || (UniversalIconicWeaponHelper.IsEligibleWeapon(itemData)
+      && upgrades >= 2.00 && plus < 1.00 && quality >= 4.00);
+    if !needsCurveRepair {
+      return;
+    }
+
+    let initialUpgrades: Float = 0.00;
+    if upgrades <= 0.00 {
+      initialUpgrades = Cast<Float>(RoundF(ClampF(quality * 2.00 + plus, 0.00, 10.00)));
+    }
+
+    // Remove both transient and saved copies of the old random/tier curves.
+    // The second pass is intentional: older saves can carry one copy in each
+    // modifier bucket, while current saves generally use only the saved path.
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.Quality, false);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.Quality, true);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.RandomCurveInput, false);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.RandomCurveInput, true);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.IsItemPlus, false);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.IsItemPlus, true);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.QualityToMaxQualityRatio, false);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.QualityToMaxQualityRatio, true);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.CommonTierFailsafe, false);
+    statsSystem.RemoveAllModifiers(statsId, gamedataStatType.CommonTierFailsafe, true);
+
+    if itemData.GetStatValueByType(gamedataStatType.ScalingBlocked) < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.ScalingBlocked, gameStatModifierType.Additive, 1.00);
+    }
+    if initialUpgrades > 0.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.WasItemUpgraded, gameStatModifierType.Additive, initialUpgrades);
+    }
+
+    let qualityCurveMod: ref<gameStatModifierData> = RPGManager.CreateStatModifierUsingCurve(
+      gamedataStatType.Quality,
+      gameStatModifierType.Additive,
+      gamedataStatType.WasItemUpgraded,
+      n"quality_curves",
+      n"iconic_upgrades_amount_to_quality"
+    );
+    let plusCurveMod: ref<gameStatModifierData> = RPGManager.CreateStatModifierUsingCurve(
+      gamedataStatType.IsItemPlus,
+      gameStatModifierType.Additive,
+      gamedataStatType.WasItemUpgraded,
+      n"quality_curves",
+      n"iconic_upgrades_amount_to_plus"
+    );
+    if IsDefined(qualityCurveMod) {
+      statsSystem.AddSavedModifier(statsId, qualityCurveMod);
+    }
+    if IsDefined(plusCurveMod) {
+      statsSystem.AddSavedModifier(statsId, plusCurveMod);
+    }
+
+    if isSaber {
+      UniversalIconicWeaponHelper.ApplyCraftedWoundBridge(statsSystem, statsId, itemData);
+    }
   }
 
   private final static func ApplyEvolutionSignatureMechanic(
@@ -329,32 +434,6 @@ public class UniversalIconicWeaponHelper {
     };
   }
 
-  private final static func RollAllCraftedFirearmStatPackage(
-    statsSystem: ref<StatsSystem>,
-    statsId: StatsObjectID,
-    itemData: ref<gameItemData>
-  ) -> Void {
-    let i: Int32 = 0;
-    while i < 8 {
-      UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, i);
-      i += 1;
-    };
-
-    i = 0;
-    while i < 7 {
-      UniversalIconicWeaponHelper.ApplyRangedHandlingRoll(statsSystem, statsId, i);
-      i += 1;
-    };
-
-    i = 0;
-    while i < 4 {
-      UniversalIconicWeaponHelper.ApplyElementalRoll(statsSystem, statsId, i);
-      i += 1;
-    };
-
-    UniversalIconicWeaponHelper.ApplyAllHiddenIconicMechanics(statsSystem, statsId, true);
-  }
-
   private final static func RollRandomIconicStatPackage(
     statsSystem: ref<StatsSystem>,
     statsId: StatsObjectID,
@@ -365,8 +444,10 @@ public class UniversalIconicWeaponHelper {
     let isRanged: Bool = WeaponObject.IsRanged(itemId);
     let evolution: gamedataWeaponEvolution = RPGManager.GetWeaponEvolution(itemId);
 
-    // Crafted weapons receive 3 random core modifiers; other weapons keep 2.
-    let coreCount: Int32 = craftedByPlayer ? 3 : 2;
+    // V-crafted weapons use the same modifier package as world-found and
+    // purchased weapons.  The previous extra-roll branch made crafted saves
+    // diverge from the ordinary Iconic pool and overpowered the result.
+    let coreCount: Int32 = 2;
     let core1: Int32 = RandRange(0, 8);
     let core2: Int32 = (core1 + RandRange(1, 8)) % 8;
     UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, core1);
@@ -380,8 +461,7 @@ public class UniversalIconicWeaponHelper {
       UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, uniqueCore3);
     };
 
-    // Crafted weapons receive 3 random handling modifiers; other weapons keep 2.
-    let handlingCount: Int32 = craftedByPlayer ? 3 : 2;
+    let handlingCount: Int32 = 2;
     if isRanged {
       let hand1: Int32 = RandRange(0, 7);
       let hand2: Int32 = (hand1 + RandRange(1, 7)) % 7;
@@ -410,8 +490,7 @@ public class UniversalIconicWeaponHelper {
       };
     };
 
-    // Crafted weapons receive 3 distinct elemental packages; other weapons keep 1.
-    let elementalCount: Int32 = craftedByPlayer ? 3 : 1;
+    let elementalCount: Int32 = 1;
     let elem1: Int32 = RandRange(0, 4);
     UniversalIconicWeaponHelper.ApplyElementalRoll(statsSystem, statsId, elem1);
     if elementalCount >= 2 {
@@ -427,14 +506,10 @@ public class UniversalIconicWeaponHelper {
       };
     };
 
-    // Crafted weapons receive 2 distinct hidden mechanics; world/purchased
-    // weapons retain the normal single random hidden mechanic.
     if craftedByPlayer {
-      let hidden1: Int32 = RandRange(0, 5);
-      let hidden2: Int32 = (hidden1 + RandRange(1, 5)) % 5;
-      UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hidden1);
-      UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hidden2);
+      UniversalIconicWeaponHelper.ApplyCraftedHiddenMechanic(statsSystem, statsId);
     } else {
+      // World/purchased weapons retain one random hidden mechanic.
       let hiddenRoll: Int32 = RandRange(0, 5);
       UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hiddenRoll);
     };
@@ -459,31 +534,27 @@ public class UniversalIconicWeaponHelper {
     let craftedByPlayer: Bool = itemData.GetStatValueByType(gamedataStatType.IsItemCrafted) >= 1.00
       || itemData.HasTag(n"CustomRedscriptCraftedWeapon");
 
-    // Existing crafted weapons promoted by the previous version receive the
-    // complete hidden package once, without rerolling their other modifiers.
-    let currentMarker: Float = itemData.GetStatValueByType(gamedataStatType.IconicItemUpgraded);
-    if currentMarker >= 1.00 {
-      if craftedByPlayer && currentMarker < 2.50 {
-        let existingStats: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
-        let existingStatsId: StatsObjectID = itemData.GetStatsObjectID();
-        UniversalIconicWeaponHelper.ApplyAllHiddenIconicMechanics(existingStats, existingStatsId, WeaponObject.IsRanged(itemData.GetID()));
-        UniversalIconicWeaponHelper.AddSavedStat(existingStats, existingStatsId, gamedataStatType.IconicItemUpgraded, gameStatModifierType.Additive, 3.00 - currentMarker);
-      };
-      if itemData.GetStatValueByType(gamedataStatType.HitDismembermentFactor) >= 1.50
-        && itemData.GetStatValueByType(gamedataStatType.HitWoundsFactor) < 1.50 {
-        let existingStats: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
-        let existingStatsId: StatsObjectID = itemData.GetStatsObjectID();
-        UniversalIconicWeaponHelper.AddSavedStat(existingStats, existingStatsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 1.50);
-        UniversalIconicWeaponHelper.AddSavedStat(existingStats, existingStatsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 0.40);
-      };
-      return;
-    };
-
     let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
     if !IsDefined(statsSystem) {
       return;
     }
     let statsId: StatsObjectID = itemData.GetStatsObjectID();
+    UniversalIconicWeaponHelper.RepairIconicUpgradeCurvesIfNeeded(statsSystem, statsId, itemData);
+
+    // Existing crafted weapons promoted by the previous versions receive only
+    // the missing deterministic package bridge, without rerolling other rolls.
+    let currentMarker: Float = itemData.GetStatValueByType(gamedataStatType.IconicItemUpgraded);
+    if currentMarker >= 1.00 {
+      if craftedByPlayer && currentMarker < 5.00 {
+        if currentMarker >= 4.00 {
+          UniversalIconicWeaponHelper.ApplyCraftedWoundBridge(statsSystem, statsId, itemData);
+        } else {
+          UniversalIconicWeaponHelper.ApplyCraftedHiddenMechanic(statsSystem, statsId);
+        }
+        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.IconicItemUpgraded, gameStatModifierType.Additive, 5.00 - currentMarker);
+      };
+      return;
+    };
 
     // Layer 1: Ensure BaseStats.IsItemIconic = 1.0 is saved on the weapon
     if itemData.GetStatValueByType(gamedataStatType.IsItemIconic) <= 0.00 {
@@ -529,12 +600,14 @@ public class UniversalIconicWeaponHelper {
       statsSystem.AddSavedModifier(statsId, plusCurveMod);
     };
 
-    // Layer 4: Apply the configured random package. Crafted weapons receive
-    // 3 core, 3 handling, 3 elemental, 2 hidden, and 1 evolution package.
+    // Layer 4: Apply the shared world/purchased Iconic modifier package. New
+    // crafted weapons use the same pool; existing saved modifiers are not
+    // destructively removed because the old rolls were not ownership-marked.
     UniversalIconicWeaponHelper.RollRandomIconicStatPackage(statsSystem, statsId, itemData, craftedByPlayer);
 
-    // Save persistent idempotency marker (1.0 = promoted standard weapon, 2.0 = native Iconic with bonus roll, 3.0 = crafted weapon)
-    let markerVal: Float = craftedByPlayer ? 3.00 : (isNativeIconicRecord ? 2.00 : 1.00);
+    // Save persistent idempotency marker (1.0 = promoted standard weapon,
+    // 2.0 = native Iconic with bonus roll, 5.0 = crafted deterministic hidden package)
+    let markerVal: Float = craftedByPlayer ? 5.00 : (isNativeIconicRecord ? 2.00 : 1.00);
     UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.IconicItemUpgraded, gameStatModifierType.Additive, markerVal);
   }
 
@@ -559,9 +632,31 @@ public class UniversalIconicWeaponHelper {
       i += 1;
     };
   }
+
+  public final static func MaximizeWeaponTier(game: GameInstance, itemData: ref<gameItemData>, opt anticipatedUpgrades: Int32) -> Void {
+    if !GameInstance.IsValid(game) || !UniversalIconicWeaponHelper.IsEligibleWeapon(itemData) {
+      return;
+    };
+    UniversalIconicWeaponHelper.PromoteWeaponToIconic(game, itemData);
+    let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
+    if !IsDefined(statsSystem) {
+      return;
+    };
+    let statsId: StatsObjectID = itemData.GetStatsObjectID();
+    if !StatsObjectID.IsDefined(statsId) {
+      return;
+    };
+    UniversalIconicWeaponHelper.RepairIconicUpgradeCurvesIfNeeded(statsSystem, statsId, itemData);
+    let currentValue: Float = itemData.GetStatValueByType(gamedataStatType.WasItemUpgraded);
+    let targetDelta: Float = 10.00 - currentValue - Cast<Float>(Max(0, anticipatedUpgrades));
+    if targetDelta > 0.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.WasItemUpgraded, gameStatModifierType.Additive, targetDelta);
+    };
+  }
 }
 
-// Mark the item returned by crafting so its promotion receives all 5 hidden mechanics.
+// Mark the item returned by crafting so it follows the shared Iconic package
+// after vanilla has finished initializing its crafted state.
 @wrapMethod(CraftingSystem)
 private final func CraftItem(target: wref<GameObject>, itemRecord: ref<Item_Record>, amount: Int32, opt ammoBulletAmount: Int32) -> wref<gameItemData> {
   let crafter: ref<PlayerPuppet> = target as PlayerPuppet;
@@ -572,7 +667,7 @@ private final func CraftItem(target: wref<GameObject>, itemRecord: ref<Item_Reco
   if IsDefined(craftedItem) && UniversalIconicWeaponHelper.IsEligibleWeapon(craftedItem) {
     craftedItem.SetDynamicTag(n"CustomRedscriptCraftedWeapon");
     // CraftItem returns after vanilla MarkItemAsCrafted(), so promote here
-    // after the item is fully initialized and apply all 5 hidden mechanics.
+    // after the item is fully initialized.
     UniversalIconicWeaponHelper.PromoteWeaponToIconic(this.GetGameInstance(), craftedItem);
   };
   if IsDefined(crafter) {
@@ -596,6 +691,32 @@ public final static func IsItemIconic(itemData: InnerItemData) -> Bool {
     return true;
   };
   return UniversalIconicWeaponHelper.IsEligibleItemID(InnerItemData.GetItemID(itemData));
+}
+
+// UIInventoryItem caches its iconic result when the UI object is created.
+// Re-check eligibility here so vendor selling logic sees the promoted state.
+@wrapMethod(UIInventoryItem)
+public final func IsIconic() -> Bool {
+  if wrappedMethod() {
+    return true;
+  };
+  return UniversalIconicWeaponHelper.IsEligibleWeapon(this.GetItemData());
+}
+
+// Iconic weapons are already protected from accidental disassembly and the
+// profile intentionally uses instant vendor selling. Bypass only the iconic
+// sale confirmation; equipped-item and other vendor confirmations remain
+// vanilla.
+@wrapMethod(FullscreenVendorGameController)
+private func OpenConfirmationPopup(itemData: wref<UIInventoryItem>, quantity: Int32, actionType: QuantityPickerActionType, opt type: VendorConfirmationPopupType) -> Void {
+  if Equals(actionType, QuantityPickerActionType.Sell)
+    && Equals(type, VendorConfirmationPopupType.Default)
+    && IsDefined(itemData)
+    && itemData.IsIconic() {
+    this.SellItem(itemData.GetRealItemData(), quantity);
+    return;
+  }
+  wrappedMethod(itemData, quantity, actionType, type);
 }
 
 // 2. Block disassembling/scrapping on all eligible weapons (identical to vanilla Iconic protection)

@@ -48,6 +48,9 @@ public func Saber_SfxVariants(id: CName) -> Int32 {
   }
 }
 
+public func Saber_SfxVolume() -> Float { return 0.32; }
+public func Saber_HumVolume() -> Float { return 0.22; }
+
 // Audioware is optional.  When installed the supplied SWBF2 events are used;
 // otherwise this branch intentionally uses only vanilla Wwise events.
 @if(ModuleExists("Audioware"))
@@ -61,7 +64,9 @@ public func Saber_PlaySfx(game: GameInstance, id: CName) -> Void {
   if !IsDefined(player) { return; }
   if Saber_HasSwbf2Bank(game) {
     let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id) + 1)));
-    GameInstance.GetAudioSystem(game).Play(variant, player.GetEntityID());
+    let settings = new AudioSettingsExt();
+    settings.volume = Saber_SfxVolume();
+    GameInstance.GetAudioSystemExt(game).Play(variant, player.GetEntityID(), n"", scnDialogLineType.None, settings);
   } else {
     GameObject.PlaySoundEvent(player, Saber_FallbackSfx(id));
   }
@@ -71,10 +76,17 @@ public func Saber_PlaySfx(game: GameInstance, id: CName) -> Void {
 public func Saber_Hum(game: GameInstance, on: Bool) -> Void {
   let player = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject();
   if !IsDefined(player) { return; }
-  let audio = GameInstance.GetAudioSystem(game);
   if Saber_HasSwbf2Bank(game) {
-    if on { audio.Play(n"saber_hum_1", player.GetEntityID()); } else { audio.Stop(n"saber_hum_1", player.GetEntityID()); }
+    if on {
+      let settings = new AudioSettingsExt();
+      settings.volume = Saber_HumVolume();
+      settings.loop = true;
+      GameInstance.GetAudioSystemExt(game).Play(n"saber_hum_1", player.GetEntityID(), n"", scnDialogLineType.None, settings);
+    } else {
+      GameInstance.GetAudioSystemExt(game).Stop(n"saber_hum_1", player.GetEntityID(), n"", null);
+    }
   } else {
+    let audio = GameInstance.GetAudioSystem(game);
     if on { audio.Play(n"w_melee_katana_handling_soft", player.GetEntityID()); } else { audio.Stop(n"w_melee_katana_handling_soft", player.GetEntityID()); }
   }
 }

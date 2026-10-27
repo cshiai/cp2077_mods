@@ -81,6 +81,12 @@ private final func Process(hitEvent: ref<gameHitEvent>, cache: ref<CacheData>) -
     };
   };
   wrappedMethod(hitEvent, cache);
+  if IsDefined(target) && SDC_IsCompanion(target) && !SDC_IsIgnoredDamage(hitEvent) {
+    let system: ref<SDC_System> = SDC_System.Get(target.GetGame());
+    if IsDefined(system) {
+      system.RefreshHud();
+    };
+  };
 }
 
 @wrapMethod(ReactionManagerComponent)

@@ -236,6 +236,8 @@ public class SDC_System extends ScriptableSystem {
   private let m_slotIDs: array<EntityID>;
   private let m_slotPending: array<Bool>;
   private let m_slotGeneration: array<Int32>;
+  private let m_hudHeaderText: wref<inkText>;
+  private let m_hudStatusText: wref<inkText>;
 
   public final static func Get(gi: GameInstance) -> ref<SDC_System> {
     return GameInstance.GetScriptableSystemsContainer(gi).Get(n"SDC_System") as SDC_System;
@@ -403,11 +405,66 @@ public class SDC_System extends ScriptableSystem {
     return count;
   }
 
+  public func BindHudWidgets(headerText: ref<inkText>, statusText: ref<inkText>) -> Void {
+    this.m_hudHeaderText = headerText;
+    this.m_hudStatusText = statusText;
+    this.RefreshHud();
+  }
+
+  private func HudSlotStatus(slot: Int32, statPools: ref<StatPoolsSystem>) -> String {
+    if slot < 0 || slot >= ArraySize(this.m_slotIDs) || !EntityID.IsDefined(this.m_slotIDs[slot]) {
+      return "OFFLINE";
+    }
+    let id: EntityID = this.m_slotIDs[slot];
+    let puppet: ref<NPCPuppet> = GameInstance.FindEntityByID(this.GetGameInstance(), id) as NPCPuppet;
+    if this.m_slotPending[slot] && !IsDefined(puppet) {
+      return "SPAWNING";
+    }
+    if !IsDefined(puppet) || SDC_IsDeadLike(puppet) || !IsDefined(statPools) {
+      return "OFFLINE";
+    }
+    let hpPct: Float = statPools.GetStatPoolValue(Cast<StatsObjectID>(id), gamedataStatPoolType.Health, true);
+    if hpPct <= 0.0 {
+      return "OFFLINE";
+    }
+    let hp: Int32 = RoundF(hpPct);
+    if hp < 1 { hp = 1; }
+    if hp > 100 { hp = 100; }
+    return IntToString(hp) + "%";
+  }
+
+  public func RefreshHud() -> Void {
+    if !IsDefined(this.m_hudHeaderText) {
+      return;
+    }
+    let count: Int32 = this.ActiveCount();
+    if count == 0 {
+      this.m_hudHeaderText.SetText("[F9] SUMMON DRONES (0/4)");
+      if IsDefined(this.m_hudStatusText) {
+        this.m_hudStatusText.SetVisible(false);
+      }
+      return;
+    }
+
+    this.m_hudHeaderText.SetText("[F9] DRONE SQUAD (" + IntToString(count) + "/4) — PRESS F9 TO DISMISS");
+    if !IsDefined(this.m_hudStatusText) {
+      return;
+    }
+    let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
+    let lineOne: String = "M1 MINOTAUR: " + this.HudSlotStatus(0, statPools)
+      + "   |   M2 MINOTAUR: " + this.HudSlotStatus(1, statPools);
+    let lineTwo: String = "O1 OCTANT:   " + this.HudSlotStatus(2, statPools)
+      + "   |   O2 OCTANT:   " + this.HudSlotStatus(3, statPools);
+    this.m_hudStatusText.SetText(lineOne + "\n" + lineTwo);
+    this.m_hudStatusText.SetVisible(true);
+  }
+
   public func IsActiveDrone(obj: wref<GameObject>) -> Bool {
     return SDC_IsCompanion(obj);
   }
 
   public func SpawnAll() -> Void {
+    this.RefreshHud();
     let player: ref<PlayerPuppet> = SDC_Player(this.GetGameInstance());
     if !this.m_active || !SDC_ValidPlayer(player) {
       return;
@@ -424,9 +481,11 @@ public class SDC_System extends ScriptableSystem {
     } else {
       this.ShowVanillaMessage("DRONE DEPLOYMENT FAILED");
     };
+    this.RefreshHud();
   }
 
   private func SpawnSlot(slot: Int32, player: ref<PlayerPuppet>) -> Void {
+    this.RefreshHud();
     if slot < 0 || slot >= SDC_MaxDrones() || !IsDefined(player) {
       return;
     };
@@ -458,6 +517,7 @@ public class SDC_System extends ScriptableSystem {
     };
     this.m_slotIDs[slot] = entityID;
     this.m_slotPending[slot] = true;
+    this.RefreshHud();
   }
 
   private cb func OnSDCDynamicEntityEvent(evt: ref<DynamicEntityEvent>) -> Void {
@@ -499,6 +559,7 @@ public class SDC_System extends ScriptableSystem {
   }
 
   private func ResolveSlot(slot: Int32, entityID: EntityID) -> Void {
+    this.RefreshHud();
     let dynamicEntities: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
     let puppet: ref<NPCPuppet>;
     if IsDefined(dynamicEntities) {
@@ -521,9 +582,11 @@ public class SDC_System extends ScriptableSystem {
     puppet.m_sdcSlot = slot;
     this.m_slotPending[slot] = false;
     SDC_ApplyFollowerRole(puppet, player);
+    this.RefreshHud();
   }
 
   public func DeleteAll() -> Void {
+    this.RefreshHud();
     let dynamicEntities: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
     let i: Int32 = 0;
     while i < ArraySize(this.m_slotIDs) {
@@ -535,6 +598,7 @@ public class SDC_System extends ScriptableSystem {
     };
     this.m_watchdogRunning = false;
     this.CancelWatchdog();
+    this.RefreshHud();
   }
 
   private func ClearSlot(slot: Int32) -> Void {
@@ -545,6 +609,7 @@ public class SDC_System extends ScriptableSystem {
     let invalidID: EntityID;
     this.m_slotIDs[slot] = invalidID;
     this.m_slotPending[slot] = false;
+    this.RefreshHud();
   }
 
   private func StartWatchdog() -> Void {
@@ -580,6 +645,7 @@ public class SDC_System extends ScriptableSystem {
   }
 
   public func WatchdogTick(generation: Int32) -> Void {
+    this.RefreshHud();
     if !this.m_watchdogRunning || generation != this.m_watchdogGeneration || !this.m_active {
       return;
     };
@@ -619,9 +685,11 @@ public class SDC_System extends ScriptableSystem {
     };
     if this.ActiveCount() == 0 {
       this.m_watchdogRunning = false;
+      this.RefreshHud();
       return;
     };
     this.ScheduleWatchdog(1.0);
+    this.RefreshHud();
   }
 
   public func InjectThreat(attacker: wref<GameObject>) -> Void {
@@ -705,5 +773,68 @@ protected cb func OnSDCPlayerKeyInput(event: ref<KeyInputEvent>) -> Void {
 @addMethod(AIFollowerRole)
 public final func SetSimpleDroneFollowerRef(followerRef: EntityReference) -> Void {
   this.followerRef = followerRef;
+}
+
+@wrapMethod(healthbarWidgetGameController)
+protected cb func OnInitialize() -> Bool {
+  let result: Bool = wrappedMethod();
+  let root: ref<inkCompoundWidget> = this.GetRootWidget() as inkCompoundWidget;
+  if !IsDefined(root) {
+    root = this.GetRootCompoundWidget();
+  }
+  if !IsDefined(root) {
+    return result;
+  }
+
+  let panel: ref<inkVerticalPanel> = new inkVerticalPanel();
+  panel.SetName(n"SDC_DroneHudPanel");
+  panel.SetAnchor(inkEAnchor.TopLeft);
+  panel.SetAnchorPoint(Vector2(0.0, 0.0));
+  panel.SetMargin(inkMargin(20.0, 115.0, 0.0, 0.0));
+  panel.SetFitToContent(true);
+  panel.Reparent(root);
+
+  let headerText: ref<inkText> = new inkText();
+  headerText.SetName(n"SDC_DroneHudHeader");
+  headerText.SetFontFamily("base\\gameplay\\gui\\fonts\\rajdhani\\rajdhani.inkfontfamily");
+  headerText.SetFontStyle(n"Semi-Bold");
+  headerText.SetFontSize(20);
+  headerText.SetFitToContent(true);
+  headerText.SetTintColor(new HDRColor(0.36, 0.96, 1.0, 0.92));
+  headerText.SetHorizontalAlignment(textHorizontalAlignment.Left);
+  headerText.SetVerticalAlignment(textVerticalAlignment.Top);
+  headerText.Reparent(panel);
+
+  let statusText: ref<inkText> = new inkText();
+  statusText.SetName(n"SDC_DroneHudStatus");
+  statusText.SetFontFamily("base\\gameplay\\gui\\fonts\\rajdhani\\rajdhani.inkfontfamily");
+  statusText.SetFontStyle(n"Regular");
+  statusText.SetFontSize(18);
+  statusText.SetFitToContent(true);
+  statusText.SetTintColor(new HDRColor(0.62, 1.0, 0.52, 0.92));
+  statusText.SetHorizontalAlignment(textHorizontalAlignment.Left);
+  statusText.SetVerticalAlignment(textVerticalAlignment.Top);
+  statusText.Reparent(panel);
+
+  let player: ref<PlayerPuppet> = this.GetPlayerControlledObject() as PlayerPuppet;
+  if IsDefined(player) {
+    let system: ref<SDC_System> = SDC_System.Get(player.GetGame());
+    if IsDefined(system) {
+      system.BindHudWidgets(headerText, statusText);
+    }
+  }
+  return result;
+}
+
+@wrapMethod(healthbarWidgetGameController)
+protected cb func OnUninitialize() -> Bool {
+  let player: ref<PlayerPuppet> = this.GetPlayerControlledObject() as PlayerPuppet;
+  if IsDefined(player) {
+    let system: ref<SDC_System> = SDC_System.Get(player.GetGame());
+    if IsDefined(system) {
+      system.BindHudWidgets(null, null);
+    }
+  }
+  return wrappedMethod();
 }
 
