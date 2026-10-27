@@ -88,6 +88,26 @@ public func IFP_NormalizeBodyPitch(nativePitch: Float) -> Float {
   return ClampF((-nativePitch - 30.0) / (80.0 - 30.0), 0.0, 1.0);
 }
 
+public func IFP_RotatePitchVector(pitch: Float, motion: Vector4) -> Vector4 {
+  let radians: Float = Deg2Rad(pitch);
+  let cosine: Float = CosF(radians);
+  let sine: Float = SinF(radians);
+  let result: Vector4 = new Vector4(motion.X, 0.0, 0.0, motion.W);
+  result.Y = cosine * motion.Y - sine * motion.Z;
+  result.Z = sine * motion.Y + cosine * motion.Z;
+  return result;
+}
+
+public func IFP_QuatMul(a: Quaternion, b: Quaternion) -> Quaternion {
+  return a * b;
+}
+
+public func IFP_AxisAngle(axis: Vector4, angle: Float) -> Quaternion {
+  let result: Quaternion;
+  Quaternion.SetAxisAngle(result, axis, angle);
+  return result;
+}
+
 public func IFP_FIXED_FOV_POSITION_COMPENSATION() -> Float { return 0.70; }
 public func IFP_BODY_WEAPON_FADE_IN_DURATION() -> Float { return 0.15; }
 public func IFP_BODY_WEAPON_FADE_OUT_DURATION() -> Float { return 0.0; }
@@ -100,8 +120,8 @@ public func IFP_BODY_WEAPON_FADE_OUT_DURATION() -> Float { return 0.0; }
 // applied by the compositor so holster/draw never fights the weapon camera.
 public func EvaluateBody(nativePitch: Float, crouching: Bool) -> IFP_BodyResult {
   let progress: Float = IFP_NormalizeBodyPitch(nativePitch);
-  let verticalRamp: Float = MinF(1.0, progress * 4.0) * MinF(1.0, progress / 0.70);
-  let forwardShape: Float = MaxF(-0.16, 5.0 * progress - MaxF(0.0, (progress - 0.55) * 8.5));
+  let verticalRamp: Float = MinF(1.0, progress * 4.0) * MinF(1.0, progress / 0.80);
+  let forwardShape: Float = MaxF(-0.16, 5.0 * progress - MaxF(0.0, (progress - 0.37) * 8.5));
   let result: IFP_BodyResult;
   result.progress = progress;
   result.lateral = 0.0;
@@ -215,9 +235,15 @@ private let m_ifpBodyBlendTarget: Float;
 @addField(PlayerPuppet)
 private let m_ifpBodyFadeElapsed: Float;
 @addField(PlayerPuppet)
-private let m_ifpLastPositionDelta: Vector4;
+private let m_ifpOwnsCamera: Bool;
 @addField(PlayerPuppet)
-private let m_ifpLastRotationDelta: EulerAngles;
+private let m_ifpBaselinePos: Vector4;
+@addField(PlayerPuppet)
+private let m_ifpBaselineRot: Quaternion;
+@addField(PlayerPuppet)
+private let m_ifpBaselineFov: Float;
+@addField(PlayerPuppet)
+private let m_ifpLastTickTime: Float;
 
 public func IFP_BindBlackboard(player: ref<PlayerPuppet>) -> Void {
   if !IsDefined(player) { return; }
@@ -278,10 +304,16 @@ public func IFP_IsCrouching(player: ref<PlayerPuppet>) -> Bool {
     || locomotion == 8;
 }
 
-public func IFP_ReadNativePitch(camera: ref<FPPCameraComponent>) -> Float {
-  if !IsDefined(camera) { return 0.0; }
-  let orientation: EulerAngles = Quaternion.ToEulerAngles(camera.GetLocalOrientation());
-  return orientation.Pitch;
+public func IFP_ReadNativePitch(camera: ref<FPPCameraComponent>, actualLocalOrientation: Quaternion) -> Float {
+  let worldOrientation: Quaternion = Matrix.ToQuat(camera.GetLocalToWorld());
+  let nativeOrientation: Quaternion = Quaternion.MulInverse(worldOrientation, actualLocalOrientation);
+  let forward: Vector4 = Quaternion.GetForward(nativeOrientation);
+  let fromForward: Float = Rad2Deg(AsinF(ClampF(forward.Z, -1.0, 1.0)));
+  let eulerPitch: Float = Quaternion.ToEulerAngles(nativeOrientation).Pitch;
+  if AbsF(-fromForward - eulerPitch) < AbsF(fromForward - eulerPitch) {
+    return -fromForward;
+  }
+  return fromForward;
 }
 
 public func IFP_IsArmed(player: ref<PlayerPuppet>) -> Bool {
@@ -311,55 +343,114 @@ public func IFP_UpdateBodyFade(player: ref<PlayerPuppet>, hasWeapon: Bool, delta
   return player.m_ifpBodyBlend;
 }
 
-public func IFP_ApplyCamera(player: ref<PlayerPuppet>, delta: Float) -> Void {
-  if !IsDefined(player) || IFP_IsBlocked(player) { return; }
-  let camera = player.GetFPPCameraComponent();
-  if !IsDefined(camera) { return; }
+public func IFP_CaptureBaseline(player: ref<PlayerPuppet>, camera: ref<FPPCameraComponent>) -> Bool {
+  if !IsDefined(player) || !IsDefined(camera) { return false; }
+  if player.m_ifpOwnsCamera { return true; }
+  player.m_ifpBaselinePos = camera.GetLocalPosition();
+  player.m_ifpBaselineRot = camera.GetLocalOrientation();
+  player.m_ifpBaselineFov = camera.GetFOV();
+  player.m_ifpOwnsCamera = true;
+  return true;
+}
 
-  // Remove only our previous additive transform; this preserves native camera
-  // writers and avoids per-frame drift or matrix allocations.
-  let position = camera.GetLocalPosition();
-  position.X -= player.m_ifpLastPositionDelta.X;
-  position.Y -= player.m_ifpLastPositionDelta.Y;
-  position.Z -= player.m_ifpLastPositionDelta.Z;
-  let orientation = Quaternion.ToEulerAngles(camera.GetLocalOrientation());
-  orientation.Pitch -= player.m_ifpLastRotationDelta.Pitch;
-  orientation.Yaw -= player.m_ifpLastRotationDelta.Yaw;
-  orientation.Roll -= player.m_ifpLastRotationDelta.Roll;
-  let nativePitch: Float = orientation.Pitch;
-  if !player.m_ifpFreeLook && !player.m_ifpReturning && nativePitch > -30.0 {
-    player.m_ifpLastPositionDelta = new Vector4(0.0, 0.0, 0.0, 0.0);
-    player.m_ifpLastRotationDelta = new EulerAngles();
+public func IFP_ReleaseCamera(player: ref<PlayerPuppet>, camera: ref<FPPCameraComponent>) -> Void {
+  if !IsDefined(player) { return; }
+  if player.m_ifpOwnsCamera && IsDefined(camera) {
+    camera.SetLocalTransform(player.m_ifpBaselinePos, player.m_ifpBaselineRot);
+  }
+  player.m_ifpOwnsCamera = false;
+  player.m_ifpBaselinePos = new Vector4(0.0, 0.0, 0.0, 0.0);
+  Quaternion.SetIdentity(player.m_ifpBaselineRot);
+  player.m_ifpBaselineFov = 0.0;
+}
+
+public func IFP_ApplyCamera(player: ref<PlayerPuppet>, delta: Float) -> Void {
+  if !IsDefined(player) { return; }
+  let camera = player.GetFPPCameraComponent();
+  if !IsDefined(camera) {
+    IFP_ReleaseCamera(player, camera);
+    return;
+  }
+  if IFP_IsBlocked(player) {
+    IFP_ReleaseCamera(player, camera);
     return;
   }
 
+  let actualLocalOrientation: Quaternion = camera.GetLocalOrientation();
+  let nativePitch: Float = IFP_ReadNativePitch(camera, actualLocalOrientation);
   let hasWeapon: Bool = IFP_IsArmed(player);
   let bodyBlend: Float = IFP_UpdateBodyFade(player, hasWeapon, delta);
-  let body = EvaluateBody(nativePitch, IFP_IsCrouching(player));
+  let bodyFadeActive: Bool = AbsF(bodyBlend - player.m_ifpBodyBlendTarget) > 0.001;
+  if !player.m_ifpFreeLook && !player.m_ifpReturning && !bodyFadeActive && nativePitch > -30.0 {
+    IFP_ReleaseCamera(player, camera);
+    return;
+  }
+  if !IFP_CaptureBaseline(player, camera) { return; }
+
+  let free = EvaluateFreeLook(player.m_ifpFreeYaw, player.m_ifpFreePitch, hasWeapon);
+  let effectiveNativePitch: Float = nativePitch
+    + ((player.m_ifpFreeLook || player.m_ifpReturning) ? free.pitch : 0.0);
+  let body = EvaluateBody(effectiveNativePitch, IFP_IsCrouching(player));
   body.forward *= bodyBlend;
   body.vertical *= bodyBlend;
   body.pitch *= bodyBlend;
-  let effectivePitch: Float = nativePitch + body.pitch;
-  let curve = NativeCameraCurve.OffsetToReference(nativePitch, effectivePitch, camera.GetFOV());
-  let free = EvaluateFreeLook(player.m_ifpFreeYaw, player.m_ifpFreePitch, hasWeapon);
+  let curve = NativeCameraCurve.OffsetToReference(nativePitch, effectiveNativePitch, player.m_ifpBaselineFov);
   let positionCompensation: Float = IFP_FIXED_FOV_POSITION_COMPENSATION();
-  let newDelta: Vector4 = new Vector4(0.0, 0.0, 0.0, 0.0);
-  newDelta.X = body.lateral + free.lateral;
-  newDelta.Y = body.forward + free.forward + curve.forward * positionCompensation;
-  newDelta.Z = body.vertical + free.vertical + curve.vertical * positionCompensation;
-  let newRotation: EulerAngles = new EulerAngles();
-  newRotation.Pitch = body.pitch + free.pitch;
-  newRotation.Yaw = free.yaw;
-  newRotation.Roll = free.roll;
-  position.X += newDelta.X;
-  position.Y += newDelta.Y;
-  position.Z += newDelta.Z;
-  orientation.Pitch += newRotation.Pitch;
-  orientation.Yaw += newRotation.Yaw;
-  orientation.Roll += newRotation.Roll;
-  camera.SetLocalTransform(position, EulerAngles.ToQuat(orientation));
-  player.m_ifpLastPositionDelta = newDelta;
-  player.m_ifpLastRotationDelta = newRotation;
+  let bodySpaceMotion: Vector4 = IFP_RotatePitchVector(
+    -nativePitch,
+    new Vector4(
+      0.0,
+      curve.forward * positionCompensation,
+      curve.vertical * positionCompensation,
+      0.0
+    )
+  );
+  let freeMotion: Vector4 = IFP_RotatePitchVector(
+    -nativePitch,
+    new Vector4(0.0, free.forward, free.vertical, 0.0)
+  );
+  let bodyPosition: Vector4 = new Vector4(
+    body.lateral,
+    body.forward,
+    body.vertical,
+    0.0
+  );
+  if player.m_ifpFreeLook || player.m_ifpReturning {
+    bodyPosition = IFP_RotatePitchVector(effectiveNativePitch - nativePitch, bodyPosition);
+  }
+  let position: Vector4 = player.m_ifpBaselinePos;
+  position.X += bodyPosition.X + free.lateral;
+  position.Y += bodyPosition.Y + freeMotion.Y + bodySpaceMotion.Y;
+  position.Z += bodyPosition.Z + freeMotion.Z + bodySpaceMotion.Z;
+
+  let orientationNativePitch: Float = nativePitch;
+  let cancelNativePitch: Quaternion = IFP_AxisAngle(
+    new Vector4(1.0, 0.0, 0.0, 0.0),
+    Deg2Rad(-orientationNativePitch)
+  );
+  let yaw: Quaternion = IFP_AxisAngle(
+    new Vector4(0.0, 0.0, 1.0, 0.0),
+    Deg2Rad(free.yaw)
+  );
+  let pitch: Quaternion = IFP_AxisAngle(
+    new Vector4(1.0, 0.0, 0.0, 0.0),
+    Deg2Rad(orientationNativePitch + body.pitch + free.pitch)
+  );
+  let roll: Quaternion = IFP_AxisAngle(
+    new Vector4(0.0, 1.0, 0.0, 0.0),
+    Deg2Rad(free.roll)
+  );
+  let orientation: Quaternion = IFP_QuatMul(
+    IFP_QuatMul(
+      IFP_QuatMul(
+        IFP_QuatMul(cancelNativePitch, yaw),
+        pitch
+      ),
+      roll
+    ),
+    player.m_ifpBaselineRot
+  );
+  camera.SetLocalTransform(position, orientation);
 
   if player.m_ifpReturning {
     player.m_ifpReturnElapsed += delta;
@@ -413,7 +504,10 @@ public func IFP_AbortFreeLook(player: ref<PlayerPuppet>) -> Void {
 @addMethod(PlayerPuppet)
 protected cb func OnIFPCameraTickEvent(evt: ref<IFPCameraTickEvent>) -> Bool {
   if !this.m_ifpAttached { return true; }
-  IFP_ApplyCamera(this, 0.016);
+  let now: Float = EngineTime.ToFloat(GameInstance.GetEngineTime(this.GetGame()));
+  let delta: Float = ClampF(now - this.m_ifpLastTickTime, 0.001, 0.10);
+  this.m_ifpLastTickTime = now;
+  IFP_ApplyCamera(this, delta);
   return true;
 }
 
@@ -426,8 +520,11 @@ protected cb func OnTakeControl(ri: EntityResolveComponentsInterface) -> Bool {
   this.m_ifpBodyBlend = 1.0;
   this.m_ifpBodyBlendTarget = 1.0;
   this.m_ifpBodyFadeElapsed = 0.0;
-  this.m_ifpLastPositionDelta = new Vector4(0.0, 0.0, 0.0, 0.0);
-  this.m_ifpLastRotationDelta = new EulerAngles();
+  this.m_ifpOwnsCamera = false;
+  this.m_ifpBaselinePos = new Vector4(0.0, 0.0, 0.0, 0.0);
+  Quaternion.SetIdentity(this.m_ifpBaselineRot);
+  this.m_ifpBaselineFov = 0.0;
+  this.m_ifpLastTickTime = EngineTime.ToFloat(GameInstance.GetEngineTime(this.GetGame()));
   IFP_BindBlackboard(this);
   let delay = GameInstance.GetDelaySystem(this.GetGame());
   if this.m_ifpAttached && IsDefined(delay) {
@@ -440,9 +537,24 @@ protected cb func OnTakeControl(ri: EntityResolveComponentsInterface) -> Bool {
 }
 
 @wrapMethod(PlayerPuppet)
+protected cb func OnGameAttached() -> Bool {
+  let result: Bool = wrappedMethod();
+  this.RegisterInputListener(this, n"FreeLook");
+  this.RegisterInputListener(this, n"Vision_Hold_Button");
+  this.RegisterInputListener(this, n"CameraMouseX");
+  this.RegisterInputListener(this, n"CameraMouseY");
+  this.RegisterInputListener(this, n"CameraX");
+  this.RegisterInputListener(this, n"CameraY");
+  this.RegisterInputListener(this, n"right_stick_x");
+  this.RegisterInputListener(this, n"right_stick_y");
+  this.RegisterInputListener(this, n"mouse_left");
+  return result;
+}
+
+@wrapMethod(PlayerPuppet)
 protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsumer) -> Bool {
   let name: CName = ListenerAction.GetName(action);
-  if Equals(name, n"FreeLook") || Equals(name, n"CameraFreeLook") {
+  if Equals(name, n"FreeLook") || Equals(name, n"Vision_Hold_Button") || Equals(name, n"CameraFreeLook") {
     if ListenerAction.IsButtonJustPressed(action) { IFP_BeginFreeLook(this); }
     if ListenerAction.IsButtonJustReleased(action) { IFP_EndFreeLook(this); }
   }
@@ -468,6 +580,7 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
 
 @wrapMethod(PlayerPuppet)
 protected cb func OnDetach() -> Bool {
+  IFP_ReleaseCamera(this, this.GetFPPCameraComponent());
   this.m_ifpAttached = false;
   this.m_ifpFreeLook = false;
   this.m_ifpReturning = false;
@@ -477,5 +590,6 @@ protected cb func OnDetach() -> Bool {
   }
   this.m_ifpTickID = GetInvalidDelayID();
   this.m_ifpBlackboard = null;
+  this.m_ifpLastTickTime = 0.0;
   return wrappedMethod();
 }

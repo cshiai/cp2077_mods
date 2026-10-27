@@ -76,6 +76,11 @@ if [[ -d "$SCRIPT_DIR/r6/storages" ]]; then
   cp -a "$SCRIPT_DIR/r6/storages/." "$GAME/r6/storages/"
 fi
 
+if [[ -d "$SCRIPT_DIR/r6/audioware" ]]; then
+  mkdir -p "$GAME/r6/audioware"
+  cp -a "$SCRIPT_DIR/r6/audioware/." "$GAME/r6/audioware/"
+fi
+
 if [[ -d "$SCRIPT_DIR/red4ext/plugins" ]]; then
   mkdir -p "$GAME/red4ext/plugins"
   cp -a "$SCRIPT_DIR/red4ext/plugins/." "$GAME/red4ext/plugins/"

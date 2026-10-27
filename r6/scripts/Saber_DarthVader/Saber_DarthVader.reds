@@ -53,7 +53,7 @@ public func Saber_SfxVariants(id: CName) -> Int32 {
 public func Saber_PlaySfx(game: GameInstance, id: CName) -> Void {
   let player = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject();
   if !IsDefined(player) { return; }
-  let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id))));
+  let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id) + 1)));
   GameInstance.GetAudioSystem(game).Play(variant, player.GetEntityID());
 }
 
