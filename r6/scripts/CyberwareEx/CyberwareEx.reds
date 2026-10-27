@@ -264,7 +264,20 @@ public class CyberwareHelper {
     }
 
     public static func IsCyberdeckEquipped(owner: ref<GameObject>) -> Bool {
-        return GameInstance.GetStatsSystem(owner.GetGame()).GetStatBoolValue(Cast(owner.GetEntityID()), gamedataStatType.HasCyberdeck);
+        if !IsDefined(owner) {
+            return false;
+        }
+        // The HasCyberdeck stat can lag one equipment transaction behind when
+        // a Sandevistan and a cyberdeck are both moved through the expanded
+        // SystemReplacementCW slots.  The equipped-record tag is authoritative
+        // for quickhack availability; retain the stat fallback for vanilla
+        // scripted/effect-only cyberdeck states.
+        let equipmentData = EquipmentSystem.GetData(owner);
+        if IsDefined(equipmentData) && ItemID.IsValid(equipmentData.FindItemInEquipAreaByTag(n"Cyberdeck", gamedataEquipmentArea.SystemReplacementCW)) {
+            return true;
+        }
+        let stats = GameInstance.GetStatsSystem(owner.GetGame());
+        return IsDefined(stats) && stats.GetStatBoolValue(Cast(owner.GetEntityID()), gamedataStatType.HasCyberdeck);
     }
 
     public static func IsCyberwareArea(equipArea: gamedataEquipmentArea) -> Bool {

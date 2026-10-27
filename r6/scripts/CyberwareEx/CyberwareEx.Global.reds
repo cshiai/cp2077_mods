@@ -69,6 +69,10 @@ protected final const func IsCyberdeckEquippedOnPlayer() -> Bool {
 @replaceMethod(EquipmentSystem)
 public final static func IsCyberdeckEquipped(owner: ref<GameObject>) -> Bool {
     if !IsDefined(owner) { return false; }
+    let equipmentData = EquipmentSystem.GetData(owner);
+    if IsDefined(equipmentData) && ItemID.IsValid(equipmentData.FindItemInEquipAreaByTag(n"Cyberdeck", gamedataEquipmentArea.SystemReplacementCW)) {
+        return true;
+    }
     let stats = GameInstance.GetStatsSystem(owner.GetGame());
     return IsDefined(stats) && stats.GetStatBoolValue(Cast(owner.GetEntityID()), gamedataStatType.HasCyberdeck);
 }
@@ -237,7 +241,11 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
     if this.IsItemOfCategory(itemID, gamedataItemCategory.Cyberware) || Equals(equipArea.areaType, gamedataEquipmentArea.ArmsCW) {
         this.CheckCyberjunkieAchievement();
     }
-    if EquipmentSystem.IsItemCyberdeck(itemID) {
+    if EquipmentSystem.IsItemCyberdeck(itemID) || CyberwareHelper.IsCyberdeckEquipped(this.m_owner) {
+        // Changing a Sandevistan/Berserk alongside a deck can leave the
+        // cached quickhack list from the previous operating-system state.
+        // Rebuild whenever a deck is currently equipped, not only when the
+        // transaction itself is the deck item.
         PlayerPuppet.ChacheQuickHackListCleanup(this.m_owner);
     }
 }

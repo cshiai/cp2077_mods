@@ -333,3 +333,15 @@ street-fight participant. That cross-module guard was compile-validated at
 08:17:39 EDT; the first failed pass correctly reported the missing module
 import and was fixed before the successful compile.
 
+## Ripperdoc vendor payload normalization (2026-10-27)
+
+The screenshot exposed a second source defect beyond the persistent empty-save
+cache: Black Chrome's `zVendors.yaml` repeated the same top-level
+`Vendors.$(vendor)` key 18 times. TweakXL templates support `$instances`, but
+duplicate YAML keys are overwrite-prone; later blocks can replace earlier
+`itemStock` data and leave the effective catalog empty. The payload is now
+normalized into 19 unique vendor records with 627 preserved `!append` entries.
+The empty-stock CyberwareEx reinitialization remains as a save-cache fallback.
+The normalized payload and source compile pass at 09:44:59; no relaunch was
+performed after this change.
+
