@@ -50,6 +50,25 @@ public func SDC_WeaponLeftRecord() -> TweakDBID {
   return t"SimpleDroneCompanion.MinotaurWeaponLeft";
 }
 
+// Fixed-width health bars avoid allocating/concatenating ten short strings on
+// every HUD refresh.  The companion HUD only ever requests values in 0..10.
+private func SDC_HealthBarString(filled: Int32) -> String {
+  switch filled {
+    case 0: return "..........";
+    case 1: return "|.........";
+    case 2: return "||........";
+    case 3: return "|||.......";
+    case 4: return "||||......";
+    case 5: return "|||||.....";
+    case 6: return "||||||....";
+    case 7: return "|||||||...";
+    case 8: return "||||||||..";
+    case 9: return "|||||||||.";
+    case 10: return "||||||||||";
+  };
+  return "..........";
+}
+
 // Comparison seam for the later smoke-test pass.  Keep this source-level
 // constant false while W1's deterministic weapon package is selected; a
 // reviewed Git edit can make C1 (the untouched vanilla record) the primary
@@ -240,6 +259,8 @@ public class SDC_System extends ScriptableSystem {
   private let m_hudStatusText: wref<inkText>;
   private let m_hudPanel: wref<inkWidget>;
   private let m_hudRoot: wref<inkWidget>;
+  private let m_lastHudHeader: String;
+  private let m_lastHudStatus: String;
 
   public final static func Get(gi: GameInstance) -> ref<SDC_System> {
     let system: ref<SDC_System> = GameInstance.GetScriptableSystemsContainer(gi).Get(n"SimpleDroneCompanion.SDC_System") as SDC_System;
@@ -252,6 +273,8 @@ public class SDC_System extends ScriptableSystem {
   private func OnAttach() -> Void {
     this.m_tickID = GetInvalidDelayID();
     this.m_lastInputAt = -1.0;
+    this.m_lastHudHeader = "";
+    this.m_lastHudStatus = "";
     this.ResetSlots();
   }
 
@@ -277,9 +300,15 @@ public class SDC_System extends ScriptableSystem {
     this.RegisterInputListener();
     this.RegisterDynamicListener();
     this.RefreshHud();
-    // Keep the reminder/panel visible even while no drones are deployed; the
-    // vanilla healthbar controller can hide its root during full-health idle.
-    this.StartWatchdog();
+    // Keep no background timer alive for the idle reminder.  The panel is
+    // hosted above the healthbar's auto-hidden container; the watchdog is
+    // reserved for live/pending drone entities only.
+    if this.ActiveCount() > 0 {
+      this.StartWatchdog();
+    } else {
+      this.m_watchdogRunning = false;
+      this.CancelWatchdog();
+    };
   }
 
   private func OnPlayerDetach(request: ref<PlayerDetachRequest>) -> Void {
@@ -420,6 +449,8 @@ public class SDC_System extends ScriptableSystem {
     this.m_hudStatusText = statusText;
     this.m_hudPanel = panel;
     this.m_hudRoot = root;
+    this.m_lastHudHeader = "";
+    this.m_lastHudStatus = "";
     this.RefreshHud();
   }
 
@@ -457,13 +488,7 @@ public class SDC_System extends ScriptableSystem {
     let filled: Int32 = RoundF(Cast<Float>(hp) * 0.10);
     if filled < 1 { filled = 1; }
     if filled > 10 { filled = 10; }
-    let bar: String = "";
-    let i: Int32 = 0;
-    while i < 10 {
-      bar += i < filled ? "|" : ".";
-      i += 1;
-    };
-    return label + " [" + bar + "] " + IntToString(hp) + "%";
+    return label + " [" + SDC_HealthBarString(filled) + "] " + IntToString(hp) + "%";
   }
 
   private func BuildHudStatusText(statPools: ref<StatPoolsSystem>) -> String {
@@ -489,22 +514,27 @@ public class SDC_System extends ScriptableSystem {
       this.m_hudPanel.SetOpacity(1.0);
     };
     let count: Int32 = this.ActiveCount();
+    let header: String;
+    let status: String;
     if count == 0 {
-      this.m_hudHeaderText.SetText("[F9] SUMMON DRONES (0/4)");
-      if IsDefined(this.m_hudStatusText) {
-        this.m_hudStatusText.SetText("Ready: 2x Minotaur + 2x Octant");
-        this.m_hudStatusText.SetVisible(true);
+      header = "[F9] SUMMON DRONES (0/4)";
+      status = "Ready: 2x Minotaur + 2x Octant";
+    } else {
+      header = "[F9] DRONE SQUAD (" + IntToString(count) + "/4) — PRESS F9 TO DISMISS";
+      let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
+      status = this.BuildHudStatusText(statPools);
+    }
+    if NotEquals(header, this.m_lastHudHeader) {
+      this.m_hudHeaderText.SetText(header);
+      this.m_lastHudHeader = header;
+    }
+    if IsDefined(this.m_hudStatusText) {
+      if NotEquals(status, this.m_lastHudStatus) {
+        this.m_hudStatusText.SetText(status);
+        this.m_lastHudStatus = status;
       }
-      return;
+      this.m_hudStatusText.SetVisible(true);
     }
-
-    this.m_hudHeaderText.SetText("[F9] DRONE SQUAD (" + IntToString(count) + "/4) — PRESS F9 TO DISMISS");
-    if !IsDefined(this.m_hudStatusText) {
-      return;
-    }
-    let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
-    this.m_hudStatusText.SetText(this.BuildHudStatusText(statPools));
-    this.m_hudStatusText.SetVisible(true);
   }
 
   public func IsActiveDrone(obj: wref<GameObject>) -> Bool {
@@ -512,7 +542,6 @@ public class SDC_System extends ScriptableSystem {
   }
 
   public func SpawnAll() -> Void {
-    this.RefreshHud();
     let player: ref<PlayerPuppet> = SDC_Player(this.GetGameInstance());
     if !this.m_active || !SDC_ValidPlayer(player) {
       return;
@@ -523,7 +552,12 @@ public class SDC_System extends ScriptableSystem {
       this.SpawnSlot(i, player);
       i += 1;
     };
-    this.StartWatchdog();
+    if this.ActiveCount() > 0 {
+      this.StartWatchdog();
+    } else {
+      this.m_watchdogRunning = false;
+      this.CancelWatchdog();
+    };
     if this.ActiveCount() > 0 {
       this.ShowVanillaMessage("DRONES DEPLOYED");
     } else {
@@ -533,7 +567,6 @@ public class SDC_System extends ScriptableSystem {
   }
 
   private func SpawnSlot(slot: Int32, player: ref<PlayerPuppet>) -> Void {
-    this.RefreshHud();
     if slot < 0 || slot >= SDC_MaxDrones() || !IsDefined(player) {
       return;
     };
@@ -565,7 +598,6 @@ public class SDC_System extends ScriptableSystem {
     };
     this.m_slotIDs[slot] = entityID;
     this.m_slotPending[slot] = true;
-    this.RefreshHud();
   }
 
   private cb func OnSDCDynamicEntityEvent(evt: ref<DynamicEntityEvent>) -> Void {
@@ -593,6 +625,7 @@ public class SDC_System extends ScriptableSystem {
         this.ClearSlot(slot);
         break;
     };
+    this.RefreshHud();
   }
 
   private func FindSlot(entityID: EntityID) -> Int32 {
@@ -607,7 +640,6 @@ public class SDC_System extends ScriptableSystem {
   }
 
   private func ResolveSlot(slot: Int32, entityID: EntityID) -> Void {
-    this.RefreshHud();
     let dynamicEntities: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
     let puppet: ref<NPCPuppet>;
     if IsDefined(dynamicEntities) {
@@ -630,11 +662,9 @@ public class SDC_System extends ScriptableSystem {
     puppet.m_sdcSlot = slot;
     this.m_slotPending[slot] = false;
     SDC_ApplyFollowerRole(puppet, player);
-    this.RefreshHud();
   }
 
   public func DeleteAll() -> Void {
-    this.RefreshHud();
     let dynamicEntities: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
     let i: Int32 = 0;
     while i < ArraySize(this.m_slotIDs) {
@@ -657,7 +687,6 @@ public class SDC_System extends ScriptableSystem {
     let invalidID: EntityID;
     this.m_slotIDs[slot] = invalidID;
     this.m_slotPending[slot] = false;
-    this.RefreshHud();
   }
 
   private func StartWatchdog() -> Void {
@@ -693,7 +722,6 @@ public class SDC_System extends ScriptableSystem {
   }
 
   public func WatchdogTick(generation: Int32) -> Void {
-    this.RefreshHud();
     if !this.m_watchdogRunning || generation != this.m_watchdogGeneration || !this.m_active {
       return;
     };
@@ -732,11 +760,8 @@ public class SDC_System extends ScriptableSystem {
       i += 1;
     };
     if this.ActiveCount() == 0 {
-      if this.m_active {
-        this.ScheduleWatchdog(1.0);
-      } else {
-        this.m_watchdogRunning = false;
-      }
+      this.m_watchdogRunning = false;
+      this.CancelWatchdog();
       this.RefreshHud();
       return;
     };
@@ -779,47 +804,11 @@ public class SDC_WatchdogCallback extends DelayCallback {
 
 @wrapMethod(PlayerPuppet)
 protected cb func OnDetach() -> Bool {
-  GameInstance.GetCallbackSystem().UnregisterCallback(n"Input/Key", this, n"OnSDCPlayerKeyInput");
   let system: ref<SDC_System> = SDC_System.Get(this.GetGame());
   if IsDefined(system) {
     system.DeleteAll();
   };
   return wrappedMethod();
-}
-
-@wrapMethod(PlayerPuppet)
-protected cb func OnGameAttached() -> Bool {
-  let result: Bool = wrappedMethod();
-  GameInstance.GetCallbackSystem().RegisterCallback(n"Input/Key", this, n"OnSDCPlayerKeyInput")
-    .SetLifetime(CallbackLifetime.Session);
-  return result;
-}
-
-@addField(PlayerPuppet)
-private let m_sdcPlayerPadModifierHeld: Bool;
-
-@addMethod(PlayerPuppet)
-protected cb func OnSDCPlayerKeyInput(event: ref<KeyInputEvent>) -> Void {
-  if !IsDefined(event) {
-    return;
-  };
-  let key: EInputKey = event.GetKey();
-  if Equals(key, EInputKey.IK_Pad_LeftShoulder) {
-    this.m_sdcPlayerPadModifierHeld = !Equals(event.GetAction(), EInputAction.IACT_Release);
-    return;
-  };
-  if !Equals(event.GetAction(), EInputAction.IACT_Press) {
-    return;
-  };
-  let keyboard: Bool = Equals(key, EInputKey.IK_F9);
-  let controller: Bool = this.m_sdcPlayerPadModifierHeld && Equals(key, EInputKey.IK_Pad_X_SQUARE);
-  if !keyboard && !controller || GameInstance.GetSystemRequestsHandler().IsPreGame() || this.IsDead() {
-    return;
-  };
-  let system: ref<SDC_System> = SDC_System.Get(this.GetGame());
-  if IsDefined(system) {
-    system.TryToggleFromInput();
-  };
 }
 
 @addMethod(AIFollowerRole)
@@ -838,13 +827,21 @@ protected cb func OnInitialize() -> Bool {
     return result;
   }
 
+  // Parent the persistent reminder above the container whose vanilla health
+  // bar controller auto-hides at full health/out of combat.  This avoids a
+  // polling timer solely to undo that visibility transition.
+  let host: ref<inkCompoundWidget> = root.GetParentWidget() as inkCompoundWidget;
+  if !IsDefined(host) {
+    host = root;
+  }
+
   let panel: ref<inkVerticalPanel> = new inkVerticalPanel();
   panel.SetName(n"SDC_DroneHudPanel");
   panel.SetAnchor(inkEAnchor.TopLeft);
   panel.SetAnchorPoint(Vector2(0.0, 0.0));
   panel.SetMargin(inkMargin(20.0, 115.0, 0.0, 0.0));
   panel.SetFitToContent(true);
-  panel.Reparent(root);
+  panel.Reparent(host);
 
   let headerText: ref<inkText> = new inkText();
   headerText.SetName(n"SDC_DroneHudHeader");
@@ -873,9 +870,10 @@ protected cb func OnInitialize() -> Bool {
 
   // healthbarWidgetGameController hides its vanilla root while V is at full
   // health/out of combat.  The companion reminder is persistent, so keep the
-  // root and our panel visible/opaque rather than inheriting that hide state.
-  root.SetVisible(true);
-  root.SetOpacity(1.0);
+  // parent host and our panel visible/opaque rather than inheriting that hide
+  // state.
+  host.SetVisible(true);
+  host.SetOpacity(1.0);
   panel.SetVisible(true);
   panel.SetOpacity(1.0);
 
@@ -883,7 +881,7 @@ protected cb func OnInitialize() -> Bool {
   if IsDefined(player) {
     let system: ref<SDC_System> = SDC_System.Get(player.GetGame());
     if IsDefined(system) {
-      system.BindHudWidgets(headerText, statusText, panel, root);
+      system.BindHudWidgets(headerText, statusText, panel, host);
     }
   }
   return result;

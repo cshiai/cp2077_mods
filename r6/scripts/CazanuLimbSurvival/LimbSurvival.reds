@@ -14,6 +14,11 @@ public abstract class Settings {
   public static func SurvivorHealthFloor() -> Float = 0.05
 }
 
+// Resolve all shapes reported for one hit transaction.  Melee sweeps can
+// contain a torso/head shape followed by the actual arm/leg shape; looking
+// only at index 0 silently loses the limb strike.  The loop is bounded by the
+// hit event's own result array and never invents a limb from a zone alone.
+
 // Match Shellrain's record-name exclusions. Metal hit shapes alone are not
 // enough: ordinary human enemies can have cybernetic limbs.
 public abstract class NPCFilter {
@@ -536,6 +541,57 @@ public final func CLS_CountMissingLimbsOnPuppet() -> Int32 {
 }
 
 @addMethod(NPCPuppet)
+public final static func CLS_ResolveStruckLimbFromHitEvent(
+  npc: ref<NPCPuppet>,
+  hitEvent: ref<gameHitEvent>,
+  out struckLimb: gameDismBodyPart,
+  out isHeadHit: Bool
+) -> Bool {
+  isHeadHit = false;
+  if !IsDefined(npc) || !IsDefined(hitEvent) {
+    return false;
+  }
+  let shapes = hitEvent.hitRepresentationResult.hitShapes;
+  let foundLimb: Bool = false;
+  let index: Int32 = 0;
+  while index < ArraySize(shapes) {
+    let shape: ref<HitShapeUserDataBase> = shapes[index].userData as HitShapeUserDataBase;
+    if IsDefined(shape) {
+      let zone: EHitReactionZone = HitShapeUserDataBase.GetHitReactionZone(shape);
+      if Equals(zone, EHitReactionZone.Head) {
+        isHeadHit = true;
+      }
+      let part: gameDismBodyPart = HitShapeUserDataBase.GetDismembermentBodyPart(shape);
+      let validZone: Bool = false;
+      switch zone {
+        case EHitReactionZone.ArmLeft:
+        case EHitReactionZone.HandLeft:
+          validZone = Equals(part, gameDismBodyPart.LEFT_ARM);
+          break;
+        case EHitReactionZone.ArmRight:
+        case EHitReactionZone.HandRight:
+          validZone = Equals(part, gameDismBodyPart.RIGHT_ARM);
+          break;
+        case EHitReactionZone.LegLeft:
+          validZone = Equals(part, gameDismBodyPart.LEFT_LEG);
+          break;
+        case EHitReactionZone.LegRight:
+          validZone = Equals(part, gameDismBodyPart.RIGHT_LEG);
+          break;
+        default:
+          break;
+      }
+      if validZone && !foundLimb && !npc.CLS_IsLimbAlreadyMissingOnPuppet(part) {
+        struckLimb = part;
+        foundLimb = true;
+      }
+    }
+    index += 1;
+  }
+  return foundLimb;
+}
+
+@addMethod(NPCPuppet)
 public final func CLS_ExecuteSaberLimbSever(part: gameDismBodyPart, hitPos: Vector4, isFinalFourthLimb: Bool) -> Void {
   if !this.CLS_IsEligibleSaberTarget() || this.CLS_IsLimbAlreadyMissingOnPuppet(part) {
     return;
@@ -619,45 +675,14 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
         && Equals(weapon.GetItemID().GetTDBID(), t"Items.Saber_DarthVader");
 
       // A direct lightsaber swing severs only the intact limb represented by
-      // hitShapes[0]. Torso/head hits and already-missing limbs are inert.
+      // one of this hit event's actual limb shapes.
       if forReal && isSaberWeapon && npc.CLS_IsEligibleSaberTarget() && !isDotOrEffect {
         let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(npc.GetGame()));
         let missingBefore: Int32 = npc.CLS_CountMissingLimbsOnPuppet();
         let struckLimb: gameDismBodyPart;
-        let validLimbHit: Bool = false;
-        if ArraySize(hitEvent.hitRepresentationResult.hitShapes) > 0 {
-          let shape: ref<HitShapeUserDataBase> = hitEvent.hitRepresentationResult.hitShapes[0].userData as HitShapeUserDataBase;
-          if IsDefined(shape) {
-            let zone: EHitReactionZone = HitShapeUserDataBase.GetHitReactionZone(shape);
-            switch zone {
-              case EHitReactionZone.ArmLeft:
-              case EHitReactionZone.HandLeft:
-                struckLimb = gameDismBodyPart.LEFT_ARM;
-                validLimbHit = true;
-                break;
-              case EHitReactionZone.ArmRight:
-              case EHitReactionZone.HandRight:
-                struckLimb = gameDismBodyPart.RIGHT_ARM;
-                validLimbHit = true;
-                break;
-              case EHitReactionZone.LegLeft:
-                struckLimb = gameDismBodyPart.LEFT_LEG;
-                validLimbHit = true;
-                break;
-              case EHitReactionZone.LegRight:
-                struckLimb = gameDismBodyPart.RIGHT_LEG;
-                validLimbHit = true;
-                break;
-              default:
-                break;
-            }
-            if validLimbHit
-              && NotEquals(HitShapeUserDataBase.GetDismembermentBodyPart(shape), struckLimb) {
-              validLimbHit = false;
-            }
-          }
-        }
-        if missingBefore < 4 && validLimbHit && !npc.CLS_IsLimbAlreadyMissingOnPuppet(struckLimb) {
+        let saberHeadHit: Bool;
+        let validLimbHit: Bool = NPCPuppet.CLS_ResolveStruckLimbFromHitEvent(npc, hitEvent, struckLimb, saberHeadHit);
+        if missingBefore < 4 && validLimbHit {
           npc.CLS_ExecuteSaberLimbSever(struckLimb, hitEvent.hitPosition, missingBefore == 3);
           npc.cls_lastSaberSeverTime = now;
           npc.cls_saberSeveredCount = npc.CLS_CountMissingLimbsOnPuppet();
@@ -668,11 +693,14 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
       }
 
       let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(npc.GetGame()));
-      let missingLimbs: Int32 = npc.CLS_CountMissingLimbsOnPuppet();
-      let recentSaberSurvivor: Bool = npc.cls_saberSeveredCount > 0
+      let missingLimbs: Int32 = 0;
+      let recentSaberSurvivor: Bool = false;
+      if npc.cls_saberSeveredCount > 0
         && now - npc.cls_lastSaberSeverTime >= 0.0
-        && now - npc.cls_lastSaberSeverTime <= 8.0
-        && missingLimbs < 4;
+        && now - npc.cls_lastSaberSeverTime <= 8.0 {
+        missingLimbs = npc.CLS_CountMissingLimbsOnPuppet();
+        recentSaberSurvivor = missingLimbs < 4;
+      }
 
       // The saber floor also covers Burning/Electrocuted/Bleeding DOT events,
       // whose AttackData may no longer carry the weapon ID.
@@ -693,43 +721,12 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
 
       // Preserve the existing wound-floor behavior for non-saber limb hits.
       if !isDotOrEffect && !recentSaberSurvivor {
-        let isUnreservedLimbHit: Bool = false;
+        let isUnreservedLimbHit: Bool;
         let isHeadHit: Bool = false;
-        if ArraySize(hitEvent.hitRepresentationResult.hitShapes) > 0 {
-          let shape: ref<HitShapeUserDataBase> = hitEvent.hitRepresentationResult.hitShapes[0].userData as HitShapeUserDataBase;
-          if IsDefined(shape) {
-            let zone: EHitReactionZone = HitShapeUserDataBase.GetHitReactionZone(shape);
-            isHeadHit = Equals(zone, EHitReactionZone.Head);
-            let part: gameDismBodyPart;
-            let validLimbZone: Bool = false;
-            switch zone {
-              case EHitReactionZone.ArmLeft:
-              case EHitReactionZone.HandLeft:
-                part = gameDismBodyPart.LEFT_ARM;
-                validLimbZone = true;
-                break;
-              case EHitReactionZone.ArmRight:
-              case EHitReactionZone.HandRight:
-                part = gameDismBodyPart.RIGHT_ARM;
-                validLimbZone = true;
-                break;
-              case EHitReactionZone.LegLeft:
-                part = gameDismBodyPart.LEFT_LEG;
-                validLimbZone = true;
-                break;
-              case EHitReactionZone.LegRight:
-                part = gameDismBodyPart.RIGHT_LEG;
-                validLimbZone = true;
-                break;
-              default:
-                break;
-            }
-            if validLimbZone && Equals(HitShapeUserDataBase.GetDismembermentBodyPart(shape), part)
-              && !npc.CLS_IsLimbAlreadyMissingOnPuppet(part) {
-              isUnreservedLimbHit = true;
-              npc.cls_lastLimbHitTime = now;
-            }
-          }
+        let struckLimb: gameDismBodyPart;
+        isUnreservedLimbHit = NPCPuppet.CLS_ResolveStruckLimbFromHitEvent(npc, hitEvent, struckLimb, isHeadHit);
+        if isUnreservedLimbHit {
+          npc.cls_lastLimbHitTime = now;
         }
 
         let inSameBlastLimbWindow: Bool = npc.cls_lastLimbHitTime > 0.0 && (now - npc.cls_lastLimbHitTime) >= 0.0 && (now - npc.cls_lastLimbHitTime) <= 0.25;

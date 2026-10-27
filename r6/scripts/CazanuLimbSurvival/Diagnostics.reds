@@ -3,7 +3,8 @@ module CazanuLimbSurvival
 
 public abstract class Diagnostics {
   // Runtime diagnostics are disabled after the elite-enemy investigation.
-  public static func Enabled() -> Bool = false
+  public static func DiagnosticsEnabled() -> Bool = false
+  public static func Enabled() -> Bool = Diagnostics.DiagnosticsEnabled()
   public static func HitsPerNPC() -> Int32 = 12
 
   public static func Enum(typeName: String, value: Int32) -> String {

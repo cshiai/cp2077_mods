@@ -77,15 +77,19 @@ public class UniversalIconicWeaponHelper {
     if current < 3.00 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 3.00 - current);
     }
-    current = itemData.GetStatValueByType(gamedataStatType.AttackSpeed);
+    // Read the effective stat from StatsSystem, which includes saved
+    // modifiers restored from the save.  ItemData alone can still expose the
+    // TweakDB base value and would cause this package to be appended again on
+    // every load/upgrade.
+    current = statsSystem.GetStatValue(statsId, gamedataStatType.AttackSpeed);
     if current < 1.50 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.AttackSpeed, gameStatModifierType.AdditiveMultiplier, 1.50);
     }
-    current = itemData.GetStatValueByType(gamedataStatType.AttackSpeed);
+    current = statsSystem.GetStatValue(statsId, gamedataStatType.AttackSpeed);
     if current < 2.50 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.AttackSpeed, gameStatModifierType.Additive, 2.50);
     }
-    current = itemData.GetStatValueByType(gamedataStatType.BaseMeleeAttackStaminaCost);
+    current = statsSystem.GetStatValue(statsId, gamedataStatType.BaseMeleeAttackStaminaCost);
     if current > 0.00 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.BaseMeleeAttackStaminaCost, gameStatModifierType.Multiplier, 0.00);
     }

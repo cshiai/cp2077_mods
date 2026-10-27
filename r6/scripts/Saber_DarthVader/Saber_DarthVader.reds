@@ -27,6 +27,10 @@ public func Saber_PlayerHoldsSaber(player: ref<GameObject>) -> Bool {
 
 @addField(PlayerPuppet)
 public let m_saberLitActive: Bool;
+@addField(PlayerPuppet)
+private let m_saberBankChecked: Bool;
+@addField(PlayerPuppet)
+private let m_saberBankAvailable: Bool;
 
 public func Saber_SetPlayerLitFlag(weapon: ref<WeaponObject>, active: Bool) -> Void {
   if !IsDefined(weapon) { return; }
@@ -51,11 +55,91 @@ public func Saber_SfxVariants(id: CName) -> Int32 {
 public func Saber_SfxVolume() -> Float { return 0.32; }
 public func Saber_HumVolume() -> Float { return 0.22; }
 
+// Resolve directly to interned names.  This keeps every swing/hit/deflect
+// free of NameToString/StringToName and temporary concatenated strings.
+public func Saber_PickSfxVariant(id: CName) -> CName {
+  let variant: Int32 = RandRange(1, Saber_SfxVariants(id) + 1);
+  switch id {
+    case n"saber_on":
+      switch variant {
+        case 1: return n"saber_on_1";
+        case 2: return n"saber_on_2";
+        case 3: return n"saber_on_3";
+        case 4: return n"saber_on_4";
+      };
+    case n"saber_off":
+      switch variant {
+        case 1: return n"saber_off_1";
+        case 2: return n"saber_off_2";
+        case 3: return n"saber_off_3";
+        case 4: return n"saber_off_4";
+      };
+    case n"saber_swing":
+      switch variant {
+        case 1: return n"saber_swing_1";
+        case 2: return n"saber_swing_2";
+        case 3: return n"saber_swing_3";
+        case 4: return n"saber_swing_4";
+        case 5: return n"saber_swing_5";
+        case 6: return n"saber_swing_6";
+        case 7: return n"saber_swing_7";
+        case 8: return n"saber_swing_8";
+        case 9: return n"saber_swing_9";
+      };
+    case n"saber_hit":
+      switch variant {
+        case 1: return n"saber_hit_1";
+        case 2: return n"saber_hit_2";
+        case 3: return n"saber_hit_3";
+        case 4: return n"saber_hit_4";
+        case 5: return n"saber_hit_5";
+        case 6: return n"saber_hit_6";
+        case 7: return n"saber_hit_7";
+      };
+    case n"saber_block":
+      switch variant {
+        case 1: return n"saber_block_1";
+        case 2: return n"saber_block_2";
+        case 3: return n"saber_block_3";
+        case 4: return n"saber_block_4";
+        case 5: return n"saber_block_5";
+        case 6: return n"saber_block_6";
+        case 7: return n"saber_block_7";
+      };
+    case n"saber_deflect":
+      switch variant {
+        case 1: return n"saber_deflect_1";
+        case 2: return n"saber_deflect_2";
+        case 3: return n"saber_deflect_3";
+        case 4: return n"saber_deflect_4";
+        case 5: return n"saber_deflect_5";
+        case 6: return n"saber_deflect_6";
+        case 7: return n"saber_deflect_7";
+        case 8: return n"saber_deflect_8";
+        case 9: return n"saber_deflect_9";
+        case 10: return n"saber_deflect_10";
+        case 11: return n"saber_deflect_11";
+        case 12: return n"saber_deflect_12";
+        case 13: return n"saber_deflect_13";
+        case 14: return n"saber_deflect_14";
+      };
+  };
+  return id;
+}
+
 // Audioware is optional.  When installed the supplied SWBF2 events are used;
 // otherwise this branch intentionally uses only vanilla Wwise events.
 @if(ModuleExists("Audioware"))
 public func Saber_HasSwbf2Bank(game: GameInstance) -> Bool {
-  return GameInstance.GetAudioSystemExt(game).Duration(n"saber_on_1") > 0.0;
+  let player: ref<PlayerPuppet> = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject() as PlayerPuppet;
+  if !IsDefined(player) {
+    return false;
+  }
+  if !player.m_saberBankChecked {
+    player.m_saberBankAvailable = GameInstance.GetAudioSystemExt(game).Duration(n"saber_on_1") > 0.0;
+    player.m_saberBankChecked = true;
+  }
+  return player.m_saberBankAvailable;
 }
 
 @if(ModuleExists("Audioware"))
@@ -63,7 +147,7 @@ public func Saber_PlaySfx(game: GameInstance, id: CName) -> Void {
   let player = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject();
   if !IsDefined(player) { return; }
   if Saber_HasSwbf2Bank(game) {
-    let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id) + 1)));
+    let variant: CName = Saber_PickSfxVariant(id);
     let settings = new AudioSettingsExt();
     settings.volume = Saber_SfxVolume();
     GameInstance.GetAudioSystemExt(game).Play(variant, player.GetEntityID(), n"", scnDialogLineType.None, settings);
@@ -261,6 +345,13 @@ public func Saber_SetOn(weapon: ref<WeaponObject>, on: Bool, delay: Float) -> Vo
 protected cb func OnSetActiveWeapon(evt: ref<SetActiveWeaponEvent>) -> Bool {
   let result: Bool = wrappedMethod(evt);
   if Saber_Is(this) {
+    let player: ref<PlayerPuppet> = this.GetOwner() as PlayerPuppet;
+    if IsDefined(player) {
+      // Recheck at most once for each equip, after Audioware has had a chance
+      // to finish loading the optional SWBF2 bank.
+      player.m_saberBankChecked = false;
+      player.m_saberBankAvailable = false;
+    }
     Saber_SetPlayerLitFlag(this, false);
     Saber_MuteKatana(this.GetGame(), true);
     this.saberOn = false;
@@ -303,12 +394,16 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
 protected cb func OnTakeControl(ri: EntityResolveComponentsInterface) -> Bool {
   let result: Bool = wrappedMethod(ri);
   this.m_saberLitActive = false;
+  this.m_saberBankChecked = false;
+  this.m_saberBankAvailable = false;
   return result;
 }
 
 @wrapMethod(PlayerPuppet)
 protected cb func OnDetach() -> Bool {
   this.m_saberLitActive = false;
+  this.m_saberBankChecked = false;
+  this.m_saberBankAvailable = false;
   return wrappedMethod();
 }
 
