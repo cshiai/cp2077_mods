@@ -33,6 +33,30 @@ Items.Saber_DarthVader_HitWoundsFactor:
   statType: BaseStats.HitWoundsFactor
   value: 3.00
 
+Items.Saber_DarthVader_AttackSpeedMultiplier:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: AdditiveMultiplier
+  statType: BaseStats.AttackSpeed
+  value: 1.50
+
+Items.Saber_DarthVader_AttackSpeedAdditive:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.AttackSpeed
+  value: 2.50
+
+Items.Saber_DarthVader_ZeroMeleeStamina:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Multiplier
+  statType: BaseStats.BaseMeleeAttackStaminaCost
+  value: 0.0
+
+Items.Saber_DarthVader_IgnoreMeleeStamina:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.CanIgnoreWeaponStaminaPenaties
+  value: 1.0
+
 Items.Saber_DarthVader_CanWeaponIgnoreArmor:
   $type: gamedataConstantStatModifier_Record
   modifierType: Additive
@@ -99,6 +123,10 @@ Items.Saber_DarthVader_Dismemberment_Stats:
     - Items.Saber_DarthVader_HitDismembermentFactor
     - Items.Saber_DarthVader_TriggerWoundedChance
     - Items.Saber_DarthVader_HitWoundsFactor
+    - Items.Saber_DarthVader_AttackSpeedMultiplier
+    - Items.Saber_DarthVader_AttackSpeedAdditive
+    - Items.Saber_DarthVader_ZeroMeleeStamina
+    - Items.Saber_DarthVader_IgnoreMeleeStamina
     - Items.Saber_DarthVader_CanWeaponIgnoreArmor
     - Items.Saber_DarthVader_CanDealFullDamageToArmored
     - Items.Saber_DarthVader_BurningApplicationRate

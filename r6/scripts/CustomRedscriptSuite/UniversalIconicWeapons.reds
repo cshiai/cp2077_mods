@@ -77,6 +77,22 @@ public class UniversalIconicWeaponHelper {
     if current < 3.00 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 3.00 - current);
     }
+    current = itemData.GetStatValueByType(gamedataStatType.AttackSpeed);
+    if current < 1.50 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.AttackSpeed, gameStatModifierType.AdditiveMultiplier, 1.50);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.AttackSpeed);
+    if current < 2.50 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.AttackSpeed, gameStatModifierType.Additive, 2.50);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.BaseMeleeAttackStaminaCost);
+    if current > 0.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.BaseMeleeAttackStaminaCost, gameStatModifierType.Multiplier, 0.00);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanIgnoreWeaponStaminaPenaties);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanIgnoreWeaponStaminaPenaties, gameStatModifierType.Additive, 1.00 - current);
+    }
     current = itemData.GetStatValueByType(gamedataStatType.CanWeaponIgnoreArmor);
     if current < 1.00 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanWeaponIgnoreArmor, gameStatModifierType.Additive, 1.00 - current);

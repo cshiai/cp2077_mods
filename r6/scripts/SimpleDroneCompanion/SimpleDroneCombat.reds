@@ -81,8 +81,15 @@ private final func Process(hitEvent: ref<gameHitEvent>, cache: ref<CacheData>) -
     };
   };
   wrappedMethod(hitEvent, cache);
-  if IsDefined(target) && SDC_IsCompanion(target) && !SDC_IsIgnoredDamage(hitEvent) {
-    let system: ref<SDC_System> = SDC_System.Get(target.GetGame());
+  // Refresh after either side of a drone combat transaction.  Target-side
+  // damage updates live HP bars; instigator-side refresh keeps the panel in
+  // sync with spawn/kill-credit transitions that can complete in the same
+  // DamageSystem pass.
+  if !SDC_IsIgnoredDamage(hitEvent)
+    && ((IsDefined(target) && SDC_IsCompanion(target))
+      || (IsDefined(instigator) && SDC_IsCompanion(instigator))) {
+    let gameOwner: ref<GameObject> = IsDefined(target) ? target : instigator;
+    let system: ref<SDC_System> = SDC_System.Get(gameOwner.GetGame());
     if IsDefined(system) {
       system.RefreshHud();
     };

@@ -238,9 +238,15 @@ public class SDC_System extends ScriptableSystem {
   private let m_slotGeneration: array<Int32>;
   private let m_hudHeaderText: wref<inkText>;
   private let m_hudStatusText: wref<inkText>;
+  private let m_hudPanel: wref<inkWidget>;
+  private let m_hudRoot: wref<inkWidget>;
 
   public final static func Get(gi: GameInstance) -> ref<SDC_System> {
-    return GameInstance.GetScriptableSystemsContainer(gi).Get(n"SDC_System") as SDC_System;
+    let system: ref<SDC_System> = GameInstance.GetScriptableSystemsContainer(gi).Get(n"SimpleDroneCompanion.SDC_System") as SDC_System;
+    if !IsDefined(system) {
+      system = GameInstance.GetScriptableSystemsContainer(gi).Get(n"SDC_System") as SDC_System;
+    };
+    return system;
   }
 
   private func OnAttach() -> Void {
@@ -270,6 +276,10 @@ public class SDC_System extends ScriptableSystem {
     this.ResetSlots();
     this.RegisterInputListener();
     this.RegisterDynamicListener();
+    this.RefreshHud();
+    // Keep the reminder/panel visible even while no drones are deployed; the
+    // vanilla healthbar controller can hide its root during full-health idle.
+    this.StartWatchdog();
   }
 
   private func OnPlayerDetach(request: ref<PlayerDetachRequest>) -> Void {
@@ -405,43 +415,85 @@ public class SDC_System extends ScriptableSystem {
     return count;
   }
 
-  public func BindHudWidgets(headerText: ref<inkText>, statusText: ref<inkText>) -> Void {
+  public func BindHudWidgets(headerText: ref<inkText>, statusText: ref<inkText>, panel: ref<inkWidget>, root: ref<inkWidget>) -> Void {
     this.m_hudHeaderText = headerText;
     this.m_hudStatusText = statusText;
+    this.m_hudPanel = panel;
+    this.m_hudRoot = root;
     this.RefreshHud();
   }
 
-  private func HudSlotStatus(slot: Int32, statPools: ref<StatPoolsSystem>) -> String {
+  private func BuildSlotHudLine(slot: Int32, statPools: ref<StatPoolsSystem>) -> String {
+    let label: String = "M1 MINOTAUR";
+    switch slot {
+      case 1:
+        label = "M2 MINOTAUR";
+        break;
+      case 2:
+        label = "O1 OCTANT  ";
+        break;
+      case 3:
+        label = "O2 OCTANT  ";
+        break;
+    };
     if slot < 0 || slot >= ArraySize(this.m_slotIDs) || !EntityID.IsDefined(this.m_slotIDs[slot]) {
-      return "OFFLINE";
+      return label + " [----------] OFFLINE";
     }
     let id: EntityID = this.m_slotIDs[slot];
     let puppet: ref<NPCPuppet> = GameInstance.FindEntityByID(this.GetGameInstance(), id) as NPCPuppet;
     if this.m_slotPending[slot] && !IsDefined(puppet) {
-      return "SPAWNING";
+      return label + " [..........] SPAWNING";
     }
     if !IsDefined(puppet) || SDC_IsDeadLike(puppet) || !IsDefined(statPools) {
-      return "OFFLINE";
+      return label + " [----------] OFFLINE";
     }
     let hpPct: Float = statPools.GetStatPoolValue(Cast<StatsObjectID>(id), gamedataStatPoolType.Health, true);
     if hpPct <= 0.0 {
-      return "OFFLINE";
+      return label + " [----------] OFFLINE";
     }
     let hp: Int32 = RoundF(hpPct);
     if hp < 1 { hp = 1; }
     if hp > 100 { hp = 100; }
-    return IntToString(hp) + "%";
+    let filled: Int32 = RoundF(Cast<Float>(hp) * 0.10);
+    if filled < 1 { filled = 1; }
+    if filled > 10 { filled = 10; }
+    let bar: String = "";
+    let i: Int32 = 0;
+    while i < 10 {
+      bar += i < filled ? "|" : ".";
+      i += 1;
+    };
+    return label + " [" + bar + "] " + IntToString(hp) + "%";
+  }
+
+  private func BuildHudStatusText(statPools: ref<StatPoolsSystem>) -> String {
+    if this.ActiveCount() == 0 {
+      return "Ready: 2x Minotaur + 2x Octant";
+    }
+    return this.BuildSlotHudLine(0, statPools) + "\n"
+      + this.BuildSlotHudLine(1, statPools) + "\n"
+      + this.BuildSlotHudLine(2, statPools) + "\n"
+      + this.BuildSlotHudLine(3, statPools);
   }
 
   public func RefreshHud() -> Void {
     if !IsDefined(this.m_hudHeaderText) {
       return;
     }
+    if IsDefined(this.m_hudRoot) {
+      this.m_hudRoot.SetVisible(true);
+      this.m_hudRoot.SetOpacity(1.0);
+    };
+    if IsDefined(this.m_hudPanel) {
+      this.m_hudPanel.SetVisible(true);
+      this.m_hudPanel.SetOpacity(1.0);
+    };
     let count: Int32 = this.ActiveCount();
     if count == 0 {
       this.m_hudHeaderText.SetText("[F9] SUMMON DRONES (0/4)");
       if IsDefined(this.m_hudStatusText) {
-        this.m_hudStatusText.SetVisible(false);
+        this.m_hudStatusText.SetText("Ready: 2x Minotaur + 2x Octant");
+        this.m_hudStatusText.SetVisible(true);
       }
       return;
     }
@@ -451,11 +503,7 @@ public class SDC_System extends ScriptableSystem {
       return;
     }
     let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
-    let lineOne: String = "M1 MINOTAUR: " + this.HudSlotStatus(0, statPools)
-      + "   |   M2 MINOTAUR: " + this.HudSlotStatus(1, statPools);
-    let lineTwo: String = "O1 OCTANT:   " + this.HudSlotStatus(2, statPools)
-      + "   |   O2 OCTANT:   " + this.HudSlotStatus(3, statPools);
-    this.m_hudStatusText.SetText(lineOne + "\n" + lineTwo);
+    this.m_hudStatusText.SetText(this.BuildHudStatusText(statPools));
     this.m_hudStatusText.SetVisible(true);
   }
 
@@ -684,7 +732,11 @@ public class SDC_System extends ScriptableSystem {
       i += 1;
     };
     if this.ActiveCount() == 0 {
-      this.m_watchdogRunning = false;
+      if this.m_active {
+        this.ScheduleWatchdog(1.0);
+      } else {
+        this.m_watchdogRunning = false;
+      }
       this.RefreshHud();
       return;
     };
@@ -803,6 +855,7 @@ protected cb func OnInitialize() -> Bool {
   headerText.SetTintColor(new HDRColor(0.36, 0.96, 1.0, 0.92));
   headerText.SetHorizontalAlignment(textHorizontalAlignment.Left);
   headerText.SetVerticalAlignment(textVerticalAlignment.Top);
+  headerText.SetText("[F9] SUMMON DRONES (0/4)");
   headerText.Reparent(panel);
 
   let statusText: ref<inkText> = new inkText();
@@ -814,13 +867,23 @@ protected cb func OnInitialize() -> Bool {
   statusText.SetTintColor(new HDRColor(0.62, 1.0, 0.52, 0.92));
   statusText.SetHorizontalAlignment(textHorizontalAlignment.Left);
   statusText.SetVerticalAlignment(textVerticalAlignment.Top);
+  statusText.SetText("Ready: 2x Minotaur + 2x Octant");
+  statusText.SetVisible(true);
   statusText.Reparent(panel);
+
+  // healthbarWidgetGameController hides its vanilla root while V is at full
+  // health/out of combat.  The companion reminder is persistent, so keep the
+  // root and our panel visible/opaque rather than inheriting that hide state.
+  root.SetVisible(true);
+  root.SetOpacity(1.0);
+  panel.SetVisible(true);
+  panel.SetOpacity(1.0);
 
   let player: ref<PlayerPuppet> = this.GetPlayerControlledObject() as PlayerPuppet;
   if IsDefined(player) {
     let system: ref<SDC_System> = SDC_System.Get(player.GetGame());
     if IsDefined(system) {
-      system.BindHudWidgets(headerText, statusText);
+      system.BindHudWidgets(headerText, statusText, panel, root);
     }
   }
   return result;
@@ -832,7 +895,7 @@ protected cb func OnUninitialize() -> Bool {
   if IsDefined(player) {
     let system: ref<SDC_System> = SDC_System.Get(player.GetGame());
     if IsDefined(system) {
-      system.BindHudWidgets(null, null);
+      system.BindHudWidgets(null, null, null, null);
     }
   }
   return wrappedMethod();
