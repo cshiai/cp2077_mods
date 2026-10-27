@@ -1,2 +1,2 @@
-// ArchiveXL 1.28.0
+// ArchiveXL 1.28.1
 module ArchiveXL
