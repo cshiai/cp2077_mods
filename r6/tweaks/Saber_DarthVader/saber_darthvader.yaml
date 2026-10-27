@@ -1,0 +1,82 @@
+# Darth Vader's Lightsaber (Star Wars Battlefront II) for Cyberpunk 2077
+# Melee weapon based on the vanilla katana (moveset, blocking, bullet deflection with the right perk).
+# Hilt model and textures from SWBF2, glowing red blade (mod\saber\meshes\saber.mesh).
+
+# --- Model part ---------------------------------------------------------------
+# Appearance names are mapped to .app files by mod\saber\saber_factory.csv (Saber_DarthVader.archive.xl).
+Items.Saber_Vader_Grip:
+  $base: Items.w_katana_grip
+  appearanceResourceName: saber_vader_grip
+
+# --- The lightsaber -----------------------------------------------------------
+Items.Saber_DarthVader:
+  $base: Items.Preset_Katana_Default
+  displayName: l"Saber-Vader-Name"
+  localizedDescription: l"Saber-Vader-Desc"
+  quality: Quality.Legendary
+  appearanceResourceName: Saber_Vader_Default
+  # Audioware is optional in this profile.  The vanilla katana Wwise bank is a
+  # safe fallback; the REDscript branch mutes these events only when Audioware
+  # is present and supplies the custom SWBF2 events.
+  audioWeaponConfiguration: audio_melee_metadata_katana
+  visualTags: [ Default ]                   # fixed tag, so the inventory icon name below is known
+  tags:
+    - !append-once IconicWeapon
+  hudIcon: UIIcon.Saber_Vader_HUD
+  CraftingData: Items.Saber_DarthVader_CraftingPackage
+  slotPartListPreset:
+    - { $type: SlotItemPartPreset, slot: AttachmentSlots.Grip, itemPartPreset: Items.Saber_Vader_Grip }
+  slotPartList:
+    - $type: SlotItemPartListElement
+      slot: AttachmentSlots.Grip
+      itemPartList: [ { $type: ItemPartListElement, item: Items.Saber_Vader_Grip } ]
+
+# --- Icons --------------------------------------------------------------------
+# Inventory: the game looks up UIIcon.weapon_<appearanceResourceName>_None__<visualTag>
+UIIcon.weapon_Saber_Vader_Default_None__Default:
+  $type: UIIcon
+  atlasResourcePath: mod\saber\icons\saber_icon.inkatlas
+  atlasPartName: saber
+
+# HUD (weapon outline in the weapon display)
+UIIcon.Saber_Vader_HUD:
+  $type: UIIcon
+  atlasResourcePath: mod\saber\icons\saber_icon.inkatlas
+  atlasPartName: saber_hud
+
+# --- Where to buy -------------------------------------------------------------
+# Always in stock at the gun shop in Little China, Watson
+Vendors.Saber_Vader_VendorItem:
+  $type: VendorItem
+  item: Items.Saber_DarthVader
+  quantity: [ Vendors.Always_Present ]
+
+Vendors.wat_lch_gunsmith_01.itemStock:
+  - !append-once Vendors.Saber_Vader_VendorItem
+  - !append-once Vendors.Saber_DarthVader_RecipeVendorItem
+
+# --- Crafting ---------------------------------------------------------------
+Items.Saber_DarthVader_CraftingPackage:
+  $type: gamedataCraftingPackage_Record
+  craftingExpModifier: 1.0
+  overcraftPenaltyModifier: 1.0
+  craftingRecipe:
+    - $type: gamedataRecipeElement_Record
+      ingredient: Items.LegendaryMaterial1
+      amount: 10
+    - $type: gamedataRecipeElement_Record
+      ingredient: Items.EpicMaterial1
+      amount: 10
+
+Items.Recipe_Saber_DarthVader:
+  $type: gamedataItemRecipe_Record
+  displayName: l"Saber-Vader-Name"
+  craftingResult:
+    $type: gamedataCraftingResult_Record
+    item: Items.Saber_DarthVader
+    amount: 1
+
+Vendors.Saber_DarthVader_RecipeVendorItem:
+  $type: VendorItem
+  item: Items.Recipe_Saber_DarthVader
+  quantity: [ Vendors.Always_Present ]

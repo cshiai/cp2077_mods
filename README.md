@@ -71,6 +71,8 @@ Gameplay tuning and pure-redscript features: no CET dependency.
 | `r6/scripts/LoadBegone/` | Fixed launch/continue/load flow and Dogtown checkpoint profile (2 files) | Requires the bundled `red4ext/plugins/LoadBegone/LoadBegone.dll`; no CET or Mod Settings |
 | `red4ext/plugins/FXBegone/` | Fixed all-effects profile and player VFX suppression companion | Requires `FXBegoneNative.dll`; defaults preserve the upstream all-enabled profile; no CET or Mod Settings |
 | `r6/scripts/BlackChrome/` | Black Chrome cyberware effectors, reward multiplier, aux-cyberdeck support, and bounded resource pool maintenance (10 files) | ArchiveXL `.xl` + TweakXL records; no CET; optional external bridges removed |
+| `r6/scripts/Saber_DarthVader/` | Darth Vader lightsaber weapon state, staged blade visuals, optional Audioware/vanilla audio paths, bullet deflection, Iconic upgrade support, vendor/crafting recipe, and idempotent recipe unlock | TweakXL + ArchiveXL + Codeware localization; Audioware optional; no CET/Lua |
+| `r6/scripts/ImmersiveFirstPerson/` | Pure-REDscript IFP 2.2.0 camera compositor, native camera curve, body correction, bounded FreeLook cone, cached eligibility blackboard, and TickOnEvent lifecycle | Vanilla REDscript camera/input APIs; no CET/Lua/native plugin |
 
 ## Tweak and asset inputs
 
@@ -97,6 +99,7 @@ Gameplay tuning and pure-redscript features: no CET dependency.
 - `archive/pc/mod/LoadBegone.archive`, `red4ext/plugins/LoadBegone/`, and `red4ext/plugins/FXBegone/` are the extracted fixed profiles for the two 26 October 2026 imports. No downloaded archive is retained.
 - `archive/pc/mod/BlackChrome.archive` and `.archive.xl`, `r6/scripts/BlackChrome/`, and `r6/tweaks/BlackChrome/` are the extracted Black Chrome 1.1.5 payload. The upstream CET Lua reward mutator is intentionally not installed.
 - `archive/pc/mod/NightCityTrafficOverhaul.archive` is the selected NCTO 2.50 traffic resource. No downloaded archive is retained.
+- `archive/pc/mod/Saber_DarthVader.archive` and `.archive.xl` provide the lightsaber mesh, hilt, textures, and ArchiveXL factory; `r6/tweaks/Saber_DarthVader/saber_darthvader.yaml` adds the Iconic weapon, Little China stock, and 10 Legendary + 10 Epic component recipe.
 - The three newly audited companion reference archives remain outside this repository and uninstalled until the SimpleDroneCompanion plan is complete, per the current user instruction; they must never be copied into Git or the game tree. Once the plan is closed, delete those downloaded archives and temporary extraction data rather than tracking them.
 
 When importing a mod, download it, extract it to a temporary directory, inspect its source/license and dependency declarations, copy the needed source/runtime files into the appropriate directory, and delete the downloaded archive. Never vendor a ZIP/7z/RAR merely for provenance.
