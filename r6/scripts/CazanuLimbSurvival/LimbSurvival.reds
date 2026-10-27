@@ -376,9 +376,13 @@ private final func CLS_LimbBlockReason() -> CName {
   let healthScale = MaxF(1.0, npc.GetCustomScaledHealthMultiplier());
   let effectiveMaxHealth = maxHealth / healthScale;
   let cumulatedLimbDamage = MaxF(this.m_bodyPartWoundCumulatedDamages[index], this.m_bodyPartDismemberCumulatedDamages[index]);
+  let reactionWeapon: ref<WeaponObject> = this.m_attackData.GetWeapon();
+  let isSaberWeapon: Bool = IsDefined(reactionWeapon)
+    && Equals(reactionWeapon.GetItemID().GetTDBID(), t"Items.Saber_DarthVader");
   if cumulatedLimbDamage < effectiveMaxHealth * threshold
     && !npc.cls_forceSurviveCurrentLimbHit
-    && !this.m_attackData.HasFlag(hitFlag.ForceDismember) {
+    && !this.m_attackData.HasFlag(hitFlag.ForceDismember)
+    && !isSaberWeapon {
     return n"below_wound_threshold";
   }
 
@@ -532,23 +536,6 @@ public final func CLS_CountMissingLimbsOnPuppet() -> Int32 {
 }
 
 @addMethod(NPCPuppet)
-public final func CLS_PickNextSaberLimb(preferredPart: gameDismBodyPart, hasPreferredLimb: Bool) -> gameDismBodyPart {
-  if hasPreferredLimb && !this.CLS_IsLimbAlreadyMissingOnPuppet(preferredPart) {
-    return preferredPart;
-  }
-  if !this.CLS_IsLimbAlreadyMissingOnPuppet(gameDismBodyPart.LEFT_ARM) {
-    return gameDismBodyPart.LEFT_ARM;
-  }
-  if !this.CLS_IsLimbAlreadyMissingOnPuppet(gameDismBodyPart.RIGHT_ARM) {
-    return gameDismBodyPart.RIGHT_ARM;
-  }
-  if !this.CLS_IsLimbAlreadyMissingOnPuppet(gameDismBodyPart.LEFT_LEG) {
-    return gameDismBodyPart.LEFT_LEG;
-  }
-  return gameDismBodyPart.RIGHT_LEG;
-}
-
-@addMethod(NPCPuppet)
 public final func CLS_ExecuteSaberLimbSever(part: gameDismBodyPart, hitPos: Vector4, isFinalFourthLimb: Bool) -> Void {
   if !this.CLS_IsEligibleSaberTarget() || this.CLS_IsLimbAlreadyMissingOnPuppet(part) {
     return;
@@ -572,32 +559,6 @@ public final func CLS_ExecuteSaberLimbSever(part: gameDismBodyPart, hitPos: Vect
       break;
   }
   this.cls_saberSeveredCount = this.CLS_CountMissingLimbsOnPuppet();
-}
-
-// Fallback for melee hit events that do not produce a StatPools transaction.
-// ApplyDamageSingle uses the same time gate, so a normal hit cannot sever twice.
-@addMethod(NPCPuppet)
-public final func CLS_EnsureSaberLimbSever(hitPos: Vector4) -> Bool {
-  if !this.CLS_IsEligibleSaberTarget() || !ScriptedPuppet.IsAlive(this) || this.IsDead() || this.IsAboutToDie() {
-    return false;
-  }
-  let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(this.GetGame()));
-  if this.cls_saberSeveredCount > 0 && now - this.cls_lastSaberSeverTime >= 0.0
-    && now - this.cls_lastSaberSeverTime <= 0.05 {
-    return false;
-  }
-  let missingBefore: Int32 = this.CLS_CountMissingLimbsOnPuppet();
-  if missingBefore >= 4 {
-    return false;
-  }
-  let part: gameDismBodyPart = this.CLS_PickNextSaberLimb(gameDismBodyPart.LEFT_ARM, false);
-  let finalLimb: Bool = missingBefore == 3;
-  this.CLS_ExecuteSaberLimbSever(part, hitPos, finalLimb);
-  this.cls_lastSaberSeverTime = now;
-  if finalLimb {
-    StatusEffectHelper.ApplyStatusEffect(this, t"BaseStatusEffect.ForceKill");
-  }
-  return true;
 }
 
 // Convert ForceDismembermentEffector limb executions on living human enemies into
@@ -657,52 +618,51 @@ private final static func ApplyDamageSingle(hitEvent: ref<gameHitEvent>, dmgType
       let isSaberWeapon: Bool = IsDefined(weapon)
         && Equals(weapon.GetItemID().GetTDBID(), t"Items.Saber_DarthVader");
 
-      // One direct lightsaber swing reserves exactly one intact limb. The
-      // fourth swing removes the final limb and permits a clean kill.
+      // A direct lightsaber swing severs only the intact limb represented by
+      // hitShapes[0]. Torso/head hits and already-missing limbs are inert.
       if forReal && isSaberWeapon && npc.CLS_IsEligibleSaberTarget() && !isDotOrEffect {
         let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(npc.GetGame()));
-        let canSeverThisSwing: Bool = npc.cls_saberSeveredCount <= 0
-          || now - npc.cls_lastSaberSeverTime > 0.05;
-        if canSeverThisSwing {
-          let missingBefore: Int32 = npc.CLS_CountMissingLimbsOnPuppet();
-          if missingBefore < 4 {
-            let preferredPart: gameDismBodyPart = gameDismBodyPart.LEFT_ARM;
-            let hasPreferredLimb: Bool = false;
-            if ArraySize(hitEvent.hitRepresentationResult.hitShapes) > 0 {
-              let shape: ref<HitShapeUserDataBase> = hitEvent.hitRepresentationResult.hitShapes[0].userData as HitShapeUserDataBase;
-              if IsDefined(shape) {
-                let zone: EHitReactionZone = HitShapeUserDataBase.GetHitReactionZone(shape);
-                switch zone {
-                  case EHitReactionZone.ArmLeft:
-                  case EHitReactionZone.HandLeft:
-                    preferredPart = gameDismBodyPart.LEFT_ARM;
-                    hasPreferredLimb = true;
-                    break;
-                  case EHitReactionZone.ArmRight:
-                  case EHitReactionZone.HandRight:
-                    preferredPart = gameDismBodyPart.RIGHT_ARM;
-                    hasPreferredLimb = true;
-                    break;
-                  case EHitReactionZone.LegLeft:
-                    preferredPart = gameDismBodyPart.LEFT_LEG;
-                    hasPreferredLimb = true;
-                    break;
-                  case EHitReactionZone.LegRight:
-                    preferredPart = gameDismBodyPart.RIGHT_LEG;
-                    hasPreferredLimb = true;
-                    break;
-                  default:
-                    break;
-                }
-              }
+        let missingBefore: Int32 = npc.CLS_CountMissingLimbsOnPuppet();
+        let struckLimb: gameDismBodyPart;
+        let validLimbHit: Bool = false;
+        if ArraySize(hitEvent.hitRepresentationResult.hitShapes) > 0 {
+          let shape: ref<HitShapeUserDataBase> = hitEvent.hitRepresentationResult.hitShapes[0].userData as HitShapeUserDataBase;
+          if IsDefined(shape) {
+            let zone: EHitReactionZone = HitShapeUserDataBase.GetHitReactionZone(shape);
+            switch zone {
+              case EHitReactionZone.ArmLeft:
+              case EHitReactionZone.HandLeft:
+                struckLimb = gameDismBodyPart.LEFT_ARM;
+                validLimbHit = true;
+                break;
+              case EHitReactionZone.ArmRight:
+              case EHitReactionZone.HandRight:
+                struckLimb = gameDismBodyPart.RIGHT_ARM;
+                validLimbHit = true;
+                break;
+              case EHitReactionZone.LegLeft:
+                struckLimb = gameDismBodyPart.LEFT_LEG;
+                validLimbHit = true;
+                break;
+              case EHitReactionZone.LegRight:
+                struckLimb = gameDismBodyPart.RIGHT_LEG;
+                validLimbHit = true;
+                break;
+              default:
+                break;
             }
-            let part: gameDismBodyPart = npc.CLS_PickNextSaberLimb(preferredPart, hasPreferredLimb);
-            npc.CLS_ExecuteSaberLimbSever(part, hitEvent.hitPosition, missingBefore == 3);
-            npc.cls_lastSaberSeverTime = now;
-            npc.cls_saberSeveredCount = npc.CLS_CountMissingLimbsOnPuppet();
-            if missingBefore == 3 {
-              StatusEffectHelper.ApplyStatusEffect(npc, t"BaseStatusEffect.ForceKill");
+            if validLimbHit
+              && NotEquals(HitShapeUserDataBase.GetDismembermentBodyPart(shape), struckLimb) {
+              validLimbHit = false;
             }
+          }
+        }
+        if missingBefore < 4 && validLimbHit && !npc.CLS_IsLimbAlreadyMissingOnPuppet(struckLimb) {
+          npc.CLS_ExecuteSaberLimbSever(struckLimb, hitEvent.hitPosition, missingBefore == 3);
+          npc.cls_lastSaberSeverTime = now;
+          npc.cls_saberSeveredCount = npc.CLS_CountMissingLimbsOnPuppet();
+          if missingBefore == 3 {
+            StatusEffectHelper.ApplyStatusEffect(npc, t"BaseStatusEffect.ForceKill");
           }
         }
       }

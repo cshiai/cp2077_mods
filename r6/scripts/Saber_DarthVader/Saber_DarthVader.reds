@@ -360,17 +360,6 @@ public func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateG
 
 @wrapMethod(WeaponObject)
 protected cb func OnMeleeHitEvent(evt: ref<MeleeHitEvent>) -> Bool {
-  // Some melee/finisher paths emit the hit event without a StatPools
-  // ApplyDamageSingle transaction. Ensure the deterministic limb counter still
-  // advances once for that swing; the helper's 0.05s gate deduplicates normal
-  // damage events.
-  if Saber_Is(this) && this.saberOn && IsDefined(evt) && !evt.hitBlocked
-    && IsDefined(evt.target) && !evt.target.IsPlayer() {
-    let fallbackTarget: ref<NPCPuppet> = evt.target as NPCPuppet;
-    if IsDefined(fallbackTarget) {
-      fallbackTarget.CLS_EnsureSaberLimbSever(Vector4.EmptyVector());
-    }
-  }
   let result: Bool = wrappedMethod(evt);
   if Saber_Is(this) && this.saberOn && IsDefined(evt.instigator) && evt.instigator.IsPlayer() {
     Saber_PlaySfx(this.GetGame(), evt.hitBlocked ? n"saber_block" : n"saber_hit");
