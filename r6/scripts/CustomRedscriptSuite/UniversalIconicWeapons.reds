@@ -51,6 +51,70 @@ public class UniversalIconicWeaponHelper {
     }
   }
 
+  private final static func EnsureSaberSignaturePackage(
+    statsSystem: ref<StatsSystem>,
+    statsId: StatsObjectID,
+    itemData: ref<gameItemData>
+  ) -> Void {
+    if !IsDefined(statsSystem) || !StatsObjectID.IsDefined(statsId) || !IsDefined(itemData)
+      || !Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader") {
+      return;
+    }
+
+    let current: Float = itemData.GetStatValueByType(gamedataStatType.TriggerDismembermentChance);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerDismembermentChance, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.HitDismembermentFactor);
+    if current < 3.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitDismembermentFactor, gameStatModifierType.Additive, 3.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.TriggerWoundedChance);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.HitWoundsFactor);
+    if current < 3.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 3.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanWeaponIgnoreArmor);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanWeaponIgnoreArmor, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanDealFullDamageToArmored);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanDealFullDamageToArmored, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.BurningApplicationRate);
+    if current < 100.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.BurningApplicationRate, gameStatModifierType.Additive, 100.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanBurningCriticallyHit);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanBurningCriticallyHit, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.ElectrocutedApplicationRate);
+    if current < 100.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.ElectrocutedApplicationRate, gameStatModifierType.Additive, 100.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.BonusCritChanceVsElectrocutedEnemies);
+    if current < 35.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.BonusCritChanceVsElectrocutedEnemies, gameStatModifierType.Additive, 35.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.BleedingApplicationRate);
+    if current < 100.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.BleedingApplicationRate, gameStatModifierType.Additive, 100.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanBleedingCriticallyHit);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanBleedingCriticallyHit, gameStatModifierType.Additive, 1.00 - current);
+    }
+    current = itemData.GetStatValueByType(gamedataStatType.CanBleedingSlowTarget);
+    if current < 1.00 {
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanBleedingSlowTarget, gameStatModifierType.Additive, 1.00 - current);
+    }
+  }
+
   private final static func ApplyCoreOffensiveRoll(
     statsSystem: ref<StatsSystem>,
     statsId: StatsObjectID,
@@ -241,15 +305,20 @@ public class UniversalIconicWeaponHelper {
           UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanIgnoreWeaponStaminaPenaties, gameStatModifierType.Additive, 1.00);
         };
         break;
-      default:
+      case 4:
         // Hidden Mechanic 5: Executioner Dismemberment Matrix & Stagger
         // Pair HitWoundsFactor + TriggerWoundedChance with HitDismembermentFactor so living limb dismemberment
         // (CazanuLimbSurvival) triggers non-lethally before health is depleted.
+        if !isRanged {
+          break;
+        }
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitDismembermentFactor, gameStatModifierType.Additive, 1.50);
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerDismembermentChance, gameStatModifierType.Additive, 0.40);
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 1.50);
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 0.40);
         UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanQuickMeleeStagger, gameStatModifierType.Additive, 1.00);
+        break;
+      default:
         break;
     };
   }
@@ -276,27 +345,16 @@ public class UniversalIconicWeaponHelper {
     statsId: StatsObjectID,
     itemData: ref<gameItemData>
   ) -> Void {
+    if !IsDefined(itemData) || !WeaponObject.IsRanged(itemData.GetID()) {
+      return;
+    }
     // Marker 4.0 was shipped before the wound pair was added.  Repair only
     // that missing bridge so existing dismemberment/armor rolls are not doubled.
-    if !IsDefined(itemData) || itemData.GetStatValueByType(gamedataStatType.HitWoundsFactor) < 1.50 {
+    if itemData.GetStatValueByType(gamedataStatType.HitWoundsFactor) < 1.50 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitWoundsFactor, gameStatModifierType.Additive, 1.50);
     }
-    if !IsDefined(itemData) || itemData.GetStatValueByType(gamedataStatType.TriggerWoundedChance) < 0.40 {
+    if itemData.GetStatValueByType(gamedataStatType.TriggerWoundedChance) < 0.40 {
       UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerWoundedChance, gameStatModifierType.Additive, 0.40);
-    }
-    if IsDefined(itemData) && Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader") {
-      if itemData.GetStatValueByType(gamedataStatType.TriggerDismembermentChance) < 0.40 {
-        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.TriggerDismembermentChance, gameStatModifierType.Additive, 0.40);
-      }
-      if itemData.GetStatValueByType(gamedataStatType.HitDismembermentFactor) < 1.50 {
-        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.HitDismembermentFactor, gameStatModifierType.Additive, 1.50);
-      }
-      if itemData.GetStatValueByType(gamedataStatType.CanWeaponIgnoreArmor) < 1.00 {
-        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanWeaponIgnoreArmor, gameStatModifierType.Additive, 1.00);
-      }
-      if itemData.GetStatValueByType(gamedataStatType.CanDealFullDamageToArmored) < 1.00 {
-        UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.CanDealFullDamageToArmored, gameStatModifierType.Additive, 1.00);
-      }
     }
   }
 
@@ -310,6 +368,9 @@ public class UniversalIconicWeaponHelper {
     }
 
     let isSaber: Bool = Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader");
+    if isSaber {
+      UniversalIconicWeaponHelper.EnsureSaberSignaturePackage(statsSystem, statsId, itemData);
+    }
     let quality: Float = itemData.GetStatValueByType(gamedataStatType.Quality);
     let plus: Float = itemData.GetStatValueByType(gamedataStatType.IsItemPlus);
     let upgrades: Float = itemData.GetStatValueByType(gamedataStatType.WasItemUpgraded);
@@ -366,9 +427,6 @@ public class UniversalIconicWeaponHelper {
       statsSystem.AddSavedModifier(statsId, plusCurveMod);
     }
 
-    if isSaber {
-      UniversalIconicWeaponHelper.ApplyCraftedWoundBridge(statsSystem, statsId, itemData);
-    }
   }
 
   private final static func ApplyEvolutionSignatureMechanic(
@@ -506,9 +564,9 @@ public class UniversalIconicWeaponHelper {
       };
     };
 
-    if craftedByPlayer {
+    if craftedByPlayer && isRanged {
       UniversalIconicWeaponHelper.ApplyCraftedHiddenMechanic(statsSystem, statsId);
-    } else {
+    } else if !craftedByPlayer {
       // World/purchased weapons retain one random hidden mechanic.
       let hiddenRoll: Int32 = RandRange(0, 5);
       UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hiddenRoll);
@@ -533,6 +591,7 @@ public class UniversalIconicWeaponHelper {
 
     let craftedByPlayer: Bool = itemData.GetStatValueByType(gamedataStatType.IsItemCrafted) >= 1.00
       || itemData.HasTag(n"CustomRedscriptCraftedWeapon");
+    let craftedRangedByPlayer: Bool = craftedByPlayer && WeaponObject.IsRanged(itemData.GetID());
 
     let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(game);
     if !IsDefined(statsSystem) {
@@ -541,11 +600,26 @@ public class UniversalIconicWeaponHelper {
     let statsId: StatsObjectID = itemData.GetStatsObjectID();
     UniversalIconicWeaponHelper.RepairIconicUpgradeCurvesIfNeeded(statsSystem, statsId, itemData);
 
+    // Older versions stamped the deterministic gun package onto every
+    // crafted weapon.  Remove that package from existing non-Saber melee
+    // weapons, while leaving the Saber signature package authoritative.
     // Existing crafted weapons promoted by the previous versions receive only
     // the missing deterministic package bridge, without rerolling other rolls.
     let currentMarker: Float = itemData.GetStatValueByType(gamedataStatType.IconicItemUpgraded);
+    if craftedByPlayer && !WeaponObject.IsRanged(itemData.GetID())
+      && !Equals(itemData.GetID().GetTDBID(), t"Items.Saber_DarthVader") && currentMarker >= 4.00 {
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.HitDismembermentFactor, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.TriggerDismembermentChance, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.HitWoundsFactor, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.TriggerWoundedChance, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.CanWeaponIgnoreArmor, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.CanDealFullDamageToArmored, true);
+      statsSystem.RemoveAllModifiers(statsId, gamedataStatType.IconicItemUpgraded, true);
+      UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.IconicItemUpgraded, gameStatModifierType.Additive, 1.00);
+      return;
+    }
     if currentMarker >= 1.00 {
-      if craftedByPlayer && currentMarker < 5.00 {
+      if craftedRangedByPlayer && currentMarker < 5.00 {
         if currentMarker >= 4.00 {
           UniversalIconicWeaponHelper.ApplyCraftedWoundBridge(statsSystem, statsId, itemData);
         } else {
@@ -606,8 +680,9 @@ public class UniversalIconicWeaponHelper {
     UniversalIconicWeaponHelper.RollRandomIconicStatPackage(statsSystem, statsId, itemData, craftedByPlayer);
 
     // Save persistent idempotency marker (1.0 = promoted standard weapon,
-    // 2.0 = native Iconic with bonus roll, 5.0 = crafted deterministic hidden package)
-    let markerVal: Float = craftedByPlayer ? 5.00 : (isNativeIconicRecord ? 2.00 : 1.00);
+    // 2.0 = native Iconic with bonus roll, 5.0 = crafted ranged deterministic
+    // hidden package)
+    let markerVal: Float = craftedRangedByPlayer ? 5.00 : (isNativeIconicRecord ? 2.00 : 1.00);
     UniversalIconicWeaponHelper.AddSavedStat(statsSystem, statsId, gamedataStatType.IconicItemUpgraded, gameStatModifierType.Additive, markerVal);
   }
 

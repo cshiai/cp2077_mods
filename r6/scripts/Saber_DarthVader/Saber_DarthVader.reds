@@ -363,6 +363,11 @@ protected cb func OnMeleeHitEvent(evt: ref<MeleeHitEvent>) -> Bool {
   let result: Bool = wrappedMethod(evt);
   if Saber_Is(this) && this.saberOn && IsDefined(evt.instigator) && evt.instigator.IsPlayer() {
     Saber_PlaySfx(this.GetGame(), evt.hitBlocked ? n"saber_block" : n"saber_hit");
+    if !evt.hitBlocked && IsDefined(evt.target) && !evt.target.IsPlayer() {
+      StatusEffectHelper.ApplyStatusEffect(evt.target, t"BaseStatusEffect.Burning", evt.instigator.GetEntityID());
+      StatusEffectHelper.ApplyStatusEffect(evt.target, t"BaseStatusEffect.Electrocuted", evt.instigator.GetEntityID());
+      StatusEffectHelper.ApplyStatusEffect(evt.target, t"BaseStatusEffect.Bleeding", evt.instigator.GetEntityID());
+    }
   }
   return result;
 }
