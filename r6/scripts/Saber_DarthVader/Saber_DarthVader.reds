@@ -5,6 +5,7 @@ module SaberDarthVader
 
 @if(ModuleExists("Audioware"))
 import Audioware.*
+import Codeware.Localization.PlayerGender
 
 public func Saber_Record() -> TweakDBID {
   return t"Items.Saber_DarthVader";
@@ -51,9 +52,7 @@ public func Saber_SfxVariants(id: CName) -> Int32 {
 // otherwise this branch intentionally uses only vanilla Wwise events.
 @if(ModuleExists("Audioware"))
 public func Saber_HasSwbf2Bank(game: GameInstance) -> Bool {
-  // The profile ships its SWBF2 bank alongside this manifest; Audioware
-  // module presence is the supported availability gate for this build.
-  return true;
+  return GameInstance.GetAudioSystemExt(game).Duration(n"saber_on_1") > 0.0;
 }
 
 @if(ModuleExists("Audioware"))
