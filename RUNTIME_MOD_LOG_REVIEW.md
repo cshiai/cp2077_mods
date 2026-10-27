@@ -345,3 +345,17 @@ The empty-stock CyberwareEx reinitialization remains as a save-cache fallback.
 The normalized payload and source compile pass at 09:44:59; no relaunch was
 performed after this change.
 
+## Sandevistan + cyberdeck quickhack follow-up (2026-10-27)
+
+The current source review found a separate state/cache edge: CyberwareEx's
+`EquipmentSystem.IsCyberdeckEquipped` and `CyberwareHelper` relied only on the
+transient `HasCyberdeck` stat. Swapping a Sandevistan and a deck through the
+expanded SystemReplacementCW slots can leave that stat one transaction behind,
+so the quickhack list is rebuilt as if no deck were present. The fix treats the
+equipped `Cyberdeck` item tag as authoritative, retains the stat fallback, and
+clears the cached quickhack list whenever a deck is currently equipped—even
+when the transaction that changed state was the Sandevistan.
+
+The fix compiled at 09:49:27 with no errors/warnings. It requires a full game
+restart before retesting; no new runtime test was launched by the agent.
+
