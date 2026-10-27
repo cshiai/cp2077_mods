@@ -1,0 +1,91 @@
+# SimpleDroneCompanion is deliberately a tiny declarative TweakXL payload.
+# The vanilla Minotaur record remains the visual/AI baseline; these records
+# only provide two deterministic subcharacter IDs and a private weapon clone
+# carrying the fixed dismemberment package.  There is no item, vendor, or
+# settings surface.
+
+SimpleDroneCompanion.TriggerDismembermentChance:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.TriggerDismembermentChance
+  value: 0.40
+
+SimpleDroneCompanion.HitDismembermentFactor:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.HitDismembermentFactor
+  value: 1.50
+
+SimpleDroneCompanion.HitWoundsFactor:
+  $type: gamedataConstantStatModifier_Record
+  modifierType: Additive
+  statType: BaseStats.HitWoundsFactor
+  value: 1.50
+
+SimpleDroneCompanion.WeaponStats:
+  $type: gamedataStatModifierGroup_Record
+  drawBasedOnStatType: False
+  optimiseCombinedModifiers: False
+  saveBasedOnStatType: False
+  statModsLimit: -1
+  relatedModifierGroups: []
+  statModifiers:
+    - SimpleDroneCompanion.TriggerDismembermentChance
+    - SimpleDroneCompanion.HitDismembermentFactor
+    - SimpleDroneCompanion.HitWoundsFactor
+
+# The vanilla Minotaur right HMG is the selected B3 weapon donor.  NPC damage
+# reads its nested npcRPGData stat groups.  Rebuild that package from the
+# stable named HMG base and the Minotaur's named stat groups instead of using
+# an auto-generated `inline0` record, whose identity can change between game
+# updates.  Keeping both paths makes the fixed package effective for the
+# native NPC weapon path without touching player inventory.
+SimpleDroneCompanion.MinotaurWeaponRPGData:
+  $base: Items.Base_HMG_NPC_Data
+  statModifierGroups:
+    - !append-once Items.Minotaur_HMG_Technical_Stats
+    - !append-once Items.Minotaur_HMG_NPC_SmartGun_Stats
+    - !append-once Items.Minotaur_HMG_SmartGun_Projectile_Stats
+    - !append-once Items.Base_HMG_NPC_Damage_Stats
+    - !append-once SimpleDroneCompanion.WeaponStats
+
+SimpleDroneCompanion.MinotaurWeapon:
+  $base: Items.Minotaur_HMG_Right
+  npcRPGData: SimpleDroneCompanion.MinotaurWeaponRPGData
+  statModifierGroups:
+    - !append-once SimpleDroneCompanion.WeaponStats
+
+SimpleDroneCompanion.MinotaurWeaponLeft:
+  $base: Items.Minotaur_HMG_Left
+  npcRPGData: SimpleDroneCompanion.MinotaurWeaponRPGData
+  statModifierGroups:
+    - !append-once SimpleDroneCompanion.WeaponStats
+
+SimpleDroneCompanion.MinotaurWeaponRightEntry:
+  $type: gamedataNPCEquipmentItem_Record
+  item: SimpleDroneCompanion.MinotaurWeapon
+  equipSlot: AttachmentSlots.WeaponRight
+
+SimpleDroneCompanion.MinotaurWeaponLeftEntry:
+  $type: gamedataNPCEquipmentItem_Record
+  item: SimpleDroneCompanion.MinotaurWeaponLeft
+  equipSlot: AttachmentSlots.WeaponLeft
+
+SimpleDroneCompanion.MinotaurEquipment:
+  $type: gamedataNPCEquipmentGroup_Record
+  equipmentItems:
+    - SimpleDroneCompanion.MinotaurWeaponRightEntry
+    - SimpleDroneCompanion.MinotaurWeaponLeftEntry
+
+# C2: declarative subcharacter records.  All balance, appearance, movement,
+# health, and native AI fields are inherited from the current vanilla
+# Minotaur.  Only weapon ownership and corpse/loot behavior are changed.
+Character.SimpleDroneMinotaurA:
+  $base: Character.militech_base_minotaur
+  primaryEquipment: SimpleDroneCompanion.MinotaurEquipment
+  dropsWeaponOnDeath: False
+  lootBagEntity: None
+  baseAttitudeGroup: player
+
+Character.SimpleDroneMinotaurB:
+  $base: Character.SimpleDroneMinotaurA
