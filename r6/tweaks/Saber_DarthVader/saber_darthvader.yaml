@@ -15,9 +15,8 @@ Items.Saber_DarthVader:
   localizedDescription: l"Saber-Vader-Desc"
   quality: Quality.Legendary
   appearanceResourceName: Saber_Vader_Default
-  # Keep native katana events available until the SWBF2 bank is present;
-  # Saber_MuteKatana suppresses them only after Audioware confirms the bank.
-  audioWeaponConfiguration: audio_melee_metadata_katana
+  # The SWBF2 Audioware event bank owns this weapon's audio; avoid katana bleed-through.
+  audioWeaponConfiguration: saber_silent
   visualTags: [ Default ]                   # fixed tag, so the inventory icon name below is known
   tags:
     - !append-once IconicWeapon
