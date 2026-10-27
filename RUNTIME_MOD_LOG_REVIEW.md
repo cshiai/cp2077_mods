@@ -299,6 +299,34 @@ values, no inline TweakDB bases, and no executable CET/Mod Settings/Native
 Settings references. This is static evidence only; it does not replace the
 later in-game smoke test.
 
+## Runtime follow-up: drone input and empty ripperdoc stock (2026-10-27)
+
+The user's 13:15 session produced clean current-build evidence: RED4ext loaded
+eight plugins, Codeware/TweakXL initialized, `scc` registered 28,422 source
+references, and the redscript compile completed. There is no SimpleDrone or
+CyberwareEx runtime exception in the available logs; the only native error is
+the pre-existing Blur Begone painted-window PSO rejection, which falls back to
+vanilla rendering.
+
+Two source-level failure paths were nevertheless identified:
+
+* The original drone hotkey listener was registered only on `PlayerPuppet`.
+  The fixed code registers the same raw-key listener on `SDC_System` after the
+  player attach request and keeps a debounced PlayerPuppet fallback, so F9 and
+  `Left Shoulder + X` reach one guarded toggle instead of relying on one
+  callback target.
+* `Vendor.GetCyberwareForSale()` reads persistent per-save stock. If a save
+  has an empty cached stock, the vanilla ripperdoc controller can show only
+  already-owned uninstall entries until the long restock interval. The fixed
+  `CyberwareEx` wrapper force-reinitializes only an actually empty vendor stock
+  before normal `PrepareVendorItems()` runs; populated vendors and sold-item
+  behavior are untouched.
+
+The fixes compile cleanly at 09:33:16 (input) and 09:29:02 (vendor wrapper)
+before the latest 13:15 runtime session. The game was not relaunched after the
+source fix; the user must restart once and retest the hotkey and ripperdoc
+inventory before runtime success can be claimed.
+
 The companion marker is also excluded from `StreetActivity`'s gang-seed
 candidate filter, preventing a friendly Minotaur from being selected as a
 street-fight participant. That cross-module guard was compile-validated at

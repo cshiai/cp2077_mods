@@ -211,6 +211,9 @@ private func SDC_IssueFollow(puppet: ref<NPCPuppet>, player: ref<PlayerPuppet>) 
 public class SDC_System extends ScriptableSystem {
   private let m_active: Bool;
   private let m_listenerRegistered: Bool;
+  private let m_inputRegistered: Bool;
+  private let m_padModifierHeld: Bool;
+  private let m_lastInputAt: Float;
   private let m_watchdogRunning: Bool;
   private let m_generation: Int32;
   private let m_watchdogGeneration: Int32;
@@ -225,6 +228,7 @@ public class SDC_System extends ScriptableSystem {
 
   private func OnAttach() -> Void {
     this.m_tickID = GetInvalidDelayID();
+    this.m_lastInputAt = -1.0;
     this.ResetSlots();
   }
 
@@ -234,6 +238,7 @@ public class SDC_System extends ScriptableSystem {
     this.m_watchdogRunning = false;
     this.CancelWatchdog();
     this.DeleteAll();
+    this.UnregisterInputListener();
     this.UnregisterDynamicListener();
     this.ResetSlots();
   }
@@ -246,6 +251,7 @@ public class SDC_System extends ScriptableSystem {
     // the slot table, otherwise the next session would orphan dynamic bodies.
     this.DeleteAll();
     this.ResetSlots();
+    this.RegisterInputListener();
     this.RegisterDynamicListener();
   }
 
@@ -255,6 +261,7 @@ public class SDC_System extends ScriptableSystem {
     this.m_watchdogRunning = false;
     this.CancelWatchdog();
     this.DeleteAll();
+    this.UnregisterInputListener();
     this.UnregisterDynamicListener();
     this.ResetSlots();
   }
@@ -294,6 +301,60 @@ public class SDC_System extends ScriptableSystem {
       dynamicEntities.UnregisterListener(SDC_Tag(), this, n"OnSDCDynamicEntityEvent");
     };
     this.m_listenerRegistered = false;
+  }
+
+  private func RegisterInputListener() -> Void {
+    if this.m_inputRegistered {
+      return;
+    };
+    GameInstance.GetCallbackSystem().RegisterCallback(n"Input/Key", this, n"OnSDCKeyInput")
+      .SetLifetime(CallbackLifetime.Session);
+    this.m_inputRegistered = true;
+  }
+
+  private func UnregisterInputListener() -> Void {
+    if !this.m_inputRegistered {
+      return;
+    };
+    GameInstance.GetCallbackSystem().UnregisterCallback(n"Input/Key", this, n"OnSDCKeyInput");
+    this.m_inputRegistered = false;
+    this.m_padModifierHeld = false;
+  }
+
+  private cb func OnSDCKeyInput(event: ref<KeyInputEvent>) -> Void {
+    if !IsDefined(event) {
+      return;
+    };
+    let key: EInputKey = event.GetKey();
+    if Equals(key, EInputKey.IK_Pad_LeftShoulder) {
+      this.m_padModifierHeld = !Equals(event.GetAction(), EInputAction.IACT_Release);
+      return;
+    };
+    if !Equals(event.GetAction(), EInputAction.IACT_Press) {
+      return;
+    };
+    let keyboard: Bool = Equals(key, EInputKey.IK_F9);
+    let controller: Bool = this.m_padModifierHeld && Equals(key, EInputKey.IK_Pad_X_SQUARE);
+    if !keyboard && !controller {
+      return;
+    };
+    if GameInstance.GetSystemRequestsHandler().IsPreGame() {
+      return;
+    };
+    let player: ref<PlayerPuppet> = SDC_Player(this.GetGameInstance());
+    if !SDC_ValidPlayer(player) {
+      return;
+    };
+    this.TryToggleFromInput();
+  }
+
+  public func TryToggleFromInput() -> Void {
+    let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(this.GetGameInstance()));
+    if this.m_lastInputAt >= 0.0 && now - this.m_lastInputAt < 0.25 {
+      return;
+    };
+    this.m_lastInputAt = now;
+    this.Toggle();
   }
 
   public func Toggle() -> Void {
@@ -581,22 +642,9 @@ public class SDC_WatchdogCallback extends DelayCallback {
   }
 }
 
-@addMethod(AIFollowerRole)
-public final func SetSimpleDroneFollowerRef(followerRef: EntityReference) -> Void {
-  this.followerRef = followerRef;
-}
-
-@wrapMethod(PlayerPuppet)
-protected cb func OnGameAttached() -> Bool {
-  let result: Bool = wrappedMethod();
-  GameInstance.GetCallbackSystem().RegisterCallback(n"Input/Key", this, n"OnSDCKeyInput")
-    .SetLifetime(CallbackLifetime.Session);
-  return result;
-}
-
 @wrapMethod(PlayerPuppet)
 protected cb func OnDetach() -> Bool {
-  GameInstance.GetCallbackSystem().UnregisterCallback(n"Input/Key", this, n"OnSDCKeyInput");
+  GameInstance.GetCallbackSystem().UnregisterCallback(n"Input/Key", this, n"OnSDCPlayerKeyInput");
   let system: ref<SDC_System> = SDC_System.Get(this.GetGame());
   if IsDefined(system) {
     system.DeleteAll();
@@ -604,33 +652,43 @@ protected cb func OnDetach() -> Bool {
   return wrappedMethod();
 }
 
+@wrapMethod(PlayerPuppet)
+protected cb func OnGameAttached() -> Bool {
+  let result: Bool = wrappedMethod();
+  GameInstance.GetCallbackSystem().RegisterCallback(n"Input/Key", this, n"OnSDCPlayerKeyInput")
+    .SetLifetime(CallbackLifetime.Session);
+  return result;
+}
+
 @addField(PlayerPuppet)
-private let m_sdcPadModifierHeld: Bool;
+private let m_sdcPlayerPadModifierHeld: Bool;
 
 @addMethod(PlayerPuppet)
-protected cb func OnSDCKeyInput(event: ref<KeyInputEvent>) -> Void {
+protected cb func OnSDCPlayerKeyInput(event: ref<KeyInputEvent>) -> Void {
   if !IsDefined(event) {
     return;
   };
   let key: EInputKey = event.GetKey();
   if Equals(key, EInputKey.IK_Pad_LeftShoulder) {
-    this.m_sdcPadModifierHeld = !Equals(event.GetAction(), EInputAction.IACT_Release);
+    this.m_sdcPlayerPadModifierHeld = !Equals(event.GetAction(), EInputAction.IACT_Release);
     return;
   };
   if !Equals(event.GetAction(), EInputAction.IACT_Press) {
     return;
   };
   let keyboard: Bool = Equals(key, EInputKey.IK_F9);
-  let controller: Bool = this.m_sdcPadModifierHeld && Equals(key, EInputKey.IK_Pad_X_SQUARE);
-  if !keyboard && !controller {
-    return;
-  };
-  if GameInstance.GetSystemRequestsHandler().IsPreGame() || this.IsDead() {
+  let controller: Bool = this.m_sdcPlayerPadModifierHeld && Equals(key, EInputKey.IK_Pad_X_SQUARE);
+  if !keyboard && !controller || GameInstance.GetSystemRequestsHandler().IsPreGame() || this.IsDead() {
     return;
   };
   let system: ref<SDC_System> = SDC_System.Get(this.GetGame());
   if IsDefined(system) {
-    system.Toggle();
+    system.TryToggleFromInput();
   };
+}
+
+@addMethod(AIFollowerRole)
+public final func SetSimpleDroneFollowerRef(followerRef: EntityReference) -> Void {
+  this.followerRef = followerRef;
 }
 

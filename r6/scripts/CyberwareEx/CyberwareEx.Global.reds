@@ -151,7 +151,7 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
         return;
     }
     let itemData: ref<gameItemData> = RPGManager.GetItemData(this.m_owner.GetGame(), this.m_owner, itemID);
-    if !this.IsEquippable(itemData) {
+    if !IsDefined(itemData) || !this.IsEquippable(itemData) {
         return;
     }
     equipmentArea = EquipmentSystem.GetEquipAreaType(itemID);
@@ -171,6 +171,9 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
         this.UnequipWardrobeSet();
     }
     transactionSystem = GameInstance.GetTransactionSystem(this.m_owner.GetGame());
+    if !IsDefined(transactionSystem) {
+        return;
+    }
     this.m_equipPending = true;
     if !this.HandleEquipWeapon(itemID, slotIndex, blockActiveSlotsUpdate, forceEquipWeapon, isLeftWeapon) {
         this.UnequipItem(equipAreaIndex, slotIndex);
@@ -216,7 +219,9 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
     this.UpdateUIBBAreaChanged(equipmentArea, slotIndex);
     oppositeSlotIndex = EquipmentSystemPlayerData.GetOppositeWeaponSlotIndex(slotIndex);
     this.SendPaperdollUpdate(equipArea, true, placementSlot, slotIndex, true);
-    this.SendPaperdollUpdate(equipArea, ItemID.IsValid(equipArea.equipSlots[oppositeSlotIndex].itemID), isLeftWeapon ? t"AttachmentSlots.WeaponRight" : t"AttachmentSlots.WeaponLeft", oppositeSlotIndex, true);
+    if oppositeSlotIndex >= 0 && oppositeSlotIndex < ArraySize(equipArea.equipSlots) {
+        this.SendPaperdollUpdate(equipArea, ItemID.IsValid(equipArea.equipSlots[oppositeSlotIndex].itemID), isLeftWeapon ? t"AttachmentSlots.WeaponRight" : t"AttachmentSlots.WeaponLeft", oppositeSlotIndex, true);
+    }
     i = 0;
     while i < ArraySize(this.m_hotkeys) {
         if this.m_hotkeys[i].IsCompatible(itemData.GetItemType()) || this.m_hotkeys[i].IsCompatible(EquipmentSystem.GetEquipAreaType(itemData.GetID())) {
@@ -475,7 +480,10 @@ private final func HandleAddingPerkLevel(i: Int32, j: Int32) {
         return;
     }
     if Equals(this.m_attributesData[i].unlockedPerks[j].type, gamedataNewPerkType.Tech_Central_Milestone_3) && this.m_attributesData[i].unlockedPerks[j].currLevel == 3 {
-        EquipmentSystem.GetData(this.m_owner).ApplyAreaPowerUps(gamedataEquipmentArea.MusculoskeletalSystemCW);
+        let equipmentData = EquipmentSystem.GetData(this.m_owner);
+        if IsDefined(equipmentData) {
+            equipmentData.ApplyAreaPowerUps(gamedataEquipmentArea.MusculoskeletalSystemCW);
+        }
     }
 }
 
@@ -495,6 +503,9 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
     if this.PlayerLastUsedPad() && Equals(ListenerAction.GetName(action), n"ToggleSprint")
         && Equals(ListenerAction.GetType(action), gameinputActionType.BUTTON_RELEASED) {
         let psmBlackboard = this.GetPlayerStateMachineBlackboard();
+        if !IsDefined(psmBlackboard) {
+            return wrappedMethod(action, consumer);
+        }
         let isFocusMode = Equals(IntEnum<gamePSMVision>(psmBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.Vision)), gamePSMVision.Focus);
         if isFocusMode {
             if QuickHackableHelper.TryToCycleOverclockedState(this) {
@@ -503,7 +514,10 @@ protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsu
                 dpadAction.state = EUIActionState.COMPLETED;
                 dpadAction.successful = true;
 
-                GameInstance.GetUISystem(this.GetGame()).QueueEvent(dpadAction);
+                let uiSystem = GameInstance.GetUISystem(this.GetGame());
+                if IsDefined(uiSystem) {
+                    uiSystem.QueueEvent(dpadAction);
+                }
                 return true;
             }
         }
@@ -592,7 +606,10 @@ private final func ActivateIconicCyberware() {
         dpadAction.state = EUIActionState.COMPLETED;
         dpadAction.successful = activated;
 
-        GameInstance.GetUISystem(this.GetGame()).QueueEvent(dpadAction);
+        let uiSystem = GameInstance.GetUISystem(this.GetGame());
+        if IsDefined(uiSystem) {
+            uiSystem.QueueEvent(dpadAction);
+        }
     }
 }
 
@@ -801,7 +818,17 @@ public final func GetSlotToEquipe(itemID: ItemID) -> Int32 {
 @replaceMethod(gameuiInventoryGameController)
 private final func RefreshPlayerCyberware() {
     let player = this.GetPlayerControlledObject();
+    if !IsDefined(player) {
+        ArrayClear(this.m_cyberwareItems);
+        inkWidgetRef.SetVisible(this.m_cyberwareHolder, false);
+        return;
+    }
     let playerData = EquipmentSystem.GetData(player);
+    if !IsDefined(playerData) {
+        ArrayClear(this.m_cyberwareItems);
+        inkWidgetRef.SetVisible(this.m_cyberwareHolder, false);
+        return;
+    }
 
     let cyberwareAreas: array<gamedataEquipmentArea>;
     ArrayPush(cyberwareAreas, gamedataEquipmentArea.SystemReplacementCW);
@@ -817,26 +844,30 @@ private final func RefreshPlayerCyberware() {
     let i = 0;
     while i < ArraySize(cyberwareAreas) {
         let areaIndex = playerData.GetEquipAreaIndex(cyberwareAreas[i]);
-        let slotIndex = 0;
-        let numberOfSlots = ArraySize(playerData.m_equipment.equipAreas[areaIndex].equipSlots);
-        while slotIndex < numberOfSlots {
-            let itemID = playerData.m_equipment.equipAreas[areaIndex].equipSlots[slotIndex].itemID;
-            if ItemID.IsValid(itemID) {
-                let itemData = this.m_InventoryManager.GetItemDataFromIDInLoadout(itemID);
-                let abilities: array<InventoryItemAbility>;
-                let attachments: array<ref<InventoryItemAttachments>>;
-                this.m_InventoryManager.GetAttachements(player, itemID, itemData.GameItemData, attachments, abilities, false);
-                if ArraySize(attachments) > 0 {
-                    ArrayPush(this.m_cyberwareItems, itemData);
-                    requiredSlotWidgets = ArraySize(this.m_cyberwareItems);
-                    if requiredSlotWidgets == maxSlotWidgets {
-                        break;
+        if areaIndex >= 0 && areaIndex < ArraySize(playerData.m_equipment.equipAreas) {
+            let slotIndex = 0;
+            let numberOfSlots = ArraySize(playerData.m_equipment.equipAreas[areaIndex].equipSlots);
+            while slotIndex < numberOfSlots {
+                let itemID = playerData.m_equipment.equipAreas[areaIndex].equipSlots[slotIndex].itemID;
+                if ItemID.IsValid(itemID) {
+                    let itemData = this.m_InventoryManager.GetItemDataFromIDInLoadout(itemID);
+                    if !InventoryItemData.IsEmpty(itemData) {
+                        let abilities: array<InventoryItemAbility>;
+                        let attachments: array<ref<InventoryItemAttachments>>;
+                        this.m_InventoryManager.GetAttachements(player, itemID, itemData.GameItemData, attachments, abilities, false);
+                        if ArraySize(attachments) > 0 {
+                            ArrayPush(this.m_cyberwareItems, itemData);
+                            requiredSlotWidgets = ArraySize(this.m_cyberwareItems);
+                            if requiredSlotWidgets == maxSlotWidgets {
+                                break;
+                            }
+                        } else {
+                            ArrayPush(dummyItems, itemData);
+                        }
                     }
-                } else {
-                    ArrayPush(dummyItems, itemData);
                 }
+                slotIndex += 1;
             }
-            slotIndex += 1;
         }
         i += 1;
     }
@@ -983,15 +1014,26 @@ public final static func SpawnCommonSlotAsync(logicController: ref<inkLogicContr
 
 @wrapMethod(QuickhacksListGameController)
 protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsumer) -> Bool {
-    if !this.m_isUILocked && !this.GetPlayerControlledObject().GetHudManager().IsHackingMinigameActive() {
+    let player = this.GetPlayerControlledObject();
+    if !IsDefined(player) {
+        return wrappedMethod(action, consumer);
+    }
+    let hudManager = player.GetHudManager();
+    if !IsDefined(hudManager) {
+        return wrappedMethod(action, consumer);
+    }
+    if !this.m_isUILocked && !hudManager.IsHackingMinigameActive() {
         if ListenerAction.IsButtonJustReleased(action) && ListenerAction.IsAction(action, n"context_help") {
-            if QuickHackableHelper.TryToCycleOverclockedState(this.GetPlayerControlledObject()) {
+            if QuickHackableHelper.TryToCycleOverclockedState(player) {
                 let dpadAction = new DPADActionPerformed();
                 dpadAction.action = EHotkey.LBRB;
                 dpadAction.state = EUIActionState.COMPLETED;
                 dpadAction.successful = true;
 
-                GameInstance.GetUISystem(this.GetPlayerControlledObject().GetGame()).QueueEvent(dpadAction);
+                let uiSystem = GameInstance.GetUISystem(player.GetGame());
+                if IsDefined(uiSystem) {
+                    uiSystem.QueueEvent(dpadAction);
+                }
             }
 
             return false;
@@ -1009,8 +1051,15 @@ private final func ToggleTutorialOverlay() {
 @replaceMethod(RadialWheelController)
 private final func GetValidCombatCyberware() -> InventoryItemData {
     let player = this.GetPlayer();
-    let itemID = EquipmentSystem.GetData(player).GetActiveMeleeWare();
     let itemData: InventoryItemData;
+    if !IsDefined(player) {
+        return itemData;
+    }
+    let equipmentData = EquipmentSystem.GetData(player);
+    if !IsDefined(equipmentData) {
+        return itemData;
+    }
+    let itemID = equipmentData.GetActiveMeleeWare();
 
     if ItemID.IsValid(itemID) {
         itemData = this.inventoryManager.GetItemDataFromIDInLoadout(itemID);
@@ -1066,7 +1115,34 @@ private final func Init() {
     wrappedMethod();
 
     this.m_overrideManager = new OverrideManager();
-    this.m_overrideManager.Initialize(EquipmentSystem.GetData(this.m_player));
+    let equipmentData = IsDefined(this.m_player) ? EquipmentSystem.GetData(this.m_player) : null;
+    this.m_overrideManager.Initialize(equipmentData);
+}
+
+// A vendor's stock is persistent in the save.  If a previous profile emptied
+// or cached a ripperdoc with no stock, the vanilla controller will faithfully
+// display only already-owned items and never rebuild the catalog until the
+// long restock timer expires.  Reinitialize only the empty-stock case before
+// the normal UI preparation; populated vendors, sold items, and ordinary
+// vendor behavior remain untouched.
+@wrapMethod(RipperDocGameController)
+private final func PrepareVendorItems() {
+    let vendorObject: wref<GameObject> = IsDefined(this.m_VendorDataManager)
+        ? this.m_VendorDataManager.GetVendorInstance()
+        : null;
+    if IsDefined(vendorObject) {
+        let market: ref<MarketSystem> = MarketSystem.GetInstance(vendorObject.GetGame());
+        if IsDefined(market) {
+            let vendor: ref<Vendor> = market.GetVendor(vendorObject);
+            if IsDefined(vendor) {
+                let stock: array<SItemStack> = vendor.GetStock();
+                if ArraySize(stock) == 0 {
+                    vendor.OnRestored(vendorObject.GetGame(), true);
+                }
+            }
+        }
+    }
+    wrappedMethod();
 }
 
 @wrapMethod(RipperDocGameController)
@@ -1199,8 +1275,18 @@ private final func IsEquipmentAreaRequiringPerk(equipmentArea: gamedataEquipment
 @addMethod(RipperDocGameController)
 private final func UpdateMoney() {
     let blackBoardDef = GetAllBlackboardDefs().UI_Vendor;
-    let blackBoard = GameInstance.GetBlackboardSystem(this.GetPlayerControlledObject().GetGame()).Get(blackBoardDef);
-    blackBoard.SignalVariant(blackBoardDef.VendorData);
+        let player = this.GetPlayerControlledObject();
+        if !IsDefined(player) {
+            return;
+        }
+        let blackboardSystem = GameInstance.GetBlackboardSystem(player.GetGame());
+        if !IsDefined(blackboardSystem) {
+            return;
+        }
+        let blackBoard = blackboardSystem.Get(blackBoardDef);
+        if IsDefined(blackBoard) {
+            blackBoard.SignalVariant(blackBoardDef.VendorData);
+        }
 }
 
 @wrapMethod(RipperdocMetersArmor)
