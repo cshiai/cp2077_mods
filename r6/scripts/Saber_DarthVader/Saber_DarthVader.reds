@@ -50,11 +50,22 @@ public func Saber_SfxVariants(id: CName) -> Int32 {
 // Audioware is optional.  When installed the supplied SWBF2 events are used;
 // otherwise this branch intentionally uses only vanilla Wwise events.
 @if(ModuleExists("Audioware"))
+public func Saber_HasSwbf2Bank(game: GameInstance) -> Bool {
+  // The profile ships its SWBF2 bank alongside this manifest; Audioware
+  // module presence is the supported availability gate for this build.
+  return true;
+}
+
+@if(ModuleExists("Audioware"))
 public func Saber_PlaySfx(game: GameInstance, id: CName) -> Void {
   let player = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject();
   if !IsDefined(player) { return; }
-  let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id) + 1)));
-  GameInstance.GetAudioSystem(game).Play(variant, player.GetEntityID());
+  if Saber_HasSwbf2Bank(game) {
+    let variant = StringToName(NameToString(id) + "_" + IntToString(RandRange(1, Saber_SfxVariants(id) + 1)));
+    GameInstance.GetAudioSystem(game).Play(variant, player.GetEntityID());
+  } else {
+    GameObject.PlaySoundEvent(player, Saber_FallbackSfx(id));
+  }
 }
 
 @if(ModuleExists("Audioware"))
@@ -62,18 +73,22 @@ public func Saber_Hum(game: GameInstance, on: Bool) -> Void {
   let player = GameInstance.GetPlayerSystem(game).GetLocalPlayerMainGameObject();
   if !IsDefined(player) { return; }
   let audio = GameInstance.GetAudioSystem(game);
-  if on { audio.Play(n"saber_hum_1", player.GetEntityID()); } else { audio.Stop(n"saber_hum_1", player.GetEntityID()); }
+  if Saber_HasSwbf2Bank(game) {
+    if on { audio.Play(n"saber_hum_1", player.GetEntityID()); } else { audio.Stop(n"saber_hum_1", player.GetEntityID()); }
+  } else {
+    if on { audio.Play(n"w_melee_katana_handling_soft", player.GetEntityID()); } else { audio.Stop(n"w_melee_katana_handling_soft", player.GetEntityID()); }
+  }
 }
 
 @if(ModuleExists("Audioware"))
-public func Saber_MuteKatana(mute: Bool) -> Void {
+public func Saber_MuteKatana(game: GameInstance, mute: Bool) -> Void {
+  if mute && !Saber_HasSwbf2Bank(game) { return; }
   let manager = new AudioEventManager();
   for name in Saber_KatanaEvents() {
     if mute { manager.Mute(name); } else { manager.Unmute(name); }
   }
 }
 
-@if(!ModuleExists("Audioware"))
 public func Saber_FallbackSfx(id: CName) -> CName {
   switch id {
     case n"saber_on": return n"w_melee_katana_equip";
@@ -106,10 +121,9 @@ public func Saber_Hum(game: GameInstance, on: Bool) -> Void {
   }
 }
 
-// Audioware is absent in the active profile; vanilla katana events are already
-// selected by TweakDB and this intentionally remains a no-op.
+// Without Audioware there is no mute manager; native katana events remain active.
 @if(!ModuleExists("Audioware"))
-public func Saber_MuteKatana(mute: Bool) -> Void {}
+public func Saber_MuteKatana(game: GameInstance, mute: Bool) -> Void {}
 
 public func Saber_KatanaEvents() -> array<CName> {
   return [
@@ -237,7 +251,7 @@ protected cb func OnSetActiveWeapon(evt: ref<SetActiveWeaponEvent>) -> Bool {
   let result: Bool = wrappedMethod(evt);
   if Saber_Is(this) {
     Saber_SetPlayerLitFlag(this, false);
-    Saber_MuteKatana(true);
+    Saber_MuteKatana(this.GetGame(), true);
     this.saberOn = false;
     this.saberStage = 0;
     Saber_ApplyStage(this);
@@ -257,7 +271,7 @@ protected cb func OnRemoveActiveWeapon(evt: ref<RemoveActiveWeaponEvent>) -> Boo
     this.saberOn = false;
     this.saberStage = 0;
     Saber_ApplyStage(this);
-    Saber_MuteKatana(false);
+    Saber_MuteKatana(this.GetGame(), false);
   }
   return result;
 }

@@ -1,0 +1,142 @@
+version: 1.0.0
+sfx:
+  saber_block_1:
+    file: saber_block_1.wav
+    usage: in-memory
+  saber_block_2:
+    file: saber_block_2.wav
+    usage: in-memory
+  saber_block_3:
+    file: saber_block_3.wav
+    usage: in-memory
+  saber_block_4:
+    file: saber_block_4.wav
+    usage: in-memory
+  saber_block_5:
+    file: saber_block_5.wav
+    usage: in-memory
+  saber_block_6:
+    file: saber_block_6.wav
+    usage: in-memory
+  saber_block_7:
+    file: saber_block_7.wav
+    usage: in-memory
+  saber_deflect_1:
+    file: saber_deflect_1.wav
+    usage: in-memory
+  saber_deflect_10:
+    file: saber_deflect_10.wav
+    usage: in-memory
+  saber_deflect_11:
+    file: saber_deflect_11.wav
+    usage: in-memory
+  saber_deflect_12:
+    file: saber_deflect_12.wav
+    usage: in-memory
+  saber_deflect_13:
+    file: saber_deflect_13.wav
+    usage: in-memory
+  saber_deflect_14:
+    file: saber_deflect_14.wav
+    usage: in-memory
+  saber_deflect_2:
+    file: saber_deflect_2.wav
+    usage: in-memory
+  saber_deflect_3:
+    file: saber_deflect_3.wav
+    usage: in-memory
+  saber_deflect_4:
+    file: saber_deflect_4.wav
+    usage: in-memory
+  saber_deflect_5:
+    file: saber_deflect_5.wav
+    usage: in-memory
+  saber_deflect_6:
+    file: saber_deflect_6.wav
+    usage: in-memory
+  saber_deflect_7:
+    file: saber_deflect_7.wav
+    usage: in-memory
+  saber_deflect_8:
+    file: saber_deflect_8.wav
+    usage: in-memory
+  saber_deflect_9:
+    file: saber_deflect_9.wav
+    usage: in-memory
+  saber_hit_1:
+    file: saber_hit_1.wav
+    usage: in-memory
+  saber_hit_2:
+    file: saber_hit_2.wav
+    usage: in-memory
+  saber_hit_3:
+    file: saber_hit_3.wav
+    usage: in-memory
+  saber_hit_4:
+    file: saber_hit_4.wav
+    usage: in-memory
+  saber_hit_5:
+    file: saber_hit_5.wav
+    usage: in-memory
+  saber_hit_6:
+    file: saber_hit_6.wav
+    usage: in-memory
+  saber_hit_7:
+    file: saber_hit_7.wav
+    usage: in-memory
+  saber_hum_1:
+    file: saber_hum_1.wav
+    usage: in-memory
+    settings:
+      loop: true
+  saber_off_1:
+    file: saber_off_1.wav
+    usage: in-memory
+  saber_off_2:
+    file: saber_off_2.wav
+    usage: in-memory
+  saber_off_3:
+    file: saber_off_3.wav
+    usage: in-memory
+  saber_off_4:
+    file: saber_off_4.wav
+    usage: in-memory
+  saber_on_1:
+    file: saber_on_1.wav
+    usage: in-memory
+  saber_on_2:
+    file: saber_on_2.wav
+    usage: in-memory
+  saber_on_3:
+    file: saber_on_3.wav
+    usage: in-memory
+  saber_on_4:
+    file: saber_on_4.wav
+    usage: in-memory
+  saber_swing_1:
+    file: saber_swing_1.wav
+    usage: in-memory
+  saber_swing_2:
+    file: saber_swing_2.wav
+    usage: in-memory
+  saber_swing_3:
+    file: saber_swing_3.wav
+    usage: in-memory
+  saber_swing_4:
+    file: saber_swing_4.wav
+    usage: in-memory
+  saber_swing_5:
+    file: saber_swing_5.wav
+    usage: in-memory
+  saber_swing_6:
+    file: saber_swing_6.wav
+    usage: in-memory
+  saber_swing_7:
+    file: saber_swing_7.wav
+    usage: in-memory
+  saber_swing_8:
+    file: saber_swing_8.wav
+    usage: in-memory
+  saber_swing_9:
+    file: saber_swing_9.wav
+    usage: in-memory
