@@ -30,10 +30,9 @@ public abstract class NPCFilter {
   }
 
   public static func QualifyingRarity(rarity: gamedataNPCRarity) -> Bool {
-    return Equals(rarity, gamedataNPCRarity.Elite)
-      || Equals(rarity, gamedataNPCRarity.Rare)
-      || Equals(rarity, gamedataNPCRarity.Boss)
-      || Equals(rarity, gamedataNPCRarity.MaxTac);
+    // Living limb survival is intentionally one fit for all human enemy
+    // rarities. Keep this compatibility seam for diagnostics/callers.
+    return true;
   }
 }
 
@@ -72,12 +71,11 @@ public final func CLS_IsMechanical() -> Bool {
 @addMethod(NPCPuppet)
 public final func CLS_IsEligibleHumanTarget() -> Bool {
   return !this.CLS_IsMechanical() && this.IsHuman()
-    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !this.IsCrowd()
-    && NPCFilter.QualifyingRarity(this.GetNPCRarity());
+    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !this.IsCrowd();
 }
 
 // Darth Vader's lightsaber is an explicit deterministic exception to the
-// rarity/limb-shape gates above. It applies only to living, non-mechanical
+// limb-shape gates above. It applies only to living, non-mechanical
 // humanoid NPCs and never to V or vendors.
 @addMethod(NPCPuppet)
 public final func CLS_IsEligibleSaberTarget() -> Bool {
@@ -222,6 +220,9 @@ protected final func TryTriggerBodyPerkDismembement(remainingHealth: Float) -> B
 @wrapMethod(HitReactionComponent)
 protected final func ProcessWoundsAndDismemberment() -> Void {
   wrappedMethod();
+  if !IsDefined(this.m_ownerNPC) || !IsDefined(this.m_attackData) {
+    return;
+  }
   if IsDefined(this.m_ownerNPC) {
     this.m_ownerNPC.cls_forceSurviveCurrentLimbHit = false;
   }
@@ -231,7 +232,11 @@ protected final func ProcessWoundsAndDismemberment() -> Void {
     || NotEquals(this.m_attackData.GetAttackType(), gamedataAttackType.Ranged) {
     return;
   }
-  let zone = HitShapeUserDataBase.GetHitReactionZone(this.GetHitShapeUserData());
+  let shape = this.GetHitShapeUserData();
+  if !IsDefined(shape) {
+    return;
+  }
+  let zone = HitShapeUserDataBase.GetHitReactionZone(shape);
   if NotEquals(zone, EHitReactionZone.LegLeft) && NotEquals(zone, EHitReactionZone.LegRight) {
     return;
   }
@@ -301,9 +306,6 @@ private final func CLS_LimbBlockReason() -> CName {
   if npc.CLS_IsMechanical() { return n"mechanical_npc"; }
   if !npc.IsHuman() || npc.IsCharacterCivilian() || npc.IsPlayerCompanion() || npc.IsCrowd() {
     return n"excluded_npc_type";
-  }
-  if !NPCFilter.QualifyingRarity(npc.GetNPCRarity()) {
-    return n"not_elite_rare_boss_maxtac";
   }
   if !this.m_isAlive || !ScriptedPuppet.IsAlive(npc) || npc.IsDead() || npc.IsAboutToDie() {
     return n"dead_dying_defeated_or_killing_blow";
@@ -383,7 +385,11 @@ private final func CLS_LimbBlockReason() -> CName {
   // GetTotalFrameDamage is scaled REACTION damage, not pending HP loss.
   // Do not subtract it from health: the native death/defeat/killing-blow flags
   // above identify fatal hits without treating reaction damage as health damage.
-  let health = GameInstance.GetStatPoolsSystem(npc.GetGame()).GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false);
+  let statPools = GameInstance.GetStatPoolsSystem(npc.GetGame());
+  if !IsDefined(statPools) {
+    return n"missing_stat_pool";
+  }
+  let health = statPools.GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false);
   if health <= 0.0 {
     return n"no_health_remaining";
   }

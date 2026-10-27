@@ -1,6 +1,17 @@
 // RelentlessLiveDismember by Cazanu - crawl40/50s, pain60s, or seated shooting25s.
 module CazanuLimbSurvival
 
+// Workspot ownership is an optional runtime service during loading/unloading.
+// Treat a missing service as occupied so wound/death controllers fail closed
+// rather than dereferencing a null native interface or stealing a pose.
+public func CLS_WorkspotOwnsActor(npc: wref<NPCPuppet>) -> Bool {
+  if !IsDefined(npc) {
+    return true;
+  }
+  let workspots = GameInstance.GetWorkspotSystem(npc.GetGame());
+  return !IsDefined(workspots) || workspots.IsActorInWorkspot(npc);
+}
+
 // Entity event service is fenced from the physics flush phase. Keep physical
 // obstacle rays here, as with CrawlBlood's contact event, never in a system.
 public class CLS_CrawlObstacleProbe extends Event {
@@ -275,9 +286,11 @@ private final func CLS_PrepareCrawlDamageDeath() -> Void {
     || this.cls_groundedTimedDeath || this.cls_crawlDeadlinePreempted
     || this.CLS_WoundDeadlinePreempted() || this.IsRagdolling()
     || (!this.IsDead() && !this.IsAboutToDie())
-    || !this.GetPuppetStateBlackboard().GetBool(GetAllBlackboardDefs().PuppetState.SlotAnimationInProgress)
-    || GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this)
+    || CLS_WorkspotOwnsActor(this)
     || !ScriptedPuppet.CanRagdoll(this) { return; }
+  let puppetState = this.GetPuppetStateBlackboard();
+  if !IsDefined(puppetState)
+    || !puppetState.GetBool(GetAllBlackboardDefs().PuppetState.SlotAnimationInProgress) { return; }
   this.cls_crawlDamageDeath = true;
   this.SetSkipDeathAnimation(true);
   if Diagnostics.Enabled() {
@@ -297,7 +310,7 @@ public final func CLS_IsDirectGroundedDeath() -> Bool {
   return (this.cls_crawlDamageDeath || timedWithoutHeldPose) && this.IsAttached()
     && !this.cls_crawlDeadlinePreempted && !this.CLS_WoundDeadlinePreempted()
     && (this.IsDead() || this.IsAboutToDie())
-    && !GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this)
+    && !CLS_WorkspotOwnsActor(this)
     && ScriptedPuppet.CanRagdoll(this);
 }
 
@@ -330,7 +343,10 @@ private final func CLS_ActivateGroundedDeathRagdoll(attempts: Int32) -> Void {
   }
   let verify = new CLS_GroundedDeathRagdollEvent();
   verify.attempts = attempts + 1;
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, verify, 0.10, true);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    delay.DelayEvent(this, verify, 0.10, true);
+  }
 }
 
 @addMethod(NPCPuppet)
@@ -375,13 +391,17 @@ private final func CLS_CanProbeCrawlObstacle() -> Bool {
   return this.cls_legWoundMode == 1 && this.cls_crawlMotionStarted
     && !this.cls_crawlDeadlinePreempted && WoundTiming.Eligible(this)
     && !this.CLS_WoundDeadlinePreempted()
-    && !GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this);
+    && !CLS_WorkspotOwnsActor(this);
 }
 
 @addMethod(NPCPuppet)
 private final func CLS_QueueCrawlObstacleProbe() -> Void {
   if this.cls_crawlProbePending || !this.CLS_CanProbeCrawlObstacle() { return; }
-  let now = EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGame()).GetSimTime());
+  let timeSystem = GameInstance.GetTimeSystem(this.GetGame());
+  if !IsDefined(timeSystem) {
+    return;
+  }
+  let now = EngineTime.ToFloat(timeSystem.GetSimTime());
   if this.cls_crawlProbeQueuedAt > 0.0
     && now - this.cls_crawlProbeQueuedAt < WoundTiming.ObstacleProbeCooldownSeconds() { return; }
   let center = this.GetWorldPosition();
@@ -398,7 +418,7 @@ private final func CLS_QueueCrawlObstacleProbe() -> Void {
   evt.generation = this.cls_crawlProbeGeneration;
   evt.center = center;
   evt.forward = Vector4.Normalize(forward);
-  evt.time = EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGame()).GetSimTime());
+  evt.time = now;
   this.QueueEvent(evt);
 }
 
@@ -512,7 +532,7 @@ private final func CLS_CrawlNearbyObstacle(out reason: CName) -> Bool {
 public final func CLS_CrawlBlockedTooLong(context: ScriptExecutionContext) -> Bool {
   if this.cls_legWoundMode != 1 || !WoundTiming.Eligible(this)
     || this.CLS_WoundDeadlinePreempted()
-    || GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this) {
+    || CLS_WorkspotOwnsActor(this) {
     this.cls_crawlMotionStarted = false;
     this.cls_crawlMotionObstructed = false;
     this.CLS_ResetCrawlProbe();
@@ -595,7 +615,10 @@ public final func CLS_SelectLegWound() -> TweakDBID {
         ? WoundTiming.CrawlShortSeconds() : WoundTiming.CrawlLongSeconds();
     }
     if Diagnostics.Enabled() {
-      let firstItem = GameInstance.GetTransactionSystem(this.GetGame()).GetItemInSlot(this, t"AttachmentSlots.WeaponRight");
+      let transaction = GameInstance.GetTransactionSystem(this.GetGame());
+      let firstItem = IsDefined(transaction)
+        ? transaction.GetItemInSlot(this, t"AttachmentSlots.WeaponRight")
+        : null;
       Diagnostics.Write(s"LEG_OUTCOME npc=\(EntityID.ToDebugString(this.GetEntityID())) firstWeapon=\(SeatedCombat.SlotDiagnostic(firstItem)) gunGroup=\(armed) roll=\(roll) mode=\(this.cls_legWoundMode) (1=crawl40or50,2=pain60,3=shoot25) seconds=\(this.CLS_LegWoundSeconds()) selectedOnce=true");
     }
   }
@@ -780,7 +803,12 @@ private final func PlayAnimationOnSlot(context: ScriptExecutionContext, animFeat
     wrappedMethod(context, animFeature);
     return;
   }
-  let proxy = npc.GetAIControllerComponent().GetActionAnimationScriptProxy();
+  let ai = npc.GetAIControllerComponent();
+  if !IsDefined(ai) {
+    wrappedMethod(context, animFeature);
+    return;
+  }
+  let proxy = ai.GetActionAnimationScriptProxy();
   if !IsDefined(proxy) {
     wrappedMethod(context, animFeature);
     return;
@@ -789,7 +817,12 @@ private final func PlayAnimationOnSlot(context: ScriptExecutionContext, animFeat
   let slot = animData.AnimSlot();
   let slideParams: ActionAnimationSlideParams;
   let slideTarget: wref<GameObject>;
-  npc.GetPuppetStateBlackboard().SetBool(GetAllBlackboardDefs().PuppetState.SlotAnimationInProgress, true);
+  let puppetState = npc.GetPuppetStateBlackboard();
+  if !IsDefined(puppetState) {
+    wrappedMethod(context, animFeature);
+    return;
+  }
+  puppetState.SetBool(GetAllBlackboardDefs().PuppetState.SlotAnimationInProgress, true);
   proxy.Stop();
   let clipSeconds = proxy.GetPhaseDuration(animData.AnimFeature(), animFeature);
   this.CalculatePhaseDuration(context, clipSeconds);
@@ -838,7 +871,7 @@ public static func Update(context: ScriptExecutionContext, record: wref<AISubAct
     // controller, so permanently release this crawler's terminal deadline.
     // This excludes both the stuck finish and the chosen timed finish.
     if npc.cls_legWoundMode == 1 && (npc.cls_crawlDeadlinePreempted
-      || GameInstance.GetWorkspotSystem(npc.GetGame()).IsActorInWorkspot(npc)) {
+      || CLS_WorkspotOwnsActor(npc)) {
       npc.cls_crawlDeadlinePreempted = true;
       npc.cls_crawlMotionStarted = false;
       npc.cls_crawlMotionObstructed = false;

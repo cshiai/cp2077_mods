@@ -98,10 +98,13 @@ public abstract class ArmCombat {
         return empty;
       }
     }
-    if GameInstance.GetStatsSystem(npc.GetGame()).GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), hand) <= 0.0 {
+    let stats = GameInstance.GetStatsSystem(npc.GetGame());
+    let transaction = GameInstance.GetTransactionSystem(npc.GetGame());
+    if !IsDefined(stats) || !IsDefined(transaction)
+      || stats.GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), hand) <= 0.0 {
       return empty;
     }
-    let weapon = GameInstance.GetTransactionSystem(npc.GetGame()).GetItemInSlot(npc, slot) as WeaponObject;
+    let weapon = transaction.GetItemInSlot(npc, slot) as WeaponObject;
     if IsDefined(weapon) && weapon.IsRanged() {
       // Native WoundedShoot uses HandgunRight/LeftArmLookatCondition, whose
       // equipped-item predicates accept handgun and revolver types only. A
@@ -290,7 +293,11 @@ public final func CLS_QueueArmWeaponCleanup() -> Void {
 @addMethod(NPCPuppet)
 private final func CLS_DropMissingHandWeapon(slot: TweakDBID, attempt: Int32) -> Bool {
   if !ArmCombat.MissingWeaponSlot(this, slot) { return false; }
-  let item = GameInstance.GetTransactionSystem(this.GetGame()).GetItemInSlot(this, slot);
+  let transaction = GameInstance.GetTransactionSystem(this.GetGame());
+  if !IsDefined(transaction) {
+    return false;
+  }
+  let item = transaction.GetItemInSlot(this, slot);
   if !IsDefined(item) || !ArmCombat.IsHandheldItem(item.GetItemID()) { return false; }
   let weapon = item as WeaponObject;
   if IsDefined(weapon) && weapon.IsRanged() { AIWeapon.OnStopShooting(weapon, 0.0); }
@@ -318,7 +325,10 @@ protected cb func OnCLS_ArmWeaponCleanupEvent(evt: ref<CLS_ArmWeaponCleanupEvent
   if (left || right) && evt.attempts < 3 {
     let verify = new CLS_ArmWeaponCleanupEvent();
     verify.attempts = evt.attempts + 1;
-    GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, verify, 0.10, true);
+    let delay = GameInstance.GetDelaySystem(this.GetGame());
+    if IsDefined(delay) {
+      delay.DelayEvent(this, verify, 0.10, true);
+    }
   } else {
     this.cls_armWeaponCleanupQueued = false;
     if evt.attempts > 0 && Diagnostics.Enabled() && this.cls_armWeaponCleanupLogs < 16 {

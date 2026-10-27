@@ -135,10 +135,13 @@ public abstract class SeatedCombat {
     if !IsDefined(npc) || !npc.IsAttached() || ArmCombat.MissingRight(npc) {
       return empty;
     }
-    if GameInstance.GetStatsSystem(npc.GetGame()).GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatType.CanUseRightHand) <= 0.0 {
+    let stats = GameInstance.GetStatsSystem(npc.GetGame());
+    let transaction = GameInstance.GetTransactionSystem(npc.GetGame());
+    if !IsDefined(stats) || !IsDefined(transaction)
+      || stats.GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatType.CanUseRightHand) <= 0.0 {
       return empty;
     }
-    let gun = GameInstance.GetTransactionSystem(npc.GetGame()).GetItemInSlot(npc, t"AttachmentSlots.WeaponRight") as WeaponObject;
+    let gun = transaction.GetItemInSlot(npc, t"AttachmentSlots.WeaponRight") as WeaponObject;
     if IsDefined(gun) && gun.IsAttached() && gun.IsRanged() {
       let kind = WeaponObject.GetWeaponType(gun.GetItemID());
       if SeatedCombat.IsSeatedGunType(kind) {
@@ -158,10 +161,15 @@ public abstract class SeatedCombat {
   public static func GunRejection(npc: wref<NPCPuppet>) -> CName {
     if !WoundTiming.Eligible(npc) { return n"shoot_unavailable_wound_ineligible"; }
     if ArmCombat.MissingRight(npc) { return n"shoot_unavailable_right_arm_missing"; }
-    if GameInstance.GetStatsSystem(npc.GetGame()).GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatType.CanUseRightHand) <= 0.0 {
+    let stats = GameInstance.GetStatsSystem(npc.GetGame());
+    let transaction = GameInstance.GetTransactionSystem(npc.GetGame());
+    if !IsDefined(stats) || !IsDefined(transaction) {
+      return n"shoot_unavailable_system_missing";
+    }
+    if stats.GetStatValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatType.CanUseRightHand) <= 0.0 {
       return n"shoot_unavailable_right_hand_disabled";
     }
-    let item = GameInstance.GetTransactionSystem(npc.GetGame()).GetItemInSlot(npc, t"AttachmentSlots.WeaponRight");
+    let item = transaction.GetItemInSlot(npc, t"AttachmentSlots.WeaponRight");
     if !IsDefined(item) { return n"shoot_unavailable_right_slot_empty"; }
     let gun = item as WeaponObject;
     if !IsDefined(gun) { return n"shoot_unavailable_right_item_not_weapon"; }
@@ -298,7 +306,7 @@ public final func CLS_TryStartSeated(context: ScriptExecutionContext) -> Bool {
   this.cls_seatedAttempted = true;
   if (this.cls_legWoundMode != 2 && this.cls_legWoundMode != 3)
     || !TweakDBInterface.GetBool(t"CazanuLimbSurvival.SeatedCombatReady", false)
-    || GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this) {
+    || CLS_WorkspotOwnsActor(this) {
     return false;
   }
   this.cls_seatedComponent = this.FindComponentByName(n"CLS_SeatedWorkspot") as WorkspotResourceComponent;
@@ -308,6 +316,11 @@ public final func CLS_TryStartSeated(context: ScriptExecutionContext) -> Bool {
     return true;
   }
   let depot = GameInstance.GetResourceDepot();
+  if !IsDefined(depot) {
+    this.CLS_KeepWoundDeadline(context, n"resource_depot_missing_native_fallback");
+    this.CLS_QueueSeatedTick();
+    return true;
+  }
   if this.cls_legWoundMode == 2 {
     let body = this.CLS_GroundPainBody();
     this.cls_seatedPainPath = SeatedCombat.PainPath(body);
@@ -361,13 +374,20 @@ public final func CLS_TryStartSeated(context: ScriptExecutionContext) -> Bool {
 private final func CLS_QueueSeatedTick() -> Void {
   // UI/workspot state does not need a 10 Hz poll; 6.7 Hz keeps aim/reload
   // transitions responsive while reducing per-survivor event pressure.
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, new CLS_SeatedTickEvent(), 0.15, true);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    delay.DelayEvent(this, new CLS_SeatedTickEvent(), 0.15, true);
+  }
 }
 
 @addMethod(NPCPuppet)
 private final func CLS_LogSeated(eventName: CName) -> Void {
   if Diagnostics.Enabled() {
     let system = GameInstance.GetWorkspotSystem(this.GetGame());
+    if !IsDefined(system) {
+      Diagnostics.Write(s"SEATED npc=\(EntityID.ToDebugString(this.GetEntityID())) event=(eventName) workspot_system_missing");
+      return;
+    }
     let instance = system.GetWorkspotInstance(this.GetEntityID());
     let info = system.GetExtendedInfo(this);
     let anim: CName;
@@ -491,9 +511,11 @@ private final func CLS_SeatedAmmoReady(context: ScriptExecutionContext, now: Flo
 
 @addMethod(NPCPuppet)
 private final func CLS_CanUseSeatedSupportHand() -> Bool {
-  return !ArmCombat.MissingLeft(this)
-    && GameInstance.GetStatsSystem(this.GetGame()).GetStatValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatType.CanUseLeftHand) > 0.0
-    && !IsDefined(GameInstance.GetTransactionSystem(this.GetGame()).GetItemInSlot(this, t"AttachmentSlots.WeaponLeft"));
+  let stats = GameInstance.GetStatsSystem(this.GetGame());
+  let transaction = GameInstance.GetTransactionSystem(this.GetGame());
+  return IsDefined(stats) && IsDefined(transaction) && !ArmCombat.MissingLeft(this)
+    && stats.GetStatValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatType.CanUseLeftHand) > 0.0
+    && !IsDefined(transaction.GetItemInSlot(this, t"AttachmentSlots.WeaponLeft"));
 }
 
 @addMethod(NPCPuppet)
@@ -545,7 +567,10 @@ private final func CLS_StopSeatedSupportHand() -> Void {
     // A late inert Add must also lose to the native default state.
     release.target.request.priority = 2147483647;
   }
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEventNextFrame(this, release);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    delay.DelayEventNextFrame(this, release);
+  }
 }
 
 @addMethod(NPCPuppet)
@@ -560,7 +585,10 @@ protected cb func OnCLS_SeatedSupportReleaseEvent(evt: ref<CLS_SeatedSupportRele
   }
   if evt.attempts < 8 {
     evt.attempts += 1;
-    GameInstance.GetDelaySystem(this.GetGame()).DelayEventNextFrame(this, evt);
+    let delay = GameInstance.GetDelaySystem(this.GetGame());
+    if IsDefined(delay) {
+      delay.DelayEventNextFrame(this, evt);
+    }
   } else if Diagnostics.Enabled() {
     Diagnostics.Write(s"SEATED_SUPPORT npc=\(EntityID.ToDebugString(this.GetEntityID())) event=release_unassigned_inert nativeId=\(evt.target.outIKTargetRef.id)");
   }
@@ -618,7 +646,7 @@ private final func CLS_IsOwnedGroundIdle() -> Bool {
     || !IsNameValid(this.cls_seatedOwnedTag)
     || !Equals(this.cls_seatedOwnedTag, this.cls_seatedRequestedTag) { return false; }
   let system = GameInstance.GetWorkspotSystem(this.GetGame());
-  if !system.IsActorInWorkspot(this) { return false; }
+  if !IsDefined(system) || !system.IsActorInWorkspot(this) { return false; }
   let info = system.GetExtendedInfo(this);
   // Native start-event tags establish ownership; native record flags establish
   // playback. Raw Codeware instance offsets are diagnostic data only.
@@ -632,7 +660,10 @@ private final func CLS_StopOwnedSeatedWorkspot() -> Void {
     this.cls_seatedRetiringTag = this.cls_seatedOwnedTag;
     this.cls_seatedOwnsWorkspot = false;
     this.cls_seatedOwnedTag = n"";
-    GameInstance.GetWorkspotSystem(this.GetGame()).StopNpcInWorkspot(this);
+    let system = GameInstance.GetWorkspotSystem(this.GetGame());
+    if IsDefined(system) {
+      system.StopNpcInWorkspot(this);
+    }
   }
 }
 
@@ -759,7 +790,10 @@ private final func CLS_ActivateSeatedDeathRagdoll(attempts: Int32) -> Void {
   }
   let verify = new CLS_SeatedDeathRagdollEvent();
   verify.attempts = attempts + 1;
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, verify, 0.10, true);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    delay.DelayEvent(this, verify, 0.10, true);
+  }
 }
 
 @addMethod(NPCPuppet)
@@ -835,6 +869,10 @@ private final func CLS_RequestGroundPain(now: Float) -> Void {
     return;
   }
   let system = GameInstance.GetWorkspotSystem(this.GetGame());
+  if !IsDefined(system) {
+    this.CLS_ClearSeated();
+    return;
+  }
   let priorTag = this.cls_seatedRequestedTag;
   this.CLS_StopOwnedSeatedWorkspot();
   if IsNameValid(priorTag) { this.cls_seatedRetiringTag = priorTag; }
@@ -882,6 +920,10 @@ protected cb func OnCLS_SeatedTickEvent(evt: ref<CLS_SeatedTickEvent>) -> Bool {
   }
   if this.cls_seatedStage == 1 {
     let system = GameInstance.GetWorkspotSystem(this.GetGame());
+    if !IsDefined(system) {
+      this.CLS_KeepWoundDeadline(context, n"workspot_system_missing_deadline_fallback");
+      return false;
+    }
     if system.IsActorInWorkspot(this) {
       this.cls_seatedForeignWorkspot = true;
       this.CLS_LogSeated(n"external_workspot_during_load");

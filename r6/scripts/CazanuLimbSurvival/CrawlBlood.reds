@@ -17,7 +17,14 @@ public abstract class CrawlBlood {
   }
 
   public static func Fresh(game: GameInstance, time: Float) -> Bool {
-    let age = EngineTime.ToFloat(GameInstance.GetTimeSystem(game).GetSimTime()) - time;
+    if !GameInstance.IsValid(game) {
+      return false;
+    }
+    let timeSystem = GameInstance.GetTimeSystem(game);
+    if !IsDefined(timeSystem) {
+      return false;
+    }
+    let age = EngineTime.ToFloat(timeSystem.GetSimTime()) - time;
     return age >= 0.0 && age <= 0.5;
   }
 
@@ -112,20 +119,34 @@ public class CrawlBloodSystem extends ScriptableSystem {
   private let finalSeed: Int32;
 
   private func Now() -> Float {
-    return EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGameInstance()).GetSimTime());
+    let timeSystem = GameInstance.GetTimeSystem(this.GetGameInstance());
+    return IsDefined(timeSystem) ? EngineTime.ToFloat(timeSystem.GetSimTime()) : 0.0;
   }
 
   private func RemoveFirst() -> Void {
-    GameInstance.GetStaticEntitySystem().DespawnEntity(this.marks[0].id);
+    if ArraySize(this.marks) == 0 {
+      return;
+    }
+    let entities = GameInstance.GetStaticEntitySystem();
+    if IsDefined(entities) {
+      entities.DespawnEntity(this.marks[0].id);
+    }
     ArrayErase(this.marks, 0);
   }
 
   private func Clear() -> Void {
     if this.sweepPending {
-      GameInstance.GetDelaySystem(this.GetGameInstance()).CancelDelay(this.sweepID);
+      let delay = GameInstance.GetDelaySystem(this.GetGameInstance());
+      if IsDefined(delay) {
+        delay.CancelDelay(this.sweepID);
+      }
     }
     this.sweepPending = false;
     let entities = GameInstance.GetStaticEntitySystem();
+    if !IsDefined(entities) {
+      ArrayClear(this.marks);
+      return;
+    }
     let i = 0;
     while i < ArraySize(this.marks) {
       entities.DespawnEntity(this.marks[i].id);
@@ -145,8 +166,12 @@ public class CrawlBloodSystem extends ScriptableSystem {
 
   private func ScheduleSweep() -> Void {
     if !this.sweepPending && ArraySize(this.marks) > 0 {
+      let delay = GameInstance.GetDelaySystem(this.GetGameInstance());
+      if !IsDefined(delay) {
+        return;
+      }
       this.sweepPending = true;
-      this.sweepID = GameInstance.GetDelaySystem(this.GetGameInstance()).DelayScriptableSystemRequest(
+      this.sweepID = delay.DelayScriptableSystemRequest(
         n"CazanuLimbSurvival.CrawlBloodSystem", new CLS_CrawlBloodSweep(), 1.0, true);
     }
   }
@@ -206,7 +231,9 @@ public class CrawlBloodSystem extends ScriptableSystem {
     spec.appearanceName = n"default";
     spec.attached = true;
     while ArraySize(this.marks) >= CrawlBlood.MaxMarks() { this.RemoveFirst(); }
-    let id = GameInstance.GetStaticEntitySystem().SpawnEntity(spec);
+    let staticEntities = GameInstance.GetStaticEntitySystem();
+    if !IsDefined(staticEntities) || !staticEntities.IsReady() { return; }
+    let id = staticEntities.SpawnEntity(spec);
     if !EntityID.IsDefined(id) { return; }
     let mark: CLS_CrawlBloodMark;
     mark.id = id;
@@ -222,15 +249,18 @@ public class CrawlBloodSystem extends ScriptableSystem {
   }
 
   private func CanPlace(owner: wref<NPCPuppet>, position: Vector4, time: Float, opt finalMark: Bool) -> Bool {
-    if !IsDefined(owner) || !CrawlBlood.Valid(position)
+    let staticEntities = GameInstance.GetStaticEntitySystem();
+    let playerSystem = GameInstance.GetPlayerSystem(this.GetGameInstance());
+    if !IsDefined(staticEntities) || !IsDefined(playerSystem)
+      || !IsDefined(owner) || !CrawlBlood.Valid(position)
       || !CrawlBlood.Fresh(this.GetGameInstance(), time)
-      || !GameInstance.GetStaticEntitySystem().IsReady() { return false; }
+      || !staticEntities.IsReady() { return false; }
     if finalMark {
       if !owner.CLS_CanPlaceFinalBlood() { return false; }
     } else {
       if !owner.CLS_CanSmearCrawlBlood() { return false; }
     }
-    let player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerMainGameObject();
+    let player = playerSystem.GetLocalPlayerMainGameObject();
     return IsDefined(player) && Vector4.DistanceSquared(player.GetWorldPosition(), position) <= 2500.0;
   }
 
@@ -340,7 +370,7 @@ public final func CLS_CanSmearCrawlBlood() -> Bool {
   return this.cls_legWoundMode == 1 && WoundTiming.Eligible(this)
     && this.cls_extendedWoundStarted && !this.cls_groundedTimedDeath && !this.IsRagdolling()
     && !this.CLS_WoundDeadlinePreempted()
-    && !GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this);
+    && !CLS_WorkspotOwnsActor(this);
 }
 
 @addMethod(NPCPuppet)
@@ -354,7 +384,12 @@ public final func CLS_LogCrawlBlood(side: Float, position: Vector4, total: Int32
 @addMethod(NPCPuppet)
 public final func CLS_UpdateCrawlBlood() -> Void {
   if !this.CLS_CanSmearCrawlBlood() { this.cls_bloodInitialized = false; return; }
-  let now = EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGame()).GetSimTime());
+  let timeSystem = GameInstance.GetTimeSystem(this.GetGame());
+  if !IsDefined(timeSystem) {
+    this.cls_bloodInitialized = false;
+    return;
+  }
+  let now = EngineTime.ToFloat(timeSystem.GetSimTime());
   let position = this.GetWorldPosition();
   if !CrawlBlood.Valid(position) { this.cls_bloodInitialized = false; return; }
   if !this.cls_bloodInitialized {
@@ -478,7 +513,12 @@ public final func CLS_StartFinalBloodDelay() -> Void {
   if this.cls_bloodFinalDelayStarted || this.cls_bloodFinalQueued
     || this.cls_legWoundMode == 1 || !this.CLS_FinalBloodStateValid() { return; }
   this.cls_bloodFinalDelayStarted = true;
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, new CLS_FinalBloodDelayEvent(), 3.0, true);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if !IsDefined(delay) {
+    this.cls_bloodFinalDelayStarted = false;
+    return;
+  }
+  delay.DelayEvent(this, new CLS_FinalBloodDelayEvent(), 3.0, true);
   if Diagnostics.Enabled() {
     Diagnostics.Write(s"FINAL_BLOOD_TIMER npc=\(EntityID.ToDebugString(this.GetEntityID())) mode=\(this.cls_legWoundMode) delay=3.0s");
   }
@@ -504,7 +544,12 @@ private final func CLS_QueueFinalBloodContact() -> Void {
   }
   contact.heading.Z = 0.0;
   contact.heading.W = 0.0;
-  contact.time = EngineTime.ToFloat(GameInstance.GetTimeSystem(this.GetGame()).GetSimTime());
+  let timeSystem = GameInstance.GetTimeSystem(this.GetGame());
+  if !IsDefined(timeSystem) {
+    this.cls_bloodFinalQueued = false;
+    return;
+  }
+  contact.time = EngineTime.ToFloat(timeSystem.GetSimTime());
   this.QueueEvent(contact);
 }
 

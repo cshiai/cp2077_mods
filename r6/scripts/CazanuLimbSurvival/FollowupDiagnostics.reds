@@ -36,7 +36,10 @@ public final func CLS_StartFollowupDiagnostics() -> Void {
 private final func CLS_QueueSurvivalSnapshot(delay: Float) -> Void {
   let evt = new CLS_SurvivalSnapshotEvent();
   evt.scheduledAfter = delay;
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, evt, delay, true);
+  let delaySystem = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delaySystem) {
+    delaySystem.DelayEvent(this, evt, delay, true);
+  }
 }
 
 @addMethod(NPCPuppet)
@@ -45,8 +48,10 @@ protected cb func OnCLS_SurvivalSnapshotEvent(evt: ref<CLS_SurvivalSnapshotEvent
     return false;
   }
   let id = Cast<StatsObjectID>(this.GetEntityID());
-  let health = GameInstance.GetStatPoolsSystem(this.GetGame()).GetStatPoolValue(id, gamedataStatPoolType.Health, false);
-  let canUseLegs = GameInstance.GetStatsSystem(this.GetGame()).GetStatValue(id, gamedataStatType.CanUseLegs);
+  let statPools = GameInstance.GetStatPoolsSystem(this.GetGame());
+  let stats = GameInstance.GetStatsSystem(this.GetGame());
+  let health: Float = IsDefined(statPools) ? statPools.GetStatPoolValue(id, gamedataStatPoolType.Health, false) : -1.0;
+  let canUseLegs: Float = IsDefined(stats) ? stats.GetStatValue(id, gamedataStatType.CanUseLegs) : -1.0;
   let armLeft = StatusEffectSystem.ObjectHasStatusEffect(this, t"BaseStatusEffect.DismemberedArmLeft")
     || StatusEffectSystem.ObjectHasStatusEffect(this, t"BaseStatusEffect.DismemberedHandLeft");
   let armRight = StatusEffectSystem.ObjectHasStatusEffect(this, t"BaseStatusEffect.DismemberedArmRight")
@@ -65,7 +70,10 @@ protected cb func OnCLS_SurvivalSnapshotEvent(evt: ref<CLS_SurvivalSnapshotEvent
   Diagnostics.Write(s"FOLLOWUP npc=\(EntityID.ToDebugString(this.GetEntityID())) after=\(evt.scheduledAfter)s hp=\(health) alive=\(ScriptedPuppet.IsAlive(this)) aboutToDie=\(this.IsAboutToDie()) aboutToDefeat=\(this.IsAboutToBeDefeated()) ragdoll=\(this.IsRagdolling()) armLeft=\(armLeft) armRight=\(armRight) legLeft=\(legLeft) legRight=\(legRight) canUseLegs=\(canUseLegs) woundedType=\(woundType) woundedTag=\(woundTag) aiContext=\(hasContext) woundedLegsRecord=\(IsDefined(condition)) woundedLegsCondition=\(woundedLegsCondition)");
   Diagnostics.Write(s"ACTIVITY npc=\(EntityID.ToDebugString(this.GetEntityID())) after=\(evt.scheduledAfter)s record=\(TDBID.ToStringDEBUG(this.GetRecordID())) \(this.CLS_ActivityState())");
   let effects: array<ref<StatusEffect>>;
-  GameInstance.GetStatusEffectSystem(this.GetGame()).GetAppliedEffects(this.GetEntityID(), effects);
+  let statusEffects = GameInstance.GetStatusEffectSystem(this.GetGame());
+  if IsDefined(statusEffects) {
+    statusEffects.GetAppliedEffects(this.GetEntityID(), effects);
+  }
   let effectNames = "";
   let effectIndex = 0;
   while effectIndex < ArraySize(effects) && effectIndex < 32 {
@@ -209,7 +217,10 @@ public final func CLS_LogAIForcedDeath(record: wref<AISubActionForceDeath_Record
   let deathAction = TweakDBInterface.GetAIActionRecord(t"StatusEffectActions.DismemberedLegDeath");
   let fromLegDeath = IsDefined(deathAction) && deathAction.LoopSubActionsContains(record);
   let fromExtendedLegDeath = Equals(record.GetID(), t"CazanuLimbSurvival.LegFinalDeath");
-  let health = GameInstance.GetStatPoolsSystem(this.GetGame()).GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false);
+  let statPools = GameInstance.GetStatPoolsSystem(this.GetGame());
+  let health: Float = IsDefined(statPools)
+    ? statPools.GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false)
+    : -1.0;
   Diagnostics.Write(s"AI_FORCE_DEATH npc=\(EntityID.ToDebugString(this.GetEntityID())) event=\(this.cls_forcedDeathLogCount)/8 record=\(TDBID.ToStringDEBUG(record.GetID())) fromDismemberedLegDeath=\(fromLegDeath) fromExtendedLegDeath=\(fromExtendedLegDeath) delay=\(record.Delay()) hp=\(health) alive=\(ScriptedPuppet.IsAlive(this)) aboutToDie=\(this.IsAboutToDie())");
 }
 
@@ -259,10 +270,13 @@ public final func CLS_IsDiagnosticCrawler() -> Bool {
 public final func CLS_TraceCrawlTransition(stage: String) -> Void {
   if !this.CLS_IsDiagnosticCrawler() || this.cls_crawlTransitionLogs >= 48 { return; }
   this.cls_crawlTransitionLogs += 1;
-  let hp = GameInstance.GetStatPoolsSystem(this.GetGame()).GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false);
+  let statPools = GameInstance.GetStatPoolsSystem(this.GetGame());
+  let hp: Float = IsDefined(statPools)
+    ? statPools.GetStatPoolValue(Cast<StatsObjectID>(this.GetEntityID()), gamedataStatPoolType.Health, false)
+    : -1.0;
   let slot = this.GetPuppetStateBlackboard().GetBool(GetAllBlackboardDefs().PuppetState.SlotAnimationInProgress);
   let position = this.GetWorldPosition();
-  Diagnostics.Write(s"CRAWL_TRANSITION npc=\(EntityID.ToDebugString(this.GetEntityID())) event=\(this.cls_crawlTransitionLogs)/48 stage=\(stage) hp=\(hp) aboutToDie=\(this.IsAboutToDie()) aboutToDefeat=\(this.IsAboutToBeDefeated()) ragdoll=\(this.IsRagdolling()) canRagdoll=\(ScriptedPuppet.CanRagdoll(this)) skipDeathAnimation=\(this.ShouldSkipDeathAnimation()) timedDeath=\(this.cls_groundedTimedDeath) crawlPreempted=\(this.cls_crawlDeadlinePreempted) woundPreempted=\(this.CLS_WoundDeadlinePreempted()) motion=\(this.cls_crawlMotionStarted) obstructed=\(this.cls_crawlMotionObstructed) workspot=\(GameInstance.GetWorkspotSystem(this.GetGame()).IsActorInWorkspot(this)) slot=\(slot) position=\(position.X),\(position.Y),\(position.Z) \(this.CLS_ActivityState())");
+  Diagnostics.Write(s"CRAWL_TRANSITION npc=\(EntityID.ToDebugString(this.GetEntityID())) event=\(this.cls_crawlTransitionLogs)/48 stage=\(stage) hp=\(hp) aboutToDie=\(this.IsAboutToDie()) aboutToDefeat=\(this.IsAboutToBeDefeated()) ragdoll=\(this.IsRagdolling()) canRagdoll=\(ScriptedPuppet.CanRagdoll(this)) skipDeathAnimation=\(this.ShouldSkipDeathAnimation()) timedDeath=\(this.cls_groundedTimedDeath) crawlPreempted=\(this.cls_crawlDeadlinePreempted) woundPreempted=\(this.CLS_WoundDeadlinePreempted()) motion=\(this.cls_crawlMotionStarted) obstructed=\(this.cls_crawlMotionObstructed) workspot=\(CLS_WorkspotOwnsActor(this)) slot=\(slot) position=\(position.X),\(position.Y),\(position.Z) \(this.CLS_ActivityState())");
 }
 
 @addMethod(NPCPuppet)
@@ -281,7 +295,10 @@ private final func CLS_QueueCrawlDeathSnapshots(confirmedDeath: Bool) -> Void {
     let evt = new CLS_CrawlDeathSnapshotEvent();
     evt.afterSeconds = delays[index];
     evt.confirmedDeath = confirmedDeath;
-    GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, evt, delays[index], true);
+    let delaySystem = GameInstance.GetDelaySystem(this.GetGame());
+    if IsDefined(delaySystem) {
+      delaySystem.DelayEvent(this, evt, delays[index], true);
+    }
     index += 1;
   }
 }

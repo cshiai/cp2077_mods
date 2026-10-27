@@ -1,4 +1,4 @@
-// RelentlessLiveDismember by Cazanu - temporary combat diagnostics enabled for investigation.
+// RelentlessLiveDismember by Cazanu - bounded combat diagnostics, disabled by default.
 module CazanuLimbSurvival
 
 public abstract class Diagnostics {
@@ -11,9 +11,9 @@ public abstract class Diagnostics {
   }
 
   public static func Write(message: String) -> Void {
-    if Diagnostics.Enabled() {
-      FTLog("[LimbSurvival] " + message);
-    }
+    // Diagnostics are permanently disabled in the normal gameplay profile.
+    // Keep the call surface for behavior-preserving wrappers, but do not
+    // construct or emit combat telemetry.
   }
 }
 
@@ -115,7 +115,10 @@ private final func CLS_LogHitStart() -> Void {
       weaponInfo += s" woundFactor=\(woundFactor) reactionFactor=\(reactionFactor)";
     }
   }
-  let health = GameInstance.GetStatPoolsSystem(npc.GetGame()).GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false);
+  let statPools = GameInstance.GetStatPoolsSystem(npc.GetGame());
+  let health: Float = IsDefined(statPools)
+    ? statPools.GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false)
+    : -1.0;
   let frameReaction = npc.GetTotalFrameDamage();
   let reason = this.CLS_LimbBlockReason();
   shapeInfo += s" killingBlow=\(this.m_attackData.HasFlag(hitFlag.WasKillingBlow)) frameWoundDamage=\(npc.GetTotalFrameWoundsDamage())";
