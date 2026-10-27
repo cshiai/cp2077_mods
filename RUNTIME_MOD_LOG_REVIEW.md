@@ -262,7 +262,7 @@ Source review found two corpse paths that could explain an enemy marker on an in
 
 The selected B3/C1+C2/T1/S2/L1/A1+A2/D1/R1/U1/E1/W1 design is now present in
 `r6/scripts/SimpleDroneCompanion/` and `r6/tweaks/SimpleDroneCompanion.yaml`.
-The module owns two session-bound Minotaur IDs through Codeware's
+The module owns four session-bound combat-drone IDs (two Minotaurs and two Octants) through Codeware's
 `DynamicEntitySystem`, registers one fixed F9 / `Left Shoulder + X` input path,
 applies a vanilla `AIFollowerRole`, and reissues only a missing follow command
 from a one-second active-entity watchdog. Combat wrappers are marker-gated:
@@ -285,14 +285,14 @@ lines. The later named-NPC-RPG-data and navmesh-placement adjustments were sourc
 `final.redscripts.modded` output. The source also retains a fixed
 `SDC_UseVanillaRecordPath()` comparison seam and a one-command custom-follow
 fallback, without adding runtime settings. No new game launch or companion
-smoke test was performed; summon, combat, save/load, and two-drone performance
+smoke test was performed; summon, combat, save/load, and four-drone performance
 remain the later user-requested runtime gate.
 
 U1 feedback is now implemented through the game's native
 `PreventionSystem.ShowMessage` warning channel for deploy, dismiss, and failure;
 there is still no custom HUD, menu, localization, or settings surface.
 
-A source-only invariant pass also passes for the current module: two slots,
+A source-only invariant pass also passes for the current module: four slots,
 session-bound persistence flags, fixed keyboard/controller input, dynamic
 entity ownership, friendly-fire guard, V kill credit, all three weapon stat
 values, no inline TweakDB bases, and no executable CET/Mod Settings/Native
@@ -358,4 +358,33 @@ when the transaction that changed state was the Sandevistan.
 
 The fix compiled at 09:49:27 with no errors/warnings. It requires a full game
 restart before retesting; no new runtime test was launched by the agent.
+
+## Vendor and quickhack regression follow-up (2026-10-27 compile-only)
+
+The next source audit found that the normalized Black Chrome vendor additions
+were still missing the explicit `VendorItem` record type required by current
+TweakXL vendor syntax.  TweakXL accepted the YAML document but could not build
+usable `VendorWare_Record` entries, which explains a ripperdoc page containing
+only the equipped/uninstall side of the UI.  All 627 `!append` entries across
+19 ripperdoc records now carry `$type: VendorItem`; the existing empty-stock
+save-cache reinitialization remains as a fallback.  The current documentation
+also confirms that vendor stock is cached by the game, so a later user smoke
+test may need a complete restart and a normal vendor restock interval.
+
+The former `UniversalSlotsAndAttachments` duplicate-quickhack feature was also
+removed.  Its `RemoveOtherShards`, `RemoveDuplicatedHacks`, `DistinctPrograms`,
+and custom quickhack part-picker replacements are gone, restoring vanilla
+deduplication, inventory filtering, quality checks, and installed-shard
+handling.  The unrelated universal weapon/cyberware slot compatibility and
+tooltip-description preservation remain.  The unused Slots Slots Slots
+cyberdeck-program-9..16 seam and monowire quickhack-slot bypass were removed as
+well.
+
+The four-drone companion source was extended from two Minotaurs to two
+Minotaurs plus two Militech Octants.  Octants inherit the vanilla hard combat
+archetype and autocannon, but the companion records clear the hostile death
+explosion package and retain the marker-gated friendly-fire/kill-credit rules.
+This pass compiled at 10:41:06 EDT.  No game launch or runtime smoke test was
+performed; vendor visibility, quickhack purchase/install behavior, and the
+four-drone summon remain user-side checks.
 

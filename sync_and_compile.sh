@@ -36,6 +36,11 @@ cp -a "$SCRIPT_DIR/r6/scripts/." "$GAME/r6/scripts/"
 # UX-04 was intentionally removed.  `cp -a` is additive, so clean only this
 # explicitly retired source file to prevent an old game-side copy returning.
 rm -f "$GAME/r6/scripts/CustomRedscriptSuite/Nexus34645_AutoContinue.reds"
+rm -f "$GAME/r6/scripts/CustomRedscriptSuite/Nexus34645_Startup.reds"
+# The level-cap module was renamed when its cap moved from 150 to 300.  Since
+# the source copy is additive, remove the retired game-side filename so both
+# generations cannot compile together.
+rm -f "$GAME/r6/scripts/CustomRedscriptSuite/LevelCap150XP150.reds"
 # Much Better AI is now a fixed, CET-free profile.  Remove the upstream
 # settings/localization sources if an earlier extraction left them in the
 # additive game-side tree; neither is part of the repository anymore.
@@ -59,6 +64,12 @@ if [[ -d "$SCRIPT_DIR/r6/tweaks" ]]; then
   mkdir -p "$GAME/r6/tweaks"
   cp -a "$SCRIPT_DIR/r6/tweaks/." "$GAME/r6/tweaks/"
 fi
+# The optional Reinforcements Gang-vs-Gang overlay is intentionally not part
+# of this profile: its vehicle/character records are unavailable here and
+# produced hundreds of TweakXL reference warnings.  `cp -a` is additive, so
+# remove an older game-side extraction instead of allowing it to return.
+rm -f "$GAME/r6/tweaks/zz_FactionsEvolved/FactionsEvolved_Reinforcements.yaml"
+rm -rf "$GAME/r6/tweaks/zz_FactionsEvolved/reinforcements"
 
 if [[ -d "$SCRIPT_DIR/r6/storages" ]]; then
   mkdir -p "$GAME/r6/storages"
@@ -69,6 +80,11 @@ if [[ -d "$SCRIPT_DIR/red4ext/plugins" ]]; then
   mkdir -p "$GAME/red4ext/plugins"
   cp -a "$SCRIPT_DIR/red4ext/plugins/." "$GAME/red4ext/plugins/"
 fi
+# Blur Begone/ReFRACT are fixed source profiles.  Remove the upstream
+# Mod Settings menu wrappers from an older additive extraction so they cannot
+# reintroduce a runtime configuration surface.
+rm -f "$GAME/red4ext/plugins/BlurBegone/scripts/BlurBegoneMenu.reds" \
+  "$GAME/red4ext/plugins/ReFRACT/scripts/ReFRACTMenu.reds"
 
 if [[ -d "$SCRIPT_DIR/archive/pc/mod" ]]; then
   mkdir -p "$GAME/archive/pc/mod"
@@ -90,6 +106,7 @@ for plugin_scripts in \
   "$GAME/red4ext/plugins/Codeware/Scripts" \
   "$GAME/red4ext/plugins/TweakXL/Scripts" \
   "$GAME/red4ext/plugins/BlurBegone/scripts" \
+  "$GAME/red4ext/plugins/ReFRACT/scripts" \
   "$GAME/red4ext/plugins/FXBegone/scripts" \
   "$GAME/red4ext/plugins/LoadBegone/scripts"; do
   if [[ -d "$plugin_scripts" ]]; then

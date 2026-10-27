@@ -1,7 +1,7 @@
 // SimpleDroneCompanion
 //
-// A source-controlled, vanilla-first companion backend for two session-bound
-// Militech Minotaurs.  It deliberately owns only lifecycle, fixed input, the
+// A source-controlled, vanilla-first companion backend for four session-bound
+// Militech combat drones (two Minotaurs and two Octants).  It deliberately owns only lifecycle, fixed input, the
 // follower role, and a bounded watchdog.  There is no CET/Lua, Mod Settings,
 // localization, persistence, JSON, custom archive, or fleet UI.
 //
@@ -18,16 +18,26 @@ public func SDC_Tag() -> CName {
 }
 
 public func SDC_MaxDrones() -> Int32 {
-  return 2;
+  return 4;
 }
 
 public func SDC_VanillaRecord() -> TweakDBID {
   return t"Character.militech_base_minotaur";
 }
 
+public func SDC_VanillaOctantRecord() -> TweakDBID {
+  return t"Character.militech_drone_octant_hard";
+}
+
 public func SDC_StaticRecord(slot: Int32) -> TweakDBID {
   if slot == 1 {
     return t"Character.SimpleDroneMinotaurB";
+  };
+  if slot == 2 {
+    return t"Character.SimpleDroneOctantA";
+  };
+  if slot == 3 {
+    return t"Character.SimpleDroneOctantB";
   };
   return t"Character.SimpleDroneMinotaurA";
 }
@@ -53,13 +63,13 @@ public func SDC_RecordForSlot(slot: Int32) -> TweakDBID {
   // static weapon record.  The source-level C1 switch and missing-record
   // fallback keep the vanilla implementation available for comparison.
   if SDC_UseVanillaRecordPath() {
-    return SDC_VanillaRecord();
+    return slot >= 2 ? SDC_VanillaOctantRecord() : SDC_VanillaRecord();
   };
   let staticRecord: TweakDBID = SDC_StaticRecord(slot);
   if IsDefined(TweakDBInterface.GetRecord(staticRecord)) {
     return staticRecord;
   };
-  return SDC_VanillaRecord();
+  return slot >= 2 ? SDC_VanillaOctantRecord() : SDC_VanillaRecord();
 }
 
 @addField(ScriptedPuppet)
@@ -92,8 +102,13 @@ private func SDC_ValidPlayer(player: wref<PlayerPuppet>) -> Bool {
 }
 
 private func SDC_OffsetForSlot(slot: Int32) -> Vector4 {
-  if slot == 1 {
-    return new Vector4(-3.0, -1.5, 0.0, 0.0);
+  switch slot {
+    case 1:
+      return new Vector4(-3.0, -1.5, 0.0, 0.0);
+    case 2:
+      return new Vector4(4.0, 1.0, 0.0, 0.0);
+    case 3:
+      return new Vector4(-4.0, 1.0, 0.0, 0.0);
   };
   return new Vector4(3.0, -1.5, 0.0, 0.0);
 }

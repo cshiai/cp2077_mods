@@ -2,16 +2,7 @@
 // UniversalSlotsAndAttachments.reds (Cyberpunk 2077 v2.5)
 // 100% Pure Redscript — Zero TweakXL / Zero tweakdb.bin edits
 // ============================================================================
-// 1. Cyberdecks — Duplicate Quickhacks & All Blueprint Program Slots Unlocked:
-//    - Allows multiple copies of the same quickhack (any tier or same tier) to
-//      sit in multiple cyberdeck slots simultaneously without evicting existing
-//      copies (`ItemModificationSystem.RemoveOtherShards`,
-//      `RPGManager.RemoveDuplicatedHacks`, `InventoryDataManagerV2.DistinctPrograms`).
-//    - Keeps all copies of quickhacks visible in the cyberdeck part picker
-//      (`InventoryDataManagerV2.GetPlayerInventoryPartsDataForItem`).
-//    - Unlocks all quality-gated slots on cyberdecks regardless of tier.
-//
-// 2. Cyberware Arms — Unlocking Unused Vanilla Blueprint Mod Slots + Monowire Slot:
+// 1. Cyberware Arms — Unlocking Unused Vanilla Blueprint Mod Slots + Monowire Slot:
 //    - Exposes the 2 unused vanilla blueprint slots already present in
 //      `tweakdb.bin` on every Cyberware Arm (`Cyb_StrongArms`, `Cyb_MantisBlades`,
 //      `Cyb_NanoWires`, `Cyb_Launcher`):
@@ -20,31 +11,25 @@
 //        * Mantis Blades: `AttachmentSlots.MantisBladesRotor` +
 //                         `AttachmentSlots.ArmsCyberwareGeneralSlot`
 //        * Monowire:      `AttachmentSlots.NanoWiresBattery` +
-//                         `AttachmentSlots.ArmsCyberwareGeneralSlot` +
-//                         `AttachmentSlots.NanoWiresQuickhackSlot` (unlocked
-//                         without requiring the Relic perk)
+//                         `AttachmentSlots.ArmsCyberwareGeneralSlot`
 //        * Projectile Launcher: `AttachmentSlots.ProjectileLauncherWiring` +
 //                               `AttachmentSlots.ArmsCyberwareGeneralSlot`
 //    - Allows weapon mods to be installed and swapped in those Cyberware Arm slots.
 //
-// 3. Weapons — Universal Attachments & Mods Unlocker + Iconic Upgrade Compatibility:
+// 2. Weapons — Universal Attachments & Mods Unlocker + Iconic Upgrade Compatibility:
 //    - Unlocks all existing weapon blueprint slots (`Scope`, `PowerModule`,
 //      `WeaponMod1..2`, `Tech_Handgun_WeaponMod1..4`, `GenericWeaponMod1..4`)
 //      immediately at Tier 1+ (`RPGManager.IsSlotAvailable`,
 //      `RPGManager.ShouldSlotBeAvailable`, `InventoryDataManagerV2.ShouldSlotBeAvailable`).
-//    - Removes the per-weapon `SlotPartList` scope/muzzle restriction in
-//      `InventoryDataManagerV2.GetPlayerInventoryPartsDataForItem` so any scope
-//      (`Prt_ShortScope`, `Prt_LongScope`, `Prt_PowerSniperScope`,
-//      `Prt_TechSniperScope`) fits any `Scope` slot and any muzzle/silencer
-//      (`Prt_Muzzle`, `Prt_HandgunMuzzle`, `Prt_RifleMuzzle`) fits any
-//      `PowerModule` slot.
+//    - Extends the vanilla placement checks so the supported scope, muzzle,
+//      and weapon-mod families can use the additional source-controlled slots.
 //    - Allows cross-family weapon mod slotting across all ranged/melee weapon
 //      mod slots (`PlacementSlotsContains`, `IsMatchingSlot`, `GetMatchingSlot`).
 //    - Protects Iconic weapons from having mods or attachments stripped by
 //      `CraftingSystem.ClearNonIconicSlots`, working seamlessly with
 //      `UniversalIconicWeapons.reds`.
 //
-// 4. Two-Column Attachment & Mod Slot UI (`InventoryWeaponItemChooser`,
+// 3. Two-Column Attachment & Mod Slot UI (`InventoryWeaponItemChooser`,
 //    `InventoryGenericItemChooser`):
 //    - Arranges weapon attachments and mod slots in a clean 2-column layout.
 // ============================================================================
@@ -361,36 +346,7 @@ public abstract class UniversalSlotsHelper {
 }
 
 // ============================================================================
-// 1. Cyberdecks: Allow Duplicate Quickhacks in Multiple Slots
-// ============================================================================
-
-@wrapMethod(ItemModificationSystem)
-private final func RemoveOtherShards(obj: ref<GameObject>, item: ItemID, shardID: ItemID) -> Void {
-  if Equals(RPGManager.GetItemType(shardID), gamedataItemType.Prt_Program) {
-    return;
-  }
-  wrappedMethod(obj, item, shardID);
-}
-
-@wrapMethod(RPGManager)
-private final static func RemoveDuplicatedHacks(commands: script_ref<array<PlayerQuickhackData>>) -> Void {
-  // Allow duplicate quickhacks equipped across multiple cyberdeck slots
-  return;
-}
-
-@wrapMethod(RPGManager)
-private final static func RemoveDuplicatedHacks(deck: script_ref<array<wref<ObjectAction_Record>>>, splinter: script_ref<array<wref<ObjectAction_Record>>>) -> Void {
-  // Allow duplicate quickhack actions from cyberdeck + monowire/splinter
-  return;
-}
-
-@wrapMethod(InventoryDataManagerV2)
-public final func DistinctPrograms(const items: script_ref<array<ItemID>>) -> array<ItemID> {
-  return Deref(items);
-}
-
-// ============================================================================
-// 2. Unlock All Blueprint Slots Regardless of Quality/Tier + Monowire Slot
+// 1. Unlock All Blueprint Slots Regardless of Quality/Tier + Monowire Slot
 // ============================================================================
 
 @wrapMethod(InventoryDataManagerV2)
@@ -403,12 +359,14 @@ private final func ShouldSlotBeAvailable(itemData: wref<gameItemData>, attachmen
 
 @replaceMethod(UIInventoryItemModsManager)
 private final func GetAttachements(owner: wref<GameObject>, inventoryItem: wref<UIInventoryItem>) -> Void {
-  // This method is a rebuild, not an append.  Clear our owned presentation
-  // state first so repeated UI refreshes cannot duplicate mods or retain a
-  // dedicated attachment from a previous item.
-  ArrayClear(this.m_mods);
-  ArrayClear(this.m_attachments);
-  this.m_dedicatedMod = null;
+  // UIInventoryItemModsManager.Make() calls FetchModsDataPackages() before
+  // this method.  `m_mods` therefore already contains the item's OnEquip and
+  // OnAttach gameplay-package descriptions (the functionality text shown in
+  // the tooltip), followed by any attachment entries added here.  Do not
+  // clear m_mods: doing so silently removed every vanilla and Black Chrome
+  // cyberware function description while leaving stats and lore visible.
+  // The manager is built once per UIInventoryItem, so its attachment arrays
+  // start empty and need no destructive reset here.
   if !IsDefined(inventoryItem) || !IsDefined(inventoryItem.GetItemData()) {
     return;
   }
@@ -601,14 +559,8 @@ public final func GetAttachements(owner: wref<GameObject>, itemData: wref<gameIt
   }
 }
 
-@wrapMethod(UIInventoryItemModsManager)
-private final func FilterNanoWireSlot(inventoryItem: wref<UIInventoryItem>) -> Void {
-  // Keep Monowire's NanoWiresQuickhackSlot available at all times
-  return;
-}
-
 // ============================================================================
-// 3. Register Cyberware Arm & Weapon Mod Slots in Redscript Slot Tables
+// 2. Register Cyberware Arm & Weapon Mod Slots in Redscript Slot Tables
 // ============================================================================
 
 @wrapMethod(RPGManager)
@@ -651,7 +603,7 @@ public final static func GetAttachmentSlotsForInventory() -> array<TweakDBID> {
 }
 
 // ============================================================================
-// 4. Universal Part & Mod Placement Compatibility (Scopes, Muzzles, Mods, Arms)
+// 3. Universal Part & Mod Placement Compatibility (Scopes, Muzzles, Mods, Arms)
 // ============================================================================
 
 @wrapMethod(InventoryDataManagerV2)
@@ -756,6 +708,9 @@ private final func GetMatchingSlot(const itemData: script_ref<InventoryItemData>
 
 @replaceMethod(InventoryItemModeLogicController)
 private final func EquipPart(const itemData: script_ref<InventoryItemData>, slotID: TweakDBID) -> Void {
+  if !IsDefined(this.m_selectedItemChooser) {
+    return;
+  }
   let equippedItemData: InventoryItemData = this.m_selectedItemChooser.GetModifiedItemData();
   if this.m_InventoryManager.CanInstallPart(itemData) && TDBID.IsValid(slotID) {
     this.m_InventoryManager.InstallPart(InventoryItemData.GetID(equippedItemData), InventoryItemData.GetID(itemData), slotID);
@@ -801,15 +756,18 @@ private final func HandleItemClick(const itemData: script_ref<InventoryItemData>
     } else {
       if actionName.IsAction(n"click") && NotEquals(displayContext, ItemDisplayContext.Attachment) {
         if InventoryItemData.IsEquipped(itemData) || InventoryItemData.IsEmpty(itemData) {
-          if Equals(Deref(itemData), this.itemChooser.GetModifiedItemData()) {
+            if IsDefined(this.itemChooser) && Equals(Deref(itemData), this.itemChooser.GetModifiedItemData()) {
             this.SelectItemChooserWithoutCallback(this.itemChooser);
           } else {
-            if Equals(Deref(itemData), this.m_leftItemChooser.GetModifiedItemData()) {
+            if IsDefined(this.m_leftItemChooser) && Equals(Deref(itemData), this.m_leftItemChooser.GetModifiedItemData()) {
               this.SelectItemChooserWithoutCallback(this.m_leftItemChooser);
             }
           }
         } else {
           if !(InventoryItemData.IsEquipped(itemData) && Equals(this.m_currentHotkey, EHotkey.INVALID)) {
+            if !IsDefined(this.m_selectedItemChooser) {
+              return;
+            }
             localEquippedData = InventoryItemData.GetGameItemData(this.m_selectedItemChooser.GetModifiedItemData());
             shouldUpdate = true;
             isEquippedItemBlocked = IsDefined(localEquippedData) && localEquippedData.HasTag(n"UnequipBlocked");
@@ -836,7 +794,9 @@ private final func HandleItemClick(const itemData: script_ref<InventoryItemData>
             if IsDefined(this.m_leftItemChooser) {
               this.m_leftItemChooser.RefreshItems(shouldUpdate, -1);
             }
-            this.itemChooser.RefreshItems(shouldUpdate, -1);
+            if IsDefined(this.itemChooser) {
+              this.itemChooser.RefreshItems(shouldUpdate, -1);
+            }
             if !InventoryItemData.IsPart(itemData) {
               this.m_viewMode = ItemViewModes.Item;
               this.m_currentFilter = ItemFilterCategory.Invalid;
@@ -894,8 +854,13 @@ private final func InstallItemPart(obj: ref<GameObject>, itemID: ItemID, partIte
     partInstallRequest.owner = obj;
     partInstallRequest.itemID = itemID;
     partInstallRequest.partID = partItemID;
-    GameInstance.GetScriptableSystemsContainer(this.GetGameInstance()).Get(n"EquipmentSystem").QueueRequest(partInstallRequest);
-    GameInstance.GetScriptableSystemsContainer(this.GetGameInstance()).Get(n"UIInventoryScriptableSystem").QueueRequest(partInstallRequest);
+    let systems = GameInstance.GetScriptableSystemsContainer(this.GetGameInstance());
+    if IsDefined(systems) {
+      let equipmentSystem = systems.Get(n"EquipmentSystem");
+      let uiSystem = systems.Get(n"UIInventoryScriptableSystem");
+      if IsDefined(equipmentSystem) { equipmentSystem.QueueRequest(partInstallRequest); }
+      if IsDefined(uiSystem) { uiSystem.QueueRequest(partInstallRequest); }
+    }
   }
   PlayerPuppet.ChacheQuickHackListCleanup(obj as PlayerPuppet);
   return result;
@@ -925,107 +890,8 @@ private final func GetInventoryItemDataInternal(owner: wref<GameObject>, itemDat
   return result;
 }
 
-// Replaces InventoryDataManagerV2.GetPlayerInventoryPartsDataForItem so that:
-// 1. Scopes and Muzzles are NOT filtered out by the weapon's restrictive SlotPartList,
-//    allowing any scope in any Scope slot and any muzzle/silencer in any PowerModule slot.
-// 2. Cyberdeck quickhack shards are NOT deduplicated by shardType in the part picker,
-//    allowing multiple copies of the same quickhack to be selected and installed.
-@replaceMethod(InventoryDataManagerV2)
-public final func GetPlayerInventoryPartsDataForItem(item: ItemID, slotIDs: script_ref<array<TweakDBID>>) -> array<wref<gameItemData>> {
-  let tempItems: array<wref<gameItemData>> = this.GetPlayerInventoryItems();
-  let inventoryItems: array<wref<gameItemData>>;
-  let outputItems: array<wref<gameItemData>>;
-  let currentItemRecord: wref<Item_Record>;
-  let parts: array<InnerItemData>;
-  let innerItemData: InnerItemData;
-  let currentPartStaticData: wref<Item_Record>;
-  let matchAnySlot: Bool;
-  let i: Int32 = 0;
-  let j: Int32 = 0;
-
-  while i < ArraySize(tempItems) {
-    if IsDefined(tempItems[i]) {
-      currentItemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(tempItems[i].GetID()));
-      if IsDefined(currentItemRecord) && currentItemRecord.IsPart() {
-      matchAnySlot = false;
-      ArrayClear(parts);
-      tempItems[i].GetItemParts(parts);
-      if ArraySize(parts) > 0 {
-        innerItemData = parts[0];
-        currentPartStaticData = InnerItemData.GetStaticData(innerItemData);
-        j = 0;
-        while j < ArraySize(Deref(slotIDs)) {
-          if this.PlacementSlotsContains(currentPartStaticData, Deref(slotIDs)[j]) {
-            matchAnySlot = true;
-            break;
-          }
-          j += 1;
-        }
-      } else {
-        j = 0;
-        while j < ArraySize(Deref(slotIDs)) {
-          if this.PlacementSlotsContains(currentItemRecord, Deref(slotIDs)[j]) {
-            matchAnySlot = true;
-            break;
-          }
-          j += 1;
-        }
-      }
-      if matchAnySlot {
-        ArrayPush(inventoryItems, tempItems[i]);
-      }
-      }
-    }
-    i += 1;
-  }
-
-  i = 0;
-  while i < ArraySize(inventoryItems) {
-    ArrayPush(outputItems, inventoryItems[i]);
-    i += 1;
-  }
-  return outputItems;
-}
-
-@replaceMethod(InventoryDataManagerV2)
-public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs: script_ref<array<TweakDBID>>, opt filteredItems: array<ItemModParams>, outputItems: script_ref<array<InventoryItemData>>) -> Void {
-  if !IsDefined(this.m_Player) || !ItemID.IsValid(item) {
-    return;
-  }
-  let inventoryItems: array<InventoryItemData> = this.GetPlayerPartsInventoryData(slotIDs);
-  let isDeckOrMonoWire: Bool = GameInstance.GetTransactionSystem(this.m_Player.GetGame()).HasTag(this.m_Player, n"Cyberdeck", item)
-    || Equals(RPGManager.GetItemType(item), gamedataItemType.Cyb_NanoWires);
-  let quantityToFilterOut: Int32;
-  let quantity: Int32;
-  let i: Int32 = ArraySize(inventoryItems) - 1;
-
-  while i >= 0 {
-    quantityToFilterOut = this.GetQunatityToFilterOut(InventoryItemData.GetID(inventoryItems[i]), filteredItems);
-    quantity = InventoryItemData.GetQuantity(inventoryItems[i]) - quantityToFilterOut;
-    InventoryItemData.SetQuantity(inventoryItems[i], quantity);
-    if quantity <= 0 {
-      ArrayErase(inventoryItems, i);
-    } else {
-      InventoryItemData.SetIsRequirementMet(inventoryItems[i], true);
-    }
-    i -= 1;
-  }
-
-  i = 0;
-  while i < ArraySize(inventoryItems) {
-    if isDeckOrMonoWire {
-      if !ItemModificationSystem.HasThisShardInstalled(this.m_Player, item, InventoryItemData.GetID(inventoryItems[i])) {
-        ArrayPush(Deref(outputItems), inventoryItems[i]);
-      }
-    } else {
-      ArrayPush(Deref(outputItems), inventoryItems[i]);
-    }
-    i += 1;
-  }
-}
-
 // ============================================================================
-// 5. Iconic Weapon Compatibility: Never Strip Mods/Attachments from Iconic Weapons
+// 4. Iconic Weapon Compatibility: Never Strip Mods/Attachments from Iconic Weapons
 // ============================================================================
 
 @wrapMethod(CraftingSystem)
@@ -1034,7 +900,7 @@ private final func ClearNonIconicSlots(itemData: wref<gameItemData>) -> Void {
 }
 
 // ============================================================================
-// 6. UI Slot Labels, Icons & Two-Column Slot Layout
+// 5. UI Slot Labels, Icons & Two-Column Slot Layout
 // ============================================================================
 
 @wrapMethod(UIItemsHelper)
@@ -1067,7 +933,11 @@ protected func RebuildSlots() -> Void {
   if inkCompoundRef.GetNumChildren(this.m_slotsContainer) <= 0 {
     return;
   }
-  let grid: ref<inkUniformGrid> = inkCompoundRef.GetWidgetByIndex(this.m_slotsContainer, 0).GetParentWidget() as inkUniformGrid;
+  let firstSlot = inkCompoundRef.GetWidgetByIndex(this.m_slotsContainer, 0);
+  if !IsDefined(firstSlot) {
+    return;
+  }
+  let grid: ref<inkUniformGrid> = firstSlot.GetParentWidget() as inkUniformGrid;
   if !IsDefined(grid) {
     return;
   }

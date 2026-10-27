@@ -18,10 +18,6 @@ public class SSS_UI {
     if SSS.ParseSlotCat(slot, fam, n, cat) && (n >= 3 || cat == SSS.Iconic() || cat == SSS.Arms()) && cat != SSS.Collectible() {
       return SSS.SlotId(fam, 1);
     }
-    let name: String = SSS.SlotEntityName(slot);
-    if StrBeginsWith(name, "CyberdeckProgram") && StringToInt(StrMid(name, 16), 0) > 8 {
-      return t"AttachmentSlots.CyberdeckProgram1";
-    }
     return slot;
   }
 }

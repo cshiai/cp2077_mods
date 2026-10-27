@@ -78,10 +78,6 @@ public class SSS_Ids {
     return none;
   }
 
-  public static func Decks() -> array<TweakDBID> {
-    return [t"AttachmentSlots.CyberdeckProgram9", t"AttachmentSlots.CyberdeckProgram10", t"AttachmentSlots.CyberdeckProgram11", t"AttachmentSlots.CyberdeckProgram12", t"AttachmentSlots.CyberdeckProgram13", t"AttachmentSlots.CyberdeckProgram14", t"AttachmentSlots.CyberdeckProgram15", t"AttachmentSlots.CyberdeckProgram16"];
-  }
-
   public static func Concat(a: array<TweakDBID>, b: array<TweakDBID>) -> array<TweakDBID> {
     for x in b {
       if !ArrayContains(a, x) {

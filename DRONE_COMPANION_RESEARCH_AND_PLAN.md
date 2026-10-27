@@ -1,6 +1,6 @@
 # Drone companion audit and implementation plan
 
-**Status:** implementation in progress. The downloaded reference packages remain uninstalled and outside the repository. The selected vanilla-first two-drone design is being implemented and compile-checked before a later, user-requested in-game smoke test.
+**Status:** implementation in progress. The downloaded reference packages remain uninstalled and outside the repository. The selected vanilla-first four-drone design is being implemented and compile-checked before a later, user-requested in-game smoke test.
 
 ## 1. Scope and constraints
 
@@ -11,7 +11,7 @@ The target is a **small, reliable combat-drone companion** that fits this reposi
 - no Cyber Engine Tweaks (CET), Lua, overlay, console, Native Settings, Mod Settings, JSON settings, or runtime tuning;
 - downloaded reference archives may remain temporarily outside the repository until the full plan is complete, but must never be copied into Git or installed into the game tree;
 - fixed constants reviewed in Git;
-- one dependable fighting drone rather than a fleet of variants;
+- a small dependable fighting group (two Minotaurs and two Octants) rather than a fleet of variants;
 - bounded work, explicit cleanup, and compatibility with the existing enemy, Cazanu, CyberwareEx, and UI hooks.
 
 The upstream package is a reference implementation, not a drop-in dependency. Its Nexus page requires CET, RED4ext, redscript, Codeware, and TweakXL, and exposes a large in-game settings surface. Its listed modification and asset permissions require author permission, so this plan is a clean-room redesign rather than a source/assets fork. [Drone Companion requirements and permissions](https://www.nexusmods.com/cyberpunk2077/mods/32572)
@@ -61,7 +61,7 @@ The package contains two large menu paths (`DroneMenu.reds` and `DroneMenuInk.re
 | P1 | Two independent in-game menu implementations and many UI wrappers. | Large conflict and crash surface, especially with QuestGuide and existing character/perk UI. | No custom menu/HUD in the baseline. |
 | P1 | Multiple periodic scans plus `onUpdate`/`onDraw`. | Avoidable CPU/UI work and possible stutter in large fights. | Event-driven threat handoff plus one bounded watchdog (about 1 s) only while active. |
 | P1 | Delayed spawn/recall/retry/vehicle/elevator callbacks. | Stale callbacks can act on a replaced entity or save/load boundary. | Generation token per spawn; delete through DynamicEntitySystem; no vehicle/camera/arena path. |
-| P1 | Three instances per model by default, tunable to ten, plus variants and hijacks. | Entity count and AI cost grow quickly; enemy multipliers already use a 24-clone ceiling. | Hard cap of two active Minotaurs in the selected S2 profile; no variants or fleet UI. |
+| P1 | Three instances per model by default, tunable to ten, plus variants and hijacks. | Entity count and AI cost grow quickly; enemy multipliers already use a 24-clone ceiling. | Hard cap of four active drones (two Minotaurs plus two Octants) in the selected S2 profile; no variants or fleet UI. |
 | P1 | Broad `DamageSystem`, `AIActionTarget`, `SenseComponent`, and `HitReactionComponent` wrappers. | Potentially changes unrelated NPC combat. | Every wrapper must first prove the actor has the simple-drone marker; avoid threat-recalculation wrappers unless a focused test proves they are necessary. |
 | P2 | Custom archive/UI assets for a feature that can use a vanilla mech record. | Adds ArchiveXL/resource compatibility and a 13 MB asset payload. | Use vanilla Minotaur visuals and no custom archive. |
 | P2 | Eight language packs and custom menu strings. | More compile surface for no gameplay value in a no-menu design. | No custom localization in the baseline; use one vanilla notification path or fixed English source text. |
@@ -208,15 +208,15 @@ This package is intentionally separate from the existing `UniversalIconicWeapons
 
 1. **Lock the design:** complete. B3/C1+C2/T1/S2/L1/A1+A2/D1/R1/U1/E1/W1 are selected; P is intentionally unselected after the reference audit. No upstream code or assets are copied.
 2. **Create the smallest source module:** complete in `r6/scripts/SimpleDroneCompanion/`; it owns the system, marker, input, spawn, cleanup, follower role, event-driven threat handoff, damage guard, and kill-credit hook.
-3. **Add records only if selected:** complete in `r6/tweaks/SimpleDroneCompanion.yaml`; it contains two static subcharacter records, one equipment group, and the fixed weapon package, with no vendor/item/settings layer.
+3. **Add records only if selected:** complete in `r6/tweaks/SimpleDroneCompanion.yaml`; it contains four static subcharacter records (two Minotaurs and two Octants), one Minotaur equipment group, and the fixed weapon package, with no vendor/item/settings layer.
 4. **Add no archive by default:** use the vanilla drone record and icon. ArchiveXL remains available to the profile but is not made a new hard dependency for the minimal mod.
 5. **Remove all upstream surfaces:** no CET folder, Lua, Mod Settings annotations, Native Settings, JSON, session files, backup files, trail log, custom menu/HUD, camera, chauffeur, arena, hijack, loot, skins, firmware, or variant data.
 6. **Integrate compatibility guards:** complete for current source: marker checks precede every combat wrapper, session generation and watchdog-generation state invalidate stale work, `DynamicEntitySystem.IsManaged` precedes deletion, and no global AI changes are made for unmarked actors.
-   `StreetActivity` explicitly excludes the companion marker from gang-seed candidates so the friendly Minotaurs cannot become encounter participants.
+   `StreetActivity` explicitly excludes the companion marker from gang-seed candidates so the friendly drones cannot become encounter participants.
    The marker is cleared in `ScriptedPuppet.OnDetach` before streamed objects can be reused.
 7. **Compile first:** `git diff --check`, shell syntax checks, and `sync_and_compile.sh` pass when invoked with the currently running Proton Experimental toolchain. The game was not launched by this pass; a fresh TweakXL runtime log remains a later smoke-test gate.
 8. **Focused runtime smoke test later:** summon/dismiss, save/load behavior selected in L, one combat against ordinary enemies, one elite, one vehicle-area fight, one player death/reload, and one removal/cleanup test. Check that no stale entity remains and that existing Cazanu/EnemyMultiplier/Much Better AI behavior is unchanged.
-9. **Performance gate:** compare idle, combat, and dismissal behavior with two drones. Reject any per-frame scan, repeated UI rebuild, unbounded callback queue, or clone/entity leak.
+9. **Performance gate:** compare idle, combat, and dismissal behavior with four drones. Reject any per-frame scan, repeated UI rebuild, unbounded callback queue, or clone/entity leak.
 10. **Document the final fixed constants, including the mandatory 40% dismemberment weapon package, in `README.md`, then commit the focused source change.**
 
 ## 10. Definition of done for the drone module
@@ -224,7 +224,7 @@ This package is intentionally separate from the existing `UniversalIconicWeapons
 - no CET/Lua/Mod Settings/JSON/settings/backup payload exists;
 - no downloaded installer/archive is tracked or installed; temporary reference archives are deleted only after the full plan and implementation are complete;
 - only selected source and intentionally shipped runtime payloads are present;
-- two drones summon and dismiss together through the selected trigger;
+- four drones summon and dismiss together through the selected trigger;
 - the entity is owned and cleaned up by Codeware DynamicEntitySystem;
 - it follows and fights without a global polling loop;
 - it cannot damage V or another companion, but can be killed by enemies;

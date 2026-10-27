@@ -4,270 +4,315 @@
 Vendors.cz_con_ripdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -277,270 +322,315 @@ Vendors.cz_con_ripdoc_01:
 Vendors.cz_monument_ripperdoc_anderson:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -550,270 +640,315 @@ Vendors.cz_monument_ripperdoc_anderson:
 Vendors.cz_monument_ripperdoc_farida:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -823,270 +958,315 @@ Vendors.cz_monument_ripperdoc_farida:
 Vendors.cz_stadium_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.ThunderGodLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AegisLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.JuiceTankLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.GasDispenserLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.CyberMonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.UndyingBerserkLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -1096,6 +1276,7 @@ Vendors.cz_stadium_ripperdoc_01:
 Vendors.bls_ina_se1_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1103,6 +1284,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1110,6 +1292,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1117,6 +1300,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1124,6 +1308,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1131,6 +1316,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1138,162 +1324,189 @@ Vendors.bls_ina_se1_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -1303,6 +1516,7 @@ Vendors.bls_ina_se1_ripperdoc_01:
 Vendors.bls_ina_se1_ripperdoc_02:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1310,6 +1524,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1317,6 +1532,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1324,6 +1540,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1331,6 +1548,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1338,6 +1556,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1345,162 +1564,189 @@ Vendors.bls_ina_se1_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -1510,6 +1756,7 @@ Vendors.bls_ina_se1_ripperdoc_02:
 Vendors.wat_kab_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1517,6 +1764,7 @@ Vendors.wat_kab_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1524,6 +1772,7 @@ Vendors.wat_kab_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyMidGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1531,162 +1780,189 @@ Vendors.wat_kab_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -1696,6 +1972,7 @@ Vendors.wat_kab_ripperdoc_01:
 Vendors.wat_lch_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
@@ -1703,6 +1980,7 @@ Vendors.wat_lch_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1710,6 +1988,7 @@ Vendors.wat_lch_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1717,6 +1996,7 @@ Vendors.wat_lch_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1724,162 +2004,189 @@ Vendors.wat_lch_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -1889,6 +2196,7 @@ Vendors.wat_lch_ripperdoc_01:
 Vendors.pac_wwd_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
@@ -1896,6 +2204,7 @@ Vendors.pac_wwd_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -1903,6 +2212,7 @@ Vendors.pac_wwd_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -1910,6 +2220,7 @@ Vendors.pac_wwd_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -1917,162 +2228,189 @@ Vendors.pac_wwd_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -2082,6 +2420,7 @@ Vendors.pac_wwd_ripperdoc_01:
 Vendors.hey_spr_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2089,6 +2428,7 @@ Vendors.hey_spr_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2096,162 +2436,189 @@ Vendors.hey_spr_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -2261,6 +2628,7 @@ Vendors.hey_spr_ripperdoc_01:
 Vendors.wat_kab_ripperdoc_03:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2268,6 +2636,7 @@ Vendors.wat_kab_ripperdoc_03:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EarlyGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2275,162 +2644,189 @@ Vendors.wat_kab_ripperdoc_03:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -2440,6 +2836,7 @@ Vendors.wat_kab_ripperdoc_03:
 Vendors.wat_kab_ripperdoc_02:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -2447,6 +2844,7 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2454,6 +2852,7 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.MidEndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2461,6 +2860,7 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -2468,6 +2868,7 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2475,6 +2876,7 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2482,162 +2884,189 @@ Vendors.wat_kab_ripperdoc_02:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -2647,6 +3076,7 @@ Vendors.wat_kab_ripperdoc_02:
 Vendors.cct_dtn_ripdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -2654,6 +3084,7 @@ Vendors.cct_dtn_ripdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2661,6 +3092,7 @@ Vendors.cct_dtn_ripdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2668,162 +3100,189 @@ Vendors.cct_dtn_ripdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -2833,6 +3292,7 @@ Vendors.cct_dtn_ripdoc_01:
 Vendors.std_arr_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -2840,6 +3300,7 @@ Vendors.std_arr_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -2847,6 +3308,7 @@ Vendors.std_arr_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.EndGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -2854,162 +3316,189 @@ Vendors.std_arr_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -3019,6 +3508,7 @@ Vendors.std_arr_ripperdoc_01:
 Vendors.wbr_jpn_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
@@ -3026,6 +3516,7 @@ Vendors.wbr_jpn_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
@@ -3033,6 +3524,7 @@ Vendors.wbr_jpn_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       availabilityPrereq: Vendors.LateGameCredAvailability
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
@@ -3040,162 +3532,189 @@ Vendors.wbr_jpn_ripperdoc_01:
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -3205,162 +3724,189 @@ Vendors.wbr_jpn_ripperdoc_01:
 Vendors.std_rcr_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -3370,162 +3916,189 @@ Vendors.std_rcr_ripperdoc_01:
 Vendors.wat_nid_ripperdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -3535,162 +4108,189 @@ Vendors.wat_nid_ripperdoc_01:
 Vendors.wbr_hil_ripdoc_01:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary
@@ -3700,162 +4300,189 @@ Vendors.wbr_hil_ripdoc_01:
 Vendors.wbr_jpn_ripperdoc_02:
   itemStock:
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.HeuristicBiomonitorLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.BorgLegsLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SponsoredCoveringLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.CommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckCommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.AuxiliaryCyberdeckLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SmartBloodPumpLegendary
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.UncommonCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsUncommon
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.RareCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsRare
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.EpicCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsEpic
       quantity:
       - Vendors.Always_Present
     - !append
+      $type: VendorItem
       generationPrereqs:
       - LootPrereqs.LegendaryCWLevelAvailabilityAtVendor
       item: BlackChrome.SynthLungsLegendary

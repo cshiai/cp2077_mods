@@ -77,6 +77,29 @@ SimpleDroneCompanion.MinotaurEquipment:
     - SimpleDroneCompanion.MinotaurWeaponRightEntry
     - SimpleDroneCompanion.MinotaurWeaponLeftEntry
 
+SimpleDroneCompanion.OctantWeaponRPGData:
+  $base: Items.Base_NPC_RPG_Data
+  statModifierGroups:
+    - !append-once Items.Octant_Autocannon_Handling_Stats
+    - !append-once Items.Octant_Autocannon_NPC_Damage_Stats
+    - !append-once SimpleDroneCompanion.WeaponStats
+
+SimpleDroneCompanion.OctantWeapon:
+  $base: Items.Octant_Autocannon
+  npcRPGData: SimpleDroneCompanion.OctantWeaponRPGData
+  statModifierGroups:
+    - !append-once SimpleDroneCompanion.WeaponStats
+
+SimpleDroneCompanion.OctantWeaponEntry:
+  $type: gamedataNPCEquipmentItem_Record
+  item: SimpleDroneCompanion.OctantWeapon
+  equipSlot: AttachmentSlots.WeaponRight
+
+SimpleDroneCompanion.OctantEquipment:
+  $type: gamedataNPCEquipmentGroup_Record
+  equipmentItems:
+    - SimpleDroneCompanion.OctantWeaponEntry
+
 # C2: declarative subcharacter records.  All balance, appearance, movement,
 # health, and native AI fields are inherited from the current vanilla
 # Minotaur.  Only weapon ownership and corpse/loot behavior are changed.
@@ -89,3 +112,17 @@ Character.SimpleDroneMinotaurA:
 
 Character.SimpleDroneMinotaurB:
   $base: Character.SimpleDroneMinotaurA
+
+# The Octant records provide the second pair.  Keep the vanilla Octant
+# autocannon/archetype, but remove the hostile death-explosion package because
+# these are session-bound player companions rather than disposable enemies.
+Character.SimpleDroneOctantA:
+  $base: Character.militech_drone_octant_hard
+  primaryEquipment: SimpleDroneCompanion.OctantEquipment
+  onSpawnGLPs: []
+  dropsWeaponOnDeath: False
+  lootBagEntity: None
+  baseAttitudeGroup: player
+
+Character.SimpleDroneOctantB:
+  $base: Character.SimpleDroneOctantA
