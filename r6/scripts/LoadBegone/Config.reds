@@ -6,7 +6,7 @@ public enum LoadBegoneCheckpoints {
     Bypass = 2,
 }
 
-// Fixed source profile.  The upstream menu/user.ini surface is not
+// Fixed source profile. The upstream runtime configuration surface is not
 // shipped in this collection; edit these values in Git and recompile.
 public class LoadBegoneConfig {
     public let enabled: Bool = true;
@@ -16,6 +16,8 @@ public class LoadBegoneConfig {
     public let delay: Float = 0.0;
 
     public let skipPrompts: Bool = true;
+
+    public let skipRecapVideos: Bool = true;
 
     public let skipModWarning: Bool = true;
 

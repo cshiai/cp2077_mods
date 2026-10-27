@@ -1,4 +1,4 @@
-# FX Begone 2.3.0 + Load Begone 3.0.0 integration review
+# FX Begone 2.3.0 + Load Begone 3.1.2 integration review
 
 ## Imported payloads
 
@@ -7,8 +7,9 @@ reviewed before installation:
 
 * **FX Begone 2.3.0** — `FXBegoneNative.dll`, `FXBegone.reds`, and the
   generated `FXBegoneSettings.reds` registry.
-* **Load Begone 3.0.0** — `LoadBegone.archive`, `LoadBegone.dll`,
-  `LoadBegone.Native.reds`, `Config.reds`, and `MainMenu.reds`.
+* **Load Begone 3.1.2** — `LoadBegone.archive`, `LoadBegone.dll`,
+  `LoadBegone.Native.reds`, `Config.reds`, `LoadingScreen.reds`, and
+  `MainMenu.reds`.
 
 The downloaded ZIP files and temporary extraction directory were deleted. No
 download archive is tracked in the repository.
@@ -46,11 +47,18 @@ mutate a fresh config object. The fixed profile removes all annotations and
 listener code; `LoadBegoneReadConfig()` now returns the source defaults.
 
 The preserved fixed defaults are: launch into the last save, allow Esc to
-return to the menu, zero extra delay, skip continuation prompts and the start
-screen, skip the mod-verification popup, bypass the Dogtown checkpoint, use
-4× checkpoint timing if the native checkpoint path falls back, and disable the
-checkpoint speed limit. These are now Git-controlled values, not runtime
-parameters.
+return to the menu, zero extra delay, skip continuation prompts and recap
+videos, skip the start screen and mod-verification popup, bypass the Dogtown
+checkpoint, use 4× checkpoint timing if the native checkpoint path falls back,
+and disable the checkpoint speed limit. These are now Git-controlled values,
+not runtime parameters.
+
+The 3.1.2 merge adds the upstream loading-screen callback bridge (recap-screen
+tracking and voice-language handoff), start-screen busy detection, recap
+metadata replay, and guarded black overlays that keep loading UI hidden until
+the save transition is safe. The new native entry points are all wrapped with
+`ModuleExists("LoadBegone.Native")` fallbacks, and the fixed profile still
+contains no Mod Settings annotations or listeners.
 
 The native API remains guarded with `ModuleExists("LoadBegone.Native")`, so a
 missing native plugin fails closed for native-only operations rather than
