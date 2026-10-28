@@ -35,7 +35,6 @@ BaseStats.JuiceTankRegen:
 
 BlackChrome.JuiceTankCooldownDamageNotification:
   $type: StatusEffect
-  duration: BaseStatusEffect.CyberwareCooldownNotification_inline0
   isAffectedByTimeDilationNPC: true
   isAffectedByTimeDilationPlayer: true
   maxStacks: RTDB.StatusEffect_inline0

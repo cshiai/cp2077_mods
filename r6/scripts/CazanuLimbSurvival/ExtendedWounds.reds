@@ -611,7 +611,7 @@ public final func CLS_SelectLegWound() -> TweakDBID {
     // Cazanu: choose one of two crawl lifetimes once, with equal odds.
     // A second leg loss or an AI restart reuses the same duration.
     if this.cls_legWoundMode == 1 {
-      this.cls_crawlWoundSeconds = RandRange(0, 2) == 0
+      this.cls_crawlWoundSeconds = RandRange(0, 1) == 0
         ? WoundTiming.CrawlShortSeconds() : WoundTiming.CrawlLongSeconds();
     }
     if Diagnostics.Enabled() {

@@ -58,7 +58,7 @@ public func Saber_HumVolume() -> Float { return 0.22; }
 // Resolve directly to interned names.  This keeps every swing/hit/deflect
 // free of NameToString/StringToName and temporary concatenated strings.
 public func Saber_PickSfxVariant(id: CName) -> CName {
-  let variant: Int32 = RandRange(1, Saber_SfxVariants(id) + 1);
+  let variant: Int32 = RandRange(1, Saber_SfxVariants(id));
   switch id {
     case n"saber_on":
       switch variant {

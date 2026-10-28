@@ -469,10 +469,14 @@ public func matchRandomPassengersSlots(basePassengers: array<TweakDBID>, desired
     let newPassengers: array<TweakDBID>;
     let i = 0;
     let slots = ArraySize(basePassengers);
-    if (slots < 1){ slots = 1; }
+    let desiredSlots = ArraySize(desiredPassengers);
+    if (slots < 1 || desiredSlots < 1){ return newPassengers; }
 
     while i < slots {
-        ArrayPush(newPassengers, desiredPassengers[i]);
+        // Some third-party vehicles expose more passenger slots than the
+        // three-entry faction templates.  Cycle the reviewed template rather
+        // than reading past its end and corrupting the crowd registry.
+        ArrayPush(newPassengers, desiredPassengers[i % desiredSlots]);
         i += 1;
     }
 
@@ -692,7 +696,10 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
             if(vehicleListIndex > lastVanillaIndex){
 
                 let vehicleCategories: array<CName> = FromVariant(TweakDBInterface.GetFlat(vehicle+t".visualTags"));
-                let vehicleCategory: String = NameToString(ArrayPop(vehicleCategories));
+                let vehicleCategory: String = "";
+                if ArraySize(vehicleCategories) > 0 {
+                    vehicleCategory = NameToString(vehicleCategories[ArraySize(vehicleCategories) - 1]);
+                }
                 let vehicleRandomPassengers: array<TweakDBID> = FromVariant(TweakDBInterface.GetFlat(vehicle+t".randomPassengers"));
                 let vehicleSlots: Int32 = ArraySize(vehicleRandomPassengers);
 
@@ -707,7 +714,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                         ArrayPush(santodomingoModdedFleet, vehicle);
                     }
                     if (autoOccupy){
-                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass))];
+                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass) - 1)];
                         randomPassengers = matchRandomPassengersSlots(vehicleRandomPassengers, passengersSelection);
                         TweakDBManager.SetFlat(vehicle+t".randomPassengers", randomPassengers);
                     }
@@ -722,7 +729,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                         ArrayPush(littleChinaModdedFleet, vehicle);
                     }
                     if (autoOccupy){
-                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass))];
+                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass) - 1)];
                         randomPassengers = matchRandomPassengersSlots(vehicleRandomPassengers, passengersSelection);
                         TweakDBManager.SetFlat(vehicle+t".randomPassengers", randomPassengers);
                     }
@@ -737,7 +744,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                         ArrayPush(northOakModdedFleet, vehicle);
                     }
                     if (autoOccupy){
-                        passengersSelection = passengersHighClass[RandRange(0, ArraySize(passengersHighClass))];
+                        passengersSelection = passengersHighClass[RandRange(0, ArraySize(passengersHighClass) - 1)];
                         randomPassengers = matchRandomPassengersSlots(vehicleRandomPassengers, passengersSelection);
                         TweakDBManager.SetFlat(vehicle+t".randomPassengers", randomPassengers);
                     }
@@ -752,7 +759,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                         ArrayPush(northOakModdedFleet, vehicle);
                     }
                     if (autoOccupy){
-                        passengersSelection = passengersHighClass[RandRange(0, ArraySize(passengersHighClass))];
+                        passengersSelection = passengersHighClass[RandRange(0, ArraySize(passengersHighClass) - 1)];
                         randomPassengers = matchRandomPassengersSlots(vehicleRandomPassengers, passengersSelection);
                         TweakDBManager.SetFlat(vehicle+t".randomPassengers", randomPassengers);
                     }
@@ -908,7 +915,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                         ArrayPush(littleChinaModdedFleet, vehicle);
                     }
                     if (autoOccupy){
-                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass))];
+                        passengersSelection = passengersLowClass[RandRange(0, ArraySize(passengersLowClass) - 1)];
                         randomPassengers = matchRandomPassengersSlots(vehicleRandomPassengers, passengersSelection);
                         TweakDBManager.SetFlat(vehicle+t".randomPassengers", randomPassengers);
                     }
@@ -1499,7 +1506,7 @@ public func addTrafficVehicles(event: ref<ResourceEvent>) -> Void {
                 // TESTING TOOL
                 if (ArraySize(testModdedFleet) > 0 ) {
                     for vehicle in charDatas {
-                        let vehicleType = testModdedFleet[RandRange(0, ArraySize(testModdedFleet))];
+                        let vehicleType = testModdedFleet[RandRange(0, ArraySize(testModdedFleet) - 1)];
                         SetCharDataRecordID(comReg, dataI, periodI, charDataI, vehicleType);
                         charDataI += 1;
                     }

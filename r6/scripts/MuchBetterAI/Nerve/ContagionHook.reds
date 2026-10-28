@@ -39,7 +39,11 @@ protected cb func OnDeath(evt: ref<gameDeathEvent>) -> Bool {
   let rejFactionFearless: Int32 = 0;
   let rejLos: Int32 = 0;
   let i: Int32 = 0;
-  while i < ArraySize(nearby) {
+  let nearbyCount: Int32 = ArraySize(nearby);
+  if nearbyCount > 64 {
+    nearbyCount = 64;
+  }
+  while i < nearbyCount {
     let witness: ref<NPCPuppet> = nearby[i];
     if MBAI_EnemyEligible(witness) && witness.GetEntityID() != victimID && !witness.IsMechanical() && MBAI_SameCombatGroup(this, witness) && NPCPuppet.IsInCombatWithTarget(witness, player) {
       if !Equals(witness.GetHighLevelStateFromBlackboard(), gamedataNPCHighLevelState.Combat) {
@@ -64,6 +68,6 @@ protected cb func OnDeath(evt: ref<gameDeathEvent>) -> Bool {
   if marked > 0 {
     MBAInfo("Contagion", s"death rarity=\(rarity) leader=\(isLeader) shook \(marked) witness(es)");
   };
-  MBADebug("Contagion", s"scan victimRarity=\(rarity) nearby=\(ArraySize(nearby)) shook=\(marked) rejBasic=\(rejBasic) rejState=\(rejState) rejFactionFearless=\(rejFactionFearless) rejLos=\(rejLos)");
+  MBADebug("Contagion", s"scan victimRarity=\(rarity) nearby=\(nearbyCount) shook=\(marked) rejBasic=\(rejBasic) rejState=\(rejState) rejFactionFearless=\(rejFactionFearless) rejLos=\(rejLos)");
   return result;
 }

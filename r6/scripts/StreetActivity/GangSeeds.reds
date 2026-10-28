@@ -15,6 +15,7 @@ public func StreetActivity_ActiveSeconds() -> Float = 150.0;
 public func StreetActivity_MinCooldownSeconds() -> Float = 480.0;
 public func StreetActivity_MaxCooldownSeconds() -> Float = 720.0;
 public func StreetActivity_EncounterCloneCount() -> Int32 = 1;
+public func StreetActivity_MaxNearbyCandidates() -> Int32 = 64;
 
 private func StreetActivity_PlayerEligible(player: wref<PlayerPuppet>) -> Bool {
   if !IsDefined(player) || player.IsDead() || IsEntityInInteriorArea(player)
@@ -135,6 +136,9 @@ public class StreetActivitySystem extends ScriptableSystem {
     this.m_tickID = GetInvalidDelayID();
     this.m_activeEncounter = false;
     this.m_escalated = false;
+    let clearedID: EntityID;
+    this.m_seedA = clearedID;
+    this.m_seedB = clearedID;
   }
 
   private final func ScheduleTick(seconds: Float) -> Void {
@@ -171,7 +175,10 @@ public class StreetActivitySystem extends ScriptableSystem {
 
   private final func TrySeedEncounter(player: ref<PlayerPuppet>, now: Float) -> Void {
     let nearby: array<ref<NPCPuppet>> = player.GetNPCsAroundObject(90.0);
-    let count: Int32 = ArraySize(nearby);
+    // Crowd queries can return hundreds of actors in dense districts.  The
+    // pairwise rival search is intentionally bounded so the five-second
+    // scheduler can never turn into an unbounded O(N^2) scan.
+    let count: Int32 = Min(ArraySize(nearby), StreetActivity_MaxNearbyCandidates());
     let i: Int32 = 0;
     while i < count {
       let first: ref<NPCPuppet> = nearby[i];

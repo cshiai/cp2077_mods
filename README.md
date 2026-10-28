@@ -16,7 +16,7 @@ Personal, source-first Cyberpunk 2077 mod collection. The repository is intentio
 - **CET policy:** Cyber Engine Tweaks is deliberately **not installed or supported**. No CET Lua, ASI, console, or CET-required mod may be added.
 - **Much Better AI profile:** the imported 2.3 enemy-AI source is now a fixed REDscript/TweakXL profile. Its CET Lua bootstrap, Native Settings UI, JSON settings store, localization packages, runtime config class, and user-facing tuning parameters are intentionally absent. Gameplay constants are reviewed source values; change them in Git rather than through a runtime menu.
 - **Weather profile:** `archive/pc/mod/weather_probability_rebalance.archive` is an archive-only weather-probability resource. It has no scripts, settings, CET, or native plugin and is loaded through the ordinary mod archive path.
-- **FX/Load profiles:** FX Begone 2.2.1 and Load Begone 3.1.2 are installed as fixed profiles. Their Mod Settings annotations/listeners and any CET dependency were removed; native RED4ext plugins and REDscript companions remain together. Load Begone 3.1.2 adds recap-screen/voice-language callbacks, start-screen busy detection, recap replay support, and blackout overlays while retaining the source-controlled defaults.
+- **FX/Load profiles:** FX Begone 2.2.1 and the currently installed Load Begone 3.1.1 plugin are installed as fixed profiles. Their Mod Settings annotations/listeners and any CET dependency were removed; native RED4ext plugins and REDscript companions remain together. Load Begone adds recap-screen/voice-language callbacks, start-screen busy detection, recap replay support, and blackout overlays while retaining the source-controlled defaults.
 - **Blur/ReFRACT profiles:** Blur Begone 2.6.0 remains active as a fixed source profile. ReFRACT 1.5.0 is retained but REDscript-gated off on the current Proton/MSVCP runtime after two native D3D12 `_Mtx_lock` access violations; its native DLL is not hand-edited and can be re-enabled only with a rebuilt/validated companion.
 - **Black Chrome profile:** Black Chrome 1.1.5 is installed as a fixed ArchiveXL/TweakXL + pure REDscript profile. Its CET reward bootstrap and optional Alternative Berserk bridge were removed; defensive null/lifecycle guards were added to the effectors and cyberdeck/PoolSystem hooks. The 19-vendor payload uses explicit `VendorItem` entries so the 627 cyberware additions survive current TweakXL parsing and vendor stock generation.
 - **Cyberware descriptions:** `CustomRedscriptSuite/CyberwareFlavorDescriptions.reds` restores the post-2.0 cyberware flavour-text panel by removing only the vanilla cyberware hide predicate. `CyberwareEx` repairs persistent ripperdoc stock/materialized inventory during vendor preparation and after each purchase, so deterministic cyberware can be bought and equipped repeatedly in one visit; its slot-index and GLP paths preserve duplicate copies instead of evicting the matching `cyberwareType`, and it keeps an equipped cyberdeck in the three-slot cyberware strip. `UniversalSlotsAndAttachments` now preserves the vanilla `OnEquip`/`OnAttach` gameplay-package entries that supply function text; crafting/upgrade/consumable/material hide rules remain intact. Its former duplicate-quickhack/extra-cyberdeck-slot feature was removed; deck program installation and duplicate filtering now use vanilla paths.
@@ -46,7 +46,7 @@ The custom plugin is built from `native_plugins/UniversalAimFlashlight/Main.cpp`
 
 ## Source map
 
-### `r6/scripts/CustomRedscriptSuite/` (22 modules)
+### `r6/scripts/CustomRedscriptSuite/` (21 modules)
 
 Gameplay tuning and pure-redscript features: no CET dependency.
 
@@ -128,8 +128,8 @@ When importing a mod, download it, extract it to a temporary directory, inspect 
 ./launch-cyberpunk2077-proton-experimental.sh launch
 ```
 
-The current build `26161058` has clean RED4ext startup, all seven expected
-plugins, and successful `scc` invocation in the latest available startup log;
+The current build `26161058` has clean RED4ext startup, all nine expected
+profile plugins, and successful `scc` invocation in the latest available startup log;
 the helper still refuses any different build. The latest source-only pass was
 compile-validated without launching the game.
 

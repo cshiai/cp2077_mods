@@ -233,7 +233,7 @@ public final static func CancelConnection(context: ScriptExecutionContext, recor
         ScriptExecutionContext.SetArgumentObject(context, n"NetrunnerProxy", null);
         return;
       };
-      if !CEN_ProximityCancelsHack() {
+      if CEN_ProximityCancelsHack() {
         let player: ref<PlayerPuppet> = GetPlayer(caster.GetGame());
         if IsDefined(player) && Vector4.Distance(player.GetWorldPosition(), caster.GetWorldPosition()) <= CEN_ProximityRange() {
           caster.CEN_BeginRelease(EngineTime.ToFloat(GameInstance.GetSimTime(caster.GetGame())));

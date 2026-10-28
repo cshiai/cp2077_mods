@@ -454,7 +454,7 @@ public class UniversalIconicWeaponHelper {
     statsId: StatsObjectID,
     evolution: gamedataWeaponEvolution
   ) -> Void {
-    let subRoll: Int32 = RandRange(0, 2);
+    let subRoll: Int32 = RandRange(0, 1);
     switch evolution {
       case gamedataWeaponEvolution.Power:
         if subRoll == 0 {
@@ -526,59 +526,59 @@ public class UniversalIconicWeaponHelper {
     // purchased weapons.  The previous extra-roll branch made crafted saves
     // diverge from the ordinary Iconic pool and overpowered the result.
     let coreCount: Int32 = 2;
-    let core1: Int32 = RandRange(0, 8);
-    let core2: Int32 = (core1 + RandRange(1, 8)) % 8;
+    let core1: Int32 = RandRange(0, 6);
+    let core2: Int32 = (core1 + RandRange(1, 6)) % 7;
     UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, core1);
     UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, core2);
     if coreCount >= 3 {
-      let core3: Int32 = (core2 + RandRange(1, 8)) % 8;
+      let core3: Int32 = (core2 + RandRange(1, 6)) % 7;
       let uniqueCore3: Int32 = core3;
       while uniqueCore3 == core1 || uniqueCore3 == core2 {
-        uniqueCore3 = (uniqueCore3 + 1) % 8;
+        uniqueCore3 = (uniqueCore3 + 1) % 7;
       };
       UniversalIconicWeaponHelper.ApplyCoreOffensiveRoll(statsSystem, statsId, uniqueCore3);
     };
 
     let handlingCount: Int32 = 2;
     if isRanged {
-      let hand1: Int32 = RandRange(0, 7);
-      let hand2: Int32 = (hand1 + RandRange(1, 7)) % 7;
+      let hand1: Int32 = RandRange(0, 5);
+      let hand2: Int32 = (hand1 + RandRange(1, 5)) % 6;
       UniversalIconicWeaponHelper.ApplyRangedHandlingRoll(statsSystem, statsId, hand1);
       UniversalIconicWeaponHelper.ApplyRangedHandlingRoll(statsSystem, statsId, hand2);
       if handlingCount >= 3 {
-        let hand3: Int32 = (hand2 + RandRange(1, 7)) % 7;
+        let hand3: Int32 = (hand2 + RandRange(1, 5)) % 6;
         let uniqueHand3: Int32 = hand3;
         while uniqueHand3 == hand1 || uniqueHand3 == hand2 {
-          uniqueHand3 = (uniqueHand3 + 1) % 7;
+          uniqueHand3 = (uniqueHand3 + 1) % 6;
         };
         UniversalIconicWeaponHelper.ApplyRangedHandlingRoll(statsSystem, statsId, uniqueHand3);
       };
     } else {
-      let melee1: Int32 = RandRange(0, 4);
-      let melee2: Int32 = (melee1 + RandRange(1, 4)) % 4;
+      let melee1: Int32 = RandRange(0, 2);
+      let melee2: Int32 = (melee1 + RandRange(1, 2)) % 3;
       UniversalIconicWeaponHelper.ApplyMeleeHandlingRoll(statsSystem, statsId, melee1);
       UniversalIconicWeaponHelper.ApplyMeleeHandlingRoll(statsSystem, statsId, melee2);
       if handlingCount >= 3 {
-        let melee3: Int32 = (melee2 + RandRange(1, 4)) % 4;
+        let melee3: Int32 = (melee2 + RandRange(1, 2)) % 3;
         let uniqueMelee3: Int32 = melee3;
         while uniqueMelee3 == melee1 || uniqueMelee3 == melee2 {
-          uniqueMelee3 = (uniqueMelee3 + 1) % 4;
+          uniqueMelee3 = (uniqueMelee3 + 1) % 3;
         };
         UniversalIconicWeaponHelper.ApplyMeleeHandlingRoll(statsSystem, statsId, uniqueMelee3);
       };
     };
 
     let elementalCount: Int32 = 1;
-    let elem1: Int32 = RandRange(0, 4);
+    let elem1: Int32 = RandRange(0, 2);
     UniversalIconicWeaponHelper.ApplyElementalRoll(statsSystem, statsId, elem1);
     if elementalCount >= 2 {
-      let elem2: Int32 = (elem1 + RandRange(1, 4)) % 4;
+      let elem2: Int32 = (elem1 + RandRange(1, 2)) % 3;
       UniversalIconicWeaponHelper.ApplyElementalRoll(statsSystem, statsId, elem2);
       if elementalCount >= 3 {
-        let elem3: Int32 = (elem2 + RandRange(1, 4)) % 4;
+        let elem3: Int32 = (elem2 + RandRange(1, 2)) % 3;
         let uniqueElem3: Int32 = elem3;
         while uniqueElem3 == elem1 || uniqueElem3 == elem2 {
-          uniqueElem3 = (uniqueElem3 + 1) % 4;
+          uniqueElem3 = (uniqueElem3 + 1) % 3;
         };
         UniversalIconicWeaponHelper.ApplyElementalRoll(statsSystem, statsId, uniqueElem3);
       };
@@ -588,7 +588,7 @@ public class UniversalIconicWeaponHelper {
       UniversalIconicWeaponHelper.ApplyCraftedHiddenMechanic(statsSystem, statsId);
     } else if !craftedByPlayer {
       // World/purchased weapons retain one random hidden mechanic.
-      let hiddenRoll: Int32 = RandRange(0, 5);
+      let hiddenRoll: Int32 = RandRange(0, 4);
       UniversalIconicWeaponHelper.ApplyHiddenIconicMechanicRoll(statsSystem, statsId, isRanged, hiddenRoll);
     };
 

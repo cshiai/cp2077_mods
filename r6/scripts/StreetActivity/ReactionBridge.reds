@@ -3,6 +3,8 @@
 // global attitude table, or high-density stimulus preset.
 module StreetActivity.Reactions
 
+import SimpleDroneCompanion.*
+
 @wrapMethod(StimFilters)
 public static func CanTriggerCombatDirectly(stimType: gamedataStimType) -> Bool {
   let vanilla: Bool = wrappedMethod(stimType);
@@ -24,6 +26,10 @@ private final func ShouldTriggerAggressiveCrowdNPCCombat(stimEvent: ref<StimuliE
   let playerPuppet: ref<PlayerPuppet> = stimEvent.sourceObject as PlayerPuppet;
   let owner: ref<GameObject> = this.GetOwner();
   if !IsDefined(playerPuppet) || !IsDefined(owner) {
+    return false;
+  }
+  let ownerPuppet: ref<ScriptedPuppet> = owner as ScriptedPuppet;
+  if IsDefined(ownerPuppet) && (ownerPuppet.IsPlayerCompanion() || SDC_IsCompanion(ownerPuppet)) {
     return false;
   }
   let game: GameInstance = owner.GetGame();

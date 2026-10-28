@@ -113,12 +113,20 @@ public class ReFRACTSettings extends ScriptableSystem {
   private let vehicleData: ref<IBlackboard>;
   private let mountedCallback: ref<CallbackHandle>;
   private let cameraCallback: ref<CallbackHandle>;
+
+  public final static func Get(game: GameInstance) -> ref<ReFRACTSettings> {
+    return GameInstance.GetScriptableSystemsContainer(game).Get(n"ReFRACT.ReFRACTSettings") as ReFRACTSettings;
+  }
   // Fixed source profile: no Mod Settings listener or runtime toggle.
   private func OnAttach() -> Void {
     this.Apply();
   }
 
   private func OnDetach() -> Void {
+    // Explicitly tear down the native hook before releasing listeners.  This
+    // is harmless for the fixed disabled profile and keeps future reviewed
+    // enablement safe across save reloads.
+    SetEnabled(false);
     this.renderListener = null;
     this.UnwatchVehicle();
     this.ForgetVehicle();
@@ -224,6 +232,9 @@ public class ReFRACTSettings extends ScriptableSystem {
   }
 
   public func ApplyRenderMode() -> Void {
+    if !this.enabled {
+      return;
+    }
     let game = this.GetGameInstance();
     SetRenderMode(ReFRACTRenderMode.TracedReflections(game), ReFRACTRenderMode.RayReconstruction(game));
   }
@@ -232,7 +243,11 @@ public class ReFRACTSettings extends ScriptableSystem {
   private func WatchVehicle() -> Void {
     this.UnwatchVehicle();
     let defs = GetAllBlackboardDefs().UI_ActiveVehicleData;
-    this.vehicleData = GameInstance.GetBlackboardSystem(this.GetGameInstance()).Get(defs);
+    let blackboardSystem = GameInstance.GetBlackboardSystem(this.GetGameInstance());
+    if !IsDefined(blackboardSystem) {
+      return;
+    }
+    this.vehicleData = blackboardSystem.Get(defs);
     if !IsDefined(this.vehicleData) {
       return;
     }
@@ -319,6 +334,10 @@ public class ReFRACTSettings extends ScriptableSystem {
 @wrapMethod(VehicleComponentPS)
 public final func SetCrystalDomeState(value: Bool) -> Void {
   wrappedMethod(value);
+  let settings = ReFRACTSettings.Get(GetGameInstance());
+  if !IsDefined(settings) || !settings.enabled {
+    return;
+  }
   let vehicle = ReFRACTSettings.MountedVehicle(GetGameInstance());
   if IsDefined(vehicle) && Equals(vehicle.GetVehiclePS(), this) {
     SetCrystalDomeOn(value);
@@ -329,6 +348,10 @@ public final func SetCrystalDomeState(value: Bool) -> Void {
 @wrapMethod(VehicleComponent)
 protected final func ToggleCrystalDome(on: Bool, opt instant: Bool, opt force: Bool, opt delay: Float, opt meshDelay: Float, opt fastStop: Bool) -> Void {
   wrappedMethod(on, instant, force, delay, meshDelay, fastStop);
+  let settings = ReFRACTSettings.Get(GetGameInstance());
+  if !IsDefined(settings) || !settings.enabled {
+    return;
+  }
   let mounted = ReFRACTSettings.MountedVehicle(GetGameInstance());
   let vehicle: ref<VehicleObject> = this.GetVehicle();
   if IsDefined(mounted) && Equals(mounted, vehicle) {
@@ -347,7 +370,11 @@ public abstract class ReFRACTRenderMode {
 
   // DLSS_D stays on with tracing off or another upscaler picked, the menu just greys it out
   public static func RayReconstruction(game: GameInstance) -> Bool {
-    let scaling = GameInstance.GetSettingsSystem(game).GetVar(n"/graphics/presets", n"ResolutionScaling") as ConfigVarListString;
+    let settings = GameInstance.GetSettingsSystem(game);
+    if !IsDefined(settings) {
+      return false;
+    }
+    let scaling = settings.GetVar(n"/graphics/presets", n"ResolutionScaling") as ConfigVarListString;
     return (ReFRACTRenderMode.Flag(game, n"/graphics/raytracing", n"RayTracedPathTracing") ||
       ReFRACTRenderMode.Flag(game, n"/graphics/raytracing", n"RayTracing")) &&
       ReFRACTRenderMode.Flag(game, n"/graphics/presets", n"DLSS_D") &&
@@ -355,7 +382,11 @@ public abstract class ReFRACTRenderMode {
   }
 
   private static func Flag(game: GameInstance, group: CName, name: CName) -> Bool {
-    let flag = GameInstance.GetSettingsSystem(game).GetVar(group, name) as ConfigVarBool;
+    let settings = GameInstance.GetSettingsSystem(game);
+    if !IsDefined(settings) {
+      return false;
+    }
+    let flag = settings.GetVar(group, name) as ConfigVarBool;
     return IsDefined(flag) && flag.GetValue();
   }
 }

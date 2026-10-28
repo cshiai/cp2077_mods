@@ -88,7 +88,11 @@ public func MBAI_StealthHit_AlertGroup(victim: ref<NPCPuppet>, incidentPos: Vect
 
   let peers: array<ref<NPCPuppet>> = victim.GetNPCsAroundObject(40.0);
   let i: Int32 = 0;
-  while i < ArraySize(peers) {
+  let peerCount: Int32 = ArraySize(peers);
+  if peerCount > 64 {
+    peerCount = 64;
+  }
+  while i < peerCount {
     let peer: ref<NPCPuppet> = peers[i];
     if MBAI_ActorMovementEligible(peer) && peer.IsAggressive() && peer.GetEntityID() != victim.GetEntityID() && MBAI_SameCombatGroup(victim, peer) && NotEquals(peer.GetHighLevelStateFromBlackboard(), gamedataNPCHighLevelState.Combat) {
       if NotEquals(peer.GetHighLevelStateFromBlackboard(), gamedataNPCHighLevelState.Alerted) {

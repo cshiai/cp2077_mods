@@ -214,8 +214,6 @@ BlackChrome.SynthLungs$(tier):
               refStat: BaseStats.Cool
               value: -0.04
               statType: BaseStats.SwayTraversalTime
-        effectorClassName: ApplyStatGroupEffector
-        prereqRecord: Prereqs.AlwaysTruePrereq
         removeAfterActionCall: false
         removeAfterPrereqCheck: false
         reapplyOnWeaponChange: false

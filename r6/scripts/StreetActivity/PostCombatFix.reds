@@ -1,5 +1,7 @@
 module PostCombatFix
 
+import SimpleDroneCompanion.*
+
 private func RetreatTagName() -> CName = n"pcf_GangerCanRetreat";
 
 private func BoardingWaitForDistanceInSeconds(distanceInMeters: Float) -> Float =
@@ -44,6 +46,12 @@ private func VehicleSpeed(vehicle: wref<VehicleObject>) -> Float {
 
 private func IsEncounterOwnedNPC(puppet: wref<ScriptedPuppet>) -> Bool {
   if !IsDefined(puppet) {
+    return false;
+  }
+  // Session-bound drones and any future vanilla companion must never inherit
+  // the hostile retreat/vehicle state machine, even if a record carries the
+  // generic retreat tag.
+  if puppet.IsPlayerCompanion() || SDC_IsCompanion(puppet) {
     return false;
   }
   if puppet.m_pcfRetreatOptIn || puppet.m_pcfStreetActivityOwned || NPCManager.HasTag(puppet.GetRecordID(), RetreatTagName()) {
@@ -298,7 +306,10 @@ private func SendRetreatMountCommand(puppet: wref<ScriptedPuppet>, vehicle: wref
   let giveUp: ref<GiveUpBoardingCommand> = new GiveUpBoardingCommand();
   giveUp.boarder = puppet;
   giveUp.attempt = puppet.m_pcfBoardingAttempt;
-  GameInstance.GetDelaySystem(puppet.GetGame()).DelayCallback(giveUp, waitInSeconds);
+  let delay: ref<DelaySystem> = GameInstance.GetDelaySystem(puppet.GetGame());
+  if IsDefined(delay) {
+    delay.DelayCallback(giveUp, waitInSeconds);
+  }
   LogRetreat(s"\(puppetTag) mount sent, vehicle \(EntityID.ToDebugString(vehicle.GetEntityID())) slot \(NameToString(reservedSlot)), \(distanceInMeters)m to walk, ceiling \(waitInSeconds)s, vehicle speed \(VehicleSpeed(vehicle)), \(vehicle.m_pcfBoardersPending) boarder(s) out");
   return true;
 }
@@ -433,7 +444,12 @@ private func SendPanicDrive(vehicle: wref<VehicleObject>, driver: wref<ScriptedP
   verify.driver = driver;
   verify.attemptLabel = attemptLabel;
   verify.useInitCmd = useInitCmd;
-  GameInstance.GetDelaySystem(game).DelayCallback(verify, DriveOffVerifyDelayInSeconds());
+  let delay: ref<DelaySystem> = GameInstance.GetDelaySystem(game);
+  if IsDefined(delay) {
+    delay.DelayCallback(verify, DriveOffVerifyDelayInSeconds());
+  } else {
+    vehicle.m_pcfDriveOffPending = false;
+  }
 }
 
 public class VerifyDriveOffCommand extends DelayCallback {
