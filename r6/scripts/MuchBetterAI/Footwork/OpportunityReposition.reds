@@ -66,13 +66,17 @@ public class MBAI_OpportunityRepositionSystem extends ScriptableSystem {
 
   private func OnDetach() -> Void {
     let gi: GameInstance = this.GetGameInstance();
-    GameInstance.GetDelaySystem(gi).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(gi, this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
     this.CancelAll(gi, EngineTime.ToFloat(GameInstance.GetSimTime(gi)));
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_OpportunityRepositionCallback> = new MBAI_OpportunityRepositionCallback();
     cb.system = this;

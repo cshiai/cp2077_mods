@@ -3,6 +3,7 @@ module MuchBetterAI.Capability
 import MuchBetterAI.Core.*
 import MuchBetterAI.Fireteam.*
 import MuchBetterAI.Logging.*
+import SimpleDroneCompanion.*
 
 public class MBAI_CapabilityAuditEvent extends Event {}
 
@@ -42,7 +43,7 @@ public static func MBAI_CapabilityCatalog() -> array<TweakDBID> {
 }
 
 public static func MBAI_CapabilityEligible(npc: wref<NPCPuppet>) -> Bool {
-  if !IsDefined(npc) || npc.IsCharacterCivilian() || npc.IsCrowd() || npc.IsPlayerCompanion() || GameObject.IsFriendlyTowardsPlayer(npc) || !npc.IsActive() || !npc.IsOnAutonomousAI() || npc.IsPaperdoll() {
+  if !IsDefined(npc) || npc.IsCharacterCivilian() || npc.IsCrowd() || npc.IsPlayerCompanion() || SDC_IsCompanion(npc) || GameObject.IsFriendlyTowardsPlayer(npc) || !npc.IsActive() || !npc.IsOnAutonomousAI() || npc.IsPaperdoll() {
     return false;
   };
   let recordID: TweakDBID = npc.GetRecordID();
@@ -93,6 +94,9 @@ public static func MBAI_ProvisionCapabilities(npc: ref<NPCPuppet>) -> Void {
   };
   let appliedPackages: array<TweakDBID>;
   let glp: ref<GameplayLogicPackageSystem> = GameInstance.GetGameplayLogicPackageSystem(npc.GetGame());
+  if !IsDefined(glp) {
+    return;
+  };
   glp.GetAppliedPackages(npc, appliedPackages);
   MBAI_ApplyCapability(npc, t"Ability.CanGuardBreak", appliedPackages);
 }
@@ -106,7 +110,10 @@ public static func MBAI_AuditCapabilities(npc: ref<NPCPuppet>) -> Void {
 protected cb func OnGameAttached() -> Bool {
   let result: Bool = wrappedMethod();
   let evt: ref<MBAI_CapabilityAuditEvent> = new MBAI_CapabilityAuditEvent();
-  GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, evt, 0.10, false);
+  let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    delay.DelayEvent(this, evt, 0.10, false);
+  }
   return result;
 }
 

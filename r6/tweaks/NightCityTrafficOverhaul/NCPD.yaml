@@ -1,0 +1,310 @@
+# BRENNAN APOLLO
+Vehicle.police__brennan_apollo:
+  $base: Vehicle.v_sportbike3_brennan_apollo_police
+  entityTemplatePath: night_city_traffic_overhaul\entities\ncpd\brennan_apollo_ncpd.ent
+  appearanceName: brennan_apollo_police_basic_police_01
+  randomPassengers: [Passengers.policeDriverEntry]
+  affiliation: Factions.NCPD
+
+# BRENNAN APOLLO
+Vehicle.police__biker_brennan_apollo:
+  $base: Vehicle.v_sportbike3_brennan_apollo_police
+  entityTemplatePath: night_city_traffic_overhaul\entities\ncpd\brennan_apollo_ncpd.ent
+  appearanceName: brennan_apollo_police_basic_police_01
+  randomPassengers: [Passengers.policeBikerDriverEntry]
+  affiliation: Factions.NCPD
+
+# ARCHER HELLA
+Vehicle.police__archer_hella:
+  $base: Vehicle.v_standard2_archer_hella_police
+  entityTemplatePath: night_city_traffic_overhaul\entities\ncpd\archer_hella_ncpd.ent
+  appearanceName: archer_hella__basic_police_01
+  randomPassengers: [Passengers.policeDriverEntry, Passengers.policePassengerFrontEntry, Passengers.policePassengerBackEntry]
+  affiliation: Factions.NCPD
+
+# VILLEFORT CORTES
+Vehicle.police__villefort_cortes:
+  $base: Vehicle.v_standard2_villefort_cortes_police
+  entityTemplatePath: night_city_traffic_overhaul\entities\ncpd\villefort_cortes_ncpd.ent
+  appearanceName: villefort_cortes__basic_police_01
+  randomPassengers: [Passengers.policeDriverEntry, Passengers.policePassengerFrontEntry, Passengers.policePassengerBackEntry]
+  affiliation: Factions.NCPD
+
+# CHEVALIER EMPEROR
+Vehicle.police__chevalier_emperor:
+  $base: Vehicle.v_standard3_chevalier_emperor_police
+  entityTemplatePath: night_city_traffic_overhaul\entities\ncpd\chevalier_emperor_ncpd.ent
+  appearanceName: chevalier_emperor__basic_police
+  randomPassengers: [Passengers.policeEnforcerDriverEntry, Passengers.policeEnforcerPassengerFrontEntry, Passengers.policeEnforcerPassengerBackEntry]
+  affiliation: Factions.NCPD
+
+# THORTON MERRIMAC
+Vehicle.police__thorton_merrimac:
+  $base: Vehicle.v_standard25_thorton_merrimac_police
+  randomPassengers: [Passengers.policeEnforcerDriverEntry, Passengers.policeEnforcerPassengerFrontEntry, Passengers.policeEnforcerPassengerBackEntry]
+  affiliation: Factions.NCPD
+
+
+# CHARACTERS
+
+Character.NCTO_biker_handgun_ma:
+  $base: Character.prevention_biker_handgun_ma
+  entityTemplatePath: night_city_traffic_overhaul\characters\entities\ncpd_biker.ent
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.NCTO_biker_rifle_ma:
+  $base: Character.prevention_biker_rifle_ma
+  entityTemplatePath: night_city_traffic_overhaul\characters\entities\ncpd_biker.ent
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.NCTO_biker_shotgun_ma:
+  $base: Character.prevention_biker_shotgun_ma
+  entityTemplatePath: night_city_traffic_overhaul\characters\entities\ncpd_biker.ent
+  tags:
+    - !append pcf_GangerCanRetreat
+
+
+# CHARACTERS
+
+Character.ncto__prevention_police_handgun_ma:
+  $base: Character.prevention_police_handgun_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_police_handgun_wa:
+  $base: Character.prevention_police_handgun_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_police_shotgun_ma:
+  $base: Character.prevention_police_shotgun_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_police_shotgun_wa:
+  $base: Character.prevention_police_shotgun_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_police_rifle_ma:
+  $base: Character.prevention_police_rifle_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_police_rifle_wa:
+  $base: Character.prevention_police_rifle_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_enforcer_lmg_mb:
+  $base: Character.prevention_enforcer_lmg_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_enforcer_rifle_ma:
+  $base: Character.prevention_enforcer_rifle_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__prevention_enforcer_shotgun_ma:
+  $base: Character.prevention_enforcer_shotgun_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+
+# BIKE
+Passengers.policeBikerDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.NCTO_biker_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.NCTO_biker_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.NCTO_biker_shotgun_ma
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# PATROL
+Passengers.policeDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_wa
+      weight: 0.5
+  validSlotNames: [seat_front_left]
+
+Passengers.policePassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_wa
+      weight: 0.5
+  validSlotNames: [seat_front_right]
+
+Passengers.policePassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_shotgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_police_rifle_wa
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# ENFORCER
+Passengers.policeEnforcerDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_lmg_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_shotgun_ma
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.policeEnforcerPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_lmg_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_shotgun_ma
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.policeEnforcerPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_lmg_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__prevention_enforcer_shotgun_ma
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+# ELITE
+Passengers.NetWatchDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.netwatch_agent_netrunner3_omaha_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_rifle_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_shotgun_ma
+      weight: 0.25
+  validSlotNames: [seat_front_left]
+
+Passengers.NetWatchPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.netwatch_agent_netrunner3_omaha_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_rifle_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.mws_se5_06_netwatch_shotgun_ma
+      weight: 0.25
+  validSlotNames: [seat_front_right]
+

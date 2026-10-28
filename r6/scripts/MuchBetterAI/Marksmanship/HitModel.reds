@@ -326,7 +326,11 @@ private final func MBAI_SquadPressure(player: ref<PlayerPuppet>, now: Float) -> 
     player.m_mbaiShotBudgetSpent = 0;
   };
   if player.m_mbaiShotBudgetSpent >= 2 {
-    let difficulty: gameDifficulty = GameInstance.GetStatsDataSystem(player.GetGame()).GetDifficulty();
+    let statsData = GameInstance.GetStatsDataSystem(player.GetGame());
+    if !IsDefined(statsData) {
+      return 1.0;
+    };
+    let difficulty: gameDifficulty = statsData.GetDifficulty();
     if player.m_mbaiShotBudgetSpent == 2 {
       switch difficulty {
         case gameDifficulty.Story: pressure = 0.38; break;
@@ -361,6 +365,9 @@ private final func MBAI_SensoryPenalty(npc: ref<NPCPuppet>, weaponOwner: ref<Gam
     return 0.0;
   };
   let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(weaponOwner.GetGame());
+  if !IsDefined(statsSystem) {
+    return 0.0;
+  };
   let accuracy: Float = statsSystem.GetStatValue(Cast<StatsObjectID>(weaponOwner.GetEntityID()), gamedataStatType.Accuracy);
   if accuracy <= 0.0 {
     return 0.0;
@@ -401,6 +408,9 @@ private final func MBAI_StructuralShotAllowed(weaponOwner: ref<GameObject>, weap
     };
   };
   let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(gameInstance);
+  if !IsDefined(statsSystem) {
+    return false;
+  };
   let accuracy: Float = statsSystem.GetStatValue(Cast<StatsObjectID>(weaponOwner.GetEntityID()), gamedataStatType.Accuracy);
   if accuracy == 0.0 {
     return false;
@@ -442,7 +452,11 @@ private final func MBAI_WeaponHitScale(weaponType: gamedataItemType) -> Float {
 @addMethod(TargetShootComponent)
 private final func MBAI_DifficultyHitScale(target: ref<GameObject>) -> Float {
   let difficultyScale: Float = 1.0;
-  switch GameInstance.GetStatsDataSystem(target.GetGame()).GetDifficulty() {
+  let statsData = GameInstance.GetStatsDataSystem(target.GetGame());
+  if !IsDefined(statsData) {
+    return difficultyScale;
+  };
+  switch statsData.GetDifficulty() {
     case gameDifficulty.Story: difficultyScale = 0.70; break;
     case gameDifficulty.Easy: difficultyScale = 0.85; break;
     case gameDifficulty.VeryHard: difficultyScale = 1.12; break;

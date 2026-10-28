@@ -109,7 +109,10 @@ public final func RefreshCombatDetectionMultiplier(target: ref<ScriptedPuppet>) 
   let gi: GameInstance = owner.GetGame();
   let lightF: Float = MBAI_TimeOfDayLightFactor(gi, player);
   let coverF: Float = 1.0;
-  let psmBB: ref<IBlackboard> = GameInstance.GetBlackboardSystem(gi).GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine);
+  let blackboard = GameInstance.GetBlackboardSystem(gi);
+  let psmBB: ref<IBlackboard> = IsDefined(blackboard)
+    ? blackboard.GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+    : null;
   if IsDefined(psmBB) && psmBB.GetBool(GetAllBlackboardDefs().PlayerStateMachine.UsingCover) {
     coverF = 0.7;
   };

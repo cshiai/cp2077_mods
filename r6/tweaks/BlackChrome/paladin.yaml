@@ -1,0 +1,225 @@
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Common, nextTier: BlackChrome.PaladinDeckCommonPlus, damageBonus: 30, traceTimeV: -0.5,  name: blackchrome_paladin_name1 }
+    - { tier: CommonPlus, nextTier: BlackChrome.PaladinDeckUncommon, damageBonus: 35, traceTimeV: -0.48, name: blackchrome_paladin_name1 }
+    - { tier: Uncommon, nextTier: BlackChrome.PaladinDeckUncommonPlus, damageBonus: 45, traceTimeV: -0.43, name: blackchrome_paladin_name2 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.PaladinDeckRare, damageBonus: 50, traceTimeV: -0.40, name: blackchrome_paladin_name2 }
+    - { tier: Rare, nextTier: BlackChrome.PaladinDeckRarePlus, damageBonus: 60, traceTimeV: -0.35, name: blackchrome_paladin_name3 }
+    - { tier: RarePlus, nextTier: BlackChrome.PaladinDeckEpic, damageBonus: 65, traceTimeV: -0.32, name: blackchrome_paladin_name3 }
+    - { tier: Epic, nextTier: BlackChrome.PaladinDeckEpicPlus, damageBonus: 75, traceTimeV: -0.28, name: blackchrome_paladin_name4 }
+    - { tier: EpicPlus, nextTier: BlackChrome.PaladinDeckLegendary, damageBonus: 80, traceTimeV: -0.25, name: blackchrome_paladin_name4 }
+    - { tier: Legendary, nextTier: BlackChrome.PaladinDeckLegendaryPlus, damageBonus: 90, traceTimeV: -0.2, name: blackchrome_paladin_name5 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.PaladinDeckLegendaryPlusPlus, damageBonus: 96, traceTimeV: -0.18, name: blackchrome_paladin_name5 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, damageBonus: 100, traceTimeV: -0.15, name: blackchrome_paladin_name5 }   
+  $base: Items.AdvancedMilitechParalineMKVLegendary
+  quality: Quality.$(tier)
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_12
+  nextUpgradeItem: $(nextTier)
+  displayName: LocKey#$(name)
+  tags: ['Cyberware', 'HideInBackpackUI', 'Cyberdeck']
+  variants: [Variants.Humanity20Cost]
+  OnEquip: 
+    - Items.BaseDeck_inline0
+    - Items.BaseDeck_inline3 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [$(damageBonus), 30]
+        localizedDescription: LocKey#blackchrome_paladin_description1    
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [10]
+        localizedDescription: LocKey#blackchrome_paladin_description2
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [25, 20]
+        localizedDescription: LocKey#blackchrome_paladin_description3
+
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Common }
+    - { tier: CommonPlus }
+  blueprint: Items.CyberdeckBlueprint2Slots
+  OnEquip:
+      - !append
+        $type: GameplayLogicPackage
+        stats: 
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.Memory
+            value: 2
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.BufferSize
+            value: 0
+  objectActions:
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Uncommon }
+    - { tier: UncommonPlus }
+  blueprint: Items.CyberdeckBlueprint3Slots
+  OnEquip:
+      - !append
+        $type: GameplayLogicPackage
+        stats: 
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.Memory
+            value: 3
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.BufferSize
+            value: 1
+  objectActions:
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Rare }
+    - { tier: RarePlus }
+  blueprint: Items.CyberdeckBlueprint4Slots
+  OnEquip:
+      - !append
+        $type: GameplayLogicPackage
+        stats: 
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.Memory
+            value: 4
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.BufferSize
+            value: 2  
+  objectActions:
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Epic }
+    - { tier: EpicPlus }
+  blueprint: Items.CyberdeckBlueprint5Slots
+  OnEquip:
+      - !append
+        $type: GameplayLogicPackage
+        stats: 
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.Memory
+            value: 5
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.BufferSize
+            value: 3  
+  objectActions:
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+    - DeviceAction.VehicleExplodeClassHack
+    - DeviceAction.OverloadClassLvl4Hack
+    - DeviceAction.TurretOverrideAttitudeClassHack
+    - DeviceAction.OverrideAttitudeClassLvl4Hack
+    - DeviceAction.TurretToggleStateClassLvl4Hack 
+    - DeviceAction.ServerOverloadClassHack
+
+BlackChrome.PaladinDeck$(tier):
+  $instances:
+    - { tier: Legendary }
+    - { tier: LegendaryPlus }   
+    - { tier: LegendaryPlusPlus }   
+  blueprint: Items.CyberdeckBlueprint6Slots
+  OnEquip:
+      - !append
+        $type: GameplayLogicPackage
+        stats: 
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.Memory
+            value: 6
+          - $type: ConstantStatModifier
+            modifierType: Additive
+            statType: BaseStats.BufferSize
+            value: 4
+  objectActions:
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+    - DeviceAction.VehicleExplodeClassHack
+    - DeviceAction.OverloadClassLvl4Hack
+    - DeviceAction.TurretOverrideAttitudeClassHack
+    - DeviceAction.OverrideAttitudeClassLvl4Hack
+    - DeviceAction.TurretToggleStateClassLvl4Hack 
+    - DeviceAction.ServerOverloadClassHack
+    - DeviceAction.TurretOverrideAttitudeClassLvl5Hack
+    - DeviceAction.OverrideAttitudeClassLvl5Hack
+    - DeviceAction.TurretToggleStateClassLvl5Hack

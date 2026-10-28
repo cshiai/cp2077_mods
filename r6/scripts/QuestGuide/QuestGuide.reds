@@ -803,7 +803,10 @@ public class QuestGuidePopup extends InGamePopup {
     this.m_qgRebuildGeneration += 1;
     let evt: ref<QGRebuildEvent> = new QGRebuildEvent();
     evt.generation = this.m_qgRebuildGeneration;
-    GameInstance.GetDelaySystem(this.GetGame()).DelayEvent(this, evt, 0.08, true);
+    let delay = GameInstance.GetDelaySystem(this.GetGame());
+    if IsDefined(delay) {
+      delay.DelayEvent(this, evt, 0.08, true);
+    }
   }
 
   protected cb func OnQGRebuildEvent(evt: ref<QGRebuildEvent>) -> Bool {
@@ -1617,7 +1620,10 @@ public class QuestGuidePopup extends InGamePopup {
 
   public static func Show(player: ref<PlayerPuppet>) -> ref<QuestGuidePopup> {
     let popup: ref<QuestGuidePopup> = new QuestGuidePopup();
-    GameInstance.GetUISystem(player.GetGame()).QueueEvent(ShowCustomPopupEvent.Create(popup));
+    let uiSystem = IsDefined(player) ? GameInstance.GetUISystem(player.GetGame()) : null;
+    if IsDefined(uiSystem) {
+      uiSystem.QueueEvent(ShowCustomPopupEvent.Create(popup));
+    }
     return popup;
   }
 
@@ -1631,7 +1637,10 @@ public class QuestGuidePopup extends InGamePopup {
     };
     let popup: ref<QuestGuidePopup> = new QuestGuidePopup();
     popup.QGSetFromMenu(true);
-    GameInstance.GetUISystem(player.GetGame()).QueueEvent(ShowCustomPopupEvent.Create(popup));
+    let uiSystem = IsDefined(player) ? GameInstance.GetUISystem(player.GetGame()) : null;
+    if IsDefined(uiSystem) {
+      uiSystem.QueueEvent(ShowCustomPopupEvent.Create(popup));
+    }
     return popup;
   }
 }

@@ -107,6 +107,7 @@ class TheNullifier extends ScriptableService
 	private let darkMatterNodes: array<Int32>;
 	
 	private let isInitialized: Bool = false;
+	private let callbackSystem: wref<CallbackSystem>;
 
 	let exceptionMap: ref<inkIntHashMap>;
 	let fogMap: ref<inkIntHashMap>;
@@ -120,17 +121,29 @@ class TheNullifier extends ScriptableService
 	private cb func OnLoad() {
 		if !this.enabled { return; }
 		if !this.isInitialized { this.InitializeHashLibrary(); }
-		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/Loaded", this, n"ProcessRestrictions").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
+		this.callbackSystem = GameInstance.GetCallbackSystem();
+		if !IsDefined(this.callbackSystem) { return; }
+		this.callbackSystem.RegisterCallback(n"Resource/Loaded", this, n"ProcessRestrictions").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
 
-		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/PostLoad", this, n"ProcessFogNulled").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
+		this.callbackSystem.RegisterCallback(n"Resource/PostLoad", this, n"ProcessFogNulled").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
 //		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/PostLoad", this, n"ProcessQuestPhasePMR_Removal").AddTarget(ResourceTarget.Type(n"questQuestPhaseResource"));
 //		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/PostLoad", this, n"ProcessScenePMR_Removal").AddTarget(ResourceTarget.Type(n"scnSceneResource"));
 //		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/PostLoad", this, n"ProcessQuestPMR_Removal").AddTarget(ResourceTarget.Type(n"questQuestResource"));
 
 //		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/Ready", this, n"ProcessVehicleForbiddenAreaNode").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
-		GameInstance.GetCallbackSystem().RegisterCallback(n"Resource/Ready", this, n"ProcessVisualsNulled").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
+		this.callbackSystem.RegisterCallback(n"Resource/Ready", this, n"ProcessVisualsNulled").AddTarget(ResourceTarget.Type(n"worldStreamingSector"));
 
 		this.RegisterModSettingsListener();
+	}
+
+	private func OnDetach() -> Void {
+		if !IsDefined(this.callbackSystem) {
+			return;
+		}
+		this.callbackSystem.UnregisterCallback(n"Resource/Loaded", this);
+		this.callbackSystem.UnregisterCallback(n"Resource/PostLoad", this);
+		this.callbackSystem.UnregisterCallback(n"Resource/Ready", this);
+		this.callbackSystem = null;
 	}
 
 	@if(ModuleExists( "ModSettingsModule" ))
@@ -142,9 +155,10 @@ class TheNullifier extends ScriptableService
 	private func RegisterModSettingsListener() {}
 
 	private cb func ProcessVisualsNulled( event: ref<ResourceEvent> ) {
-		if !this.ncktnEnabled && !this.ncvnEnabled { return; }
+		if !this.ncktnEnabled && !this.ncvnEnabled || !IsDefined(event) { return; }
 		let sector = event.GetResource() as worldStreamingSector;
-		if !IsDefined(sector) || Equals(sector.category, worldStreamingSectorCategory.Navigation) || Equals(sector.category, worldStreamingSectorCategory.AlwaysLoaded) { return; }
+		if !IsDefined(sector) || !IsDefined(this.NodeIDMap) || !IsDefined(this.exceptionMap) || !IsDefined(this.killMap)
+			|| Equals(sector.category, worldStreamingSectorCategory.Navigation) || Equals(sector.category, worldStreamingSectorCategory.AlwaysLoaded) { return; }
 
 		let sectorPathHash = ResRef.GetHash(event.GetPath());
 		let count = sector.GetNodeSetupCount();
@@ -189,7 +203,7 @@ class TheNullifier extends ScriptableService
 
 	private cb func ProcessFogNulled(event: ref<ResourceEvent>) 
 	{
-		if(!this.ncfnEnabled) { return; }
+		if !this.ncfnEnabled || !IsDefined(event) || !IsDefined(this.fogMap) { return; }
 
 		let sector = event.GetResource() as worldStreamingSector;
 		if !IsDefined(sector) { return; }
@@ -213,7 +227,7 @@ class TheNullifier extends ScriptableService
 	}
 
 	private cb func ProcessRestrictions( event: ref<ResourceEvent> ) {
-		if !this.ncktnEnabled && !this.ncwbnEnabled { return; }
+		if !this.ncktnEnabled && !this.ncwbnEnabled || !IsDefined(event) { return; }
 		let sector = event.GetResource() as worldStreamingSector;
 		if !IsDefined(sector) || Equals(sector.category, worldStreamingSectorCategory.Navigation) || Equals(sector.category, worldStreamingSectorCategory.AlwaysLoaded) { return; }
 
@@ -287,9 +301,9 @@ class TheNullifier extends ScriptableService
 	}
 
 	private cb func ProcessVehicleForbiddenAreaNode(event: ref<ResourceEvent>) {
-		if !this.ncfvnEnabled { return; }
+		if !this.ncfvnEnabled || !IsDefined(event) { return; }
 		let sector = event.GetResource() as worldStreamingSector;
-		if (Equals(sector.category, worldStreamingSectorCategory.Navigation) || Equals(sector.category, worldStreamingSectorCategory.AlwaysLoaded)) { return; }
+		if !IsDefined(sector) || Equals(sector.category, worldStreamingSectorCategory.Navigation) || Equals(sector.category, worldStreamingSectorCategory.AlwaysLoaded) { return; }
 			
 		for node in sector.GetNodes() {
 			let forbidden = node as worldVehicleForbiddenAreaNode;
@@ -312,7 +326,7 @@ class TheNullifier extends ScriptableService
     }	
 
     private cb func ProcessScenePMR_Removal(event: ref<ResourceEvent>) {
-		if !this.ncprnEnabled { return; }
+		if !this.ncprnEnabled || !IsDefined(event) { return; }
         let scene = event.GetResource() as scnSceneResource;
         if !IsDefined(scene) { return; }
 
@@ -334,7 +348,7 @@ class TheNullifier extends ScriptableService
     }
 
     private cb func ProcessQuestPMR_Removal(event: ref<ResourceEvent>) {
-		if !this.ncprnEnabled { return; }
+		if !this.ncprnEnabled || !IsDefined(event) { return; }
         let quest = event.GetResource() as questQuestResource;
         if !IsDefined(quest) { return; }
 
@@ -342,7 +356,7 @@ class TheNullifier extends ScriptableService
             let gameManagerNode = node as questGameManagerNodeDefinition;
             if IsDefined(gameManagerNode) {
                 let restrict = gameManagerNode.type as questGameplayRestrictions_NodeType;
-                if IsDefined(node) {
+	                if IsDefined(restrict) {
 					ArrayRemove(restrict.restrictionIDs, t"GameplayRestriction.NoPhotoMode");
                 }
             }
@@ -350,7 +364,7 @@ class TheNullifier extends ScriptableService
     }
 
     private cb func ProcessQuestPhasePMR_Removal(event: ref<ResourceEvent>) {
-		if !this.ncprnEnabled { return; }
+		if !this.ncprnEnabled || !IsDefined(event) { return; }
         let qPhase = event.GetResource() as questQuestPhaseResource;
         if !IsDefined(qPhase) { return; }
 
@@ -358,7 +372,7 @@ class TheNullifier extends ScriptableService
             let gameManagerNode = node as questGameManagerNodeDefinition;
             if IsDefined(gameManagerNode) {
                 let restrict = gameManagerNode.type as questGameplayRestrictions_NodeType;
-                if IsDefined(restrict) {
+	                if IsDefined(restrict) {
 					ArrayRemove(restrict.restrictionIDs, t"GameplayRestriction.NoPhotoMode");
                 }
             }

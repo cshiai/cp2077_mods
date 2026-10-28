@@ -1,0 +1,294 @@
+# VEHICLES
+
+
+# DELAMAIN
+Vehicle.transport__cortes_delamain:
+  $base: Vehicle.v_standard2_villefort_cortes_delamain_taxi
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\villefort_cortes_delamain_taxi.ent
+  appearanceName: villefort_cortes__basic_delamain
+  randomPassengers: [Passengers.DelamainPassengerBackEntry]
+  headlightColor:
+    - 255
+    - 255
+    - 255 # 0
+    - 255
+
+# HELLA COMBAT CAB
+Vehicle.transport__archer_hella_combat_cab:
+  $base: Vehicle.v_standard2_archer_hella_combat_cab
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\archer_hella_combat_cab.ent
+  appearanceName: archer_hella__basic_combatcab_01
+  randomPassengers: [Passengers.SixthstreetTaxiDriverEntry, Passengers.LowProfilePassengerBackEntry]
+
+Vehicle.transport__archer_hella_combat_cab_civ:
+  $base: Vehicle.v_standard2_archer_hella_combat_cab
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\archer_hella_combat_cab.ent
+  appearanceName: archer_hella__basic_combatcab_01
+  randomPassengers: [Passengers.CivTaxiDriverEntry, Passengers.LowProfilePassengerBackEntry]
+
+# THRAX COMBAT CAB
+Vehicle.transport__chevalier_thrax_combat_cab:
+  $base: Vehicle.v_standard2_chevalier_thrax_combat_cab
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\chevalier_thrax_combat_cab.ent
+  appearanceName: chevalier_thrax__basic_combat_cab_01
+  randomPassengers: [Passengers.SixthstreetTaxiDriverEntry, Passengers.LowProfilePassengerBackEntry]
+
+# THRAX COMBAT CAB
+Vehicle.transport__chevalier_thrax_combat_cab_civ:
+  $base: Vehicle.v_standard2_chevalier_thrax_combat_cab
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\chevalier_thrax_combat_cab.ent
+  appearanceName: chevalier_thrax__basic_combat_cab_01
+  randomPassengers: [Passengers.CivTaxiDriverEntry, Passengers.LowProfilePassengerBackEntry]
+
+# MAHIR BUS
+Vehicle.transport__mahir_mt28_coach:
+  $base: Vehicle.v_mahir_mt28_coach
+  entityTemplatePath: night_city_traffic_overhaul\entities\transport\v_mahir_mt28_coach_basic_01.ent
+  appearanceName: mahir_mt28_basic_coach_01
+  randomPassengers: [Passengers.LowProfilePassengerBackEntry]
+
+
+# DELAMAIN PASSENGERS
+Passengers.DelamainPassengerBackEntry:
+  $base: Passengers.CitizenRichPassengerBackEntry
+  probability: 0.5
+  role: Passenger
+  characterRecords:
+    - Passengers.CitizenRichPassengerBackEntry_inline0
+    - Passengers.CitizenRichPassengerBackEntry_inline1
+    - Passengers.CorpoArasakaPassengerBackEntry_inline0
+    - Passengers.CorpoArasakaPassengerBackEntry_inline1
+  validSlotNames:
+    - seat_back_right
+    - seat_back_left
+
+# TAXI PASSENGERS - HIGH PROFILE
+Passengers.HighProfilePassengerBackEntry:
+  $base: Passengers.CitizenRichPassengerBackEntry
+  probability: 0.5
+  role: Passenger
+  characterRecords:
+    - Passengers.CitizenRichPassengerBackEntry_inline0
+    - Passengers.CitizenRichPassengerBackEntry_inline1
+    - Passengers.CorporatPassengerBackEntry_inline0
+    - Passengers.CorporatPassengerBackEntry_inline1
+    - Passengers.DollPassengerBackEntry_inline0
+    - Passengers.DollPassengerBackEntry_inline1
+  validSlotNames:
+    - seat_back_right
+    - seat_back_left
+
+Passengers.DollPassengerBackEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.DollMale
+  weight: 1
+
+Passengers.DollPassengerBackEntry_inline1:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.DollFemale
+  weight: 1
+
+# TAXI PASSENGERS - LOW PROFILE
+Passengers.LowProfilePassengerBackEntry:
+  $base: Passengers.CitizenRichPassengerBackEntry
+  probability: 0.5
+  role: Passenger
+  characterRecords:
+    - Passengers.LowlifePassengerBackEntry_inline0
+    - Passengers.LowlifePassengerBackEntry_inline1
+    - Passengers.MunicipialMalePassengerBackEntry_inline0
+    - Passengers.NightLifePassengerBackEntry_inline0
+    - Passengers.NightLifePassengerBackEntry_inline1
+    - Passengers.ProstitutePassengerBackEntry_inline0
+    - Passengers.ProstitutePassengerBackEntry_inline1
+    - Passengers.HottiePassengerBackEntry_inline0
+  validSlotNames:
+    - seat_back_right
+    - seat_back_left
+
+Passengers.ProstitutePassengerBackEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.ProstituteMale
+  weight: 1
+
+Passengers.ProstitutePassengerBackEntry_inline1:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.ProstituteFemale
+  weight: 1
+
+Passengers.HottiePassengerBackEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.HoodHottie
+  weight: 1
+
+
+# TAXI CAB DRIVER
+
+Passengers.SixthstreetTaxiDriverEntry:
+  $base: Passengers.CitizenRichDriverEntry
+  probability: 1
+  role: Driver
+  characterRecords:
+    - Passengers.SixthstreetDriverEntry_inline0
+    - Passengers.SixthstreetDriverEntry_inline1
+    - Passengers.SixthstreetDriverEntry_inline2
+    - Passengers.SixthstreetDriverEntry_inline3
+    - Passengers.SixthstreetDriverEntry_inline4
+    - Passengers.SixthstreetDriverEntry_inline5
+    - Passengers.SixthstreetDriverEntry_inline6
+  validSlotNames:
+    - seat_front_left
+
+
+Passengers.SixthstreetDriverEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_hooligan_ranged1_nova_ma
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline1:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_hooligan_ranged1_nova_wa
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline2:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_hooligan_ranged1_saratoga_ma
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline3:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_hooligan_ranged1_saratoga_wa
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline4:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_menace1_shotgun2_igla_ma
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline5:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_menace1_shotgun2_tactician_ma
+  weight: 1
+
+Passengers.SixthstreetDriverEntry_inline6:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.sixthstreet_veteran3_ranged2_ajax_ma
+  weight: 1
+
+
+
+
+# TAXI CAB DRIVER - CIVILIAN
+Passengers.CivTaxiDriverEntry:
+  $base: Passengers.CitizenRichDriverEntry
+  probability: 1
+  role: Driver
+  characterRecords:
+    - Passengers.TaxiDriverDriverEntry_inline0
+    - Passengers.TaxiDriverDriverEntry_inline1
+  validSlotNames:
+    - seat_front_left
+
+Passengers.TaxiDriverDriverEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.NonBinaryMaleBody
+  weight: 1
+
+Passengers.TaxiDriverDriverEntry_inline1:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.NonBinaryFemaleBody
+  weight: 1
+
+
+
+
+# Character.NightlifeMale
+# Character.NightlifeWoman
+# Character.DefaultNCResidentMale
+# Character.DefaultNCResidentFemale
+# Character.MunicipialMale
+# Character.HoodHottie
+# Character.ProstituteMale
+# Character.SexworkerMale
+# Character.ProstituteFemale
+# Character.SexworkerFemale
+
+# Character.CitizenRichMale
+# Character.CitizenRichFemale
+# Character.CitizenArasakaHatoCorpoMale
+# Character.CorpoMan
+# Character.CorpoManBig
+# Character.CorpoWoman
+# Character.CorpoManArasaka
+# Character.CorpoWomanArasaka
+# Character.ArasakaScientist
+# Character.DollMale
+# Character.DollFemale
+
+# Character.CitizenAldecaldosMale
+# Character.CitizenAldecaldosMaleBig
+# Character.CitizenAldecaldosFemale
+# Character.CitizenBikerMale
+# Character.CitizenBikerFemale
+
+# Character.CookMale
+# Character.Waitress
+# Character.ServiceDiningWoman
+# Character.ServiceDiningMale
+# Character.WorkerMale
+# Character.WorkerSpecialistMale
+# Character.NurseFemale
+# Character.MedicalFemale
+# Character.MedicalMale
+
+# Character.WomanChubby
+# Character.JockMale
+# Character.WorkoutMale
+# Character.JockMaleBig
+# Character.WorkoutMaleBig
+# Character.WorkoutFemale
+# Character.Mallrat
+# Character.MediaWoman
+# Character.Monk
+# Character.MorningCrowdMan
+# Character.TenantMale
+# Character.TenantMaleBig
+# Character.MorningCrowdWoman
+# Character.TenantWoman
+
+# Character.SlackerMale
+# Character.YoungsterMale
+# Character.SlackerMaleBig
+# Character.YoungsterMaleBig
+# Character.SlackerFemale
+# Character.YoungsterFemale
+# Character.StoopKing
+# Character.LowlifeMale
+# Character.StoopKingBig
+# Character.LowlifeMaleBig
+# Character.StoopQueen
+# Character.LowlifeWoman
+# Character.FattyMale
+# Character.ObeseMale
+# Character.TrainingRobot
+
+# Character.JunkieMale
+# Character.JunkieFemale
+
+# Character.Bouncer
+# Character.CreoleMan
+# Character.CreoleWoman
+# Character.CreoleManBig
+
+# Character.FreakMale
+# Character.FreakFemale
+# Character.NonBinaryMaleBody
+# Character.NonBinaryFemaleBody
+
+# Character.AldecaldosMale
+# Character.AldecaldosFemale
+# Character.ServiceDancerFemale
+# Character.ServiceTubeDancerFemale
+# Character.ReligiousFemale
+# Character.ShootingRangeMercMale
+# Character.ShootingRangeMercFemal

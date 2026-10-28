@@ -591,7 +591,11 @@ public func MBAI_NetrunnerCountMeleeAllies(nrn: wref<NPCPuppet>) -> Int32 {
 
 public func MBAI_NetrunnerUltimateGateMet(nrn: wref<NPCPuppet>) -> Bool {
   let gi: GameInstance = nrn.GetGame();
-  let player: ref<GameObject> = GameInstance.GetPlayerSystem(gi).GetLocalPlayerMainGameObject();
+  let playerSystem = GameInstance.GetPlayerSystem(gi);
+  if !IsDefined(playerSystem) {
+    return false;
+  };
+  let player: ref<GameObject> = playerSystem.GetLocalPlayerMainGameObject();
   if !IsDefined(player) {
     return true;
   };

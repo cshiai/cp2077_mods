@@ -46,12 +46,10 @@ MovementActions.RingSelector.actions:
 GenericArchetype.RingSelector.actions:
   - !append-once MBAI.MeleePunishPressBlocked
   - !append-once MBAI.MeleePunishPressParried
-MovementActions.MeleeRingSelector.actions:
-  - !append-once MBAI.MeleePunishPressBlocked
-  - !append-once MBAI.MeleePunishPressParried
-DefaultRingSelector.actions:
-  - !append-once MBAI.MeleePunishPressBlocked
-  - !append-once MBAI.MeleePunishPressParried
+# The two concrete melee selector records are inheritance-only aliases on
+# current 2.5 data.  TweakXL cannot infer their array element type and emits
+# an ambiguous-definition error; the parent RingSelector edits above cover
+# the same action graph without poisoning the import.
 
 # Weapon temperament/ring discipline is deliberately additive; the
 # temperament system and vanilla ring tests remain authoritative.

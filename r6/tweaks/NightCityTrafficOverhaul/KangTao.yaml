@@ -1,0 +1,106 @@
+# VILLEFORT CORTES
+Vehicle.kangtao__villefort_cortes:
+  $base: Vehicle.v_standard2_villefort_cortes_kangtao
+  randomPassengers: [Passengers.KangtaoDriverEntry, Passengers.KangtaoPassengerFrontEntry, Passengers.KangtaoPassengerBackEntry]
+  affiliation: Factions.KangTao
+
+# VILLEFORT COLUMBUS
+Vehicle.kangtao__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus_kangtao
+  randomPassengers: [Passengers.KangtaoDriverEntry, Passengers.KangtaoPassengerFrontEntry]
+  destruction: Vehicle.NCTO_VehicleDestructionParamsColumbus
+  affiliation: Factions.KangTao
+
+# MILITECH BEHEMOTH COLUMBUS
+Vehicle.kangtao__militech_behemoth:
+  $base: Vehicle.v_utility4_militech_behemoth_kangtao
+  randomPassengers: [Passengers.KangtaoDriverEntry, Passengers.KangtaoPassengerFrontEntry]
+  affiliation: Factions.KangTao
+
+
+# DRIVERS
+Passengers.KangtaoDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_ranger1_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun2_zhuo_mah_rare
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun3_zhuo_mah_elite
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.KangtaoPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_ranger1_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun2_zhuo_mah_rare
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun3_zhuo_mah_elite
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.KangtaoPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_ranger1_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun2_zhuo_mah_rare
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_soldier2_shotgun3_zhuo_mah_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_android_android2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kangtao_officer_grenadier3_mah_elite
+      weight: 0.1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__kangtao_ranger1_ranged2_dian_ma:
+  $base: Character.kangtao_ranger1_ranged2_dian_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kangtao_soldier2_shotgun2_zhuo_mah_rare:
+  $base: Character.kangtao_soldier2_shotgun2_zhuo_mah_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kangtao_soldier2_shotgun3_zhuo_mah_elite:
+  $base: Character.kangtao_soldier2_shotgun3_zhuo_mah_elite
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kangtao_android_android2_dian_ma:
+  $base: Character.kangtao_android_android2_dian_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kangtao_officer_grenadier3_mah_elite:
+  $base: Character.kangtao_officer_grenadier3_mah_elite
+  tags:
+    - !append pcf_GangerCanRetreat

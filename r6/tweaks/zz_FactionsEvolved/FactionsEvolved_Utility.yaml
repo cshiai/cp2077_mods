@@ -1,0 +1,157 @@
+# --- Utility Vehicles ---
+
+# ORANJE3 TABLE TOP ORANJE
+Passengers.TraumaDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_shotgun2_zhuo_ma_rare
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.TraumaPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_shotgun2_zhuo_ma_rare
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_rare_officer_chao_ma
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.TraumaPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_ranged2_dian_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__trauma_soldier_shotgun2_zhuo_ma_rare
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# BORDER PATROL
+Passengers.BorderDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards_shotgun
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.BorderPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards_shotgun
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.BorderPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_border_guards_shotgun
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# SHERIFF
+Passengers.SheriffDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__California_Sheriff
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.SheriffPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__California_Sheriff
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.SheriffPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__California_Sheriff
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# ==============================================================================
+# FACTIONS EVOLVED - UTILITY CHARACTERS
+# ==============================================================================
+
+# TRAUMA TEAM
+Character.fe__trauma_soldier_ranged2_dian_ma:
+  $base: Character.trauma_soldier_ranged2_dian_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__trauma_soldier_shotgun2_zhuo_ma_rare:
+  $base: Character.trauma_soldier_shotgun2_zhuo_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__trauma_rare_officer_chao_ma:
+  $base: Character.trauma_rare_officer_chao_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+
+# BORDER PATROL
+Character.fe__prevention_border_guards:
+  $base: Character.prevention_border_guards
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__prevention_border_guards_shotgun:
+  $base: Character.prevention_border_guards_shotgun
+  tags:
+    - !append pcf_GangerCanRetreat
+
+
+# SHERIFF
+Character.fe__California_Sheriff:
+  $base: Character.California_Sheriff
+  tags:
+    - !append pcf_GangerCanRetreat

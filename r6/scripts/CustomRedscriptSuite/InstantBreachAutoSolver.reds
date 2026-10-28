@@ -32,7 +32,10 @@ public static func IBS_EnsureAllDataminePrograms(bb: ref<IBlackboard>) -> Void {
 @wrapMethod(ScriptableDeviceComponentPS)
 public final func OnToggleNetrunnerDive(evt: ref<ToggleNetrunnerDive>) -> EntityNotificationType {
   if IsDefined(evt) && !evt.ShouldTerminate() {
-    let minigameBB: ref<IBlackboard> = GameInstance.GetBlackboardSystem(this.GetGameInstance()).Get(GetAllBlackboardDefs().HackingMinigame);
+    let blackboard = GameInstance.GetBlackboardSystem(this.GetGameInstance());
+    let minigameBB: ref<IBlackboard> = IsDefined(blackboard)
+      ? blackboard.Get(GetAllBlackboardDefs().HackingMinigame)
+      : null;
     IBS_EnsureAllDataminePrograms(minigameBB);
     this.SetMinigameState(HackingMinigameState.Succeeded);
     evt.m_skipMinigame = true;
@@ -42,7 +45,10 @@ public final func OnToggleNetrunnerDive(evt: ref<ToggleNetrunnerDive>) -> Entity
 
 @wrapMethod(AccessPointControllerPS)
 private final func RefreshSlaves(const devices: script_ref<array<ref<DeviceComponentPS>>>) -> Void {
-  let minigameBB: ref<IBlackboard> = GameInstance.GetBlackboardSystem(this.GetGameInstance()).Get(GetAllBlackboardDefs().HackingMinigame);
+  let blackboard = GameInstance.GetBlackboardSystem(this.GetGameInstance());
+  let minigameBB: ref<IBlackboard> = IsDefined(blackboard)
+    ? blackboard.Get(GetAllBlackboardDefs().HackingMinigame)
+    : null;
   IBS_EnsureAllDataminePrograms(minigameBB);
   wrappedMethod(devices);
 }

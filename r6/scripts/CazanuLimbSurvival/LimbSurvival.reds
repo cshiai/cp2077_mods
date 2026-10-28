@@ -1,6 +1,8 @@
 // RelentlessLiveDismember by Cazanu - living limb-loss rules.
 module CazanuLimbSurvival
 
+import SimpleDroneCompanion.*
+
 // Fractions of maximum health, measured using the game's accumulated wound damage.
 // These are independent of health damage: a lethal hit still kills normally.
 public abstract class Settings {
@@ -76,7 +78,7 @@ public final func CLS_IsMechanical() -> Bool {
 @addMethod(NPCPuppet)
 public final func CLS_IsEligibleHumanTarget() -> Bool {
   return !this.CLS_IsMechanical() && this.IsHuman()
-    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !this.IsCrowd();
+    && !this.IsCharacterCivilian() && !this.IsPlayerCompanion() && !SDC_IsCompanion(this) && !this.IsCrowd();
 }
 
 // Darth Vader's lightsaber is an explicit deterministic exception to the
@@ -84,7 +86,8 @@ public final func CLS_IsEligibleHumanTarget() -> Bool {
 // humanoid NPCs and never to V or vendors.
 @addMethod(NPCPuppet)
 public final func CLS_IsEligibleSaberTarget() -> Bool {
-  return this.IsHuman() && !this.CLS_IsMechanical() && !this.IsPlayer() && !this.IsVendor();
+  return this.IsHuman() && !this.CLS_IsMechanical() && !this.IsPlayer() && !this.IsVendor()
+    && !this.IsPlayerCompanion() && !SDC_IsCompanion(this);
 }
 
 // Accumulate wound and dismemberment frame damage across multishot projectiles
@@ -309,7 +312,7 @@ private final func CLS_LimbBlockReason() -> CName {
   }
   let npc = this.m_ownerNPC;
   if npc.CLS_IsMechanical() { return n"mechanical_npc"; }
-  if !npc.IsHuman() || npc.IsCharacterCivilian() || npc.IsPlayerCompanion() || npc.IsCrowd() {
+  if !npc.IsHuman() || npc.IsCharacterCivilian() || npc.IsPlayerCompanion() || SDC_IsCompanion(npc) || npc.IsCrowd() {
     return n"excluded_npc_type";
   }
   if !this.m_isAlive || !ScriptedPuppet.IsAlive(npc) || npc.IsDead() || npc.IsAboutToDie() {

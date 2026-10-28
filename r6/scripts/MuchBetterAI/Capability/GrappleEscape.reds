@@ -1,9 +1,10 @@
 module MuchBetterAI.Capability
 
 import MuchBetterAI.Logging.*
+import SimpleDroneCompanion.*
 
 public static func MBAI_GrappleEscapeEligible(target: wref<NPCPuppet>, player: wref<PlayerPuppet>) -> Bool {
-  if !IsDefined(target) || !IsDefined(player) || NotEquals(GameObject.GetAttitudeTowards(target, player), EAIAttitude.AIA_Hostile) || target.IsMechanical() || target.IsCharacterCivilian() || target.IsCrowd() || target.IsPlayerCompanion() || NPCManager.HasTag(target.GetRecordID(), n"Cyberpsycho") || NPCManager.HasTag(target.GetRecordID(), n"MiniBoss") || NPCManager.HasTag(target.GetRecordID(), n"q305_maxtac") || NPCManager.HasTag(target.GetRecordID(), n"MaxTac_Prevention") {
+  if !IsDefined(target) || !IsDefined(player) || NotEquals(GameObject.GetAttitudeTowards(target, player), EAIAttitude.AIA_Hostile) || target.IsMechanical() || target.IsCharacterCivilian() || target.IsCrowd() || target.IsPlayerCompanion() || SDC_IsCompanion(target) || NPCManager.HasTag(target.GetRecordID(), n"Cyberpsycho") || NPCManager.HasTag(target.GetRecordID(), n"MiniBoss") || NPCManager.HasTag(target.GetRecordID(), n"q305_maxtac") || NPCManager.HasTag(target.GetRecordID(), n"MaxTac_Prevention") {
     return false;
   };
   let rarity: gamedataNPCRarity = target.GetNPCRarity();

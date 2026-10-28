@@ -14,6 +14,8 @@
 //   clones and ownerless clones via DynamicEntitySystem.DeleteEntity.
 // ============================================================================
 
+import SimpleDroneCompanion.*
+
 public class EMRS_Settings extends ScriptableSystem {
 
   // Clone hostile NPCs as they spawn. Turning this off also removes every clone alive.
@@ -174,8 +176,27 @@ public func EMRS_OutcomeGone() -> Int32 {
 }
 
 public func EMRS_Log(msg: String) -> Void {
-  let line: String = "[EnemyMultiplierRS] " + msg;
-  FTLog(line);
+  // Telemetry is permanently disabled in the fixed profile.  Keep the
+  // helper so the guarded call sites remain easy to audit, but never emit
+  // clone decisions, cleanup counts, or status output during normal play.
+}
+
+// A streamed corpse is not always reported by IsDead()/IsDefeated() alone.
+// Dynamic-entity clones can still be attached while their high-level state is
+// already Dead or Unconscious; treating those entities as eligible produces a
+// hostile marker on a corpse and lets the corpse participate in another hit or
+// loot pass.  Keep this predicate centralized for both the normal spawn queue
+// and StreetActivity's explicit encounter path.
+private func EMRS_IsDeadLike(npc: wref<NPCPuppet>) -> Bool {
+  if !IsDefined(npc) {
+    return true;
+  };
+  if npc.IsDead() || ScriptedPuppet.IsDefeated(npc) || ScriptedPuppet.IsUnconscious(npc) {
+    return true;
+  };
+  let state: gamedataNPCHighLevelState = npc.GetHighLevelStateFromBlackboard();
+  return Equals(state, gamedataNPCHighLevelState.Dead)
+    || Equals(state, gamedataNPCHighLevelState.Unconscious);
 }
 
 public class EMRS_EnqueueRequest extends ScriptableSystemRequest {
@@ -274,7 +295,10 @@ public class EMRS_System extends ScriptableSystem {
     let cb: ref<EMRS_TickCallback> = new EMRS_TickCallback();
     cb.system = this;
     cb.gen = this.m_tickGen;
-    GameInstance.GetDelaySystem(this.GetGameInstance()).DelayCallback(cb, delay, false);
+    let delaySystem = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if IsDefined(delaySystem) {
+      delaySystem.DelayCallback(cb, delay, false);
+    }
   }
 
   public func ScheduleTick() -> Void {
@@ -447,7 +471,7 @@ public class EMRS_System extends ScriptableSystem {
     if npc.HasTag(EMRS_CloneTag()) || ArrayContains(this.m_clones, npcID) || (IsDefined(des) && (des.IsManaged(npcID) || des.IsTagged(npcID, EMRS_CloneTag()))) {
       return 1;
     };
-    if npc.IsDead() || ScriptedPuppet.IsDefeated(npc) {
+    if EMRS_IsDeadLike(npc) {
       return 2;
     };
     if !firstLook && Equals(npc.GetHighLevelStateFromBlackboard(), gamedataNPCHighLevelState.Combat) {
@@ -465,7 +489,7 @@ public class EMRS_System extends ScriptableSystem {
     if npc.IsCharacterChildren() {
       return 6;
     };
-    if npc.IsPlayerCompanion() {
+    if npc.IsPlayerCompanion() || SDC_IsCompanion(npc) {
       return 8;
     };
     let rarity: gamedataNPCRarity = npc.GetNPCRarity();
@@ -567,7 +591,8 @@ public class EMRS_System extends ScriptableSystem {
 
   private func SpawnClone(gi: GameInstance, s: ref<EMRS_Settings>, original: ref<NPCPuppet>, index: Int32, count: Int32) -> Bool {
     let des: ref<DynamicEntitySystem> = GameInstance.GetDynamicEntitySystem();
-    if !IsDefined(des) || !des.IsReady() || ArraySize(this.m_clones) >= 24 {
+    if !IsDefined(des) || !des.IsReady() || ArraySize(this.m_clones) >= 24
+      || !IsDefined(original) || !original.IsAttached() || EMRS_IsDeadLike(original) {
       return false;
     };
     let pos: Vector4 = original.GetWorldPosition();
@@ -634,10 +659,12 @@ public class EMRS_System extends ScriptableSystem {
         let shouldDelete: Bool = !IsDefined(owner);
         if !shouldDelete && IsDefined(player) {
           let cloneNpc: ref<NPCPuppet> = GameInstance.FindEntityByID(gi, cloneID) as NPCPuppet;
-          if IsDefined(cloneNpc) && (cloneNpc.IsDead() || ScriptedPuppet.IsDefeated(cloneNpc)) {
-            if Vector4.Distance(cloneNpc.GetWorldPosition(), player.GetWorldPosition()) > 45.0 {
-              shouldDelete = true;
-            };
+          if IsDefined(cloneNpc) && EMRS_IsDeadLike(cloneNpc) {
+            // Clones are extra combat bodies, not a second corpse/loot source.
+            // Remove them on the next bounded sweep so a dead clone cannot
+            // retain an enemy marker or be hit/looted repeatedly.  The
+            // original NPC keeps the ordinary vanilla corpse and loot path.
+            shouldDelete = true;
           };
         };
         if shouldDelete {
@@ -674,6 +701,63 @@ public class EMRS_System extends ScriptableSystem {
     };
   }
 
+  // StreetActivity reuses this system's DynamicEntitySystem ownership,
+  // navmesh placement, cleanup, and hard 24-clone ceiling. It does not create
+  // a second spawn manager. The seed path accepts gangers neutral to the
+  // player, but still excludes civilians, police, bosses, officers,
+  // companions, vehicle occupants, and quest-nameplate actors.
+  public func SpawnEncounterClones(id: EntityID, count: Int32) -> array<EntityID> {
+    let created: array<EntityID>;
+    if !this.m_active || count <= 0 {
+      return created;
+    };
+    let settings: ref<EMRS_Settings> = EMRS_Settings.Get(this.GetGameInstance());
+    if !IsDefined(settings) || !settings.enabled {
+      return created;
+    };
+    let original: ref<NPCPuppet> = GameInstance.FindEntityByID(this.GetGameInstance(), id) as NPCPuppet;
+    if !this.IsEncounterCloneEligible(original) {
+      return created;
+    };
+    let room: Int32 = 24 - ArraySize(this.m_clones);
+    if room <= 0 {
+      return created;
+    };
+    if count > room {
+      count = room;
+    };
+    let i: Int32 = 0;
+    while i < count {
+      if this.SpawnClone(this.GetGameInstance(), settings, original, i, count) {
+        ArrayPush(created, this.m_clones[ArraySize(this.m_clones) - 1]);
+      };
+      i += 1;
+    };
+    return created;
+  }
+
+  private func IsEncounterCloneEligible(npc: wref<NPCPuppet>) -> Bool {
+    if !IsDefined(npc) || !npc.IsAttached() || EMRS_IsDeadLike(npc)
+      || npc.IsCrowd() || npc.IsCharacterCivilian() || npc.IsCharacterPolice()
+      || npc.IsCharacterChildren() || npc.IsPlayerCompanion() || SDC_IsCompanion(npc)
+      || VehicleComponent.IsMountedToVehicle(this.GetGameInstance(), npc)
+      || !npc.IsCharacterGanger() {
+      return false;
+    };
+    let rarity: gamedataNPCRarity = npc.GetNPCRarity();
+    if Equals(rarity, gamedataNPCRarity.Boss)
+      || Equals(rarity, gamedataNPCRarity.MaxTac)
+      || Equals(rarity, gamedataNPCRarity.Officer) {
+      return false;
+    };
+    let record: wref<Character_Record> = npc.GetRecord();
+    if !IsDefined(record) {
+      return false;
+    };
+    let nameplate: wref<UINameplate_Record> = record.UiNameplate();
+    return !IsDefined(nameplate) || nameplate.GetID() != t"UINameplate.QuestSettings";
+  }
+
   public func CloneCount() -> Int32 {
     return ArraySize(this.m_clones);
   }
@@ -685,6 +769,15 @@ public class EMRS_System extends ScriptableSystem {
   public func PoolCount() -> Int32 {
     return ArraySize(this.m_poolRecords);
   }
+}
+
+public func EMRS_RequestEncounterClones(gi: GameInstance, id: EntityID, count: Int32) -> array<EntityID> {
+  let created: array<EntityID>;
+  let system: ref<EMRS_System> = EMRS_System.Get(gi);
+  if IsDefined(system) {
+    created = system.SpawnEncounterClones(id, count);
+  };
+  return created;
 }
 
 public class EMRS_TickCallback extends DelayCallback {

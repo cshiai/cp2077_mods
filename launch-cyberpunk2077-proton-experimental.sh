@@ -8,7 +8,7 @@ GAME="${GAME:-$HOME/.local/share/Steam/steamapps/common/Cyberpunk 2077}"
 STEAM_ROOT="${STEAM_ROOT:-$HOME/.local/share/Steam}"
 PREFIX="${STEAM_COMPAT_DATA_PATH:-$STEAM_ROOT/steamapps/compatdata/1091500}"
 MANIFEST="$STEAM_ROOT/steamapps/appmanifest_1091500.acf"
-EXPECTED_BUILD="26133166"
+EXPECTED_BUILD="26161058"
 
 if [[ -x "${PROTON:-}" ]]; then
   :

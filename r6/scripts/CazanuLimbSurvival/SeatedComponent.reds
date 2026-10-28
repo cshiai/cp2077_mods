@@ -6,16 +6,27 @@ public class SeatedComponentService extends ScriptableService {
   private let cls_registered: Bool;
   private let cls_loggedAdded: Bool;
   private let cls_loggedMissingRecord: Bool;
+  private let cls_callbackSystem: wref<CallbackSystem>;
 
   private cb func OnLoad() -> Void {
     if this.cls_registered { return; }
-    GameInstance.GetCallbackSystem()
+    this.cls_callbackSystem = GameInstance.GetCallbackSystem();
+    if !IsDefined(this.cls_callbackSystem) { return; }
+    this.cls_callbackSystem
       .RegisterCallback(n"Entity/Extract", this, n"OnNPCExtract")
       .AddTarget(EntityTarget.Type(n"NPCPuppet"));
     this.cls_registered = true;
     if Diagnostics.Enabled() {
       Diagnostics.Write("SEATED component_service_registered");
     }
+  }
+
+  private func OnDetach() -> Void {
+    if IsDefined(this.cls_callbackSystem) {
+      this.cls_callbackSystem.UnregisterCallback(n"Entity/Extract", this);
+    }
+    this.cls_callbackSystem = null;
+    this.cls_registered = false;
   }
 
   private cb func OnNPCExtract(evt: ref<EntityBuilderEvent>) -> Void {

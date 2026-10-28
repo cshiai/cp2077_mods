@@ -96,7 +96,7 @@ At 01:02:55 EDT on 26 October 2026:
 * shell syntax and Git whitespace checks passed; and
 * no downloaded archive remained outside the source tree.
 
-The current Steam build remains guarded as unvalidated (`26161058`), so native
-plugin startup and in-game load/FX behavior still require the approved runtime
-smoke test after the build is reassessed.
+The current Steam build `26161058` is the guarded baseline and the latest
+runtime log shows both native plugins loading cleanly. A focused in-game load/
+FX smoke test remains useful, but the profile no longer blocks this build.
 

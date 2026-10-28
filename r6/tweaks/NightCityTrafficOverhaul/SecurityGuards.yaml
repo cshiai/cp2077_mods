@@ -1,0 +1,299 @@
+# CHARACTERS
+Character.security__VIP_driver:
+  $base: Character.CorpoManCorporatDriver
+  affiliation: Factions.UnaffiliatedCorpo
+  reactionPreset: ReactionPresets.Driver_Panic
+
+
+# CHEVALIER EMPEROR
+Vehicle.charterHillSecurity__chevalier_emperor:
+  $base: Vehicle.v_standard3_chevalier_emperor
+  entityTemplatePath: night_city_traffic_overhaul\entities\security\chevalier_emperor_security.ent
+  appearanceName: chevalier_emperor__basic_suburban_1_5
+  randomPassengers: [Passengers.CharterHillDriverEntry, Passengers.CharterHillPassengerFrontEntry, Passengers.CharterHillPassengerBackEntry]
+
+# THORTON MERRIMAC
+Vehicle.cityCenterVIP__thorton_merrimac_premium:
+  $base: Vehicle.v_standard25_thorton_merrimac_premium
+  entityTemplatePath: night_city_traffic_overhaul\entities\security\thorton_merrimac_vip.ent
+  appearanceName: thorton_merrimac_basic_urban_08
+  randomPassengers: [Passengers.CityCenterVIPDriverEntry, Passengers.CityCenterSecurityPassengerFrontEntry, Passengers.CityCenterVIPPassengerBackEntry]
+
+# VILLEFORT DELEON
+Vehicle.cityCenterVIP__villefort_deleon:
+  $base: Vehicle.v_sport2_villefort_deleon_sport
+  entityTemplatePath: night_city_traffic_overhaul\entities\security\villefort_deleon_vip.ent
+  appearanceName: villefort_deleon_basic_urban_04
+  randomPassengers: [Passengers.CityCenterVIPDriverEntry, Passengers.CityCenterVIPPassengerFrontEntry]
+  
+# ALVARADO PREMIUM
+Vehicle.cityCenterVIP__alvarado_premium:
+  $base: Vehicle.v_sport2_villefort_alvarado_premium
+  entityTemplatePath: night_city_traffic_overhaul\entities\security\villefort_alvarado_vip.ent
+  appearanceName: villefort_alvarado__basic_mafia_01
+  randomPassengers: [Passengers.CityCenterVIPDriverEntry, Passengers.CityCenterSecurityPassengerFrontEntry, Passengers.CityCenterVIPPassengerBackEntry]
+
+
+# CHARTER HILL
+Passengers.CharterHillDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_grunt1_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+
+Passengers.CharterHillPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_grunt1_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.CharterHillPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_grunt1_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_guard1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_melee2_baton_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__hil_security_security2_ranged2_saratoga_wa
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+# CITY CENTER
+Passengers.CityCenterVIPDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.security__VIP_driver
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.CityCenterSecurityPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_guard1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_guard1_ranged1_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_guard1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_security2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_security2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_security2_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__security_security2_ranged2_saratoga_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.CityCenterVIPPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoManArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoWomanArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CitizenRichMale
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CitizenRichFemale
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.CityCenterVIPPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoManArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoWomanArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CitizenRichMale
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CitizenRichFemale
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__hil_security_grunt1_melee1_baton_ma:
+  $base: Character.hil_security_grunt1_melee1_baton_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_guard1_ranged1_nue_ma:
+  $base: Character.hil_security_guard1_ranged1_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_guard1_ranged1_saratoga_ma:
+  $base: Character.hil_security_guard1_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_melee2_baton_ma:
+  $base: Character.hil_security_security2_melee2_baton_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_melee2_baton_wa:
+  $base: Character.hil_security_security2_melee2_baton_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_ranged2_ajax_ma:
+  $base: Character.hil_security_security2_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_ranged2_ajax_wa:
+  $base: Character.hil_security_security2_ranged2_ajax_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_ranged2_saratoga_ma:
+  $base: Character.hil_security_security2_ranged2_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__hil_security_security2_ranged2_saratoga_wa:
+  $base: Character.hil_security_security2_ranged2_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_guard1_ranged1_nue_ma:
+  $base: Character.security_guard1_ranged1_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_guard1_ranged1_nue_wa:
+  $base: Character.security_guard1_ranged1_nue_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_guard1_ranged1_saratoga_ma:
+  $base: Character.security_guard1_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_security2_ranged2_ajax_ma:
+  $base: Character.security_security2_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_security2_ranged2_ajax_wa:
+  $base: Character.security_security2_ranged2_ajax_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_security2_ranged2_saratoga_ma:
+  $base: Character.security_security2_ranged2_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__security_security2_ranged2_saratoga_wa:
+  $base: Character.security_security2_ranged2_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat

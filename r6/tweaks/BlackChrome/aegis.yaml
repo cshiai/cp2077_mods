@@ -1,0 +1,261 @@
+
+BlackChrome.AegisCooldown:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        value: 10
+        statType: BaseStats.MaxDuration
+  gameplayTags: ['Debuff', 'BlackChrome.AegisCooldown']
+  packages: 
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: Effector
+          effectorClassName: RemoveStatusEffectsEffector
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          effectTags: ['BlackChrome.AegisBuff']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.PlayerCooldown
+  stopActiveSfxOnDeactivate: true
+  uiData:
+    $type: StatusEffectUIData
+    description: LocKey#53709
+    displayName: LocKey#blackchrome_aegis_name
+    iconPath: armor_boost
+
+BaseStats.AegisActive:
+  $type: Stat
+  enumName: AegisActive
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1
+
+BaseStats.AegisEquipped:
+  $type: Stat
+  enumName: AegisEquipped
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1
+
+BaseStats.AegisRamCost:
+  $type: Stat
+  enumName: AegisRamCost
+  flags: []
+  max: 5
+  min: 0
+  decimalPlaces: 1
+
+
+BlackChrome.AegisEffect$(tier):
+  $instances:
+    - { tier: Uncommon, blockChance: 0.3, blockChanceDescription: 30, ramCost: 1 }
+    - { tier: UncommonPlus, blockChance: 0.35, blockChanceDescription: 35, ramCost: 1 }
+    - { tier: Rare, blockChance: 0.4, blockChanceDescription: 40, ramCost: 1.3 }
+    - { tier: RarePlus, blockChance: 0.45, blockChanceDescription: 45, ramCost: 1.3 }
+    - { tier: Epic, blockChance: 0.5, blockChanceDescription: 50, ramCost: 1.6 }
+    - { tier: EpicPlus, blockChance: 0.55, blockChanceDescription: 55, ramCost: 1.6 }    
+    - { tier: Legendary, blockChance: 0.6, blockChanceDescription: 60, ramCost: 2 }
+    - { tier: LegendaryPlus, blockChance: 0.65, blockChanceDescription: 65, ramCost: 2 }   
+    - { tier: LegendaryPlusPlus, blockChance: 0.7, blockChanceDescription: 70, ramCost: 2  }   
+  $type: StatusEffect
+  VFX:
+    - $type: StatusEffectFX
+      name: optical_camo
+    - $type: StatusEffectFX
+      name: catch_me
+    - $type: StatusEffectFX
+      name: smart_storage
+  duration: BaseStats.InfiniteDuration
+  gameplayTags: ['Buff', 'CyberwareBuff','BlackChrome.AegisBuff']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers:
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxStacks
+        value: 2
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+  uiData:
+    $type: StatusEffectUIData
+    description: LocKey#blackchrome_aegis_effect_description
+    displayName: LocKey#blackchrome_aegis_effect_name
+    floatValues: [$(blockChanceDescription)]
+    iconPath: armor_boost
+  packages: 
+    - $type: GameplayLogicPackage
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.AegisActive
+          value: 1
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.AegisRamCost
+          value: $(ramCost)
+      effectors: 
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: false
+          inverted: false
+          prereqRecord: 
+            $type: MultiPrereq
+            aggregationType: OR
+            nestedPrereqs: 
+              - $type: StatPrereq
+                comparisonType: NotEqual
+                objectToCheck: Player
+                prereqClassName: StatPrereq
+                statType: AegisEquipped
+                valueToCheck: 1
+              - $type: StatPoolPrereq
+                comparePercentage: false
+                comparisonType: LessOrEqual
+                listenConstantly: false
+                prereqClassName: StatPoolPrereq
+                statPoolType: Memory
+                valueToCheck:   
+                  - $type: ConstantStatModifier
+                    modifierType: Additive
+                    statType: BaseStats.Memory
+                    value: 0.5
+          statusEffect: BlackChrome.AegisCooldown
+        - $type: Effector
+          effectorClassName: Phoenicia.BlackChrome.AegisEffector
+          chanceToTrigger: $(blockChance)
+          prereqRecord: 
+            $type: HitPrereq
+            callbackType: HitReceived
+            conditions: 
+              - $type: HitPrereqCondition
+                type: Prereqs.AttackType
+                attackType: Ranged
+              - $type: HitPrereqCondition
+                type: Prereqs.WeaponType
+                weaponType: Ranged
+            ignoreSelfInflictedPressureWave: true
+            isSynchronous: true
+            pipelineStage: Process
+            pipelineType: Damage
+            prereqClassName: HitReceivedPrereq
+
+BlackChrome.Aegis$(tier):
+  $instances:
+  - { tier: Uncommon, nextTier: BlackChrome.AegisUncommonPlus, ramCost: 1, block: 30, roundedTier: Uncommon }
+  - { tier: UncommonPlus, nextTier: BlackChrome.AegisRare, ramCost: 1, block: 35, roundedTier: Uncommon }
+  - { tier: Rare, nextTier: BlackChrome.AegisRarePlus, ramCost: 1.3, block: 40, roundedTier: Rare }
+  - { tier: RarePlus, nextTier: BlackChrome.AegisEpic, ramCost: 1.3, block: 45, roundedTier: Rare }
+  - { tier: Epic, nextTier: BlackChrome.AegisEpicPlus, ramCost: 1.6, block: 50, roundedTier: Epic }
+  - { tier: EpicPlus, nextTier: BlackChrome.AegisLegendary, ramCost: 1.6, block: 55, roundedTier: Epic }    
+  - { tier: Legendary, nextTier: BlackChrome.AegisLegendaryPlus, ramCost: 2, block: 60, roundedTier: Legendary }
+  - { tier: LegendaryPlus, nextTier: BlackChrome.AegisLegendaryPlusPlus, ramCost: 2, block: 65, roundedTier: Legendary }   
+  - { tier: LegendaryPlusPlus, nextTier: None, ramCost: 2, block: 70, roundedTier: Legendary  }   
+  $base: Items.AdvancedNanoTechPlates$(tier)
+  displayName: LocKey#blackchrome_aegis_name
+  localizedDescription: LocKey#blackchrome_aegis_flavor
+  nextUpgradeItem: $(nextTier)
+  variants: [Variants.Humanity30CostTinkererVariant]
+  tags: ['BlackChrome.AegisCyberware', 'Cyberware', 'HideInBackpackUI', 'IllegalItem',]
+  itemType: ItemType.Cyb_Ability
+  cyberwareType: AegisNanoShield
+  statModifiers: 
+    - Items.ItemArmorToArmor
+    - Items.AdvancedIntegumentarySystemModule_inline0
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.Armor
+      value: 10
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Self
+      refStat: BaseStats.Quality
+      statType: BaseStats.Armor
+      value: 5
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Self
+      refStat: BaseStats.IsItemPlus
+      statType: BaseStats.Armor
+      value: 5
+    - Items.AdvancedBioConductorsCommon_inline0
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_07
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [$(block), $(ramCost), 10]
+        localizedDescription: LocKey#blackchrome_aegis_description
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.AegisEquipped
+          value: 1
+    - Attunements.IntelligenceAllDamage
+  objectActions:
+    - $type: ObjectAction
+      actionName: Use
+      hackCategory: HackCategory.NotAHack
+      interactionLayer: None
+      objectActionType: ObjectActionType.Direct
+      startEffects: 
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator 
+          statusEffect: BlackChrome.AegisCooldown
+      instigatorPrereqs: 
+        - $type: StatusEffectPrereq
+          checkType: CheckType.Tag
+          invert: false
+          objectToCheck: None
+          prereqClassName: StatusEffectPrereq
+          tagToCheck: BlackChrome.AegisBuff
+    - $type: ObjectAction
+      actionName: Use
+      instigatorPrereqs:
+        - $type: StatusEffectPrereq
+          checkType: CheckType.Tag
+          invert: true
+          objectToCheck: None
+          prereqClassName: StatusEffectPrereq
+          tagToCheck: BlackChrome.AegisCooldown
+        - $type: StatusEffectPrereq
+          checkType: CheckType.Tag
+          invert: true
+          objectToCheck: None
+          prereqClassName: StatusEffectPrereq
+          tagToCheck: BlackChrome.AegisBuff
+        - $type: StatPoolPrereq
+          comparePercentage: false
+          comparisonType: GreaterOrEqual
+          listenConstantly: false
+          prereqClassName: StatPoolPrereq
+          statPoolType: Memory
+          valueToCheck:   
+            - $type: ConstantStatModifier
+              modifierType: Additive
+              statType: BaseStats.Memory
+              value: $(ramCost)
+      hackCategory: HackCategory.NotAHack
+      interactionLayer: None
+      objectActionType: ObjectActionType.Direct
+      startEffects: 
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator 
+          statusEffect: BlackChrome.AegisEffect$(tier)

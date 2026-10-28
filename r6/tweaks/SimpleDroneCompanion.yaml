@@ -126,3 +126,19 @@ Character.SimpleDroneOctantA:
 
 Character.SimpleDroneOctantB:
   $base: Character.SimpleDroneOctantA
+
+# Cerberus companions inherit the Phantom Liberty Militech Cerberus entity,
+# melee weapon, mechanical health pools, and Immortal safety tag.  The
+# companion marker/attitude is applied by REDscript after DynamicEntitySystem
+# attaches the puppet; no quest loot or weapon drop is allowed.
+Character.SimpleDroneCerberusA:
+  $base: Character.q305_cerberus_robot
+  baseAttitudeGroup: player
+  dropsWeaponOnDeath: False
+  lootDrop: None
+  hideUIElements: False
+  tags:
+    - !append-once SimpleDroneCompanion
+
+Character.SimpleDroneCerberusB:
+  $base: Character.SimpleDroneCerberusA

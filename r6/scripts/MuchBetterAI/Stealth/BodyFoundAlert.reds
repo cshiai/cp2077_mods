@@ -24,7 +24,7 @@ public class MBAI_BodyAlertSystem extends ScriptableSystem {
   }
 
   private func OnDetach() -> Void {
-    GameInstance.GetDelaySystem(this.GetGameInstance()).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(this.GetGameInstance(), this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
     this.m_ticking = false;
     ArrayClear(this.m_anchors);
@@ -67,6 +67,10 @@ public class MBAI_BodyAlertSystem extends ScriptableSystem {
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_BodyAlertCallback> = new MBAI_BodyAlertCallback();
     cb.system = this;

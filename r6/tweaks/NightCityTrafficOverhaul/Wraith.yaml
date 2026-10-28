@@ -1,0 +1,194 @@
+# THORTON COLBY
+Vehicle.wraith__thorton_colby:
+  $base: Vehicle.v_standard25_thorton_colby_nomad_wraith
+  randomPassengers: [Passengers.WraithDriverEntry, Passengers.WraithPassengerFrontEntry, Passengers.WraithPassengerBackEntry]
+  affiliation: Factions.Wraiths
+
+# THORTON GALENA
+Vehicle.wraith__thorton_galena:
+  $base: Vehicle.v_standard2_thorton_galena_nomad_wraith
+  randomPassengers: [Passengers.WraithDriverEntry, Passengers.WraithPassengerFrontEntry]
+  affiliation: Factions.Wraiths
+
+# ARCHER QUARTZ
+Vehicle.wraith__archer_quartz:
+  $base: Vehicle.v_standard2_archer_quartz_nomad_wraith
+  randomPassengers: [Passengers.WraithDriverEntry, Passengers.WraithPassengerFrontEntry]
+  affiliation: Factions.Wraiths
+
+# MIZUTANI SHION
+Vehicle.wraith__mizutani_shion:
+  $base: Vehicle.v_sport2_mizutani_shion_nomad_wraith
+  randomPassengers: [Passengers.WraithDriverEntry, Passengers.WraithPassengerFrontEntry, Passengers.WraithPassengerBackEntry]
+  affiliation: Factions.Wraiths
+
+# QUADRA TYPE66
+Vehicle.wraith__quadra_type66:
+  $base: Vehicle.v_sport2_quadra_type66_nomad_wraith
+  randomPassengers: [Passengers.WraithDriverEntry, Passengers.WraithPassengerFrontEntry]
+  affiliation: Factions.Wraiths
+
+
+# DRIVERS
+Passengers.WraithDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_wa
+      weight: 1
+  validSlotNames:
+    - seat_front_left
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.WraithPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt2_melee2_crowbar_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt2_melee2_crowbar_wa
+    #   weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.WraithPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_ironpipe_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt1_melee1_tireiron_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt1_ranged1_pulsar_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt2_melee2_crowbar_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.wraiths_grunt2_melee2_crowbar_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt2_ranged2_copperhead_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt2_ranged2_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__wraiths_grunt2_ranged2_pulsar_wa
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__wraiths_grunt1_ranged1_nova_ma:
+  $base: Character.wraiths_grunt1_ranged1_nova_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt1_ranged1_nova_wa:
+  $base: Character.wraiths_grunt1_ranged1_nova_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt1_ranged1_pulsar_ma:
+  $base: Character.wraiths_grunt1_ranged1_pulsar_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt1_ranged1_pulsar_wa:
+  $base: Character.wraiths_grunt1_ranged1_pulsar_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt2_ranged2_copperhead_ma:
+  $base: Character.wraiths_grunt2_ranged2_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt2_ranged2_copperhead_wa:
+  $base: Character.wraiths_grunt2_ranged2_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt2_ranged2_pulsar_ma:
+  $base: Character.wraiths_grunt2_ranged2_pulsar_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__wraiths_grunt2_ranged2_pulsar_wa:
+  $base: Character.wraiths_grunt2_ranged2_pulsar_wa
+  tags:
+    - !append pcf_GangerCanRetreat

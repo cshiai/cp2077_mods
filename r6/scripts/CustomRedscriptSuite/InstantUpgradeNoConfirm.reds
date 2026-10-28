@@ -8,6 +8,8 @@
 
 // --- 1. Inventory Item Upgrading & Crafting: Instant Click (0 Hold Time) ---
 
+import CustomRedscriptSuite.UniversalIconicWeapons.*
+
 @addField(CraftingMainLogicController)
 private let iusProcessInFlight: Bool;
 
@@ -61,6 +63,16 @@ public final func UpdateCraftProcess(evt: ref<inkPointerEvent>) -> Void {
 @wrapMethod(UpgradingScreenController)
 protected cb func OnHoldFinished(evt: ref<ProgressBarFinishedProccess>) -> Bool {
   let result: Bool = wrappedMethod(evt);
+  // The vanilla handler already queues one transaction. Complete the
+  // remaining progression through one saved-stat delta instead of nine extra
+  // inventory transactions, which caused visible hitching and repeated UI
+  // rebuilds.
+  if !this.m_selectedItemData.Empty {
+    let selectedItem: ref<gameItemData> = InventoryItemData.GetGameItemData(this.m_selectedItemData);
+    if IsDefined(selectedItem) {
+      UniversalIconicWeaponHelper.MaximizeWeaponTier(this.m_Game, selectedItem, 1);
+    }
+  }
   this.iusProcessInFlight = false;
   this.m_isProcessing = false;
   if IsDefined(this.m_craftingGameController) {

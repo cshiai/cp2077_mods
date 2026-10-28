@@ -1,7 +1,9 @@
 // Pure redscript Enemy Health Auto-Scaling by Level for Cyberpunk 2077 2.5 (no TweakXL/Codeware required)
-// Quintic smootherstep ramp from 125% (1.25x) at level 10 to 300% (3x) at level 60.
-// Levels below 10 also use 125% health; level 60 and above cap at 300%.
+// Quintic smootherstep ramp from 250% (2.5x) at level 10 to 600% (6x) at level 60.
+// Levels below 10 also use 250% health; level 60 and above cap at 600%.
 // Non-Johnny enemies additionally regenerate 0.1% of max health per second.
+
+import SimpleDroneCompanion.*
 
 // Scale only populated damage channels.  The no-argument MultAttackValue()
 // overload also touches derived/untyped attack data, which can double-apply
@@ -40,7 +42,11 @@ public final static func IsJohnnyMemory(game: GameInstance) -> Bool {
   if !GameInstance.IsValid(game) {
     return false;
   }
-  let controlled: ref<GameObject> = GameInstance.GetPlayerSystem(game).GetLocalPlayerControlledGameObject();
+  let playerSystem = GameInstance.GetPlayerSystem(game);
+  if !IsDefined(playerSystem) {
+    return false;
+  }
+  let controlled: ref<GameObject> = playerSystem.GetLocalPlayerControlledGameObject();
   let puppet: ref<gamePuppetBase> = controlled as gamePuppetBase;
   return IsDefined(puppet) && Equals(puppet.GetRecordID(), t"Character.johnny_replacer");
 }
@@ -64,6 +70,10 @@ public final func ApplyCustomEnemyHealthRegeneration(enabled: Bool) -> Void {
   let game: GameInstance = this.GetGame();
   let statPoolsSystem: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(game);
   if !IsDefined(statPoolsSystem) {
+    // Keep the lifecycle flag coherent even when the pool service is already
+    // tearing down; otherwise a later reattach could incorrectly skip the
+    // one required regeneration registration.
+    this.m_customEnemyHealthRegenActive = enabled;
     return;
   }
   let statsObjID: StatsObjectID = Cast<StatsObjectID>(this.GetEntityID());
@@ -85,16 +95,16 @@ public final func ApplyCustomEnemyHealthRegeneration(enabled: Bool) -> Void {
 public final static func CalculateCustomHealthMultiplier(level: Float) -> Float {
   let effectiveLevel: Float = MaxF(level, 1.0);
   if effectiveLevel <= 10.0 {
-    return 1.25;
+    return 2.5;
   }
   let rawT: Float = (effectiveLevel - 10.0) / 50.0;
   let t: Float = ClampF(rawT, 0.0, 1.0);
   if t >= 1.0 {
-    return 3.0;
+    return 6.0;
   }
   // Quintic smootherstep: zero slope and zero curvature at both endpoints.
   let smoothT: Float = t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
-  return 1.25 + (1.75 * smoothT);
+  return 2.5 + (3.5 * smoothT);
 }
 
 @addMethod(NPCPuppet)
@@ -112,7 +122,7 @@ public final const func HasCustomScaledHealthModifier() -> Bool {
 
 @addMethod(NPCPuppet)
 public final func ApplyCustomEnemyHealthScaling(fillHealthPool: Bool) -> Void {
-  if this.IsDead() || ScriptedPuppet.IsDefeated(this) || this.IsIncapacitated() || this.IsPaperdoll() || this.IsVendor() || this.IsPlayerCompanion() || this.IsCrowd() || this.IsCharacterCivilian() {
+  if this.IsDead() || ScriptedPuppet.IsDefeated(this) || this.IsIncapacitated() || this.IsPaperdoll() || this.IsVendor() || this.IsPlayerCompanion() || SDC_IsCompanion(this) || this.IsCrowd() || this.IsCharacterCivilian() {
     return;
   }
 
@@ -133,7 +143,8 @@ public final func ApplyCustomEnemyHealthScaling(fillHealthPool: Bool) -> Void {
   let npcLevel: Float = statsSystem.GetStatValue(statsObjID, gamedataStatType.Level);
   let effectiveLevel: Float = MaxF(npcPowerLevel, npcLevel);
 
-  let player: ref<GameObject> = GameInstance.GetPlayerSystem(game).GetLocalPlayerControlledGameObject();
+  let playerSystem = GameInstance.GetPlayerSystem(game);
+  let player: ref<GameObject> = IsDefined(playerSystem) ? playerSystem.GetLocalPlayerControlledGameObject() : null;
   if IsDefined(player) {
     let playerID: StatsObjectID = Cast<StatsObjectID>(player.GetEntityID());
     let playerLevel: Float = MaxF(
@@ -312,7 +323,7 @@ private final func ScalePlayerDamage(hitEvent: ref<gameHitEvent>) -> Void {
     return;
   }
   let targetPuppet: ref<NPCPuppet> = hitEvent.target as NPCPuppet;
-  if IsDefined(targetPuppet) && NotEquals(targetPuppet.GetNPCRarity(), gamedataNPCRarity.Boss) && NotEquals(targetPuppet.GetNPCRarity(), gamedataNPCRarity.MaxTac) {
+  if IsDefined(targetPuppet) {
     let mult: Float = targetPuppet.GetCustomScaledHealthMultiplier();
     if mult > 1.0 {
       EHSL_ScaleAttackHealthChannels(hitEvent.attackComputed, 1.0 / mult);

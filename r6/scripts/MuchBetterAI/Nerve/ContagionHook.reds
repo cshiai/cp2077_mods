@@ -4,12 +4,13 @@ import MuchBetterAI.Logging.*
 import MuchBetterAI.Core.*
 import MuchBetterAI.Stealth.*
 import MuchBetterAI.Squad.*
+import SimpleDroneCompanion.*
 
 @wrapMethod(NPCPuppet)
 protected cb func OnDeath(evt: ref<gameDeathEvent>) -> Bool {
   let gi: GameInstance = this.GetGame();
   let player: ref<PlayerPuppet> = GetPlayer(gi);
-  let scan: Bool = !this.IsCharacterCivilian() && !this.IsMechanical() && this.IsEnemy() && !this.IsPlayerCompanion() && !GameObject.IsFriendlyTowardsPlayer(this) && IsDefined(player);
+  let scan: Bool = !this.IsCharacterCivilian() && !this.IsMechanical() && this.IsEnemy() && !this.IsPlayerCompanion() && !SDC_IsCompanion(this) && !GameObject.IsFriendlyTowardsPlayer(this) && IsDefined(player);
   let now: Float;
   let victimPos: Vector4;
   let rarity: gamedataNPCRarity;

@@ -1,0 +1,202 @@
+
+# BlackChrome.NanoRepairIcon:
+#   $type: UIIcon
+#   atlasPartName: biomonitor
+#   atlasResourcePath: 'base\gameplay\gui\common\icons\items\item_icons13.inkatlas'
+
+
+# # change to: 
+# # Player activate ability:
+# # - Damage reduction, for each armor point
+# # - Costs Ram to use
+# # - make script to show player ram, even if no cyberdeck
+# # - Cyberware Attunement - extra armor? 
+# # - After effect finishes, player gets healed - up to 30% of player armor.
+# # make it work with overclock?
+# # Cd: 100 sec.
+# #  do I remove it? todo
+# BlackChrome.NanoRepair$(tier)$(type):
+#   $instances:
+#     - { tier: Rare, type: 'Normal', nextTier: BlackChrome.NanoRepairRarePlusNormal, repairPercentage: 15, cooldown: 300, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairRareUpgrade }
+#     - { tier: Rare, type: 'Upgrade', nextTier: BlackChrome.NanoRepairRarePlusNormal, repairPercentage: 18, cooldown: 300, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }
+#     - { tier: RarePlus, type: 'Normal', nextTier: BlackChrome.NanoRepairEpicNormal, repairPercentage: 15, cooldown: 280, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairRarePlusUpgrade  }
+#     - { tier: RarePlus, type: 'Upgrade', nextTier: BlackChrome.NanoRepairEpicNormal, repairPercentage: 18, cooldown: 280, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }
+#     - { tier: Epic, type: 'Normal', nextTier: BlackChrome.NanoRepairEpicPlusNormal, repairPercentage: 20, cooldown: 240, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairEpicUpgrade }
+#     - { tier: Epic, type: 'Upgrade', nextTier: BlackChrome.NanoRepairEpicPlusNormal, repairPercentage: 24, cooldown: 240, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }
+#     - { tier: EpicPlus, type: 'Normal', nextTier: BlackChrome.NanoRepairLegendaryNormal, repairPercentage: 20, cooldown: 220, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairEpicPlusUpgrade }    
+#     - { tier: EpicPlus, type: 'Upgrade', nextTier: BlackChrome.NanoRepairLegendaryNormal, repairPercentage: 24, cooldown: 220, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }    
+#     - { tier: Legendary, type: 'Normal', nextTier: BlackChrome.NanoRepairLegendaryPlusNormal, repairPercentage: 25, cooldown: 180, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairLegendaryUpgrade }
+#     - { tier: Legendary, type: 'Upgrade', nextTier: BlackChrome.NanoRepairLegendaryPlusNormal, repairPercentage: 30, cooldown: 180, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }
+#     - { tier: LegendaryPlus, type: 'Normal', nextTier: BlackChrome.NanoRepairLegendaryPlusPlusNormal, repairPercentage: 25, cooldown: 160, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairLegendaryPlusUpgrade }   
+#     - { tier: LegendaryPlus, type: 'Upgrade', nextTier: BlackChrome.NanoRepairLegendaryPlusPlusNormal, repairPercentage: 30, cooldown: 160, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }   
+#     - { tier: LegendaryPlusPlus, type: 'Normal', nextTier: None, repairPercentage: 25 , cooldown: 140, tags: ['Cyberware', 'HideInBackpackUI'], sideUpgradeItem: BlackChrome.NanoRepairLegendaryPlusPlusUpgrade }   
+#     - { tier: LegendaryPlusPlus, type: 'Upgrade', nextTier: None, repairPercentage: 30 , cooldown: 140, tags: ['Cyberware', 'HideInBackpackUI', 'SkipActivityLog'], sideUpgradeItem: None }   
+#   $base: Items.AdvancedEndoskeleton$(tier)
+#   displayName: LocKey#blackchrome_nanoRepair_name
+#   localizedDescription: LocKey#blackchrome_nanoRepair_flavor
+#   nextUpgradeItem: $(nextTier)
+#   itemType: ItemType.Cyb_Ability
+#   tags: $(tags)
+#   iconPath: BlackChrome.NanoRepairIcon
+#   variants: [Variants.Humanity30CostTinkererVariant]
+#   sideUpgradeItem: $(sideUpgradeItem)
+#   cyberwareType: NanoMatrix
+#   objectActions:
+#     - $type: ObjectAction
+#       actionName: Use
+#       instigatorPrereqs:
+#         - $type: StatusEffectPrereq
+#           checkType: CheckType.Tag
+#           invert: true
+#           objectToCheck: None
+#           prereqClassName: StatusEffectPrereq
+#           tagToCheck: BlackChrome.NanoRepair
+#         - $type: StatusEffectPrereq
+#           checkType: CheckType.Tag
+#           invert: true
+#           objectToCheck: None
+#           prereqClassName: StatusEffectPrereq
+#           tagToCheck: BlackChrome.NanoRepairCooldown
+#       hackCategory: HackCategory.NotAHack
+#       interactionLayer: None
+#       objectActionType: ObjectActionType.Direct
+#       startEffects: 
+#         - $type: ObjectActionEffect
+#           recipient: ObjectActionReference.Instigator
+#           statusEffect: 
+#             $type: StatusEffect
+#             duration:
+#               $type: StatModifierGroup
+#               statModsLimit: -1
+#               statModifiers: 
+#                 - $type: ConstantStatModifier
+#                   modifierType: Additive
+#                   statType: BaseStats.MaxDuration
+#                   value: 6
+#             gameplayTags: ['Buff', 'CyberwareBuff', 'BlackChrome.NanoRepair']
+#             isAffectedByTimeDilationNPC: true
+#             isAffectedByTimeDilationPlayer: true
+#             maxStacks: RTDB.StatusEffect_inline0
+#             packages:
+#               - $type: GameplayLogicPackage
+#                 # effectors: 
+#                 #   # - $type: MutablePoolValueModifier
+#                 #   #   delayOnChange: false
+#                 #   #   delayOnChangeMod: 
+#                 #   #     - $type: ConstantStatModifier
+#                 #   #       modifierType: Additive
+#                 #   #       statType: BaseStats.MaxDuration
+#                 #   #       value: 0
+#                 #   # use painducer?
+#             savable: true
+#             statusEffectType: BaseStatusEffectTypes.Misc
+#             stopActiveSfxOnDeactivate: true
+#             uiData: 
+#               $type: StatusEffectUIData
+#               displayName: LocKey#blackchrome_nanoRepair_buff_name
+#               description: LocKey#blackchrome_nanoRepair_buff_description
+#               priority: 0
+#               iconPath: health_booster_regen # todo maybe better icon?
+#   statModifiers:
+#     - Items.ItemArmorToArmor
+#     - Items.AdvancedMusculoskeletalSystemModule_inline0
+#     - $type: ConstantStatModifier
+#       modifierType: Additive
+#       statType: BaseStats.Armor
+#       value: 10
+#     - $type: CombinedStatModifier
+#       modifierType: Additive
+#       opSymbol: '*'
+#       refObject: Self
+#       refStat: BaseStats.Quality
+#       statType: BaseStats.Armor
+#       value: 5
+#     - $type: CombinedStatModifier
+#       modifierType: Additive
+#       opSymbol: '*'
+#       refObject: Self
+#       refStat: BaseStats.IsItemPlus
+#       statType: BaseStats.Armor
+#       value: 5
+#     - $type: CombinedStatModifier
+#       modifierType: Additive
+#       opSymbol: '*'
+#       refObject: Player
+#       refStat: BaseStats.HumanityAllocated
+#       statType: BaseStats.AttunementHelper # Attunement bonus => up to 50 extra armor for this cyberware
+#       value: 0.1
+#     - $type: CombinedStatModifier
+#       modifierType: Additive
+#       opSymbol: '*'
+#       refObject: Player
+#       refStat: BaseStats.Armor
+#       statType: BaseStats.AttunementHelper2 # Expected Heal * 100 ( )
+#       value: $(repairPercentage)
+#     - $type: CombinedStatModifier
+#       modifierType: Additive
+#       opSymbol: '*'
+#       refObject: Self
+#       refStat: BaseStats.AttunementHelper2
+#       statType: BaseStats.AttunementHelper3 # Expected Heal per second
+#       value: 0.000333 # percentage to multiplier = 0.01. Heal duration is 30 seconds, so 0.03 multiplier is applied
+#   OnEquip:
+#     - $type: GameplayLogicPackage
+#       UIData: 
+#         $type: GameplayLogicPackageUIData
+#         localizedDescription: LocKey#blackchrome_nanoRepair_description
+#         floatValues: [$(repairPercentage), 30, $(cooldown)]
+#     - $type: GameplayLogicPackage
+#       stackable: true
+#       UIData: 
+#         $type: GameplayLogicPackageUIData
+#         localizedDescription: LocKey#blackchrome_nanoRepair_description
+#         iconPath: UIIcon.Filter_Cyberware
+#         localizedName: LocKey#blackchrome_cybernericAttunement_name
+#         floatValues: [0.1]
+#         stats: 
+#           - BaseStats.AttunementHelper
+
+
+
+
+
+# aegis
+
+        
+      # startEffects: 
+      #   - $type: ObjectActionEffect
+      #     recipient: ObjectActionReference.Instigator
+      #     statusEffect: 
+      #       $type: StatusEffect
+      #       duration:
+      #         $type: StatModifierGroup
+      #         statModsLimit: -1
+      #         statModifiers: 
+      #           - $type: ConstantStatModifier
+      #             modifierType: Additive
+      #             statType: BaseStats.MaxDuration
+      #             value: 6
+      #       gameplayTags: ['Buff', 'CyberwareBuff', 'BlackChrome.NanoRepair']
+      #       isAffectedByTimeDilationNPC: true
+      #       isAffectedByTimeDilationPlayer: true
+      #       maxStacks: RTDB.StatusEffect_inline0
+      #       packages:
+      #         - $type: GameplayLogicPackage
+      #           # effectors: 
+      #           #   # - $type: MutablePoolValueModifier
+      #           #   #   delayOnChange: false
+      #           #   #   delayOnChangeMod: 
+      #           #   #     - $type: ConstantStatModifier
+      #           #   #       modifierType: Additive
+      #           #   #       statType: BaseStats.MaxDuration
+      #           #   #       value: 0
+      #           #   # use painducer?
+      #       savable: true
+      #       statusEffectType: BaseStatusEffectTypes.Misc
+      #       stopActiveSfxOnDeactivate: true
+      #       uiData: 
+      #         $type: StatusEffectUIData
+      #         displayName: LocKey#blackchrome_nanoRepair_buff_name
+      #         description: LocKey#blackchrome_nanoRepair_buff_description
+      #         priority: 0
+      #         iconPath: health_booster_regen # todo maybe better icon?

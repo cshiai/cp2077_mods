@@ -48,6 +48,9 @@ public final func ApplyPassiveHealthRegen25() -> Void {
   let game = this.GetGame();
   let stats = GameInstance.GetStatsSystem(game);
   let statPools = GameInstance.GetStatPoolsSystem(game);
+  if !IsDefined(stats) || !IsDefined(statPools) {
+    return;
+  }
   let id = Cast<StatsObjectID>(this.GetEntityID());
 
   if !IsDefined(this.passiveHealthRegen25InCombatEnabledMod) {
@@ -104,6 +107,32 @@ public final func ApplyPassiveHealthRegen25() -> Void {
     this.passiveHealthRegen25OutOfCombatRateMod = RPGManager.CreateStatModifier(gamedataStatType.HealthOutOfCombatRegenRateBase, gameStatModifierType.Additive, 2.5);
     stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatRateMod);
   };
+
+  // Save/load and equipment refreshes can rebuild the stat container while
+  // leaving these transient refs alive.  Remove/re-add each one so the fixed
+  // profile does not silently stop regenerating after a reload.
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatEnabledMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatEnabledMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25OutOfCombatEnabledMod);
+  stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatEnabledMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatStartThresholdMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatStartThresholdMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25OutOfCombatStartThresholdMod);
+  stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatStartThresholdMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatEndThresholdMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatEndThresholdMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25OutOfCombatEndThresholdMod);
+  stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatEndThresholdMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatDelayMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatDelayMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25OutOfCombatDelayMod);
+  stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatDelayMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatStartDelayMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatStartDelayMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25InCombatRateMod);
+  stats.AddModifier(id, this.passiveHealthRegen25InCombatRateMod);
+  stats.RemoveModifier(id, this.passiveHealthRegen25OutOfCombatRateMod);
+  stats.AddModifier(id, this.passiveHealthRegen25OutOfCombatRateMod);
 
   let regenMod: StatPoolModifier;
   regenMod.enabled = true;

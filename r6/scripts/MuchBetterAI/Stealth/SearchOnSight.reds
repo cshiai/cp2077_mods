@@ -22,12 +22,16 @@ public class MBAI_SearchSpikeSystem extends ScriptableSystem {
     let gi: GameInstance = this.GetGameInstance();
     let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(gi));
     MBAI_CancelTrackedMoveToOwner(gi, n"Search", now);
-    GameInstance.GetDelaySystem(this.GetGameInstance()).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(this.GetGameInstance(), this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_SearchSpikeCallback> = new MBAI_SearchSpikeCallback();
     cb.game = this.GetGameInstance();

@@ -1,0 +1,267 @@
+# TEST
+
+
+
+
+# FOR PANIC DRIVING
+Crowds.NCTO_PanicDrivingSlow:
+  $base: Crowds.DrivingSlow
+  acceleration: 2.0
+  brakePressureFactor: 15.0
+  deceleration: 14.0
+  maxSpeed: 25.0
+
+
+# APPEND MODDED LIST PLACEHOLDER VEHICLE
+Vehicle.vehicle_list.list:
+  - !append Vehicle.NCTO_porsche_911turbo_cabrio
+
+
+# SECURITY FLEE ATTITUDE
+ReactionPresets.Driver_Panic:
+  $base: ReactionPresets.InVehicle_Civilian
+  rules:
+    - $base: ReactionPresets.Civilian_Neutral_inline0
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline1
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline2
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline3
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline4
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline5
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline6
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline7
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline8
+      output: ReactionOutput.Panic
+    - $base: ReactionPresets.Civilian_Neutral_inline9
+      output: ReactionOutput.Panic
+
+
+# VEHICLES HEALTH
+VehicleStatPreset.VehicleHealthx20:
+  $type: StatModifierGroup
+  statModifiers:
+    - $type: ConstantStatModifier
+      modifierType: Multiplier
+      statType: BaseStats.Health
+      value: 2.0
+
+VehicleStatPreset.VehicleHealthx30:
+  $type: StatModifierGroup
+  statModifiers:
+    - $type: ConstantStatModifier
+      modifierType: Multiplier
+      statType: BaseStats.Health
+      value: 3.0
+
+
+# VEHICLE DESTRUCTION
+Vehicle.NCTO_VehicleDestructionParamsHellaCombatCab:
+  $base: Vehicle.VehicleDestructionParamsHella
+  glass: []
+  wheels:
+    - $base: Vehicle.VehicleDestructionParamsHella_inline23
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsHella_inline24
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsHella_inline25
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsHella_inline26
+      hitsToFlatten: 8
+
+Vehicle.NCTO_VehicleDestructionParamsThraxCombatCab:
+  $base: Vehicle.VehicleDestructionParamsThrax
+  glass: []
+  wheels:
+    - $base: Vehicle.VehicleDestructionParamsThrax_inline18
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsThrax_inline19
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsThrax_inline20
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsThrax_inline21
+      hitsToFlatten: 8
+
+Vehicle.NCTO_VehicleDestructionParamsCortesDelamain:
+  $base: Vehicle.VehicleDestructionParamsCortes
+  glass: []
+  wheels:
+  - $base: Vehicle.VehicleDestructionParamsCortes_inline27
+    hitsToFlatten: 8
+  - $base: Vehicle.VehicleDestructionParamsCortes_inline28
+    hitsToFlatten: 8
+  - $base: Vehicle.VehicleDestructionParamsCortes_inline29
+    hitsToFlatten: 8
+  - $base: Vehicle.VehicleDestructionParamsCortes_inline30
+    hitsToFlatten: 8
+  detachableParts: []
+
+Vehicle.NCTO_VehicleDestructionParamsColumbus:
+  $base: Vehicle.VehicleDestructionParamsColumbus
+  glass: []
+  wheels:
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline18
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline19
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline20
+      hitsToFlatten: 8
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline21
+      hitsToFlatten: 8
+  detachableParts: 
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline12
+      components: []
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline13
+      components: []
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline14
+      components: []
+    - $base: Vehicle.VehicleDestructionParamsColumbus_inline15
+      components: []
+
+
+# FOR BIKE SPEEDS
+Crowds.Bike_Sport_Driving:
+  $base: Crowds.Car_Sport_Driving
+
+Crowds.Bike__Sport_DrivingPattern:
+  $type: gamedataCrowdSlotMovementPatternBase_Record
+  name: normal
+  settings: Crowds.Bike_Sport_Driving
+
+Crowds.Sportbike_DrivingPackage:
+  $type: gamedataCrowdSettingsPackageBase_Record
+  specs:
+    - Crowds.Bike__Sport_DrivingPattern
+    - Crowds.StopDrivingPattern
+    - Crowds.PanicDrivingPattern
+
+
+# FIXES FOR VEHICLES DRIVING SPEED 
+
+# TRUCKS
+Vehicle.v_mahir_mt28_coach:
+  crowdMemberSettings: Crowds.Truck_DrivingPackage
+Vehicle.cs_savable_mahir_mt28_coach:
+  crowdMemberSettings: Crowds.Truck_DrivingPackage
+Vehicle.v_utility4_kaukaz_zeya:
+  crowdMemberSettings: Crowds.Truck_DrivingPackage
+Vehicle.v_utility4_militech_behemoth:
+  crowdMemberSettings: Crowds.Truck_DrivingPackage
+Vehicle.v_kaukaz_z71_aras:
+  crowdMemberSettings: Crowds.Truck_DrivingPackage
+
+# SPORT VEHICLES
+Vehicle.v_sport1_herrera_riptide_terrier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport1_herrera_riptide_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport1_herrera_riptide_web:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport1_herrera_riptide:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport1_herrera_riptide_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport1_herrera_riptide_premium:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport2_quadra_type66_nomad:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport2_porsche_911turbo:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sport2_porsche_911turbo_cabrio:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+
+# SPORT BIKES
+Vehicle.v_sportbike3_brennan_apollo:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_courier_expanded:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_mox:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_courier_expanded:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_tyger_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_test5:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_quest:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_linas_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_tyger:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_jackie_tuned_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_jackie_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_player_02:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_sport:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_animal:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_tyger_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_jackie_tuned:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_nomad:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_scorpion:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_tyger:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_tyger_courier_expanded:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_tyger_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_player_02:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_player_03:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_quest:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_nomad_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_kurtz:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_courier:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_police:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_sport:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.q304_v_sportbike3_brennan_apollo_quest_scanning:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike3_brennan_apollo_basic_01_prevention:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_player_02:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_player_03:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_tyger:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_tyger_player:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike2_arch_jackie:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage
+Vehicle.v_sportbike1_yaiba_kusanagi_quest:
+  crowdMemberSettings: Crowds.Sport_DrivingPackage

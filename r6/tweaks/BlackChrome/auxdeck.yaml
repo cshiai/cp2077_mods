@@ -1,0 +1,325 @@
+BaseStats.HasAuxCyberdeck:
+  $type: Stat
+  enumName: HasAuxCyberdeck
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1
+
+BaseStats.HasRealCyberdeck:
+  $type: Stat
+  enumName: HasRealCyberdeck
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1 
+
+BlackChrome.NoRealCyberdeckPrereq:
+  $type: StatPrereq
+  comparisonType: Equal
+  objectToCheck: Owner
+  prereqClassName: StatPrereq
+  statType: HasRealCyberdeck
+  valueToCheck: 0
+
+BlackChrome.RealCyberdeckPrereq:
+  $type: StatPrereq
+  comparisonType: Equal
+  objectToCheck: Owner
+  prereqClassName: StatPrereq
+  statType: HasRealCyberdeck
+  valueToCheck: 1
+
+Items.$(name):
+  $instances: 
+    - { name: 'AdvancedArasakaShadowMKICommon' }
+    - { name: 'AdvancedArasakaShadowMKICommonPlus' }
+    - { name: 'AdvancedArasakaShadowMKIIUncommon' }
+    - { name: 'AdvancedArasakaShadowMKIIUncommonPlus' }
+    - { name: 'AdvancedArasakaShadowMKIIIRare' }
+    - { name: 'AdvancedArasakaShadowMKIIIRarePlus' }
+    - { name: 'AdvancedArasakaShadowMKIVEpic' }
+    - { name: 'AdvancedArasakaShadowMKIVEpicPlus'}
+    - { name: 'AdvancedArasakaShadowMKVLegendary'}
+    - { name: 'AdvancedArasakaShadowMKVLegendaryPlus' }
+    - { name: 'AdvancedArasakaShadowMKVLegendaryPlusPlus' }
+    - { name: 'AdvancedBiotechSigmaMKIUncommon' }
+    - { name: 'AdvancedBiotechSigmaMKIUncommonPlus' }
+    - { name: 'AdvancedBiotechSigmaMKIIRare' }
+    - { name: 'AdvancedBiotechSigmaMKIIRarePlus' }
+    - { name: 'AdvancedBiotechSigmaMKIIIEpic' }
+    - { name: 'AdvancedBiotechSigmaMKIIIEpicPlus' }
+    - { name: 'AdvancedBiotechSigmaMKIVLegendary' }
+    - { name: 'AdvancedBiotechSigmaMKIVLegendaryPlus' }
+    - { name: 'AdvancedBiotechSigmaMKIVLegendaryPlusPlus' }
+    - { name: 'HauntedCyberdeck_Rare' }
+    - { name: 'HauntedCyberdeck_RarePlus' }
+    - { name: 'HauntedCyberdeck_Epic' }
+    - { name: 'HauntedCyberdeck_EpicPlus' }
+    - { name: 'HauntedCyberdeck_Legendary' }
+    - { name: 'HauntedCyberdeck_LegendaryPlus' }
+    - { name: 'HauntedCyberdeck_LegendaryPlusPlus' }
+    - { name: 'AdvancedMilitechParalineMKICommon' }
+    - { name: 'AdvancedMilitechParalineMKICommonPlus' }
+    - { name: 'AdvancedMilitechParalineMKIIUncommon' }
+    - { name: 'AdvancedMilitechParalineMKIIUncommonPlus' }
+    - { name: 'AdvancedMilitechParalineMKIIIRare' }
+    - { name: 'AdvancedMilitechParalineMKIIIRarePlus' }
+    - { name: 'AdvancedMilitechParalineMKIVEpic' }
+    - { name: 'AdvancedMilitechParalineMKIVEpicPlus' }
+    - { name: 'AdvancedMilitechParalineMKVLegendary' }
+    - { name: 'AdvancedMilitechParalineMKVLegendaryPlus' }
+    - { name: 'AdvancedMilitechParalineMKVLegendaryPlusPlus' }
+    - { name: 'AdvancedNetwatchNetdriverMKLegendary' }
+    - { name: 'AdvancedNetwatchNetdriverMKLegendaryPlus' }
+    - { name: 'AdvancedNetwatchNetdriverMKLegendaryPlusPlus' }
+    - { name: 'AdvancedRavenMicrocyberMKIRare' }
+    - { name: 'AdvancedRavenMicrocyberMKIRarePlus' }
+    - { name: 'AdvancedRavenMicrocyberMKIIEpic' }
+    - { name: 'AdvancedRavenMicrocyberMKIIEpicPlus' }
+    - { name: 'AdvancedRavenMicrocyberMKIIILegendary' }
+    - { name: 'AdvancedRavenMicrocyberMKIIILegendaryPlus' }
+    - { name: 'AdvancedRavenMicrocyberMKIIILegendaryPlusPlus' }
+    - { name: 'AdvancedTetratronicRipplerMKICommon' }
+    - { name: 'AdvancedTetratronicRipplerMKICommonPlus' }
+    - { name: 'AdvancedTetratronicRipplerMKIIUncommon' }
+    - { name: 'AdvancedTetratronicRipplerMKIIUncommonPlus' }
+    - { name: 'AdvancedTetratronicRipplerMKIIIRare' }
+    - { name: 'AdvancedTetratronicRipplerMKIIIRarePlus' }
+    - { name: 'AdvancedTetratronicRipplerMKIVEpic' }
+    - { name: 'AdvancedTetratronicRipplerMKIVEpicPlus' }
+    - { name: 'AdvancedTetratronicRipplerMKVLegendary' }
+    - { name: 'AdvancedTetratronicRipplerMKVLegendaryPlus' }
+    - { name: 'AdvancedTetratronicRipplerMKVLegendaryPlusPlus' }
+  OnEquip: 
+    - !append
+      $type: GameplayLogicPackage
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.HasRealCyberdeck
+          value: 1
+
+QuickHack.QuickHack_inline1:
+  comparisonType: GreaterOrEqual
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Common, nextTier: BlackChrome.AuxiliaryCyberdeckCommonPlus, traceTime: 50, traceTimeV: -0.5,  name: blackchrome_auxCyberdeck_name1 }
+    - { tier: CommonPlus, nextTier: BlackChrome.AuxiliaryCyberdeckUncommon, traceTime: 48, traceTimeV: -0.48, name: blackchrome_auxCyberdeck_name1 }
+    - { tier: Uncommon, nextTier: BlackChrome.AuxiliaryCyberdeckUncommonPlus, traceTime: 43, traceTimeV: -0.43, name: blackchrome_auxCyberdeck_name2 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.AuxiliaryCyberdeckRare, traceTime: 40, traceTimeV: -0.40, name: blackchrome_auxCyberdeck_name2 }
+    - { tier: Rare, nextTier: BlackChrome.AuxiliaryCyberdeckRarePlus, traceTime: 35, traceTimeV: -0.35, name: blackchrome_auxCyberdeck_name3 }
+    - { tier: RarePlus, nextTier: BlackChrome.AuxiliaryCyberdeckEpic, traceTime: 32, traceTimeV: -0.32, name: blackchrome_auxCyberdeck_name3 }
+    - { tier: Epic, nextTier: BlackChrome.AuxiliaryCyberdeckEpicPlus, traceTime: 28, traceTimeV: -0.28, name: blackchrome_auxCyberdeck_name4 }
+    - { tier: EpicPlus, nextTier: BlackChrome.AuxiliaryCyberdeckLegendary, traceTime: 25, traceTimeV: -0.25, name: blackchrome_auxCyberdeck_name4 }
+    - { tier: Legendary, nextTier: BlackChrome.AuxiliaryCyberdeckLegendaryPlus, traceTime: 20, traceTimeV: -0.2, name: blackchrome_auxCyberdeck_name5 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.AuxiliaryCyberdeckLegendaryPlusPlus, traceTime: 18, traceTimeV: -0.18, name: blackchrome_auxCyberdeck_name5 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, traceTime: 15, traceTimeV: -0.15, name: blackchrome_auxCyberdeck_name5 }   
+  $base: Items.AdvancedMilitechParalineMKVLegendary
+  quality: Quality.$(tier)
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_05
+  nextUpgradeItem: $(nextTier)
+  equipArea: EquipmentArea.FrontalCortexCW
+  displayName: LocKey#$(name)
+  tags: ['Cyberware', 'HideInBackpackUI', 'BlackChrome.AuxCyberdeck', 'Cyberdeck']
+  blueprint: Items.Cyberware
+  variants: [Variants.Humanity14Cost]
+  OnEquip: 
+    - Items.BaseDeck_inline0
+    - Items.BaseDeck_inline3 
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: ApplyStatGroupEffector
+          applicationTarget: Player
+          effectorClassName: ApplyStatGroupEffector
+          removeWithEffector: true
+          prereqRecord: BlackChrome.RealCyberdeckPrereq
+          statGroup: 
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers: 
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.Memory
+                value: -2
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.BufferSize
+                value: -3   
+        - $type: ApplyStatGroupEffector
+          applicationTarget: Player
+          effectorClassName: ApplyStatGroupEffector
+          removeWithEffector: true
+          prereqRecord: BlackChrome.NoRealCyberdeckPrereq
+          statGroup: 
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers: 
+              - $type: ConstantStatModifier
+                modifierType: AdditiveMultiplier
+                statType: BaseStats.HackRevealPositionModifier
+                value: $(traceTimeV)
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.DeviceMemoryCostReduction
+                value: 1
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [1]
+        localizedDescription: LocKey#blackchrome_auxCyberdeck_description3    
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [$(traceTime)]
+        localizedDescription: LocKey#blackchrome_auxCyberdeck_description1
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: []
+        localizedDescription: LocKey#blackchrome_auxCyberdeck_description4
+    - $type: GameplayLogicPackage
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.Memory
+          value: 2
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BufferSize
+          value: 3
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.HasAuxCyberdeck
+          value: 1
+    
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Common }
+    - { tier: CommonPlus }
+  objectActions:
+    - QuickHack.PingHack
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Uncommon }
+    - { tier: UncommonPlus }
+  objectActions:
+    - QuickHack.PingHack
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Rare }
+    - { tier: RarePlus }
+  objectActions:
+    - QuickHack.PingHack
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Epic }
+    - { tier: EpicPlus }
+  objectActions:
+    - QuickHack.PingHack
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+    - DeviceAction.VehicleExplodeClassHack
+    - DeviceAction.OverloadClassLvl4Hack
+    - DeviceAction.TurretOverrideAttitudeClassHack
+    - DeviceAction.OverrideAttitudeClassLvl4Hack
+    - DeviceAction.TurretToggleStateClassLvl4Hack 
+    - DeviceAction.ServerOverloadClassHack
+
+BlackChrome.AuxiliaryCyberdeck$(tier):
+  $instances:
+    - { tier: Legendary }
+    - { tier: LegendaryPlus }   
+    - { tier: LegendaryPlusPlus }   
+  objectActions:
+    - QuickHack.PingHack
+    - DeviceAction.PingDevice
+    - DeviceAction.DataExtractionClassHack
+    - DeviceAction.MalfunctionClassHack
+    - DeviceAction.ToggleStateClassHack
+    - DeviceAction.TurretToggleStateClassHack
+    - DeviceAction.TakeControlCameraClassHack
+    - DeviceAction.VehicleForceBrakesClassHack
+    - DeviceAction.OverloadClassHack
+    - DeviceAction.TakeControlClassHack
+    - DeviceAction.TurretOverloadClassHack
+    - DeviceAction.OverrideAttitudeClassHack
+    - DeviceAction.HighPitchNoiseQuickHack
+    - DeviceAction.TurretToggleStateClassLvl2Hack
+    - DeviceAction.VehicleAccelerateClassHack
+    - DeviceAction.TakeControlVehicleClassHack
+    - DeviceAction.SetDeviceTagKillMode
+    - DeviceAction.OverrideAttitudeClassLvl3Hack
+    - DeviceAction.TurretToggleStateClassLvl3Hack
+    - DeviceAction.VehicleExplodeClassHack
+    - DeviceAction.OverloadClassLvl4Hack
+    - DeviceAction.TurretOverrideAttitudeClassHack
+    - DeviceAction.OverrideAttitudeClassLvl4Hack
+    - DeviceAction.TurretToggleStateClassLvl4Hack 
+    - DeviceAction.ServerOverloadClassHack
+    - DeviceAction.TurretOverrideAttitudeClassLvl5Hack
+    - DeviceAction.OverrideAttitudeClassLvl5Hack
+    - DeviceAction.TurretToggleStateClassLvl5Hack

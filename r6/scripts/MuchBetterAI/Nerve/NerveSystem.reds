@@ -62,13 +62,17 @@ public class MBAI_NerveSystem extends ScriptableSystem {
 
   private func OnDetach() -> Void {
     let gi: GameInstance = this.GetGameInstance();
-    GameInstance.GetDelaySystem(gi).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(gi, this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
     this.CancelAll(gi);
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_NerveTickCallback> = new MBAI_NerveTickCallback();
     cb.game = this.GetGameInstance();
@@ -95,6 +99,9 @@ public class MBAI_NerveSystem extends ScriptableSystem {
     let squad: array<wref<NPCPuppet>> = this.GatherEnemies(gi, player);
     this.SyncGroups(squad, now);
     let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(gi);
+    if !IsDefined(statPools) {
+      return;
+    }
     let contagionAmount: Float = 0.2;
     let groupIndex: Int32 = ArraySize(this.m_groups) - 1;
     while groupIndex >= 0 {

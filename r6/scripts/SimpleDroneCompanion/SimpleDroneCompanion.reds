@@ -1,15 +1,15 @@
 // SimpleDroneCompanion
 //
-// A source-controlled, vanilla-first companion backend for four session-bound
-// Militech combat drones (two Minotaurs and two Octants).  It deliberately owns only lifecycle, fixed input, the
-// follower role, and a bounded watchdog.  There is no CET/Lua, Mod Settings,
+// A source-controlled, vanilla-first companion backend for six session-bound
+// Militech combat drones (two Minotaurs, two Octants, and two Cerberus units).
+// It deliberately owns only lifecycle, fixed input, the
+// follower role, and a bounded watchdog. There is no CET/Lua, Mod Settings,
 // localization, persistence, JSON, custom archive, or fleet UI.
 //
-// C1 + C2 are represented by a small record seam: the declarative
-// SimpleDroneMinotaurA/B records carry the fixed weapon package, while the
-// vanilla Character.militech_base_minotaur ID is retained as a safe fallback
-// if a future TweakXL load omits the private records.  Replacing that seam
-// does not change the entity lifecycle or combat hooks.
+// C1/C2/C3 are represented by a small record seam: declarative Minotaur,
+// Octant, and Cerberus records carry the fixed companion payloads, while
+// vanilla IDs remain safe fallbacks if a future TweakXL load omits a private
+// record. Replacing that seam does not change lifecycle or combat hooks.
 
 module SimpleDroneCompanion
 
@@ -18,7 +18,7 @@ public func SDC_Tag() -> CName {
 }
 
 public func SDC_MaxDrones() -> Int32 {
-  return 4;
+  return 6;
 }
 
 public func SDC_VanillaRecord() -> TweakDBID {
@@ -27,6 +27,10 @@ public func SDC_VanillaRecord() -> TweakDBID {
 
 public func SDC_VanillaOctantRecord() -> TweakDBID {
   return t"Character.militech_drone_octant_hard";
+}
+
+public func SDC_VanillaCerberusRecord() -> TweakDBID {
+  return t"Character.q305_cerberus_robot";
 }
 
 public func SDC_StaticRecord(slot: Int32) -> TweakDBID {
@@ -38,6 +42,12 @@ public func SDC_StaticRecord(slot: Int32) -> TweakDBID {
   };
   if slot == 3 {
     return t"Character.SimpleDroneOctantB";
+  };
+  if slot == 4 {
+    return t"Character.SimpleDroneCerberusA";
+  };
+  if slot == 5 {
+    return t"Character.SimpleDroneCerberusB";
   };
   return t"Character.SimpleDroneMinotaurA";
 }
@@ -79,14 +89,20 @@ public func SDC_UseVanillaRecordPath() -> Bool {
 
 public func SDC_RecordForSlot(slot: Int32) -> TweakDBID {
   // C2 is the primary path because it is the only path that can carry W1's
-  // static weapon record.  The source-level C1 switch and missing-record
+  // static weapon record. The source-level C1 switch and missing-record
   // fallback keep the vanilla implementation available for comparison.
   if SDC_UseVanillaRecordPath() {
+    if slot >= 4 {
+      return SDC_VanillaCerberusRecord();
+    };
     return slot >= 2 ? SDC_VanillaOctantRecord() : SDC_VanillaRecord();
   };
   let staticRecord: TweakDBID = SDC_StaticRecord(slot);
   if IsDefined(TweakDBInterface.GetRecord(staticRecord)) {
     return staticRecord;
+  };
+  if slot >= 4 {
+    return SDC_VanillaCerberusRecord();
   };
   return slot >= 2 ? SDC_VanillaOctantRecord() : SDC_VanillaRecord();
 }
@@ -128,6 +144,10 @@ private func SDC_OffsetForSlot(slot: Int32) -> Vector4 {
       return new Vector4(4.0, 1.0, 0.0, 0.0);
     case 3:
       return new Vector4(-4.0, 1.0, 0.0, 0.0);
+    case 4:
+      return new Vector4(5.0, -3.0, 0.0, 0.0);
+    case 5:
+      return new Vector4(-5.0, -3.0, 0.0, 0.0);
   };
   return new Vector4(3.0, -1.5, 0.0, 0.0);
 }
@@ -225,7 +245,20 @@ private func SDC_IssueFollow(puppet: ref<NPCPuppet>, player: ref<PlayerPuppet>) 
     return;
   };
   let ai: ref<AIHumanComponent> = puppet.GetAIControllerComponent();
-  if !IsDefined(ai) || ai.IsCommandActive(n"AIFollowTargetCommand") {
+  if !IsDefined(ai) {
+    return;
+  };
+  // Keep the session-bound squad with V across streaming/fast traversal
+  // without a per-frame scan. Combat/alerted puppets return above; only an
+  // idle follower farther than 45m is snapped to a nearby nav point.
+  if Vector4.Distance(puppet.GetWorldPosition(), player.GetWorldPosition()) > 45.0 {
+    let teleportation = GameInstance.GetTeleportationFacility(player.GetGame());
+    if IsDefined(teleportation) {
+      teleportation.Teleport(puppet, SDC_SpawnPosition(player, puppet.m_sdcSlot), Vector4.ToRotation(player.GetWorldForward()));
+      return;
+    }
+  };
+  if ai.IsCommandActive(n"AIFollowTargetCommand") {
     return;
   };
   let follow: ref<AIFollowTargetCommand> = new AIFollowTargetCommand();
@@ -466,6 +499,12 @@ public class SDC_System extends ScriptableSystem {
       case 3:
         label = "O2 OCTANT  ";
         break;
+      case 4:
+        label = "C1 CERBERUS";
+        break;
+      case 5:
+        label = "C2 CERBERUS";
+        break;
     };
     if slot < 0 || slot >= ArraySize(this.m_slotIDs) || !EntityID.IsDefined(this.m_slotIDs[slot]) {
       return label + " [----------] OFFLINE";
@@ -493,12 +532,14 @@ public class SDC_System extends ScriptableSystem {
 
   private func BuildHudStatusText(statPools: ref<StatPoolsSystem>) -> String {
     if this.ActiveCount() == 0 {
-      return "Ready: 2x Minotaur + 2x Octant";
+      return "Ready: 2x Minotaur + 2x Octant + 2x Cerberus";
     }
     return this.BuildSlotHudLine(0, statPools) + "\n"
       + this.BuildSlotHudLine(1, statPools) + "\n"
       + this.BuildSlotHudLine(2, statPools) + "\n"
-      + this.BuildSlotHudLine(3, statPools);
+      + this.BuildSlotHudLine(3, statPools) + "\n"
+      + this.BuildSlotHudLine(4, statPools) + "\n"
+      + this.BuildSlotHudLine(5, statPools);
   }
 
   public func RefreshHud() -> Void {
@@ -517,10 +558,10 @@ public class SDC_System extends ScriptableSystem {
     let header: String;
     let status: String;
     if count == 0 {
-      header = "[F9] SUMMON DRONES (0/4)";
-      status = "Ready: 2x Minotaur + 2x Octant";
+      header = "[F9] SUMMON DRONES (0/6)";
+      status = "Ready: 2x Minotaur + 2x Octant + 2x Cerberus";
     } else {
-      header = "[F9] DRONE SQUAD (" + IntToString(count) + "/4) — PRESS F9 TO DISMISS";
+      header = "[F9] DRONE SQUAD (" + IntToString(count) + "/6) — PRESS F9 TO DISMISS";
       let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
       status = this.BuildHudStatusText(statPools);
     }
@@ -852,7 +893,7 @@ protected cb func OnInitialize() -> Bool {
   headerText.SetTintColor(new HDRColor(0.36, 0.96, 1.0, 0.92));
   headerText.SetHorizontalAlignment(textHorizontalAlignment.Left);
   headerText.SetVerticalAlignment(textVerticalAlignment.Top);
-  headerText.SetText("[F9] SUMMON DRONES (0/4)");
+  headerText.SetText("[F9] SUMMON DRONES (0/6)");
   headerText.Reparent(panel);
 
   let statusText: ref<inkText> = new inkText();
@@ -864,7 +905,7 @@ protected cb func OnInitialize() -> Bool {
   statusText.SetTintColor(new HDRColor(0.62, 1.0, 0.52, 0.92));
   statusText.SetHorizontalAlignment(textHorizontalAlignment.Left);
   statusText.SetVerticalAlignment(textVerticalAlignment.Top);
-  statusText.SetText("Ready: 2x Minotaur + 2x Octant");
+  statusText.SetText("Ready: 2x Minotaur + 2x Octant + 2x Cerberus");
   statusText.SetVisible(true);
   statusText.Reparent(panel);
 

@@ -1,0 +1,145 @@
+# ARCHER QUARTZ
+Vehicle.aldelcaldos__archer_quartz:
+  $base: Vehicle.aldecado_archer_quartz_heat_3
+  randomPassengers: [Passengers.AdelcaldosDriverEntry]
+  affiliation: Factions.Aldecaldos
+
+# THORTON COLBY
+Vehicle.aldelcaldos__thorton_colby:
+  $base: Vehicle.aldecado_thorton_colby_heat_3
+  randomPassengers: [Passengers.AdelcaldosDriverEntry, Passengers.AdelcaldosPassengerFrontEntry]
+  affiliation: Factions.Aldecaldos
+
+# THORTON GALENA 01
+Vehicle.aldelcaldos__thorton_galena_01:
+  $base: Vehicle.aldecado_thorton_galena_heat_1
+  randomPassengers: [Passengers.AdelcaldosDriverEntry, Passengers.AdelcaldosPassengerFrontEntry, Passengers.AdelcaldosPassengerBackEntry]
+  affiliation: Factions.Aldecaldos
+
+# THORTON GALENA 02
+Vehicle.aldelcaldos__thorton_galena_02:
+  $base: Vehicle.aldecado_thorton_galena_heat_2
+  randomPassengers: [Passengers.AdelcaldosDriverEntry, Passengers.AdelcaldosPassengerFrontEntry, Passengers.AdelcaldosPassengerBackEntry]
+  affiliation: Factions.Aldecaldos
+
+# DRIVERS
+Passengers.AdelcaldosDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_driver_shotgun2_tactician_ma
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.AdelcaldosPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_driver_shotgun2_tactician_ma
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.AdelcaldosPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt1_ranged1_pulsar_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__adelcaldos_driver_shotgun2_tactician_ma
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+
+
+# Character.adelcaldos_grunt1_ranged1_nova_ma
+# Character.adelcaldos_grunt1_ranged1_nova_wa
+# Character.adelcaldos_grunt1_ranged1_pulsar_ma
+# Character.adelcaldos_grunt1_ranged1_pulsar_wa
+# Character.adelcaldos_grunt2_ranged2_copperhead_ma
+# Character.adelcaldos_driver_shotgun2_tactician_ma
+
+
+# CHARACTERS
+Character.ncto__adelcaldos_grunt1_ranged1_nova_ma:
+  $base: Character.adelcaldos_grunt1_ranged1_nova_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__adelcaldos_grunt1_ranged1_nova_wa:
+  $base: Character.adelcaldos_grunt1_ranged1_nova_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__adelcaldos_grunt1_ranged1_pulsar_ma:
+  $base: Character.adelcaldos_grunt1_ranged1_pulsar_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__adelcaldos_grunt1_ranged1_pulsar_wa:
+  $base: Character.adelcaldos_grunt1_ranged1_pulsar_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__adelcaldos_grunt2_ranged2_copperhead_ma:
+  $base: Character.adelcaldos_grunt2_ranged2_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__adelcaldos_driver_shotgun2_tactician_ma:
+  $base: Character.adelcaldos_driver_shotgun2_tactician_ma
+  tags:
+    - !append pcf_GangerCanRetreat

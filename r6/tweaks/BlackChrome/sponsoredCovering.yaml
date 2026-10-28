@@ -1,0 +1,57 @@
+BaseStats.RewardBaseStatMultiplier:
+  $type: Stat
+  enumName: RewardBaseStatMultiplier
+  flags: [ EquipOnPlayer ]
+  max: 10
+  min: 0
+
+BlackChrome.RewardMultiplier:
+  $base: Ability.CanCauseBurn_inline4
+  opSymbol: +
+  refStat: BaseStats.RewardBaseStatMultiplier
+  statType: BaseStats.Quantity
+  value: 1
+  modifierType: Multiplier
+  refObject: Player
+
+BlackChrome.SponsoredCovering$(tier):
+  $instances:
+    - { tier: Common, nextTier: BlackChrome.SponsoredCoveringCommonPlus, moneyBonus: 0.10, moneyBonusDesc: 10 }
+    - { tier: CommonPlus, nextTier: BlackChrome.SponsoredCoveringUncommon, moneyBonus: 0.12, moneyBonusDesc: 12 }
+    - { tier: Uncommon, nextTier: BlackChrome.SponsoredCoveringUncommonPlus, moneyBonus: 0.14, moneyBonusDesc: 14 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.SponsoredCoveringRare, moneyBonus: 0.16, moneyBonusDesc: 16 }
+    - { tier: Rare, nextTier: BlackChrome.SponsoredCoveringRarePlus, moneyBonus: 0.18, moneyBonusDesc: 18 }
+    - { tier: RarePlus, nextTier: BlackChrome.SponsoredCoveringEpic, moneyBonus: 0.20, moneyBonusDesc: 20 }
+    - { tier: Epic, nextTier: BlackChrome.SponsoredCoveringEpicPlus, moneyBonus: 0.22, moneyBonusDesc: 22 }
+    - { tier: EpicPlus, nextTier: BlackChrome.SponsoredCoveringLegendary, moneyBonus: 0.24, moneyBonusDesc: 24 }
+    - { tier: Legendary, nextTier: BlackChrome.SponsoredCoveringLegendaryPlus, moneyBonus: 0.26, moneyBonusDesc: 26 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.SponsoredCoveringLegendaryPlusPlus, moneyBonus: 0.28, moneyBonusDesc: 28 }
+    - { tier: LegendaryPlusPlus, nextTier: None, moneyBonus: 0.30, moneyBonusDesc: 30 }
+  $base: Items.AdvancedBoringPlating$(tier)
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_10
+  displayName: LocKey#blackchrome_arasakaSkin_name
+  localizedDescription: LocKey#blackchrome_arasakaSkin_flavor
+  variants: [Variants.Humanity10CostTinkererVariant]
+  cyberwareType: SponsoredCovering
+  nextUpgradeItem: $(nextTier)
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_arasakaSkin_description
+        floatValues: [$(moneyBonusDesc)]
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.RewardBaseStatMultiplier
+          value: $(moneyBonus)
+  statModifiers:
+    - Items.ItemArmorToArmor
+    - Items.AdvancedIntegumentarySystemModule_inline0
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.Armor
+      value: 1
+    - Items.IconicAdvancedT1000Common_inline4

@@ -608,37 +608,41 @@ class AdjustCyberwareCompatibility extends ScriptableTweak {
         let cyberwareRemappings = CyberwareConfig.Remappings();
         for record in TweakDBInterface.GetRecords(n"Item_Record") {
             let cyberwareTypeFlat = TweakDBInterface.GetFlat(record.GetID() + t".cyberwareType");
-            if IsDefined(cyberwareTypeFlat) {
-                let cyberwareType = FromVariant<CName>(cyberwareTypeFlat);
-                let displayName = TweakDBInterface.GetLocKeyDefault(record.GetID() + t".displayName");
-                for cyberwareRemapping in cyberwareRemappings {
-                    if Equals(displayName, cyberwareRemapping.displayName) {
-                        cyberwareType = cyberwareRemapping.cyberwareType;
-                        TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
+            let cyberwareType: CName = IsDefined(cyberwareTypeFlat)
+                ? FromVariant<CName>(cyberwareTypeFlat)
+                : n"None";
+            let displayName = TweakDBInterface.GetLocKeyDefault(record.GetID() + t".displayName");
+
+            // Some deterministic/Iconic records omit cyberwareType entirely;
+            // remap those by display name before building their duplicate slot.
+            for cyberwareRemapping in cyberwareRemappings {
+                if Equals(displayName, cyberwareRemapping.displayName) {
+                    cyberwareType = cyberwareRemapping.cyberwareType;
+                    TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
+                    TweakDBManager.UpdateRecord(record.GetID());
+                    break;
+                }
+            }
+
+            let placementSlots = TweakDBInterface.GetForeignKeyArray(record.GetID() + t".placementSlots");
+            if ArraySize(placementSlots) > 0 {
+                if Equals(cyberwareType, n"IconicJenkinsTendons") {
+                    cyberwareType = n"JenkinsTendons";
+                    TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
+                    TweakDBManager.UpdateRecord(record.GetID());
+                }
+                for attachmentSlot in attachmentSlots {
+                    if Equals(cyberwareType, attachmentSlot.cyberwareType) {
+                        let newPlacementSlots: array<TweakDBID>;
+                        ArrayPush(newPlacementSlots, attachmentSlot.slotID);
+                        for existingSlot in placementSlots {
+                            if !ArrayContains(newPlacementSlots, existingSlot) {
+                                ArrayPush(newPlacementSlots, existingSlot);
+                            }
+                        }
+                        TweakDBManager.SetFlat(record.GetID() + t".placementSlots", newPlacementSlots);
                         TweakDBManager.UpdateRecord(record.GetID());
                         break;
-                    }
-                }
-                let placementSlots = TweakDBInterface.GetForeignKeyArray(record.GetID() + t".placementSlots");
-                if ArraySize(placementSlots) > 0 {
-                    if Equals(cyberwareType, n"IconicJenkinsTendons") {
-                        cyberwareType = n"JenkinsTendons";
-                        TweakDBManager.SetFlat(record.GetID() + t".cyberwareType", cyberwareType);
-                        TweakDBManager.UpdateRecord(record.GetID());
-                    }
-                    for attachmentSlot in attachmentSlots {
-                        if Equals(cyberwareType, attachmentSlot.cyberwareType) {
-                            let newPlacementSlots: array<TweakDBID>;
-                            ArrayPush(newPlacementSlots, attachmentSlot.slotID);
-                            for existingSlot in placementSlots {
-                                if !ArrayContains(newPlacementSlots, existingSlot) {
-                                    ArrayPush(newPlacementSlots, existingSlot);
-                                }
-                            }
-                            TweakDBManager.SetFlat(record.GetID() + t".placementSlots", newPlacementSlots);
-                            TweakDBManager.UpdateRecord(record.GetID());
-                            break;
-                        }
                     }
                 }
             }

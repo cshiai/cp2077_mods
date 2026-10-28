@@ -1,0 +1,109 @@
+# YAIBA KUSANAGI
+Vehicle.mox__yaiba_kusanagi:
+  $base: Vehicle.v_sportbike1_yaiba_kusanagi_mox
+  randomPassengers: [Passengers.MoxDriverEntry]
+  affiliation: Factions.TheMox
+
+# MAKIGAKI MAHIR
+Vehicle.mox__mahir_supron:
+  $base: Vehicle.v_standard25_mahir_mox
+  randomPassengers: [Passengers.MoxDriverEntry, Passengers.MoxPassengerFrontEntry]
+  affiliation: Factions.TheMox
+
+# ARCHER QUARTZ
+Vehicle.mox__archer_quartz:
+  $base: Vehicle.v_standard2_archer_quartz_mox
+  randomPassengers: [Passengers.MoxDriverEntry, Passengers.MoxPassengerFrontEntry]
+  affiliation: Factions.TheMox
+
+# VILLEFORT ALVARADO
+Vehicle.mox__villefort_alvarado:
+  $base: Vehicle.cs_savable_villefort_alvarado_mox
+  randomPassengers: [Passengers.MoxDriverEntry, Passengers.MoxPassengerFrontEntry]
+  affiliation: Factions.TheMox
+
+
+
+# DRIVERS
+Passengers.MoxDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_1_melee2_baseball_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_lexington_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_pulsar_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.MoxPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_lexington_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_pulsar_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_1_melee2_baseball_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite2_fmelee2_knife_wa_rare
+    #   weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite2_fmelee2_machete_wa_rare
+    #   weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite3_fmelee3_mantis_wa_elite
+    #   weight: 0.5
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.MoxPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_lexington_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__the_mox_1_ranged1_pulsar_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_1_melee2_baseball_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite2_fmelee2_knife_wa_rare
+    #   weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite2_fmelee2_machete_wa_rare
+    #   weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.the_mox_elite3_fmelee3_mantis_wa_elite
+    #   weight: 0.5
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__the_mox_1_ranged1_lexington_wa:
+  $base: Character.the_mox_1_ranged1_lexington_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__the_mox_1_ranged1_pulsar_wa:
+  $base: Character.the_mox_1_ranged1_pulsar_wa
+  tags:
+    - !append pcf_GangerCanRetreat

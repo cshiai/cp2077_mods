@@ -5,10 +5,12 @@ module AttachmentsCraftingSystem
 		if IsDefined(evt) && IsDefined(evt.itemData)
       && (evt.itemData.HasTag(n"Muzzle_Brake") || evt.itemData.HasTag(n"Silenced") || evt.itemData.HasTag(n"ShortScope") || evt.itemData.HasTag(n"LongScope") || evt.itemData.HasTag(n"SniperScope")) && evt.itemData.HasTag(n"itemPart") && !evt.itemData.HasTag(n"CraftableAndUpgradableScopes") {
 	  let qualityValue: Float = evt.itemData.GetStatValueByType(gamedataStatType.Quality);
+	  let quantity: Int32 = evt.itemData.GetQuantity();
 	  let itemTDBID: TweakDBID = ItemID.GetTDBID(evt.itemData.GetID());
 	  let itemTDBIDString = TDBID.ToStringDEBUG(itemTDBID);
 	  let newItemTDBIDString: String;
 		newItemTDBIDString = StrReplace(itemTDBIDString, "_legendary", "");
+		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Legendary", "");
 		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Generated", "");
 		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Craftable", "");
       switch qualityValue {
@@ -34,8 +36,8 @@ module AttachmentsCraftingSystem
 	  let newItemRecord: ref<Item_Record> = TweakDBInterface.GetItemRecord(newItemTDBID);
 	  let newItemID = ItemID.FromTDBID(newItemTDBID);
 	  let transactionSys: ref<TransactionSystem> = GameInstance.GetTransactionSystem(this.GetGame());
-		  if IsDefined(newItemRecord) && ItemID.IsValid(newItemID) && IsDefined(transactionSys) && transactionSys.GiveItem(this, newItemID, 1) {
-		transactionSys.RemoveItem(this, evt.itemData.GetID(), 1);
+		  if IsDefined(newItemRecord) && ItemID.IsValid(newItemID) && IsDefined(transactionSys) && quantity > 0 && transactionSys.GiveItem(this, newItemID, quantity) {
+		transactionSys.RemoveItem(this, evt.itemData.GetID(), quantity);
 	  };
 	};
 	return wrappedMethod(evt);
@@ -56,15 +58,20 @@ module AttachmentsCraftingSystem
 	      return result;
 	    }
     transactionSystem.GetItemList(this, itemList);
+	    // Reuse the transaction handle for the bounded inventory migration;
+	    // resolving it once per stack needlessly touched the global system.
+	    let transactionSys: ref<TransactionSystem> = transactionSystem;
     i = 0;
     while i < ArraySize(itemList) {
 	      if IsDefined(itemList[i]) && (itemList[i].HasTag(n"Muzzle_Brake") || itemList[i].HasTag(n"Silenced") || itemList[i].HasTag(n"ShortScope") || itemList[i].HasTag(n"LongScope") || itemList[i].HasTag(n"SniperScope")) && itemList[i].HasTag(n"itemPart") && !itemList[i].HasTag(n"CraftableAndUpgradableScopes") {
         
 	  let qualityValue: Float = itemList[i].GetStatValueByType(gamedataStatType.Quality);
+	  let quantity: Int32 = itemList[i].GetQuantity();
 	  let itemTDBID: TweakDBID = ItemID.GetTDBID(itemList[i].GetID());
 	  let itemTDBIDString = TDBID.ToStringDEBUG(itemTDBID);
 	  let newItemTDBIDString: String;
 		newItemTDBIDString = StrReplace(itemTDBIDString, "_legendary", "");
+		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Legendary", "");
 		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Generated", "");
 		newItemTDBIDString = StrReplace(newItemTDBIDString, "_Craftable", "");
       switch qualityValue {
@@ -89,9 +96,8 @@ module AttachmentsCraftingSystem
 	  let newItemTDBID = TDBID.Create(newItemTDBIDString);
 	  let newItemRecord: ref<Item_Record> = TweakDBInterface.GetItemRecord(newItemTDBID);
 	  let newItemID = ItemID.FromTDBID(newItemTDBID);
-	  let transactionSys: ref<TransactionSystem> = GameInstance.GetTransactionSystem(this.GetGame());
-		  if IsDefined(newItemRecord) && ItemID.IsValid(newItemID) && IsDefined(transactionSys) && transactionSys.GiveItem(this, newItemID, 1) {
-		transactionSys.RemoveItem(this, itemList[i].GetID(), 1);
+		  if IsDefined(newItemRecord) && ItemID.IsValid(newItemID) && quantity > 0 && transactionSys.GiveItem(this, newItemID, quantity) {
+		transactionSys.RemoveItem(this, itemList[i].GetID(), quantity);
 	  };
       };
       i += 1;

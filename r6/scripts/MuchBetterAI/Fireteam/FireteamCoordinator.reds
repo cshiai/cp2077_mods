@@ -71,13 +71,17 @@ public class MBAI_FireteamSystem extends ScriptableSystem {
 
   private func OnDetach() -> Void {
     let gi: GameInstance = this.GetGameInstance();
-    GameInstance.GetDelaySystem(gi).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(gi, this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
     this.CancelAll(gi, EngineTime.ToFloat(GameInstance.GetSimTime(gi)));
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_FireteamTickCallback> = new MBAI_FireteamTickCallback();
     cb.game = this.GetGameInstance();
@@ -456,7 +460,10 @@ public class MBAI_FireteamSystem extends ScriptableSystem {
       order.cmd = cmd;
       order.leaseToken = leaseToken;
       order.startTime = now;
-      order.startHealth = statPools.GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false);
+      order.startHealth = 100.0;
+      if IsDefined(statPools) {
+        order.startHealth = statPools.GetStatPoolValue(Cast<StatsObjectID>(npc.GetEntityID()), gamedataStatPoolType.Health, false);
+      }
       order.flankVec = search.point;
       order.initialPlayerPos = playerPos;
       order.startedVisible = tracked.visible;
@@ -901,13 +908,13 @@ public class MBAI_FireteamSystem extends ScriptableSystem {
                               let curPos: Vector4 = npc.GetWorldPosition();
                               if !order.pushThrough {
                                 let peel: Float = MBAI_DoctrinePeelThreshold(order.group);
-                                if peel > 0.0 {
+                                if peel > 0.0 && IsDefined(statPools) {
                                   let pctHP: Float = statPools.GetStatPoolValue(Cast<StatsObjectID>(order.id), gamedataStatPoolType.Health, true) / 100.0;
                                   if pctHP < peel {
                                     remove = true;
                                     reason = "peel";
                                   };
-                                } else {
+                                } else if peel <= 0.0 && IsDefined(statPools) {
                                   let hp: Float = statPools.GetStatPoolValue(Cast<StatsObjectID>(order.id), gamedataStatPoolType.Health, false);
                                   if hp < order.startHealth - 1.0 {
                                     remove = true;
@@ -1168,7 +1175,10 @@ public class MBAI_FireteamSystem extends ScriptableSystem {
   }
 
   private final func PlayerInCover(gi: GameInstance, player: ref<PlayerPuppet>) -> Bool {
-    let bb: ref<IBlackboard> = GameInstance.GetBlackboardSystem(gi).GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine);
+    let blackboard = GameInstance.GetBlackboardSystem(gi);
+    let bb: ref<IBlackboard> = IsDefined(blackboard)
+      ? blackboard.GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+      : null;
     return IsDefined(bb) && bb.GetBool(GetAllBlackboardDefs().PlayerStateMachine.UsingCover);
   }
 
@@ -1187,7 +1197,10 @@ public class MBAI_FireteamSystem extends ScriptableSystem {
     if now - this.m_playerStillSince > 4.0 {
       return true;
     };
-    let bb: ref<IBlackboard> = GameInstance.GetBlackboardSystem(gi).GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine);
+    let blackboard = GameInstance.GetBlackboardSystem(gi);
+    let bb: ref<IBlackboard> = IsDefined(blackboard)
+      ? blackboard.GetLocalInstanced(player.GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+      : null;
     if IsDefined(bb) && bb.GetBool(GetAllBlackboardDefs().PlayerStateMachine.UsingCover) {
       return true;
     };

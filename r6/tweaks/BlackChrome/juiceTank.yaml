@@ -1,0 +1,346 @@
+
+
+
+BaseStats.JuiceTankDamageCounter:
+  $type: Stat
+  enumName: JuiceTankDamageCounter
+  flags: []
+  max: 100
+  min: -100 
+  decimalPlaces: 1
+
+BaseStats.JuiceTankEquipped:
+  $type: Stat
+  enumName: JuiceTankEquipped
+  flags: []
+  max: 5
+  min: -1
+  decimalPlaces: 1
+
+BaseStats.JuiceTankDamaged:
+  $type: Stat
+  enumName: JuiceTankDamaged
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1  
+
+BaseStats.JuiceTankRegen:
+  $type: Stat
+  enumName: JuiceTankRegen
+  flags: []
+  max: 20
+  min: 0
+  decimalPlaces: 1  
+
+BlackChrome.JuiceTankCooldownDamageNotification:
+  $type: StatusEffect
+  duration: BaseStatusEffect.CyberwareCooldownNotification_inline0
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxDuration
+        value: 2
+  packages:
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: Effector
+          duration: 1
+          primaryText: LocKey#blackchrome_juiceTank_damage_warning_name
+          secondaryText: LocKey#blackchrome_juiceTank_damage_warning_description
+          effectorClassName: ShowUIWarningEffector
+          prereqRecord: Prereqs.AlwaysTruePrereq
+
+BlackChrome.JuiceTankCooldownRepairNotification:
+  $type: StatusEffect
+  duration: BaseStatusEffect.CyberwareCooldownNotification_inline0
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+  packages:
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: Effector
+          duration: 1
+          primaryText: LocKey#52430
+          secondaryText: LocKey#blackchrome_juiceTank_damage_repair_description
+          effectorClassName: ShowUIWarningEffector
+          prereqRecord: Prereqs.AlwaysTruePrereq
+
+BlackChrome.JuiceTankCooldown:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxDuration
+        value: 300
+  gameplayTags: ['Debuff']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+  uiData:
+    $type: StatusEffectUIData
+    description: LocKey#blackchrome_juiceTank_cd_description
+    displayName: LocKey#blackchrome_juiceTank_cd_name
+    floatValues: [20]
+    iconPath: Ability.HasJuiceInjector
+  packages: 
+    - $type: GameplayLogicPackage
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.MaxSpeed
+          value: 0.8
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.JuiceTankDamaged
+          value: 1
+      effectors: 
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: true
+          inverted: true
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          statusEffect: BlackChrome.JuiceTankCooldownRepairNotification
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: true
+          inverted: false
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          statusEffect: 
+            $base: BaseStatusEffect.Stun
+            duration: 
+              $type: StatModifierGroup
+              statModsLimit: -1
+              statModifiers: 
+                - $type: ConstantStatModifier
+                  modifierType: Additive
+                  statType: BaseStats.MaxDuration
+                  value: 1.5
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: true
+          inverted: false
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          statusEffect: 
+            $base: BaseStatusEffect.DrillingShakeMedium
+            duration: 
+              $type: StatModifierGroup
+              statModsLimit: -1
+              statModifiers: 
+                - $type: ConstantStatModifier
+                  modifierType: Additive
+                  statType: BaseStats.MaxDuration
+                  value: 1.5           
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: true
+          inverted: false
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          statusEffect: BlackChrome.JuiceTankCooldownDamageNotification
+
+BlackChrome.JuiceTankActivationPrereq:
+  $type: StatusEffectPrereq
+  invert: true
+  objectToCheck: None
+  prereqClassName: StatusEffectPrereq
+  statusEffect: BlackChrome.JuiceTankCooldown
+  tagToCheck: None
+
+
+
+BlackChrome.JuiceTankDamageEffect:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxDuration
+        value: 0.8
+  gameplayTags: ['Debuff']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  packages:
+    - $type: GameplayLogicPackage
+      stackable: true
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.JuiceTankDamageCounter
+          value: 1  
+  maxStacks: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxStacks
+        value: 100
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+
+
+
+
+BlackChrome.JuiceTank$(tier):
+  $instances:
+    - { tier: Epic, nextTier: BlackChrome.JuiceTankEpicPlus, regen: 7, equippedTankLevel: 1 }
+    - { tier: EpicPlus, nextTier: BlackChrome.JuiceTankLegendary, regen: 8, equippedTankLevel: 2 }
+    - { tier: Legendary, nextTier: BlackChrome.JuiceTankLegendaryPlus, regen: 10, equippedTankLevel: 3 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.JuiceTankLegendaryPlusPlus, regen: 11, equippedTankLevel: 4 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, regen: 12, equippedTankLevel: 5 }   
+  $base: Items.AdvancedBloodPump$(tier)
+  displayName: LocKey#blackchrome_juiceTank_name
+  localizedDescription: LocKey#blackchrome_juiceTank_flavor
+  objectActions: []
+  itemType: ItemType.Cyberware
+  buyPrice:
+     - Price.BaseCyberwarePrice
+     - Price.ItemQualityMultiplier
+     - Price.PlusTierMultiplier
+     - Price.CyberwareMultiplier
+     - Price.BuyPrice_StreetCred_Discount
+     - Items.AdvancedSecondHeartEpic_inline7
+  sellPrice: 
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Price.CyberwareSellMultiplier
+    - Items.AdvancedSecondHeartEpic_inline6
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_04
+  tags: ['IllegalItem', 'Cyberware', 'HideInBackpackUI']
+  variants: [Variants.Humanity48Cost]
+  statModifiers: 
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.IsItemIconic
+      value: 1
+    - Items.IconicAdvancedT1000Common_inline4
+  nextUpgradeItem: $(nextTier)
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [300, $(regen), 20, 20, 10, 2, 80]
+        localizedDescription: LocKey#blackchrome_juiceTank_description
+    - $type: GameplayLogicPackage
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.JuiceTankEquipped
+          value: $(equippedTankLevel)
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.JuiceTankRegen
+          value: $(regen)
+      effectors: 
+        - $type: ApplyStatGroupEffector
+          applicationTarget: Player
+          effectorClassName: ApplyStatGroupEffector
+          removeWithEffector: true
+          prereqRecord: BlackChrome.JuiceTankActivationPrereq
+          statGroup: 
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers: 
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.InhalerBaseHealing
+                value: 0.80
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.InjectorBaseHealing
+                value: 0.80
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.InjectorBaseOverTheTimeHealing
+                value: 0.80
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.MaxSpeed
+                value: 1.2
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.JumpHeight
+                value: 1.2
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.MeleeDamagePercentBonus
+                value: 0.1
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.StrengthSkillcheckBonus
+                value: 2  
+        - $type: Effector
+          effectorClassName: Phoenicia.BlackChrome.JuiceTankEffector
+          prereqRecord: 
+            $type: MultiPrereq
+            aggregationType: AND
+            prereqClassName: gameMultiPrereq
+            nestedPrereqs: 
+              - $type: HitPrereq
+                callbackType: HitReceived
+                ignoreSelfInflictedPressureWave: true
+                isSynchronous: true
+                pipelineStage: Process       
+                pipelineType: Damage
+                prereqClassName: HitReceivedPrereq
+              - BlackChrome.JuiceTankActivationPrereq
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          removeWithEffector: true
+          effectorClassName: ApplyStatusEffectEffector
+          statusEffect: BlackChrome.JuiceTankCooldown
+          prereqRecord: 
+            $type: MultiPrereq
+            aggregationType: AND
+            prereqClassName: gameMultiPrereq
+            nestedPrereqs: 
+              - BlackChrome.JuiceTankActivationPrereq
+              - $type: HitPrereq
+                callbackType: HitReceived
+                ignoreSelfInflictedPressureWave: true
+                isSynchronous: true
+                pipelineStage: Process       
+                pipelineType: Damage
+                prereqClassName: HitReceivedPrereq
+              - $type: StatPrereq
+                comparisonType: GreaterOrEqual
+                objectToCheck: Player
+                prereqClassName: StatPrereq
+                statType: JuiceTankDamageCounter
+                valueToCheck: 95
+    - Attunements.BodyHealthT1000

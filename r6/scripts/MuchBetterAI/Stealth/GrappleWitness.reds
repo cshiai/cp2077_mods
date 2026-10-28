@@ -1,6 +1,7 @@
 module MuchBetterAI.Stealth
 
 import MuchBetterAI.Logging.*
+import MuchBetterAI.Core.*
 
 @addField(NPCPuppet)
 let m_mbaiGrappleWitnessUntil: Float;
@@ -15,12 +16,16 @@ public class MBAI_GrappleWitnessSystem extends ScriptableSystem {
   }
 
   private func OnDetach() -> Void {
-    GameInstance.GetDelaySystem(this.GetGameInstance()).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(this.GetGameInstance(), this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_GrappleWitnessCallback> = new MBAI_GrappleWitnessCallback();
     cb.game = this.GetGameInstance();

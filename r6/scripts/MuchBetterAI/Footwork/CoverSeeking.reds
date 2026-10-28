@@ -24,12 +24,16 @@ public class MBAI_CoverSeekingSystem extends ScriptableSystem {
   }
 
   private func OnDetach() -> Void {
-    GameInstance.GetDelaySystem(this.GetGameInstance()).CancelDelay(this.m_tickID);
+    MBAI_CancelDelay(this.GetGameInstance(), this.m_tickID);
     this.m_tickID = GetInvalidDelayID();
   }
 
   private final func ScheduleTick(delay: Float) -> Void {
     let ds: ref<DelaySystem> = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if !IsDefined(ds) {
+      this.m_tickID = GetInvalidDelayID();
+      return;
+    }
     ds.CancelDelay(this.m_tickID);
     let cb: ref<MBAI_CoverSeekCallback> = new MBAI_CoverSeekCallback();
     cb.game = this.GetGameInstance();

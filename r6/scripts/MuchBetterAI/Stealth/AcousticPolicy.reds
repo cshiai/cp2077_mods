@@ -119,7 +119,10 @@ public class MBAI_AcousticSystem extends ScriptableSystem {
     cb.severity = severity;
     cb.radius = radius;
     cb.serial = this.m_serial;
-    GameInstance.GetDelaySystem(cb.game).DelayCallback(cb, this.ReceiptDelayProbe(), false);
+    let delaySystem = GameInstance.GetDelaySystem(cb.game);
+    if IsDefined(delaySystem) {
+      delaySystem.DelayCallback(cb, this.ReceiptDelayProbe(), false);
+    }
   }
 
   public final func EvaluateReceipt(sourceID: EntityID, sourcePos: Vector4, stimType: gamedataStimType, family: MBAI_AcousticFamily, severity: MBAI_AcousticSeverity, radius: Float, serial: Uint32) -> Void {

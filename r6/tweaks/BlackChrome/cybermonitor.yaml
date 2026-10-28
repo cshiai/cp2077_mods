@@ -1,0 +1,75 @@
+BlackChrome.CyberMonitor$(tier):
+  $instances:
+    - { tier: Rare, nextTier: BlackChrome.CyberMonitorRarePlus, cyberBonus: 0.15, cyberBonusDescription: 15 }
+    - { tier: RarePlus, nextTier: BlackChrome.CyberMonitorEpic, cyberBonus: 0.17, cyberBonusDescription: 17 }
+    - { tier: Epic, nextTier: BlackChrome.CyberMonitorEpicPlus, cyberBonus: 0.20, cyberBonusDescription: 20 }
+    - { tier: EpicPlus, nextTier: BlackChrome.CyberMonitorLegendary, cyberBonus: 0.22, cyberBonusDescription: 22 }
+    - { tier: Legendary, nextTier: BlackChrome.CyberMonitorLegendaryPlus, cyberBonus: 0.25, cyberBonusDescription: 25 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.CyberMonitorLegendaryPlusPlus, cyberBonus: 0.27, cyberBonusDescription: 27  }
+    - { tier: LegendaryPlusPlus, nextTier: None, cyberBonus: 0.30, cyberBonusDescription: 30 }
+  $base: Items.AdvancedBiomonitor$(tier)
+  displayName: LocKey#blackchrome_cyberMonitor_name
+  localizedDescription: LocKey#blackchrome_cyberMonitor_flavor
+  nextUpgradeItem: $(nextTier)
+  buyPrice:
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Items.IconicAdvancedT1000Common_inline9
+    - Items.IconicAdvancedT1000Common_inline10
+  sellPrice: 
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Price.CyberwareSellMultiplier
+    - Items.IconicAdvancedT1000Common_inline11
+    - Items.IconicAdvancedT1000Common_inline12
+  objectActions: []
+  tags: ['IllegalItem', 'Cyberware', 'HideInBackpackUI', 'CyberMonitor', 'ImmersiveCyberware.Biomon']
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_03
+  statModifiers:
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.HumanityAllocated
+      statType: BaseStats.AttunementHelper
+      value: 0.01
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BiomonEquipped
+          value: 1
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.SecondaryModifiersAdditiveMultiplier
+          value: $(cyberBonus)
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_cyberMonitor_description
+        floatValues: [$(cyberBonusDescription)]
+    - $type: GameplayLogicPackage
+      stackable: true
+      stats: 
+        - $type: CombinedStatModifier
+          modifierType: Additive
+          opSymbol: '*'
+          refObject: Player
+          refStat: BaseStats.HumanityAllocated
+          statType: BaseStats.CyberwareCooldownReduction
+          value: 0.0001
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        iconPath: UIIcon.Filter_Cyberware
+        floatValues: [0.01]
+        localizedDescription: LocKey#blackchrome_cyberMonitor_attunement
+        localizedName: LocKey#blackchrome_cybernericAttunement_name
+        stats: 
+          - BaseStats.AttunementHelper
+  variants: [Variants.Humanity30Cost]

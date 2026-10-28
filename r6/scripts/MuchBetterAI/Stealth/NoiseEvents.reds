@@ -35,7 +35,10 @@ public func MBAI_Noise_Recruit(player: ref<PlayerPuppet>, noisePos: Vector4, ran
 protected cb func OnCollision(eventData: ref<gameprojectileHitEvent>) -> Bool {
   let result: Bool = wrappedMethod(eventData);
   if IsDefined(eventData) && MBAI_Acoustic_Enabled(MBAI_AcousticFamily.Combat) && ArraySize(eventData.hitInstances) > 0 {
-    let player: ref<PlayerPuppet> = GameInstance.GetPlayerSystem(this.GetGame()).GetLocalPlayerControlledGameObject() as PlayerPuppet;
+    let playerSystem = GameInstance.GetPlayerSystem(this.GetGame());
+    let player: ref<PlayerPuppet> = IsDefined(playerSystem)
+      ? playerSystem.GetLocalPlayerControlledGameObject() as PlayerPuppet
+      : null;
     if IsDefined(player) {
       let hit: gameprojectileHitInstance = eventData.hitInstances[0];
       let obj: wref<GameObject> = this.GetObject(hit);
@@ -66,7 +69,10 @@ protected final func CleanUpCarryStateMachine(state: ECarryState, stateContext: 
 protected cb func OnDisposeBody(evt: ref<DisposeBody>) -> Bool {
   let result: Bool = wrappedMethod(evt);
   if !MBAI_Acoustic_ATOOwnsDisposal() && MBAI_Acoustic_Enabled(MBAI_AcousticFamily.Body) {
-    let player: ref<PlayerPuppet> = GameInstance.GetPlayerSystem(this.GetGame()).GetLocalPlayerControlledGameObject() as PlayerPuppet;
+    let playerSystem = GameInstance.GetPlayerSystem(this.GetGame());
+    let player: ref<PlayerPuppet> = IsDefined(playerSystem)
+      ? playerSystem.GetLocalPlayerControlledGameObject() as PlayerPuppet
+      : null;
     if IsDefined(player) {
       MBAI_Noise_Recruit(player, this.GetWorldPosition(), 5.0, "BodyStash");
     };

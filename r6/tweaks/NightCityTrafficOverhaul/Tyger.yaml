@@ -1,0 +1,283 @@
+# BRENNAN APOLLO
+Vehicle.tyger__brennan_apollo:
+  $base: Vehicle.v_sportbike3_brennan_apollo_tyger
+  randomPassengers: [Passengers.TygerBikerDriverEntry]
+  affiliation: Factions.TygerClaws
+
+# YAIBA KUSANAGI
+Vehicle.tyger__yaiba_kusanagi:
+  $base: Vehicle.v_sportbike1_yaiba_kusanagi_tyger
+  randomPassengers: [Passengers.TygerBikerDriverEntry]
+  affiliation: Factions.TygerClaws
+
+# ARCH TYGER
+Vehicle.tyger__sportbike2_arch:
+  $base: Vehicle.v_sportbike2_arch_tyger
+  randomPassengers: [Passengers.TygerBikerDriverEntry]
+  affiliation: Factions.TygerClaws
+
+# ARCHER QUARTZ
+Vehicle.tyger__archer_quartz:
+  $base: Vehicle.v_standard2_archer_quartz_tyger
+  randomPassengers: [Passengers.TygerDriverEntry, Passengers.TygerPassengerFrontEntry]
+  affiliation: Factions.TygerClaws
+
+# MIZUTANI SHION
+Vehicle.tyger__mizutani_shion:
+  $base: Vehicle.v_sport2_mizutani_shion_tyger
+  randomPassengers: [Passengers.TygerDriverEntry, Passengers.TygerPassengerFrontEntry]
+  affiliation: Factions.TygerClaws
+
+# VILLEFORT COLUMBUS
+Vehicle.tyger__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus_tyger
+  randomPassengers: [Passengers.TygerDriverEntry, Passengers.TygerPassengerFrontEntry]
+  affiliation: Factions.TygerClaws
+
+# QUADRA TURBO
+Vehicle.tyger__quadra_turbo:
+  $base: Vehicle.v_sport1_quadra_turbo_tyger_claw
+  randomPassengers: [Passengers.TygerDriverEntry, Passengers.TygerPassengerFrontEntry]
+  affiliation: Factions.TygerClaws
+
+# BIKER
+Passengers.TygerBikerDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.ncto__tyger_claws_biker1_ranged1_nue_ma
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker1_ranged1_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker1_ranged1_saratoga_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.tyger_claws_biker2_ranged2_copperhead_ma
+    #   weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker2_ranged2_copperhead_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker2_ranged2_shingen_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker2_ranged2_shingen_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker3_shotgun2_tactician_wa
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_biker3_shotgun3_zhuo_ma_elite
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_officerbiker_officer_nue_ma
+      weight: 0.05
+  validSlotNames: [seat_front_left]
+
+# DRIVERS
+Passengers.TygerDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_copperhead_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_copperhead_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.TygerPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1.0
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_copperhead_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster1_ranged1_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_copperhead_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.TygerPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_shingen_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_shingen_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster2_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_gangster3_ranged3_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tyger_claws_officergangster_officer_nue_ma
+      weight: 0.05
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__tygerclaw_gangster3_netrunner_nue_wa_rare
+      weight: 0.05
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__tyger_claws_biker1_ranged1_nue_ma:
+  $base: Character.tyger_claws_biker1_ranged1_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker1_ranged1_nue_wa:
+  $base: Character.tyger_claws_biker1_ranged1_nue_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker1_ranged1_saratoga_ma:
+  $base: Character.tyger_claws_biker1_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker1_ranged1_saratoga_wa:
+  $base: Character.tyger_claws_biker1_ranged1_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker2_ranged2_copperhead_wa:
+  $base: Character.tyger_claws_biker2_ranged2_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker2_ranged2_shingen_ma:
+  $base: Character.tyger_claws_biker2_ranged2_shingen_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker2_ranged2_shingen_wa:
+  $base: Character.tyger_claws_biker2_ranged2_shingen_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker3_shotgun2_tactician_wa:
+  $base: Character.tyger_claws_biker3_shotgun2_tactician_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_biker3_shotgun3_zhuo_ma_elite:
+  $base: Character.tyger_claws_biker3_shotgun3_zhuo_ma_elite
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_officerbiker_officer_nue_ma:
+  $base: Character.tyger_claws_officerbiker_officer_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster1_ranged1_copperhead_ma:
+  $base: Character.tyger_claws_gangster1_ranged1_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster1_ranged1_copperhead_wa:
+  $base: Character.tyger_claws_gangster1_ranged1_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster1_ranged1_nue_ma:
+  $base: Character.tyger_claws_gangster1_ranged1_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster1_ranged1_nue_wa:
+  $base: Character.tyger_claws_gangster1_ranged1_nue_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_copperhead_ma:
+  $base: Character.tyger_claws_gangster2_ranged2_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_copperhead_wa:
+  $base: Character.tyger_claws_gangster2_ranged2_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_shingen_ma:
+  $base: Character.tyger_claws_gangster2_ranged2_shingen_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_shingen_wa:
+  $base: Character.tyger_claws_gangster2_ranged2_shingen_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_sidewinder_ma:
+  $base: Character.tyger_claws_gangster2_ranged2_sidewinder_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster2_ranged2_sidewinder_wa:
+  $base: Character.tyger_claws_gangster2_ranged2_sidewinder_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_gangster3_ranged3_sidewinder_ma:
+  $base: Character.tyger_claws_gangster3_ranged3_sidewinder_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tyger_claws_officergangster_officer_nue_ma:
+  $base: Character.tyger_claws_officergangster_officer_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__tygerclaw_gangster3_netrunner_nue_wa_rare:
+  $base: Character.tygerclaw_gangster3_netrunner_nue_wa_rare
+  tags:
+    - !append pcf_GangerCanRetreat

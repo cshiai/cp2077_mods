@@ -1,0 +1,180 @@
+# VILLEFORT CORTES
+Vehicle.arasaka__villefort_cortes:
+  $base: Vehicle.v_standard2_villefort_cortes_arasaka
+  randomPassengers: [Passengers.ArasakaCorpoDriverEntry, Passengers.ArasakaCorpoGuardFrontPassengerEntry, Passengers.ArasakaCorpoPassengerBackEntry]
+  affiliation: Factions.Arasaka
+
+# VILLEFORT COLUMBUS
+Vehicle.arasaka__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus_arasaka
+  randomPassengers: [Passengers.ArasakaSecurityDriverEntry, Passengers.ArasakaSecurityPassengerFrontEntry]
+  affiliation: Factions.Arasaka
+
+# CHEVALIER EMPEROR
+Vehicle.arasaka__chevalier_emperor:
+  $base: Vehicle.v_standard3_chevalier_emperor
+  entityTemplatePath: night_city_traffic_overhaul\entities\security\chevalier_emperor_arasaka.ent
+  appearanceName: chevalier_emperor__basic_arasaka_01
+  randomPassengers: [Passengers.ArasakaSecurityDriverEntry, Passengers.ArasakaSecurityPassengerFrontEntry, Passengers.ArasakaSecurityPassengerBackEntry]
+  affiliation: Factions.Arasaka
+
+
+# CIVILIAN
+Passengers.ArasakaCorpoDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoManArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoWomanArasaka
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.ArasakaCorpoGuardFrontPassengerEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.NCTO_arasaka_bodyguard_ranged3_kenshin_mb_rare
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.NCTO_arasaka_bodyguard_ranged3_masamune_mb_rare
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.ArasakaCorpoPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoManArasaka
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.CorpoWomanArasaka
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+# SECURITY
+Passengers.ArasakaSecurityDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.arasaka_ranger1_melee2_knife_ma
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_masamune_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.ArasakaSecurityPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.arasaka_ranger1_melee2_knife_ma
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_masamune_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.ArasakaSecurityPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character:  Character.arasaka_ranger1_melee2_knife_ma
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_masamune_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_ranger1_ranged2_shingen_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_agent_franged2_yukimura_wa_rare
+      weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.arasaka_agent_fmelee2rare_katana_ma_rare
+    #   weight: 0.5
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.arasaka_agent_fmelee2rare_katana_wa_rare
+    #   weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_agent_fshotgun2_tactician_ma_rare
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__arasaka_agent_fshotgun2_tactician_wa_rare
+      weight: 0.5
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+Character.NCTO_arasaka_bodyguard_ranged3_kenshin_mb_rare:
+  $base: Character.arasaka_bodyguard_ranged3_kenshin_mb_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.NCTO_arasaka_bodyguard_ranged3_masamune_mb_rare:
+  $base: Character.arasaka_bodyguard_ranged3_masamune_mb_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_ranger1_ranged2_masamune_ma:
+  $base: Character.arasaka_ranger1_ranged2_masamune_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_ranger1_ranged2_shingen_ma:
+  $base: Character.arasaka_ranger1_ranged2_shingen_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_ranger1_ranged2_shingen_wa:
+  $base: Character.arasaka_ranger1_ranged2_shingen_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_agent_franged2_yukimura_wa_rare:
+  $base: Character.arasaka_agent_franged2_yukimura_wa_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_agent_fshotgun2_tactician_ma_rare:
+  $base: Character.arasaka_agent_fshotgun2_tactician_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__arasaka_agent_fshotgun2_tactician_wa_rare:
+  $base: Character.arasaka_agent_fshotgun2_tactician_wa_rare
+  tags:
+    - !append pcf_GangerCanRetreat

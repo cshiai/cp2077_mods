@@ -1,0 +1,7 @@
+# NCPD TRAFFIC SPAWN
+
+PreventionSystem.setup.maxCountPoliceVehiclesInCrowd: 50
+
+# Uncomment the following line to remove the pedestrian NCPD
+
+# PreventionSystem.setup.maxCountPolicePedestriansInCrowd: 0

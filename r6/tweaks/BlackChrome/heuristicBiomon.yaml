@@ -1,0 +1,100 @@
+BaseStats.HeuristicBiomonitorHelper:
+  $type: Stat
+  enumName: HeuristicBiomonitorHelper
+  flags: []
+  max: 20
+  min: -20
+  decimalPlaces: 1
+
+BlackChrome.HeuristicBiomonitor$(tier):
+  $instances:
+    - { tier: Common, nextTier: BlackChrome.HeuristicBiomonitorCommonPlus, healingBonusDescription: 70, healingBonus: 0.7 }
+    - { tier: CommonPlus, nextTier: BlackChrome.HeuristicBiomonitorUncommon, healingBonusDescription: 80, healingBonus: 0.8 }
+    - { tier: Uncommon, nextTier: BlackChrome.HeuristicBiomonitorUncommonPlus, healingBonusDescription: 100, healingBonus: 1 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.HeuristicBiomonitorRare, healingBonusDescription: 110, healingBonus: 1.1 }
+    - { tier: Rare, nextTier: BlackChrome.HeuristicBiomonitorRarePlus, healingBonusDescription: 120, healingBonus: 1.2 }
+    - { tier: RarePlus, nextTier: BlackChrome.HeuristicBiomonitorEpic, healingBonusDescription: 130, healingBonus: 1.3 }
+    - { tier: Epic, nextTier: BlackChrome.HeuristicBiomonitorEpicPlus, healingBonusDescription: 150, healingBonus: 1.5 }
+    - { tier: EpicPlus, nextTier: BlackChrome.HeuristicBiomonitorLegendary, healingBonusDescription: 160, healingBonus: 1.6 }
+    - { tier: Legendary, nextTier: BlackChrome.HeuristicBiomonitorLegendaryPlus, healingBonusDescription: 180, healingBonus: 1.8 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.HeuristicBiomonitorLegendaryPlusPlus, healingBonusDescription: 190, healingBonus: 1.9 }
+    - { tier: LegendaryPlusPlus, nextTier: None, healingBonusDescription: 200, healingBonus: 2 }
+  $base: Items.AdvancedBiomonitor$(tier)
+  displayName: LocKey#blackchrome_heuristicBiomonitor_name
+  localizedDescription: LocKey#blackchrome_heuristicBiomonitor_flavor
+  variants: 
+    - $type: RandomVariant
+      statModifiers: 
+        - $type: CombinedStatModifier
+          modifierType: Additive
+          opSymbol: '+'
+          refObject: Self
+          refStat: BaseStats.HeuristicBiomonitorHelper
+          statType: BaseStats.HumanityAllocated
+          value: 20
+      weight: 1
+      variantPrereqs: 
+        - $type: StatPrereq
+          comparisonType: GreaterOrEqual
+          objectToCheck: Owner
+          prereqClassName: StatPrereq
+          statType: HumanityAvailable
+          statModifiers: 
+            - $type: CombinedStatModifier
+              modifierType: Additive
+              opSymbol: '+'
+              refObject: Self
+              refStat: BaseStats.HeuristicBiomonitorHelper
+              statType: BaseStats.GenericStatPrereqValue
+              value: 20
+          valueToCheck: 0
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_01
+  tags: ['Cyberware', 'HideInBackpackUI', 'CyberMonitor', 'ImmersiveCyberware.Biomon']
+  nextUpgradeItem: $(nextTier)
+  objectActions: []
+  statModifiers:
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.Strength
+      statType: BaseStats.AttunementHelper
+      value: 1
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.Strength
+      statType: BaseStats.HeuristicBiomonitorHelper
+      value: -1
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BiomonEquipped
+          value: 1
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.HealthOutOfCombatRegenRateMult
+          value: $(healingBonus)
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.HealthInCombatRegenRateMult
+          value: $(healingBonus)
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_heuristicBiomonitor_description
+        floatValues: [$(healingBonusDescription)]
+    - $type: GameplayLogicPackage
+      stackable: true
+      UIData:
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_heuristicBiomonitor_attunement
+        localizedName: LocKey#94149
+        iconPath: UIIcon.Body
+        floatValues: [1]
+        stats: 
+          - BaseStats.AttunementHelper

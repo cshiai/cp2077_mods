@@ -527,6 +527,13 @@ protected cb func OnTakeControl(ri: EntityResolveComponentsInterface) -> Bool {
   this.m_ifpLastTickTime = EngineTime.ToFloat(GameInstance.GetEngineTime(this.GetGame()));
   IFP_BindBlackboard(this);
   let delay = GameInstance.GetDelaySystem(this.GetGame());
+  if IsDefined(delay) {
+    // OnTakeControl can fire again during a save/load handoff.  Retire the
+    // previous TickOnEvent before installing the new one so camera work never
+    // doubles up for a single frame.
+    delay.CancelTick(this.m_ifpTickID);
+    this.m_ifpTickID = GetInvalidDelayID();
+  }
   if this.m_ifpAttached && IsDefined(delay) {
     let tick = new IFPCameraTickEvent();
     // -1.0 keeps one event alive for the attached lifetime; OnDetach cancels

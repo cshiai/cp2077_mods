@@ -1,0 +1,147 @@
+# ARCHER HELLA
+Vehicle.barghest__archer_hella:
+  $base: Vehicle.v_standard2_archer_hella_kurtz
+  randomPassengers: [Passengers.BarghestDriverEntry, Passengers.BarghestPassengerFrontEntry, Passengers.BarghestPassengerBackEntry]
+  affiliation: Factions.Barghest
+
+# THORTON COLBY PICKUP
+Vehicle.barghest__thorton_colby_pickup:
+  $base: Vehicle.v_standard25_thorton_colby_pickup_kurtz
+  randomPassengers: [Passengers.BarghestDriverEntry, Passengers.BarghestPassengerFrontEntry, Passengers.BarghestPassengerBackEntry]
+  affiliation: Factions.Barghest
+
+# MAHIR SURPON
+Vehicle.barghest__mahir_supron:
+  $base: Vehicle.v_standard3_mahir_supron_kurtz
+  randomPassengers: [Passengers.BarghestDriverEntry, Passengers.BarghestPassengerFrontEntry, Passengers.BarghestPassengerBackEntry]
+  affiliation: Factions.Barghest
+
+# DRIVER AND PASSENGERS
+Passengers.BarghestDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.BarghestPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier1_ranged2_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier1_ranged2_rifle_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier2_shotgun3_shotgun_ma
+      weight: 0.5
+  validSlotNames: [seat_front_right]
+
+Passengers.BarghestPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_handgun_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_grunt1_ranged1_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier1_ranged2_rifle_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier1_ranged2_rifle_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier2_shotgun3_shotgun_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier2_generic_ranged3_rifle_ma
+      weight: 0.1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__kurtz_soldier2_shotgun2_shotgun_ma_rare
+      weight: 0.1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__kurtz_grunt1_ranged1_handgun_ma:
+  $base: Character.kurtz_grunt1_ranged1_handgun_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_grunt1_ranged1_handgun_wa:
+  $base: Character.kurtz_grunt1_ranged1_handgun_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_grunt1_ranged1_saratoga_ma:
+  $base: Character.kurtz_grunt1_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_grunt1_ranged1_saratoga_wa:
+  $base: Character.kurtz_grunt1_ranged1_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_soldier1_ranged2_rifle_ma:
+  $base: Character.kurtz_soldier1_ranged2_rifle_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_soldier1_ranged2_rifle_wa:
+  $base: Character.kurtz_soldier1_ranged2_rifle_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_soldier2_shotgun3_shotgun_ma:
+  $base: Character.kurtz_soldier2_shotgun3_shotgun_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_soldier2_generic_ranged3_rifle_ma:
+  $base: Character.kurtz_soldier2_generic_ranged3_rifle_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__kurtz_soldier2_shotgun2_shotgun_ma_rare:
+  $base: Character.kurtz_soldier2_shotgun2_shotgun_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat

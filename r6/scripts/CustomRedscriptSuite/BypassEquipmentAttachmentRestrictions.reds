@@ -19,8 +19,13 @@ public final func ApplyBypassEquipHumanity() -> Void {
 
   if !IsDefined(this.bypassEquipHumanityModifier) {
     this.bypassEquipHumanityModifier = RPGManager.CreateStatModifier(gamedataStatType.Humanity, gameStatModifierType.Additive, 9000.0);
-    stats.AddModifier(id, this.bypassEquipHumanityModifier);
   };
+  if IsDefined(this.bypassEquipHumanityModifier) {
+    // Stat containers are rebuilt during save/load and equipment refreshes;
+    // reattach the same transient modifier instead of trusting the stale ref.
+    stats.RemoveModifier(id, this.bypassEquipHumanityModifier);
+    stats.AddModifier(id, this.bypassEquipHumanityModifier);
+  }
 }
 
 public func BypassIsConvenienceEquipment(itemData: wref<gameItemData>) -> Bool {
@@ -124,7 +129,7 @@ public final func IsSlotLocked(equipmentArea: gamedataEquipmentArea, slotIndex: 
 @wrapMethod(InventoryDataManagerV2)
 public final func CanInstallPart(const itemData: script_ref<InventoryItemData>) -> Bool {
   let vanilla: Bool = wrappedMethod(itemData);
-  if vanilla || InventoryItemData.IsEmpty(itemData) || InventoryItemData.IsEquipped(itemData) {
+  if vanilla || InventoryItemData.IsEmpty(itemData) {
     return vanilla;
   };
   let partID: ItemID = InventoryItemData.GetID(itemData);
@@ -133,6 +138,9 @@ public final func CanInstallPart(const itemData: script_ref<InventoryItemData>) 
     return false;
   }
   let partType: gamedataItemType = partData.GetItemType();
+  // IsEquipped is an ItemID-level flag.  It is true when one copy of a
+  // deterministic/stackable mod is already installed on another weapon, so
+  // rejecting it here hides valid duplicate installs from the chooser.
   return InventoryItemData.IsPart(itemData)
     && (RPGManager.IsWeaponMod(partID) || RPGManager.IsClothingMod(partID)
       || Equals(partType, gamedataItemType.CyberwareStatsShard)

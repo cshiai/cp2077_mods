@@ -7,6 +7,8 @@
 // 3. Melee Enemy Swarm: Pure-Redscript port of Melee Enemy Swarm so all melee enemies
 //    rush V simultaneously instead of idling in passive SimpleCombat waiting for a ticket.
 
+import SimpleDroneCompanion.*
+
 public static func AECO_ComputeLevelDamageMult(level: Float) -> Float {
   if level <= 10.0 {
     return 1.00;
@@ -44,14 +46,14 @@ public static func AECO_ComputeRarityDamageMult(rarity: gamedataNPCRarity) -> Fl
 @wrapMethod(DamageSystem)
 private final func ProcessPlayerIncomingDamageMultiplier(hitEvent: ref<gameHitEvent>) -> Void {
   wrappedMethod(hitEvent);
-  if !IsDefined(hitEvent) || !IsDefined(hitEvent.target) || !IsDefined(hitEvent.attackData) {
+  if !IsDefined(hitEvent) || !IsDefined(hitEvent.target) || !IsDefined(hitEvent.attackData) || !IsDefined(hitEvent.attackComputed) {
     return;
   };
   if !hitEvent.target.IsPlayer() {
     return;
   };
   let attacker: ref<NPCPuppet> = hitEvent.attackData.GetInstigator() as NPCPuppet;
-  if !IsDefined(attacker) || ScriptedPuppet.IsPlayerCompanion(attacker) {
+  if !IsDefined(attacker) || ScriptedPuppet.IsPlayerCompanion(attacker) || SDC_IsCompanion(attacker) {
     return;
   };
   let statsSystem: ref<StatsSystem> = GameInstance.GetStatsSystem(attacker.GetGame());
@@ -72,7 +74,7 @@ private final func ProcessPlayerIncomingDamageMultiplier(hitEvent: ref<gameHitEv
 @wrapMethod(HitReactionComponent)
 protected final func GetDBParameters() -> Void {
   wrappedMethod();
-  if !IsDefined(this.m_ownerNPC) || ScriptedPuppet.IsPlayerCompanion(this.m_ownerNPC) {
+  if !IsDefined(this.m_ownerNPC) || ScriptedPuppet.IsPlayerCompanion(this.m_ownerNPC) || SDC_IsCompanion(this.m_ownerNPC) {
     return;
   };
   let rarity: gamedataNPCRarity = this.m_ownerNPC.GetNPCRarity();

@@ -1,0 +1,140 @@
+# --- NCPD ---
+
+# ARCH V4 FYRN (Blue)
+Passengers.DetectiveDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_ranged1_lexington_ma
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.DetectivePassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_ranged1_lexington_ma
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.DetectivePassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_melee1_baton_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__ncpd_inspector_ranged1_lexington_ma
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# MAXTAC
+Passengers.MaxTacDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_maxtac_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_rifle_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_shotgun_ma_elite
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.MaxTacPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_rifle_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_shotgun_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_melee_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_gunner_mb_elite
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+Passengers.MaxTacPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__prevention_maxtac_rifle_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_rifle_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_shotgun_ma_elite
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.fe__maxtac_melee_ma_elite
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# ==============================================================================
+# FACTIONS EVOLVED - EXTENDED CHARACTERS 
+# ==============================================================================
+
+# DETECTIVE
+Character.fe__ncpd_inspector_melee1_baton_ma:
+  $base: Character.ncpd_inspector_melee1_baton_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__ncpd_inspector_ranged1_lexington_ma:
+  $base: Character.ncpd_inspector_ranged1_lexington_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+
+# MAXTAC
+Character.fe__prevention_maxtac_rifle_ma:
+  $base: Character.prevention_maxtac_rifle_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__maxtac_rifle_ma_elite:
+  $base: Character.maxtac_rifle_ma_elite
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__maxtac_shotgun_ma_elite:
+  $base: Character.maxtac_shotgun_ma_elite
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__maxtac_melee_ma_elite:
+  $base: Character.maxtac_melee_ma_elite
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.fe__maxtac_gunner_mb_elite:
+  $base: Character.maxtac_gunner_mb_elite
+  tags:
+    - !append pcf_GangerCanRetreat

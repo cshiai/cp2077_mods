@@ -1,11 +1,12 @@
 module MuchBetterAI.Core
 
+import SimpleDroneCompanion.*
 
 public func MBAI_ActorEligible(npc: wref<NPCPuppet>) -> Bool {
   if !IsDefined(npc) || !npc.IsActive() || npc.IsDead() || ScriptedPuppet.IsDefeated(npc) || ScriptedPuppet.IsUnconscious(npc) {
     return false;
   };
-  if npc.IsCharacterCivilian() || npc.IsCrowd() || npc.IsPlayerCompanion() || GameObject.IsFriendlyTowardsPlayer(npc) {
+  if npc.IsCharacterCivilian() || npc.IsCrowd() || npc.IsPlayerCompanion() || SDC_IsCompanion(npc) || GameObject.IsFriendlyTowardsPlayer(npc) {
     return false;
   };
   return true;
@@ -50,10 +51,12 @@ public func MBAI_ActorAuthoredControlFree(npc: wref<NPCPuppet>) -> Bool {
     return false;
   };
   let gi: GameInstance = npc.GetGame();
-  if GameInstance.GetWorkspotSystem(gi).IsActorInWorkspot(npc) || AIActionHelper.HasWorkspotAICommand(npc) {
+  let workspots = GameInstance.GetWorkspotSystem(gi);
+  if (IsDefined(workspots) && workspots.IsActorInWorkspot(npc)) || AIActionHelper.HasWorkspotAICommand(npc) {
     return false;
   };
-  let scene: ref<SceneSystemInterface> = GameInstance.GetSceneSystem(gi).GetScriptInterface();
+  let sceneSystem = GameInstance.GetSceneSystem(gi);
+  let scene: ref<SceneSystemInterface> = IsDefined(sceneSystem) ? sceneSystem.GetScriptInterface() : null;
   return !IsDefined(scene) || !scene.IsEntityInDialogue(npc.GetEntityID()) && !scene.IsEntityInScene(npc.GetEntityID());
 }
 

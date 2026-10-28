@@ -1,0 +1,145 @@
+# VEHICLES
+
+
+# VILLEFORT COLUMBUS MEDICAL
+Vehicle.utility__villefort_columbus_medical:
+  $base: Vehicle.v_standard25_villefort_columbus
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\villefort_columbus_medical.ent
+  appearanceName: villefort_columbus__basic_medical_cargo_01
+  randomPassengers: [Passengers.MedicalVanDriverEntry, Passengers.MedicalVanPassengerEntry]
+
+# KAUKAZ BRATSK MACHINE 01
+Vehicle.utility__kaukaz_bratsk_machine_01:
+  $base: Vehicle.v_utility4_kaukaz_bratsk_machine
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_bratsk_machine_01.ent
+  appearanceName: kaukaz_bratsk__basic_machine_truck_01
+
+# KAUKAZ BRATSK MACHINE 02
+Vehicle.utility__kaukaz_bratsk_machine_02:
+  $base: Vehicle.v_utility4_kaukaz_bratsk_machine
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_bratsk_machine_02.ent
+  appearanceName: kaukaz_bratsk__basic_machine_truck_02
+
+# ZEYA FULL COMMON 01
+Vehicle.utility__kaukaz_zeya_full_01:
+  $base: Vehicle.v_utility4_kaukaz_zeya_full
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_zeya_full_01.ent
+  appearanceName: kaukaz_zeya__basic_zeya_full_01
+
+# ZEYA FULL COMMON 02
+Vehicle.utility__kaukaz_zeya_full_02:
+  $base: Vehicle.v_utility4_kaukaz_zeya_full
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_zeya_full_02.ent
+  appearanceName: kaukaz_zeya__basic_zeya_full_02
+
+# ZEYA FULL COMMON 03
+Vehicle.utility__kaukaz_zeya_full_03:
+  $base: Vehicle.v_utility4_kaukaz_zeya_full
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_zeya_full_03.ent
+  appearanceName: kaukaz_zeya__basic_zeya_full_03
+
+# ZEYA FULL HAZMAT
+Vehicle.utility__kaukaz_zeya_hazmat:
+  $base: Vehicle.v_utility4_kaukaz_zeya_full
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_zeya_hazmat.ent
+  appearanceName: kaukaz_zeya__basic_zeya_hazmat_01
+  randomPassengers: [Passengers.HazmatDriverEntry]
+
+# ARAS STREET CLEANER
+Vehicle.utility__kaukaz_z71_aras:
+  $base: Vehicle.v_kaukaz_z71_aras
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\kaukaz_z71_aras.ent
+  appearanceName: kaukaz_z71_aras__basic_distraction
+
+# REVERE COURIER SERVICE
+Vehicle.company__villefort_columbus_RCS:
+  $base: Vehicle.v_standard25_villefort_columbus
+  entityTemplatePath: night_city_traffic_overhaul\entities\services\villefort_columbus_revere_courier_services.ent
+  appearanceName: villefort_columbus__basic_rcs_van
+  randomPassengers: [Passengers.RCSDriverEntry]
+  # destruction: Vehicle.NCTO_VehicleDestructionParamsColumbus
+  # statModifierGroups:
+  # - !append-once VehicleStatPreset.VehicleHealthx20
+  # hijackDifficulty: HARD
+
+
+
+# porshche 911 turbo cabrio placeholder
+Vehicle.NCTO_porsche_911turbo_cabrio:
+  $base: Vehicle.v_sport2_porsche_911turbo_cabrio
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\porsche_911turbo__cabrio_placeholder.ent
+  appearanceName: porsche_911turbo__basic_cabrio_01
+
+
+  # REVERE COURIER SERVICE - DRIVER
+Passengers.RCSDriverEntry:
+  $base: Passengers.CitizenRichDriverEntry
+  probability: 1
+  role: Driver
+  characterRecords:
+    - Passengers.RCSDriverEntry_inline0
+  validSlotNames:
+    - seat_front_left
+
+Passengers.RCSDriverEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.security__RCS_company_driver
+  weight: 1
+
+# CHARACTERS
+Character.security__RCS_company_driver:
+  $base: Character.security_guard1_ranged1_nue_ma
+  entityTemplatePath: night_city_traffic_overhaul\characters\entities\rcs_security_driver.ent
+  reactionPreset: ReactionPresets.Driver_Panic
+  baseAttitudeGroup: civilian
+  isCrowd: True
+  crowdMemberSettings: Crowds.ManCivilianSettings
+
+Character.security__RCS_company_passenger:
+  $base: Character.security_guard1_ranged1_nue_ma
+  entityTemplatePath: night_city_traffic_overhaul\characters\entities\rcs_security_driver.ent
+
+
+# KAUKAZ HAZMAT - DRIVER
+Passengers.HazmatDriverEntry:
+  $base: Passengers.CitizenRichDriverEntry
+  probability: 1
+  role: Driver
+  characterRecords:
+    - Passengers.HazmatDriverEntry_inline0
+  validSlotNames:
+    - seat_front_left
+
+Passengers.HazmatDriverEntry_inline0:
+  $type: gamedataWeightedCharacter_Record
+  character: Character.ncpd_hazmat_ranged1_lexington_ma
+  weight: 1
+
+
+# MEDICAL - DRIVER
+Passengers.MedicalVanDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.MedicalFemale
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.MedicalMale
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# MEDICAL - PASSENGER
+Passengers.MedicalVanPassengerEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.MedicalFemale
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.MedicalMale
+      weight: 1
+  validSlotNames: [seat_front_right]

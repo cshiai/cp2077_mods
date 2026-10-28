@@ -1,0 +1,6 @@
+BaseStats.BiomonEquipped:
+  $type: Stat
+  enumName: BiomonEquipped
+  flags: [ ]
+  max: 1
+  min: 0

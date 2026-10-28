@@ -41,11 +41,9 @@ streaming:
         - index: 1263
           type: worldGenericProxyMeshNode
           debugName: "{q110_mall_front_door}_ProxyMesh"
-    - path: base\worlds\03_night_city\_compiled\default\exterior_-9_-9_0_2.streamingsector
-      expectedNodes: 1257
-      nodeDeletions:
-        - index: 1250
-          type: worldEntityProxyMeshNode
+    # Patch 2.5 changed node 1250 to a cooked-collision node.  Retaining the
+    # stale proxy-mesh deletion makes ArchiveXL reject this entire sector;
+    # omit it rather than deleting a different node by index.
     - path: base\worlds\03_night_city\_compiled\default\exterior_-36_-33_0_0.streamingsector
       expectedNodes: 1926
       nodeDeletions:

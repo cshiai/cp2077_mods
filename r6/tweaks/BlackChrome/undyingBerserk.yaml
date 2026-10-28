@@ -1,0 +1,370 @@
+BaseStats.UndyingBerserkHelper1:
+  $type: Stat
+  enumName: UndyingBerserkHelper1
+  flags: [ ]
+  max: 100
+  min: -100 
+  decimalPlaces: 1
+
+BaseStats.BerserkCanGoOverNeuralCapacityLimit:
+  $type: Stat
+  enumName: BerserkCanGoOverNeuralCapacityLimit
+  flags: [ EquipOnPlayer ]
+  decimalPlaces: 2
+  max: 1
+  min: 0
+
+BlackChrome.UndyingBerserkCooldownNotification:
+  $type: StatusEffect
+  duration: BaseStatusEffect.CyberwareCooldownNotification_inline0
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  stopActiveSfxOnDeactivate: true
+  packages:
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: Effector
+          duration: 1
+          primaryText: LocKey#52430
+          secondaryText: LocKey#blackchrome_undyingBerserk_cooldown
+          effectorClassName: ShowUIWarningEffector
+          prereqRecord: Prereqs.AlwaysTruePrereq
+
+BlackChrome.UndyingBerserkCooldown:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: CombinedStatModifier
+        modifierType: Additive
+        opSymbol: '*'
+        refObject: Self
+        refStat: BaseStats.BerserkCooldownBase
+        statType: BaseStats.MaxDuration
+        value: 1
+  gameplayTags: ['Debuff', 'PlayerCyberwareCooldown']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.PlayerCooldown
+  stopActiveSfxOnDeactivate: true
+  uiData:
+    $type: StatusEffectUIData
+    description: LocKey#53709
+    displayName: LocKey#blackchrome_undyingBerserk_cooldown
+    iconPath: berserk_buff
+  packages: 
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: ApplyStatusEffectEffector
+          applicationTarget: None
+          count: 1
+          effectorClassName: ApplyStatusEffectEffector
+          removeWithEffector: true
+          inverted: true
+          prereqRecord: Prereqs.AlwaysTruePrereq
+          statusEffect: BlackChrome.UndyingBerserkCooldownNotification
+
+BlackChrome.UndyingBerserkActivationPrereq:
+  $type: MultiPrereq
+  aggregationType: AND
+  nestedPrereqs: 
+    - $type: StatPrereq
+      comparisonType: Equal
+      objectToCheck: Player
+      prereqClassName: StatPrereq
+      statType: UndyingBerserkHelper1
+      valueToCheck: 100
+    - Perks.IsPlayerNotInVehicle
+    - CyberwareAction.UseAdvancedBerserk_inline2
+    - CyberwareAction.UseAdvancedBerserk_inline3
+    - CyberwareAction.UseAdvancedBerserk_inline4
+    - $type: StatusEffectPrereq
+      invert: true
+      objectToCheck: None
+      prereqClassName: StatusEffectPrereq
+      statusEffect: BlackChrome.UndyingBerserkCooldown
+      tagToCheck: None
+    - $type: StatusEffectPrereq
+      checkType: CheckType.Tag
+      invert: true
+      objectToCheck: None
+      prereqClassName: StatusEffectPrereq
+      tagToCheck: BerserkBuff
+
+
+BlackChrome.BerserkerRage:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxDuration
+        value: 0.5
+  gameplayTags: [Buff]
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxStacks
+        value: 100
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  uiData: 
+    $type: StatusEffectUIData
+    displayName: LocKey#blackchrome_undyingBerserk_fury_name
+    description: LocKey#blackchrome_undyingBerserk_fury_description
+    priority: 0
+    iconPath: berserk_buff
+  packages:
+    - $type: GameplayLogicPackage
+      stackable: true
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: AdditiveMultiplier
+          statType: BaseStats.BaseMeleeAttackStaminaCost
+          value: 0.01
+        - $type: ConstantStatModifier
+          modifierType: AdditiveMultiplier
+          statType: BaseStats.RecoilKickMin
+          value: 0.01
+        - $type: ConstantStatModifier
+          modifierType: AdditiveMultiplier
+          statType: BaseStats.RecoilKickMax
+          value: 0.01                   
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.UndyingBerserkHelper1
+          value: 1     
+
+BaseStats.CyberwareNeuralCost:
+  $type: Stat
+  enumName: CyberwareNeuralCost
+  flags: [ ]
+  decimalPlaces: 2
+  max: 50
+  min: 0
+
+BlackChrome.UndyingBerserk$(tier):
+  $instances:
+    - { tier: Rare, nextTier: BlackChrome.UndyingBerserkRarePlus, critChance: 0.20, berserkCooldown: 240 }
+    - { tier: RarePlus, nextTier: BlackChrome.UndyingBerserkEpic, critChance: 0.23, berserkCooldown: 225 }
+    - { tier: Epic, nextTier: BlackChrome.UndyingBerserkEpicPlus, critChance: 0.27, berserkCooldown: 200 }
+    - { tier: EpicPlus, nextTier: BlackChrome.UndyingBerserkLegendary, critChance: 0.30, berserkCooldown: 185}    
+    - { tier: Legendary, nextTier: BlackChrome.UndyingBerserkLegendaryPlus, critChance: 0.34, berserkCooldown: 150, }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.UndyingBerserkLegendaryPlusPlus, critChance: 0.37, berserkCooldown: 135 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, critChance: 0.4, berserkCooldown: 120 }   
+  $base: Items.AdvancedBerserkC3MK3
+  quality: Quality.$(tier)
+  cyberwareType: UndyingBerserk
+  iconPath: cwf_berserk4
+  tags: ['Cyberware', 'HideInBackpackUI', 'Berserk', 'IllegalItem', 'BlackChrome.UndyingBerserk', 'ChipwareExpansion.CyberwareWithNeuralCost', 'ChipwareExpansion.PerSecCost']
+  nextUpgradeItem: $(nextTier)
+  displayName: LocKey#blackchrome_undyingBerserk_name
+  localizedDescription: LocKey#blackchrome_undyingBerserk_flavor
+  variants: [Variants.Humanity35Cost]
+  objectActions:
+    - $type: ObjectAction
+      actionName: UseBerserk
+      hackCategory: HackCategory.NotAHack
+      instigatorPrereqs: 
+        - BlackChrome.UndyingBerserkActivationPrereq
+      objectActionType: ObjectActionType.Direct
+      interactionLayer: None
+      priority: 0
+      startEffects: 
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator
+          statusEffect: 
+            $type: StatusEffect
+            VFX: 
+              - BaseStatusEffect.AdvancedBerserkPlayerBuff_inline0
+            duration: BaseStats.InfiniteDuration
+            gameplayTags: ['Buff', 'Berserk', 'GameplayRestriction', 'Melee', 'NoInhalerOrInjector', 'NoGrenadeOrGadget', 'VehicleNoInteraction', 'PreventLowHealthOverlay', 'PreventFuryVFX', 'BerserkBuff']
+            isAffectedByTimeDilationNPC: true
+            isAffectedByTimeDilationPlayer: true
+            maxStacks: RTDB.StatusEffect_inline0
+            packages: 
+              - BaseStatusEffect.AdvancedBerserkPlayerBuff_inline1 
+              - BaseStatusEffect.AdvancedBerserkPlayerBuff_inline2
+              - Items.BerserkFakeInvulnerability
+              - $type: GameplayLogicPackage
+                effectors: 
+                  - $type: ApplyStatusEffectEffector
+                    applicationTarget: Player
+                    inverted: true
+                    count: 1
+                    removeWithEffector: true
+                    effectorClassName: ApplyStatusEffectEffector
+                    prereqRecord: Prereqs.AlwaysTruePrereq
+                    statusEffect: BlackChrome.UndyingBerserkCooldown
+                  - $type: ApplyStatGroupEffector
+                    applicationTarget: Weapon
+                    effectorClassName: ApplyStatGroupEffector
+                    prereqRecord: Prereqs.AlwaysTruePrereq
+                    removeWithEffector: true
+                    statGroup: 
+                      $type: StatModifierGroup
+                      statModsLimit: -1
+                      statModifiers:
+                        - $type: CombinedStatModifier
+                          modifierType: AdditiveMultiplier
+                          opSymbol: '*'
+                          refObject: Player
+                          refStat: BaseStats.UndyingBerserkHelper1
+                          statType: BaseStats.AttackSpeed
+                          value: 0.005
+                stats: 
+                  - $type: CombinedStatModifier
+                    modifierType: Additive
+                    opSymbol: '*'
+                    refObject: Player
+                    refStat: BaseStats.UndyingBerserkHelper1
+                    statType: BaseStats.CritDamage
+                    value: 1
+                  - $type: CombinedStatModifier
+                    modifierType: Additive
+                    opSymbol: '*'
+                    refObject: Player
+                    refStat: BaseStats.UndyingBerserkHelper1
+                    statType: BaseStats.CritChance
+                    value: $(critChance)
+                  - $type: CombinedStatModifier
+                    modifierType: AdditiveMultiplier
+                    opSymbol: '*'
+                    refObject: Player
+                    refStat: BaseStats.UndyingBerserkHelper1
+                    statType: BaseStats.MaxSpeed
+                    value: 0.005
+                  - $type: ConstantStatModifier
+                    modifierType: Additive
+                    statType: BaseStats.CanGroundSlamInAir
+                    value: 1
+                  - $type: ConstantStatModifier
+                    modifierType: Additive
+                    statType: BaseStats.CanGroundSlamOnGround
+                    value: 1
+              - Items.AdvancedBerserkC3MK3_inline14
+            replicated: true
+            savable: true
+            statusEffectType: BaseStatusEffectTypes.Berserk
+            stopActiveSfxOnDeactivate: true
+  statModifiers: 
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.IsItemIconic
+      value: 1
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.BerserkCooldownBase
+      value: $(berserkCooldown)
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Self
+      refStat: BaseStats.BerserkCooldownBase
+      statType: BaseStats.BerserkChargesDecayRate
+      value: 0.04
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.BerserkChargesRegenRate
+      value: 0
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.HumanityAllocated
+      statType: BaseStats.AttunementHelper
+      value: 0.01
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.CyberwareNeuralCost
+      value: 0.2
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.BerserkCanGoOverNeuralCapacityLimit
+      value: 1     
+  OnEquip:
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [$(critChance), 1, 1, 0.5, 25, $(berserkCooldown), 1]
+        localizedDescription: LocKey#blackchrome_undyingBerserk_description
+      effectors:
+        - $type: ModifyStatPoolValueEffector
+          applicationTarget: None
+          effectorClassName: ModifyStatPoolValueEffector
+          prereqRecord: BlackChrome.UndyingBerserkActivationPrereq
+          usePercent: true
+          statPoolUpdates: 
+            - $type: StatPoolUpdate
+              statPoolType: BaseStatPools.Health
+              statPoolValue: 100
+        - $base: Items.HealthMonitorEffector
+          effectorClassName: Phoenicia.BlackChrome.UseBerserkEffector
+          prereqRecord: BlackChrome.UndyingBerserkActivationPrereq
+        - $type: Effector
+          effectorClassName: Phoenicia.BlackChrome.BerserkEffector
+          prereqRecord: 
+            $type: MultiPrereq
+            aggregationType: AND
+            nestedPrereqs: 
+              - $type: StatusEffectPrereq
+                checkType: CheckType.Tag
+                invert: true
+                objectToCheck: None
+                prereqClassName: StatusEffectPrereq
+                tagToCheck: BerserkBuff
+              - CyberwareAction.UseAdvancedBerserk_inline0
+              - Items.ElectroshockMechanismEffector2_inline1
+              - Items.ElectroshockMechanismEffector2_inline4
+              - $type: StatusEffectPrereq
+                invert: true
+                objectToCheck: None
+                prereqClassName: StatusEffectPrereq
+                statusEffect: BlackChrome.UndyingBerserkCooldown
+                tagToCheck: None
+            prereqClassName: gameMultiPrereq    
+    - $type: GameplayLogicPackage
+      stackable: true
+      effectors:
+        - $type: ApplyStatusEffectByChanceEffector
+          applicationTarget: None
+          count: 1
+          effectorChance:
+            - $type: CombinedStatModifier
+              modifierType: Additive
+              opSymbol: '*'
+              refObject: Self
+              refStat: BaseStats.AttunementHelper
+              statType: BaseStats.EffectorChance
+              value: 0.01
+          effectorClassName: ApplyStatusEffectByChanceEffector
+          prereqRecord: 
+            $type: MultiPrereq
+            prereqClassName: gameMultiPrereq
+            aggregationType: AND
+            nestedPrereqs: 
+              - Prereqs.AnyTakedownOrKill
+              - NewPerks.Tech_Master_Perk_3_inline14
+          removeWithEffector: true
+          statusEffect: BaseStatusEffect.Tech_Master_Perk_3_Buff
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        iconPath: UIIcon.Filter_Cyberware
+        floatValues: [0.01]
+        localizedDescription: LocKey#blackchrome_undyingBerserk_attunement_description
+        localizedName: LocKey#blackchrome_cybernericAttunement_name
+        stats: 
+          - BaseStats.AttunementHelper     

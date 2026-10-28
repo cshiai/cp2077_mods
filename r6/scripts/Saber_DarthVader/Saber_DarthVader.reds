@@ -278,8 +278,14 @@ public func Saber_ApplyStageTo(ent: ref<Entity>, stage: Int32) -> Void {
 }
 
 public func Saber_ApplyStage(weapon: ref<WeaponObject>) -> Void {
+  if !IsDefined(weapon) {
+    return;
+  }
   Saber_ApplyStageTo(weapon, weapon.saberStage);
   let ts = GameInstance.GetTransactionSystem(weapon.GetGame());
+  if !IsDefined(ts) {
+    return;
+  }
   let data = weapon.GetItemData();
   if IsDefined(data) {
     let parts: array<InnerItemData>;
@@ -514,19 +520,34 @@ public func Saber_DeflectStaminaRefund() -> Float { return 0.8; }
 @wrapMethod(DamageManager)
 private final static func CanBlockBullet(hitEvent: ref<gameHitEvent>) -> Bool {
   if wrappedMethod(hitEvent) { return true; }
-  if !Saber_PlayerHoldsSaber(hitEvent.target) || !AttackData.IsRangedOnly(hitEvent.attackData.GetAttackType()) { return false; }
-  let cameraForward = GameInstance.GetCameraSystem(hitEvent.target.GetGame()).GetActiveCameraForward();
+  if !IsDefined(hitEvent) || !IsDefined(hitEvent.target) || !IsDefined(hitEvent.attackData)
+    || !Saber_PlayerHoldsSaber(hitEvent.target) || !AttackData.IsRangedOnly(hitEvent.attackData.GetAttackType()) {
+    return false;
+  }
+  let camera = GameInstance.GetCameraSystem(hitEvent.target.GetGame());
+  if !IsDefined(camera) {
+    return false;
+  }
+  let cameraForward = camera.GetActiveCameraForward();
   return Vector4.GetAngleBetween(hitEvent.hitDirection, cameraForward) > 180.0 - Saber_DefendAngle();
 }
 
 @wrapMethod(DamageSystem)
 private final func ProcessBulletBlockAndDeflect(hitEvent: ref<gameHitEvent>) -> Void {
+  if !IsDefined(hitEvent) || !IsDefined(hitEvent.target) {
+    wrappedMethod(hitEvent);
+    return;
+  }
   let target = hitEvent.target;
   if !Saber_PlayerHoldsSaber(target) {
     wrappedMethod(hitEvent);
     return;
   }
   let pools = GameInstance.GetStatPoolsSystem(target.GetGame());
+  if !IsDefined(pools) {
+    wrappedMethod(hitEvent);
+    return;
+  }
   let id = Cast<StatsObjectID>(target.GetEntityID());
   let before = pools.GetStatPoolValue(id, gamedataStatPoolType.Stamina, false);
   wrappedMethod(hitEvent);

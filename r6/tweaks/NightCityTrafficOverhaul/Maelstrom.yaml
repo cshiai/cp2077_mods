@@ -1,0 +1,233 @@
+  # YAIBA KUSANAGI
+Vehicle.maelstrom__yaiba_kusanagi:
+  $base: Vehicle.v_sportbike1_yaiba_kusanagi
+  entityTemplatePath: night_city_traffic_overhaul\entities\maelstrom\yaiba_kusanagi_maelstrom.ent
+  appearanceName: yaiba_kusanagi_basic_suburban_01
+  randomPassengers: [Passengers.MaelstromDriverEntry]
+  affiliation: Factions.Maelstrom
+
+# THORTON MACKINAW
+Vehicle.maelstrom__thorton_mackinaw:
+  $base: Vehicle.v_standard3_thorton_mackinaw
+  entityTemplatePath: night_city_traffic_overhaul\entities\maelstrom\thorton_mackinaw_maelstrom.ent
+  appearanceName: thorton_mackinaw__basic_poor_1_6
+  randomPassengers: [Passengers.MaelstromDriverEntry, Passengers.MaelstromPassengerFrontEntry, Passengers.MaelstromPassengerBackEntry]
+  affiliation: Factions.Maelstrom
+
+# THORTON GALENA
+Vehicle.maelstrom__thorton_galena:
+  $base: Vehicle.v_standard2_thorton_galena_maelstrom
+  randomPassengers: [Passengers.MaelstromDriverEntry, Passengers.MaelstromPassengerFrontEntry, Passengers.MaelstromPassengerBackEntry]
+  affiliation: Factions.Maelstrom
+
+# CHEVALIER THRAX
+Vehicle.maelstrom__chevalier_thrax:
+  $base: Vehicle.v_standard2_chevalier_thrax_maelstrom
+  randomPassengers: [Passengers.MaelstromDriverEntry, Passengers.MaelstromPassengerFrontEntry, Passengers.MaelstromPassengerBackEntry]
+  affiliation: Factions.Maelstrom
+
+# VILLEFORT COLUMBUS
+Vehicle.maelstrom__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus
+  randomPassengers: [Passengers.MaelstromDriverEntry, Passengers.MaelstromPassengerFrontEntry]
+  entityTemplatePath: night_city_traffic_overhaul\entities\maelstrom\villefort_columbus_maesltrom.ent
+  appearanceName: villefort_columbus__basic_corpo_01
+  destruction: Vehicle.NCTO_VehicleDestructionParamsColumbus
+  affiliation: Factions.Maelstrom
+
+
+# DRIVERS
+Passengers.MaelstromDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.MaelstromPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.MaelstromPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_hammer_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt2_melee2_machete_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt2_ranged2_copperhead_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstom_strong_shotgun2_carnage_ma_rare
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstom_strong_shotgun2_igla_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_fast_sniper2_grad_ma
+      weight: 0.2
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.maelstrom_grunt1_melee1_knife_ma
+    #   weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt1_ranged1_copperhead_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt1_ranged1_copperhead_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt1_ranged1_lexington_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_grunt1_ranged1_lexington_wa
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_netrunner_netrunner2_lexington_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__maelstrom_techie_grenadier2_lexington_ma
+      weight: 0.2
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__maelstrom_grunt2_ranged2_ajax_ma:
+  $base: Character.maelstrom_grunt2_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt2_ranged2_ajax_wa:
+  $base: Character.maelstrom_grunt2_ranged2_ajax_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt2_ranged2_copperhead_ma:
+  $base: Character.maelstrom_grunt2_ranged2_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt2_ranged2_copperhead_wa:
+  $base: Character.maelstrom_grunt2_ranged2_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstom_strong_shotgun2_carnage_ma_rare:
+  $base: Character.maelstom_strong_shotgun2_carnage_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstom_strong_shotgun2_igla_ma:
+  $base: Character.maelstom_strong_shotgun2_igla_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_fast_sniper2_grad_ma:
+  $base: Character.maelstrom_fast_sniper2_grad_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt1_ranged1_copperhead_ma:
+  $base: Character.maelstrom_grunt1_ranged1_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt1_ranged1_copperhead_wa:
+  $base: Character.maelstrom_grunt1_ranged1_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt1_ranged1_lexington_ma:
+  $base: Character.maelstrom_grunt1_ranged1_lexington_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_grunt1_ranged1_lexington_wa:
+  $base: Character.maelstrom_grunt1_ranged1_lexington_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_netrunner_netrunner2_lexington_ma:
+  $base: Character.maelstrom_netrunner_netrunner2_lexington_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__maelstrom_techie_grenadier2_lexington_ma:
+  $base: Character.maelstrom_techie_grenadier2_lexington_ma
+  tags:
+    - !append pcf_GangerCanRetreat

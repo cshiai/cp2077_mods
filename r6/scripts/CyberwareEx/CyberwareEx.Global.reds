@@ -140,7 +140,6 @@ public final const func GetActiveItem(equipArea: gamedataEquipmentArea, opt isLe
 private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSlotsUpdate: Bool, opt forceEquipWeapon: Bool) -> Void {
     let currentItem: ItemID;
     let currentItemData: ref<gameItemData>;
-    let cyberwareType: CName;
     let equipArea: SEquipArea;
     let equipAreaIndex: Int32;
     let equipSlot: SEquipSlot;
@@ -181,18 +180,11 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
     this.m_equipPending = true;
     if !this.HandleEquipWeapon(itemID, slotIndex, blockActiveSlotsUpdate, forceEquipWeapon, isLeftWeapon) {
         this.UnequipItem(equipAreaIndex, slotIndex);
-        // Only enforce same-cyberwareType uniqueness for SystemReplacementCW (e.g. 1 Sandevistan + 1 Cyberdeck + 1 Berserk),
-        // allowing multiple EyesCW, HandsCW, ArmsCW, LegsCW, and internal cyberware items to coexist across extra slots.
-        if Equals(equipmentArea, gamedataEquipmentArea.SystemReplacementCW) {
-            cyberwareType = TweakDBInterface.GetCName(ItemID.GetTDBID(itemID) + t".cyberwareType", n"None");
-            i = 0;
-            while i < ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots) {
-                if Equals(cyberwareType, TweakDBInterface.GetCName(ItemID.GetTDBID(this.m_equipment.equipAreas[equipAreaIndex].equipSlots[i].itemID) + t".cyberwareType", n"type")) {
-                    this.UnequipItem(equipAreaIndex, i);
-                }
-                i += 1;
-            }
-        }
+        // Do not evict another slot that has the same cyberwareType.  Ripperdoc
+        // sends this overload with an explicit slot index, and deterministic
+        // (UsesVariants == false) records intentionally reuse one ItemID for
+        // every copy.  The old type-wide eviction therefore made slot 1 look
+        // like a failed equip and prevented duplicate effects from stacking.
     }
     this.m_equipPending = false;
     this.m_equipment.equipAreas[equipAreaIndex].equipSlots[slotIndex].itemID = itemID;
@@ -207,14 +199,42 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
         }
     }
     if placementSlot != t"AttachmentSlots.WeaponRight" && placementSlot != t"AttachmentSlots.WeaponLeft" && placementSlot != t"AttachmentSlots.Consumable" {
-        if !transactionSystem.HasItemInSlot(this.m_owner, placementSlot, itemID) {
+        // A placement slot is a visual/transaction slot, not the source of
+        // truth for the expanded cyberware area. A second variant can share
+        // EyesCW/SystemReplacementCW's placement slot with the first copy;
+        // removing that slot here would silently detach the still-equipped
+        // item. Keep the first occupant and let the equip-area slots carry
+        // both stat/GLP copies.
+        let hasPlacementPeer = false;
+        let peerAreaIndex = 0;
+        while peerAreaIndex < ArraySize(this.m_equipment.equipAreas) && !hasPlacementPeer {
+            let peerSlotIndex = 0;
+            while peerSlotIndex < ArraySize(this.m_equipment.equipAreas[peerAreaIndex].equipSlots) {
+                if !(peerAreaIndex == equipAreaIndex && peerSlotIndex == slotIndex) {
+                    let peerID = this.m_equipment.equipAreas[peerAreaIndex].equipSlots[peerSlotIndex].itemID;
+                    if ItemID.IsValid(peerID) {
+                        let peerPlacement = this.GetPlacementSlot(peerAreaIndex, peerSlotIndex, false);
+                        if Equals(peerPlacement, placementSlot) {
+                            hasPlacementPeer = true;
+                            break;
+                        }
+                    }
+                }
+                peerSlotIndex += 1;
+            }
+            peerAreaIndex += 1;
+        }
+        if !transactionSystem.HasItemInSlot(this.m_owner, placementSlot, itemID) && !hasPlacementPeer {
             transactionSystem.RemoveItemFromSlot(this.m_owner, placementSlot);
             this.AddItemToSlot(transactionSystem, placementSlot, itemID, equipmentArea);
         }
     }
     this.ApplyEquipGLPs(itemID);
     this.ApplySlotGLPs(equipSlot.slotID);
-    if itemData.UsesVariants() && NotEquals(equipArea.areaType, gamedataEquipmentArea.ArmsCW) || Equals(equipArea.areaType, gamedataEquipmentArea.RightArm) {
+    // Deterministic cyberware intentionally reuses one ItemID for every copy.
+    // Apply its stat package per occupied slot, not only for variant records;
+    // otherwise a second copy appears equipped but contributes no stats.
+    if this.IsItemOfCategory(itemID, gamedataItemCategory.Cyberware) || Equals(equipArea.areaType, gamedataEquipmentArea.ArmsCW) {
         itemData.AddStatsOnEquip(this.m_owner);
     }
     equipArea = this.m_equipment.equipAreas[equipAreaIndex];
@@ -250,29 +270,112 @@ private final func EquipItem(itemID: ItemID, slotIndex: Int32, opt blockActiveSl
     }
 }
 
+// The public inventory path normally refuses an already-equipped ItemID before
+// it reaches the slot-index overload above.  Deterministic cyberware uses one
+// ItemID for a stack, so choose another free slot instead of treating the
+// second copy as a toggle/overwrite.
+@wrapMethod(EquipmentSystemPlayerData)
+public final func EquipItem(itemID: ItemID, opt blockActiveSlotsUpdate: Bool, opt forceEquipWeapon: Bool) -> Void {
+    if !ItemID.IsValid(itemID) || !IsDefined(this.m_owner) {
+        wrappedMethod(itemID, blockActiveSlotsUpdate, forceEquipWeapon);
+        return;
+    }
+
+    let equipAreaType = EquipmentSystem.GetEquipAreaType(itemID);
+    if !CyberwareHelper.IsCyberwareArea(equipAreaType) {
+        wrappedMethod(itemID, blockActiveSlotsUpdate, forceEquipWeapon);
+        return;
+    }
+    let equipAreaIndex = this.GetEquipAreaIndex(equipAreaType);
+    if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas) {
+        return;
+    }
+
+    let equipArea = this.m_equipment.equipAreas[equipAreaIndex];
+    let i = 0;
+    while i < ArraySize(equipArea.equipSlots) {
+        let visibleWhenLocked: Bool;
+        if !this.IsSlotLocked(equipArea.equipSlots[i], visibleWhenLocked)
+            && !ItemID.IsValid(equipArea.equipSlots[i].itemID) {
+            this.EquipItem(itemID, i, blockActiveSlotsUpdate, forceEquipWeapon);
+            return;
+        }
+        i += 1;
+    }
+
+    this.EquipItem(itemID, equipArea.activeIndex, blockActiveSlotsUpdate, forceEquipWeapon);
+}
+
 @wrapMethod(EquipmentSystemPlayerData)
 private final func UnequipItem(equipAreaIndex: Int32, slotIndex: Int32, opt forceRemove: Bool) {
+    let removedItemID: ItemID;
+    if equipAreaIndex >= 0 && equipAreaIndex < ArraySize(this.m_equipment.equipAreas)
+        && slotIndex >= 0 && slotIndex < ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots) {
+        removedItemID = this.m_equipment.equipAreas[equipAreaIndex].equipSlots[slotIndex].itemID;
+    }
     wrappedMethod(equipAreaIndex, slotIndex, forceRemove);
 
     if equipAreaIndex < 0 || equipAreaIndex >= ArraySize(this.m_equipment.equipAreas) {
         return;
     }
+    if !ItemID.IsValid(removedItemID) {
+        return;
+    }
 
-    switch this.m_equipment.equipAreas[equipAreaIndex].areaType {
-        case gamedataEquipmentArea.EyesCW:
-        case gamedataEquipmentArea.LegsCW:
-        case gamedataEquipmentArea.SystemReplacementCW:
-            let slotIndex = 0;
-            let numberOfSlots = ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots);
-            while slotIndex < numberOfSlots {
-                let itemID = this.m_equipment.equipAreas[equipAreaIndex].equipSlots[slotIndex].itemID;
-                if ItemID.IsValid(itemID) {
-                    this.RemoveEquipGLPs(itemID);
-                    this.ApplyEquipGLPs(itemID);
-                }
-                slotIndex += 1;
+    let areaType = this.m_equipment.equipAreas[equipAreaIndex].areaType;
+    if CyberwareHelper.IsCyberwareArea(areaType) || Equals(areaType, gamedataEquipmentArea.ArmsCW) {
+        // Vanilla removes GLPs/stats by ItemID. Rebuild every surviving slot
+        // in the area (including deterministic duplicate IDs and variant IDs)
+        // so removing one copy cannot strip the remaining copies.
+        let survivorSlotIndex = 0;
+        let numberOfSlots = ArraySize(this.m_equipment.equipAreas[equipAreaIndex].equipSlots);
+        let transactionSystem: ref<TransactionSystem>;
+        if IsDefined(this.m_owner) {
+            transactionSystem = GameInstance.GetTransactionSystem(this.m_owner.GetGame());
+        }
+        // Pass 1 removes each surviving slot's GLPs before any copy is
+        // reapplied.  RemoveEquipGLPs is keyed by ItemID, so interleaving
+        // remove/apply would erase the first copy when a second slot shares
+        // the same deterministic ID.
+        while survivorSlotIndex < numberOfSlots {
+            let survivorID = this.m_equipment.equipAreas[equipAreaIndex].equipSlots[survivorSlotIndex].itemID;
+            if ItemID.IsValid(survivorID) {
+                this.RemoveEquipGLPs(survivorID);
             }
-            break;
+            survivorSlotIndex += 1;
+        }
+
+        // Pass 2 reapplies each surviving copy and restores any shared
+        // placement attachment without removing a peer occupant.
+        survivorSlotIndex = 0;
+        while survivorSlotIndex < numberOfSlots {
+            let survivorID = this.m_equipment.equipAreas[equipAreaIndex].equipSlots[survivorSlotIndex].itemID;
+            if ItemID.IsValid(survivorID) {
+                this.ApplyEquipGLPs(survivorID);
+                // Vanilla removes stats by ItemID.  Distinct variant IDs are
+                // therefore already balanced by the wrapped call; only a
+                // surviving deterministic duplicate needs one replacement
+                // AddStatsOnEquip to restore the copy removed with this slot.
+                let survivorData = RPGManager.GetItemData(this.m_owner.GetGame(), this.m_owner, survivorID);
+                if IsDefined(survivorData)
+                    && Equals(survivorID, removedItemID)
+                    && (this.IsItemOfCategory(survivorID, gamedataItemCategory.Cyberware)
+                        || Equals(areaType, gamedataEquipmentArea.ArmsCW)) {
+                    survivorData.AddStatsOnEquip(this.m_owner);
+                }
+                let survivorPlacement = this.GetPlacementSlot(equipAreaIndex, survivorSlotIndex, false);
+                if IsDefined(transactionSystem)
+                    && survivorPlacement != t"AttachmentSlots.WeaponRight"
+                    && survivorPlacement != t"AttachmentSlots.WeaponLeft"
+                    && survivorPlacement != t"AttachmentSlots.Consumable"
+                    && !transactionSystem.HasItemInSlot(this.m_owner, survivorPlacement, survivorID) {
+                    // Do not call RemoveItemFromSlot: another surviving slot
+                    // may be using this placement and must remain attached.
+                    this.AddItemToSlot(transactionSystem, survivorPlacement, survivorID, areaType);
+                }
+            }
+            survivorSlotIndex += 1;
+        }
     }
 }
 
@@ -781,44 +884,30 @@ protected func UpdateCurrentItem() {
 
 @replaceMethod(CyberwareInventoryMiniGrid)
 public final func GetSlotToEquipe(itemID: ItemID) -> Int32 {
-    let equipArea = this.GetEquipmentArea();
-    let cyberwareType = TweakDBInterface.GetCName(ItemID.GetTDBID(itemID) + t".cyberwareType", n"None");
-
-    // If the user explicitly selected an unlocked empty slot, equip directly into it
+    // A selected empty slot is authoritative for every cyberware area,
+    // including SystemReplacementCW.  Matching cyberwareType used to win first
+    // and sent duplicate deterministic ItemIDs back to slot 0, forcing a UI
+    // refresh before the next copy could be equipped.
     let i = 0;
     while i < ArraySize(this.m_gridData) {
         if this.m_gridData[i].GetSlotIndex() == this.m_selectedSlotIndex && !this.m_gridData[i].IsLocked() && !IsDefined(this.m_gridData[i].GetUIInventoryItem()) {
-            if !Equals(equipArea, gamedataEquipmentArea.SystemReplacementCW) {
-                return this.m_selectedSlotIndex;
-            }
+            return this.m_selectedSlotIndex;
         }
         i += 1;
     }
 
     let slotIndex = ArraySize(this.m_gridData) - 1;
     let emptyIndex = -1;
-    let matchingTypeIndex = -1;
     while slotIndex >= 0 {
         if !this.m_gridData[slotIndex].IsLocked() {
             if !IsDefined(this.m_gridData[slotIndex].GetUIInventoryItem()) {
                 emptyIndex = this.m_gridData[slotIndex].GetSlotIndex();
-            } else {
-                let equippedType = TweakDBInterface.GetCNameDefault(this.m_gridData[slotIndex].GetUIInventoryItem().GetTweakDBID() + t".cyberwareType");
-                if Equals(cyberwareType, equippedType) {
-                    matchingTypeIndex = this.m_gridData[slotIndex].GetSlotIndex();
-                    if Equals(equipArea, gamedataEquipmentArea.SystemReplacementCW) {
-                        return matchingTypeIndex;
-                    }
-                }
             }
         }
         slotIndex -= 1;
     }
     if emptyIndex != -1 {
         return emptyIndex;
-    }
-    if matchingTypeIndex != -1 {
-        return matchingTypeIndex;
     }
     return this.m_selectedSlotIndex != -1 ? this.m_selectedSlotIndex : 0;
 }
@@ -1146,11 +1235,42 @@ private final func MaterializeCyberwareStock(ts: ref<TransactionSystem>) -> Void
     let i = 0;
     while i < ArraySize(this.m_stock) {
         let itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(this.m_stock[i].itemID));
-        if IsDefined(itemRecord) && !IsDefined(ts.GetItemData(this.m_vendorObject, this.m_stock[i].itemID)) {
-            ts.GiveItem(this.m_vendorObject, this.m_stock[i].itemID, this.m_stock[i].quantity, itemRecord.Tags());
+        if IsDefined(itemRecord) && this.m_stock[i].quantity > 0 {
+            // A purchase removes the vendor's stack and its transaction item,
+            // while the persistent m_stock entry is recreated on the next
+            // pass.  Refill the exact missing quantity, not only a null item
+            // data pointer (the pointer may survive with quantity zero).
+            let currentQuantity = ts.GetItemQuantity(this.m_vendorObject, this.m_stock[i].itemID);
+            if currentQuantity < this.m_stock[i].quantity {
+                ts.GiveItem(this.m_vendorObject, this.m_stock[i].itemID,
+                    this.m_stock[i].quantity - currentQuantity, itemRecord.Tags());
+            }
         }
         i += 1;
     }
+}
+
+// Vanilla hides deterministic cyberware once the player owns one copy.  That
+// rule is correct for a normal singleton vendor, but it also hides the
+// replenished stack used by this profile's duplicate-cyberware slots.
+@replaceMethod(Vendor)
+public final func GetCyberwareForSale(checkPlayerCanBuy: Bool) -> array<SItemStack> {
+    let availableItems: array<SItemStack>;
+    this.LazyInitStock();
+    this.FillVendorInventory(true);
+
+    let i = 0;
+    while i < ArraySize(this.m_stock) {
+        let itemRecord = RPGManager.GetItemRecord(this.m_stock[i].itemID);
+        if IsDefined(itemRecord) && itemRecord.TagsContains(n"Cyberware") {
+            let canBuy = !checkPlayerCanBuy || this.PlayerCanBuy(this.m_stock[i]);
+            if canBuy {
+                ArrayPush(availableItems, this.m_stock[i]);
+            }
+        }
+        i += 1;
+    }
+    return availableItems;
 }
 
 @addMethod(Vendor)
@@ -1182,16 +1302,20 @@ public final func EnsureRipperdocStockAndInventory() -> Void {
                 if this.m_stock[j].vendorItemID == itemPool[i].GetID()
                     || ItemID.GetTDBID(this.m_stock[j].itemID) == itemPool[i].Item().GetID() {
                     stockContainsItem = true;
+                    if this.m_stock[j].quantity <= 0 {
+                        this.m_stock[j].quantity = 1;
+                        stockChanged = true;
+                    }
                     break;
                 }
                 j += 1;
             }
 
-            let alreadyOwned = !itemPool[i].Item().UsesVariants()
-                && IsDefined(ts)
-                && IsDefined(player)
-                && ts.HasItem(player, ItemID.CreateQuery(itemPool[i].Item().GetID()));
-            if !stockContainsItem && !alreadyOwned {
+            // Keep one persistent stack for every cyberware record, even when
+            // the player already owns that deterministic ItemID.  The vanilla
+            // already-owned gate is the reason a bought copy disappears until
+            // the ripperdoc UI is closed and reopened.
+            if !stockContainsItem {
                 this.CreateStacksFromVendorItem(this.m_stock, itemPool[i], player);
                 if !ArrayContains(this.m_newItems, itemPool[i].Item().GetID()) {
                     ArrayPush(this.m_newItems, itemPool[i].Item().GetID());
@@ -1202,9 +1326,15 @@ public final func EnsureRipperdocStockAndInventory() -> Void {
         i += 1;
     }
 
-    this.MaterializeCyberwareStock(ts);
+    // A populated vendor is stable between controller callbacks.  Avoid
+    // rebuilding every transaction stack (and resolving every ItemRecord) on
+    // each hover/open when the pool did not change; the quantity audit below
+    // still repairs a purchase or a stale save.
+    if stockChanged {
+        this.MaterializeCyberwareStock(ts);
+    }
 
-    if ArraySize(this.GetCyberwareForSale(true)) == 0 {
+    if stockChanged && ArraySize(this.GetCyberwareForSale(true)) == 0 {
         this.m_stockInit = false;
         this.LazyInitStock();
         this.MaterializeCyberwareStock(ts);
@@ -1218,7 +1348,7 @@ public final func EnsureRipperdocStockAndInventory() -> Void {
         if IsDefined(itemRecord)
             && itemRecord.TagsContains(n"Cyberware")
             && IsDefined(ts)
-            && !IsDefined(ts.GetItemData(this.m_vendorObject, this.m_stock[i].itemID)) {
+            && ts.GetItemQuantity(this.m_vendorObject, this.m_stock[i].itemID) < this.m_stock[i].quantity {
             inventoryNeedsRefresh = true;
         }
         i += 1;
@@ -1265,6 +1395,35 @@ private final func PrepareVendorItems() {
         }
     }
     wrappedMethod();
+}
+
+// The purchase callback runs after Vendor removes the bought stack and after
+// the controller has already evicted that item from its cached vendor map.
+// Rebuild both caches here so the same ripperdoc visit immediately shows the
+// replenished deterministic cyberware instead of requiring a close/reopen.
+@wrapMethod(RipperDocGameController)
+public final func OnItemBought(itemID: ItemID, itemData: wref<gameItemData>) {
+    wrappedMethod(itemID, itemData);
+
+    if !IsDefined(this.m_VendorDataManager) {
+        return;
+    }
+    let vendorObject = this.m_VendorDataManager.GetVendorInstance();
+    if !IsDefined(vendorObject) {
+        return;
+    }
+    let market = MarketSystem.GetInstance(vendorObject.GetGame());
+    if !IsDefined(market) {
+        return;
+    }
+    let vendor = market.GetVendor(vendorObject);
+    if !IsDefined(vendor) {
+        return;
+    }
+
+    this.PrepareVendorItems();
+    this.PreparePlayerItems();
+    this.RefreshInventoryNextFrame();
 }
 
 @wrapMethod(RipperDocGameController)

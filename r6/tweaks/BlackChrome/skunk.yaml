@@ -1,0 +1,52 @@
+BaseStats.SkunkChance:
+  $type: Stat
+  enumName: SkunkChance
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1
+
+
+BlackChrome.GasDispenser$(tier):
+  $instances:
+    - { tier: Rare, nextTier: BlackChrome.GasDispenserRarePlus, meleeNerf: 50, meleeTime: 10, attackRecord: Attacks.RareBiotechGrenade, activationChance: 5 }
+    - { tier: RarePlus, nextTier: BlackChrome.GasDispenserEpic, meleeNerf: 50, meleeTime: 10, attackRecord: Attacks.RarePlusBioGrenadePlus, activationChance: 7 }
+    - { tier: Epic, nextTier: BlackChrome.GasDispenserEpicPlus, meleeNerf: 65, meleeTime: 15, attackRecord: Attacks.EpicBiotechGrenade, activationChance: 7 }
+    - { tier: EpicPlus, nextTier: BlackChrome.GasDispenserLegendary,meleeNerf: 65, meleeTime: 15, attackRecord: Attacks.EpicPlusBiotechGrenade, activationChance: 9 }    
+    - { tier: Legendary, nextTier: BlackChrome.GasDispenserLegendaryPlus, meleeNerf: 80, meleeTime: 20, attackRecord: Attacks.LegendaryBiotechGrenade, activationChance: 9 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.GasDispenserLegendaryPlusPlus, meleeNerf: 95, meleeTime: 25, attackRecord: Attacks.LegendaryPlusBiotechGrenade, activationChance: 9 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, meleeNerf: 95, meleeTime: 25, attackRecord: Attacks.LegendaryPlusBiotechGrenade, activationChance: 10 }   
+  $base: Items.AdvancedElectroshockMechanism$(tier)
+  displayName: LocKey#blackchrome_gasDispenser_name
+  localizedDescription: LocKey#blackchrome_gasDispenser_flavor
+  nextUpgradeItem: $(nextTier)
+  equipArea: EquipmentArea.NervousSystemCW
+  variants: [Variants.Humanity16Cost]
+  tags: ['Cyberware', 'HideInBackpackUI', 'IllegalItem']
+  statModifiers:
+    - Items.ItemArmorToArmor
+    - Items.AdvancedIntegumentarySystemModule_inline0
+    - Items.AdvancedVisualCortexSupportCommon_inline0
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      effectors: 
+        - $type: TriggerAttackEffector
+          chance: 0
+          selfStatusEffect: BaseStatusEffect.ElectroshockMechanismCooldown
+          statForChance: BaseStats.SkunkChance
+          attackRecord: $(attackRecord)
+          effectorClassName: TriggerAttackByChanceEffector
+          prereqRecord: Items.ElectroshockMechanismEffector2_inline0
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          value: 0.1
+          statType: BaseStats.SkunkChance
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [10, $(meleeNerf), $(meleeTime), 5, 10]
+        localizedDescription: LocKey#blackchrome_gasDispenser_description
+    - Attunements.CoolHeadshotDamage
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_06

@@ -1,0 +1,244 @@
+BaseStats.SynthLungsCooldown:
+  $type: Stat
+  enumName: SynthLungsCooldown
+  flags: []
+  max: 60
+  min: 0
+  decimalPlaces: 1
+
+BaseStats.SynthLungsSpeedBonus:
+  $type: Stat
+  enumName: SynthLungsSpeedBonus
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1
+
+
+BlackChrome.SynthLungsEffect:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        value: 1.2
+        statType: BaseStats.MaxDuration
+  gameplayTags: [Buff]
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.MaxStacks
+        value: 10
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.Misc
+  packages:
+    - $type: GameplayLogicPackage
+      stackable: true
+      stats: 
+        - $type: CombinedStatModifier
+          modifierType: AdditiveMultiplier
+          opSymbol: '*'
+          refObject: Player
+          refStat: BaseStats.SynthLungsSpeedBonus
+          statType: BaseStats.JumpHeight          
+          value: 0.1
+        - $type: CombinedStatModifier
+          modifierType: AdditiveMultiplier
+          opSymbol: '*'
+          refObject: Player
+          refStat: BaseStats.SynthLungsSpeedBonus
+          statType: BaseStats.MaxSpeed          
+          value: 0.1
+
+BlackChrome.SynthLungsCooldown:
+  $type: StatusEffect
+  duration: 
+    $type: StatModifierGroup
+    statModsLimit: -1
+    statModifiers: 
+      - $type: CombinedStatModifier
+        modifierType: Additive
+        opSymbol: '*'
+        refObject: Player
+        refStat: BaseStats.SynthLungsCooldown
+        statType: BaseStats.MaxDuration
+        value: 1
+  gameplayTags: ['Debuff', 'BlackChrome.SynthLungsCooldown', 'PlayerCyberwareCooldown']
+  isAffectedByTimeDilationNPC: true
+  isAffectedByTimeDilationPlayer: true
+  maxStacks: RTDB.StatusEffect_inline0
+  savable: true
+  statusEffectType: BaseStatusEffectTypes.PlayerCooldown
+  stopActiveSfxOnDeactivate: true
+  uiData:
+    $type: StatusEffectUIData
+    description: LocKey#53709
+    displayName: LocKey#blackchrome_synthLungs_name
+    iconPath: perks_mitigation  
+
+BlackChrome.SynthLungs$(tier):
+  $instances:
+    - { tier: Uncommon, nextTier: BlackChrome.SynthLungsUncommonPlus, speedBonus: 0.6, speedBonusDescription: 60, cooldown: 60 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.SynthLungsRare, speedBonus: 0.65, speedBonusDescription: 65, cooldown: 60 }
+    - { tier: Rare, nextTier: BlackChrome.SynthLungsRarePlus, speedBonus: 0.7, speedBonusDescription: 70, cooldown: 50 }
+    - { tier: RarePlus, nextTier: BlackChrome.SynthLungsEpic, speedBonus: 0.75, speedBonusDescription: 75, cooldown: 50 }
+    - { tier: Epic, nextTier: BlackChrome.SynthLungsEpicPlus, speedBonus: 0.8, speedBonusDescription: 80, cooldown: 40 }
+    - { tier: EpicPlus, nextTier: BlackChrome.SynthLungsLegendary, speedBonus: 0.85, speedBonusDescription: 85, cooldown: 40 }
+    - { tier: Legendary, nextTier: BlackChrome.SynthLungsLegendaryPlus, speedBonus: 0.9, speedBonusDescription: 90, cooldown: 30 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.SynthLungsLegendaryPlusPlus, speedBonus: 0.95, speedBonusDescription: 95, cooldown: 30 }
+    - { tier: LegendaryPlusPlus, nextTier: None, speedBonus: 1, speedBonusDescription: 100, cooldown: 30 }
+  $base: Items.AdvancedBiomonitor$(tier)
+  displayName: LocKey#blackchrome_synthLungs_name
+  localizedDescription: LocKey#blackchrome_synthLungs_flavor
+  nextUpgradeItem: $(nextTier)
+  itemType: ItemType.Cyb_Ability
+  cyberwareType: CyberLungs
+  iconPath: cw_circulatory_ironlungs
+  variants: [Variants.Humanity20Cost]
+  buyPrice:
+     - Price.BaseCyberwarePrice
+     - Price.ItemQualityMultiplier
+     - Price.PlusTierMultiplier
+     - Price.CyberwareMultiplier
+     - Price.BuyPrice_StreetCred_Discount
+     - Items.AdvancedSecondHeartEpic_inline7
+  sellPrice: 
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Price.CyberwareSellMultiplier
+    - Items.AdvancedSecondHeartEpic_inline6
+  statModifiers:
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.IsItemIconic
+      value: 1
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.Cool
+      statType: BaseStats.AttunementHelper
+      value: 4
+  objectActions:
+    - $type: ObjectAction
+      actionName: Use
+      hackCategory: HackCategory.NotAHack
+      interactionLayer: None
+      objectActionType: ObjectActionType.Direct
+      startEffects: 
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator 
+          effectorToTrigger: 
+            $type: ApplyStatusEffectEffector
+            applicationTarget: Player
+            inverted: false
+            count: 10
+            removeWithEffector: true
+            effectorClassName: ApplyStatusEffectEffector
+            prereqRecord: Prereqs.AlwaysTruePrereq
+            statusEffect: BlackChrome.SynthLungsEffect  
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator 
+          statusEffect: BlackChrome.SynthLungsCooldown
+        - $type: ObjectActionEffect
+          recipient: ObjectActionReference.Instigator 
+          effectorToTrigger: 
+            $type: ModifyStatPoolValueEffector
+            applicationTarget: None
+            effectorClassName: ModifyStatPoolValueEffector
+            prereqRecord: Prereqs.AlwaysTruePrereq
+            usePercent: true
+            statPoolUpdates: 
+              - $type: StatPoolUpdate
+                statPoolType: BaseStatPools.Stamina
+                statPoolValue: 100
+        - CyberwareAction.BloodPumpSFXObjectActionEffect
+        - CyberwareAction.BloodPumpVFXObjectActionEffect
+      instigatorPrereqs: 
+        - $type: StatusEffectPrereq
+          checkType: CheckType.Tag
+          invert: true
+          objectToCheck: None
+          prereqClassName: StatusEffectPrereq
+          tagToCheck: BlackChrome.SynthLungsCooldown
+  OnEquip: 
+  - $type: GameplayLogicPackage
+    UIData: 
+      $type: GameplayLogicPackageUIData
+      localizedDescription: LocKey#blackchrome_synthLungs_description
+      floatValues: [100, $(speedBonusDescription), 12, $(cooldown)]
+    effectors: 
+      - $type: ApplyStatGroupEffector
+        applicationTarget: Weapon
+        effectorClassName: ApplyStatGroupEffector
+        prereqRecord: Perks.PlayerIsAiming
+        removeWithEffector: true
+        statGroup: 
+          $type: StatModifierGroup
+          statModsLimit: -1
+          statModifiers: 
+            - $type: CombinedStatModifier
+              modifierType: Additive
+              opSymbol: '*'
+              refObject: Player
+              refStat: BaseStats.Cool
+              value: -4
+              statType: BaseStats.Sway
+            - $type: CombinedStatModifier
+              modifierType: AdditiveMultiplier
+              opSymbol: '*'
+              refObject: Player
+              refStat: BaseStats.Cool
+              value: -0.04
+              statType: BaseStats.SwaySideMaximumAngleDistance
+            - $type: CombinedStatModifier
+              modifierType: AdditiveMultiplier
+              opSymbol: '*'
+              refObject: Player
+              refStat: BaseStats.Cool
+              value: -0.04
+              statType: BaseStats.SwaySideMinimumAngleDistance
+            - $type: CombinedStatModifier
+              modifierType: AdditiveMultiplier
+              opSymbol: '*'
+              refObject: Player
+              refStat: BaseStats.Cool
+              value: -0.04
+              statType: BaseStats.SwayTraversalTime
+        effectorClassName: ApplyStatGroupEffector
+        prereqRecord: Prereqs.AlwaysTruePrereq
+        removeAfterActionCall: false
+        removeAfterPrereqCheck: false
+        reapplyOnWeaponChange: false
+    stats: 
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.SynthLungsCooldown
+        value: $(cooldown)
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.SynthLungsSpeedBonus
+        value: $(speedBonus)
+      - $type: ConstantStatModifier
+        modifierType: Additive
+        statType: BaseStats.CanBreatheUnderwater
+        value: 1
+  - $type: GameplayLogicPackage
+    stackable: true
+    UIData: 
+      $type: GameplayLogicPackageUIData
+      iconPath: UIIcon.Cool
+      floatValues: [4]
+      localizedDescription: LocKey#blackchrome_synthLungs_attunement
+      localizedName: LocKey#94150
+      stats: 
+        - BaseStats.AttunementHelper

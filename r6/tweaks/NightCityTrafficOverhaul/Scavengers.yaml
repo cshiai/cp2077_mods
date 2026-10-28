@@ -1,0 +1,216 @@
+# BRENNAN APOLLO
+Vehicle.scavengers__brennan_apollo_sport:
+  $base: Vehicle.v_sportbike3_brennan_apollo_sport
+  randomPassengers: [Passengers.ScavengersDriverEntry]
+  affiliation: Factions.Scavengers
+
+# VILLEFORT COLUMBUS
+Vehicle.scavengers__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus_scavengers
+  randomPassengers: [Passengers.ScavengersDriverEntry, Passengers.ScavengersPassengerFrontEntry]
+  affiliation: Factions.Scavengers
+
+# THORTON COLBY
+Vehicle.scavengers__thorton_colby:
+  $base: Vehicle.v_standard2_thorton_colby_scavengers
+  randomPassengers: [Passengers.ScavengersDriverEntry, Passengers.ScavengersPassengerFrontEntry]
+  affiliation: Factions.Scavengers
+
+# ARCHER HELLA
+Vehicle.scavengers__archer_hella_01:
+  $base: Vehicle.v_standard2_archer_hella_scavengers
+  entityTemplatePath: night_city_traffic_overhaul\entities\scavengers\archer_hella_scavengers_01.ent
+  appearanceName: archer_hella__basic_scavenger_1
+  randomPassengers: [Passengers.ScavengersDriverEntry, Passengers.ScavengersPassengerFrontEntry, Passengers.ScavengersPassengerBackEntry]
+  affiliation: Factions.Scavengers
+
+# ARCHER HELLA
+Vehicle.scavengers__archer_hella_02:
+  $base: Vehicle.v_standard2_archer_hella_scavengers
+  entityTemplatePath: night_city_traffic_overhaul\entities\scavengers\archer_hella_scavengers_02.ent
+  appearanceName: archer_hella__basic_scavenger_2
+  randomPassengers: [Passengers.ScavengersDriverEntry, Passengers.ScavengersPassengerFrontEntry, Passengers.ScavengersPassengerBackEntry]
+  affiliation: Factions.Scavengers
+
+# CHEVALIER THRAX
+Vehicle.scavengers__chevalier_thrax:
+  $base: Vehicle.v_standard2_chevalier_thrax_scavengers
+  randomPassengers: [Passengers.ScavengersDriverEntry, Passengers.ScavengersPassengerFrontEntry, Passengers.ScavengersPassengerBackEntry]
+  affiliation: Factions.Scavengers
+
+
+# DRIVERS
+Passengers.ScavengersDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_slaughtomatic_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_pulsar_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_nova_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_pipewrench_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_fists_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_tireiron_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_fists_wa
+    #   weight: 1
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.ScavengersPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_slaughtomatic_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_pulsar_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt1_ranged1_nova_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_pipewrench_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_fists_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_tireiron_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt1_melee1_fists_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_pipewrench_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_knife_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_pipewrench_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_copperhead_ma
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_knife_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_copperhead_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.ScavengersPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_pipewrench_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_knife_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_pipewrench_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_pulsar_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_copperhead_ma
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_grunt2_melee2_knife_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt2_ranged2_copperhead_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_fast2_fmelee2rare_knife_ma_rare
+    #   weight: 0.2
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.scavenger_butcher3_hmelee2_machete_mb_rare
+    #   weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_strong3_gunner2_defender_mb_rare
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__scavenger_grunt3_netrunner2_nova_ma_rare
+      weight: 0.2
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__scavenger_grunt1_ranged1_pulsar_ma:
+  $base: Character.scavenger_grunt1_ranged1_pulsar_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt1_ranged1_slaughtomatic_ma:
+  $base: Character.scavenger_grunt1_ranged1_slaughtomatic_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt1_ranged1_pulsar_wa:
+  $base: Character.scavenger_grunt1_ranged1_pulsar_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt1_ranged1_nova_wa:
+  $base: Character.scavenger_grunt1_ranged1_nova_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt2_ranged2_pulsar_ma:
+  $base: Character.scavenger_grunt2_ranged2_pulsar_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt2_ranged2_copperhead_ma:
+  $base: Character.scavenger_grunt2_ranged2_copperhead_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt2_ranged2_copperhead_wa:
+  $base: Character.scavenger_grunt2_ranged2_copperhead_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_strong3_gunner2_defender_mb_rare:
+  $base: Character.scavenger_strong3_gunner2_defender_mb_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__scavenger_grunt3_netrunner2_nova_ma_rare:
+  $base: Character.scavenger_grunt3_netrunner2_nova_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat

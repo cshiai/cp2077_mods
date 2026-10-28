@@ -1,0 +1,54 @@
+# CREATE YOUR CUSTOM VEHICLES HERE!
+
+# CAUTION: 
+# Invalid TweakDB entries will make the game crash! 
+# Pay attention!
+
+# THE IMPORTANT THING: 
+# Indentation is MANDATORY. 
+# The identation needed is two spaces. If you indent wrong, the game will crash. 
+
+# To learn more: https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/core-mods-explained/tweakxl/tweakxl-changing-game-records/how-to-yaml-tweak-modding-basics
+
+# Recommendation: 
+# Use Visual Studio CODE for syntax highlight and color code for easy readability and error check.
+
+# THE BASICS:
+# You need to create a custom vehicle name, a base vehicle and driver and passengers entries.
+
+# DRIVER AND PASSENGERS:
+# For Bikes use only DriverEntry
+# For two seats vehicles use Passengers.xxxDriverEntry and Passengers.xxxPassengerFrontEntry
+# For four seats vehicles use Passengers.xxxDriverEntry, Passengers.xxxPassengerFrontEntry and Passengers.xxxPassengerBackEntry
+
+# EXAMPLE N° 1 - BIKES:
+# Vehicle.custom__arch_jackie_tuned: # <<< YOUR CUSTOM VEHICLE NAME
+#   $base: Vehicle.v_sportbike2_arch_jackie_tuned # <<< THE BASE VEHICLE TO USE (check the identation)
+#   randomPassengers: [Passengers.GenericDriverEntry] # <<< THE DRIVER (check the identation)
+
+# # EXAMPLE N° 2 - TWO SEATS:
+# Vehicle.custom__maelstrom_thorton_mackinaw_bmf: # <<< YOUR CUSTOM VEHICLE NAME
+#   $base: Vehicle.v_utility4_thorton_mackinaw_bmf # <<< THE BASE VEHICLE TO USE (check the identation)
+#   randomPassengers: [Passengers.MaelstromDriverEntry, Passengers.MaelstromPassengerFrontEntry] # <<< THE DRIVER AND FRONT PASSENGER (check the identation)
+
+# # EXAMPLE N° 3 - FOUR SEATS:
+# Vehicle.custom__sixthstreet_thorton_merrimac_pickup: # <<< YOUR CUSTOM VEHICLE NAME
+#   $base: Vehicle.v_standard25_thorton_merrimac_pickup # <<< THE BASE VEHICLE TO USE (check the identation)
+#   randomPassengers: [Passengers.SixthstreetDriverEntry, Passengers.SixthstreetPassengerFrontEntry, Passengers.SixthstreetPassengerBackEntry] # <<< THE DRIVER AND FRONT AND BACK PASSENGERS (check the identation)
+
+# # IF YOU GAME CRASH AFTER TWEAKING HERE THEN YOU HAVE AN INVALID VEHICLE/PASSENGER/IDENTATION !!!
+
+
+# --- Aldecaldos ---
+
+# HUMMER H1 NOMAD
+Vehicle.aldecaldos__modded_shion:
+  $base: Vehicle.v_sport2_mizutani_shion_nomad_player
+  randomPassengers: [Passengers.AdelcaldosDriverEntry, Passengers.AdelcaldosPassengerFrontEntry]
+
+# NOMAD TANISHI
+Vehicle.arasaka__modded_suv:
+  $base: Vehicle.q112_arasaka_suv
+  randomPassengers: [Passengers.ArasakaSecurityDriverEntry, Passengers.ArasakaSecurityPassengerFrontEntry, Passengers.ArasakaSecurityPassengerBackEntry]
+
+# MERCEDES G63

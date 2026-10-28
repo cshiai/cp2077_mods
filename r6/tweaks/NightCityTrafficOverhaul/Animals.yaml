@@ -1,0 +1,220 @@
+
+# YAIBA KUSANAGI
+Vehicle.animals__yaiba_kusanagi:
+  $base: Vehicle.v_sportbike1_yaiba_kusanagi_animal
+  randomPassengers: [Passengers.AnimalsDriverEntry]
+  affiliation: Factions.Animals
+
+# THORTON GALENA
+Vehicle.animals__quadra_type66_poor:
+  $base: Vehicle.v_sport2_quadra_type66_poor
+  randomPassengers: [Passengers.AnimalsDriverEntry, Passengers.AnimalsPassengerFrontEntry]
+  affiliation: Factions.Animals
+
+# THORTON COLBY PICKUP
+Vehicle.animals__thorton_colby_pickup:
+  $base: Vehicle.v_standard25_thorton_colby_pickup
+  randomPassengers: [Passengers.AnimalsDriverEntry, Passengers.AnimalsPassengerFrontEntry]
+  affiliation: Factions.Animals
+
+# THORTON MACKINAW
+Vehicle.animals__thorton_mackinaw:
+  $base: Vehicle.v_standard3_thorton_mackinaw
+  randomPassengers: [Passengers.AnimalsDriverEntry, Passengers.AnimalsPassengerFrontEntry, Passengers.AnimalsPassengerBackEntry]
+  appearanceName: thorton_mackinaw__basic_suburban_1_5
+  affiliation: Factions.Animals
+
+# CHEVALIER THRAX
+Vehicle.animals__chevalier_thrax:
+  $base: Vehicle.v_standard2_chevalier_thrax
+  randomPassengers: [Passengers.AnimalsDriverEntry, Passengers.AnimalsPassengerFrontEntry, Passengers.AnimalsPassengerBackEntry]
+  affiliation: Factions.Animals
+
+# VILLEFORT COLUMBUS
+Vehicle.animals__villefort_columbus:
+  $base: Vehicle.q110_animals_delivery_truck
+  randomPassengers: [Passengers.AnimalsDriverEntry, Passengers.AnimalsPassengerFrontEntry]
+  affiliation: Factions.Animals
+
+# DRIVERS
+Passengers.AnimalsDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_kenshin_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_burya_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_nova_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_pulsar_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_overture_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_pulsar_mb
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.AnimalsPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_kenshin_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_burya_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_nova_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_pulsar_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_overture_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_pulsar_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_shotgun2_igla_wba_rare
+      weight: 0.1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_shotgun2_testera_wba_rare
+      weight: 0.1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt3_gunner2_defender_mb_rare
+      weight: 0.1
+  validSlotNames: [seat_front_right]
+
+Passengers.AnimalsPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_kenshin_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer1_ranged1_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_burya_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_bouncer2_ranged2_omaha_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_nova_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt1_ranged1_pulsar_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_overture_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_ranged2_pulsar_mb
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_shotgun2_igla_wba_rare
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt2_shotgun2_testera_wba_rare
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__animals_grunt3_gunner2_defender_mb_rare
+      weight: 0.2
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# Character.animals_bouncer1_ranged1_kenshin_mb
+# Character.animals_bouncer1_ranged1_omaha_mb
+# Character.animals_bouncer2_ranged2_burya_mb
+# Character.animals_bouncer2_ranged2_omaha_mb
+# Character.animals_grunt1_ranged1_nova_mb
+# Character.animals_grunt1_ranged1_pulsar_mb
+# Character.animals_grunt2_ranged2_overture_mb
+# Character.animals_grunt2_ranged2_pulsar_mb
+# Character.animals_grunt2_shotgun2_igla_wba_rare
+# Character.animals_grunt2_shotgun2_testera_wba_rare
+# Character.animals_grunt3_gunner2_defender_mb_rare
+
+
+# CHARACTERS
+
+Character.ncto__animals_bouncer1_ranged1_kenshin_mb:
+  $base: Character.animals_bouncer1_ranged1_kenshin_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_bouncer1_ranged1_omaha_mb:
+  $base: Character.animals_bouncer1_ranged1_omaha_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_bouncer2_ranged2_burya_mb:
+  $base: Character.animals_bouncer2_ranged2_burya_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_bouncer2_ranged2_omaha_mb:
+  $base: Character.animals_bouncer2_ranged2_omaha_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt1_ranged1_nova_mb:
+  $base: Character.animals_grunt1_ranged1_nova_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt1_ranged1_pulsar_mb:
+  $base: Character.animals_grunt1_ranged1_pulsar_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt2_ranged2_overture_mb:
+  $base: Character.animals_grunt2_ranged2_overture_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt2_ranged2_pulsar_mb:
+  $base: Character.animals_grunt2_ranged2_pulsar_mb
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt2_shotgun2_igla_wba_rare:
+  $base: Character.animals_grunt2_shotgun2_igla_wba_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt2_shotgun2_testera_wba_rare:
+  $base: Character.animals_grunt2_shotgun2_testera_wba_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__animals_grunt3_gunner2_defender_mb_rare:
+  $base: Character.animals_grunt3_gunner2_defender_mb_rare
+  tags:
+    - !append pcf_GangerCanRetreat

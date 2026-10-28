@@ -1,0 +1,211 @@
+# BRENNAN APOLLO
+Vehicle.valentinos__brennan_apollo_sport:
+  $base: Vehicle.v_sportbike3_brennan_apollo_sport
+  randomPassengers: [Passengers.ValentinosDriverEntry]
+  affiliation: Factions.Valentinos
+
+# THORTON COLBY
+Vehicle.valentinos__thorton_colby:
+  $base: Vehicle.v_standard2_thorton_colby_valentinos
+  randomPassengers: [Passengers.ValentinosDriverEntry, Passengers.ValentinosPassengerFrontEntry, Passengers.ValentinosPassengerBackEntry]
+  affiliation: Factions.Valentinos
+
+# THORTON MACKINAW
+Vehicle.valentinos__thorton_mackinaw:
+  $base: Vehicle.cs_savable_thorton_mackinaw_valentinos
+  randomPassengers: [Passengers.ValentinosDriverEntry, Passengers.ValentinosPassengerFrontEntry, Passengers.ValentinosPassengerBackEntry]
+  affiliation: Factions.Valentinos
+
+# VILLEFORT ALVARADO
+Vehicle.valentinos__villefort_alvarado:
+  $base: Vehicle.v_sport2_villefort_alvarado_valentinos
+  randomPassengers: [Passengers.ValentinosDriverEntry, Passengers.ValentinosPassengerFrontEntry]
+  affiliation: Factions.Valentinos
+
+# VILLEFORT ALVARADO CABRIO
+Vehicle.valentinos__villefort_alvarado_cabrio:
+  $base: Vehicle.v_sport2_villefort_alvarado_valentinos_cabrio
+  randomPassengers: [Passengers.ValentinosDriverEntry, Passengers.ValentinosPassengerFrontEntry]
+  affiliation: Factions.Valentinos
+
+# CHEVALIER THRAX
+Vehicle.valentinos__chevalier_thrax:
+  $base: Vehicle.v_standard2_chevalier_thrax_valentino
+  randomPassengers: [Passengers.ValentinosDriverEntry, Passengers.ValentinosPassengerFrontEntry, Passengers.ValentinosPassengerBackEntry]
+  affiliation: Factions.Valentinos
+
+# DRIVERS
+Passengers.ValentinosDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_knife_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_knife_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_machete_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_machete_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_overture_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_overture_wa
+      weight: 1
+  validSlotNames:
+    - seat_front_left
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.ValentinosPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_knife_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_knife_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_machete_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt2_melee2_machete_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_overture_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_overture_wa
+      weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.ValentinosPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_ajax_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt2_ranged2_nue_wa
+      weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt1_melee1_baseball_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt1_melee1_baseball_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt1_melee1_knife_ma
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.valentinos_grunt1_melee1_knife_wa
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt1_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt1_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt1_ranged1_nue_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__valentinos_grunt1_ranged1_nue_wa
+      weight: 1
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__valentinos_grunt2_ranged2_ajax_ma:
+  $base: Character.valentinos_grunt2_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt2_ranged2_ajax_wa:
+  $base: Character.valentinos_grunt2_ranged2_ajax_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt2_ranged2_nue_ma:
+  $base: Character.valentinos_grunt2_ranged2_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt2_ranged2_nue_wa:
+  $base: Character.valentinos_grunt2_ranged2_nue_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt2_ranged2_overture_ma:
+  $base: Character.valentinos_grunt2_ranged2_overture_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt2_ranged2_overture_wa:
+  $base: Character.valentinos_grunt2_ranged2_overture_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt1_ranged1_nova_ma:
+  $base: Character.valentinos_grunt1_ranged1_nova_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt1_ranged1_nova_wa:
+  $base: Character.valentinos_grunt1_ranged1_nova_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt1_ranged1_nue_ma:
+  $base: Character.valentinos_grunt1_ranged1_nue_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__valentinos_grunt1_ranged1_nue_wa:
+  $base: Character.valentinos_grunt1_ranged1_nue_wa
+  tags:
+    - !append pcf_GangerCanRetreat

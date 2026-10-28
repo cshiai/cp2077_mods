@@ -1,0 +1,185 @@
+# THORTON GALENA
+Vehicle.voodoo__thorton_galena:
+  $base: Vehicle.v_standard2_thorton_galena_voodoo_boys
+  entityTemplatePath: night_city_traffic_overhaul\entities\voodoo\thorton_galena_voodoo.ent
+  appearanceName: thorton_galena__basic_voodoo_01
+  randomPassengers: [Passengers.VoodooDriverEntry, Passengers.VoodooPassengerFrontEntry, Passengers.VoodooPassengerBackEntry]
+  affiliation: Factions.VoodooBoys
+
+# MAHIR SUPRON
+Vehicle.voodoo__mahir_supron:
+  $base: Vehicle.v_standard25_mahir_voodoo_boys
+  entityTemplatePath: night_city_traffic_overhaul\entities\voodoo\mahir_supron_voodoo.ent
+  appearanceName: mahir_supron__basic_tap_tap
+  randomPassengers: [Passengers.VoodooDriverEntry, Passengers.VoodooPassengerFrontEntry]
+  affiliation: Factions.VoodooBoys
+
+
+
+# DRIVERS
+Passengers.VoodooDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.bou_voodooboys_grunt1_fmelee2rare_baseball_ma_rare
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.VoodooPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.bou_voodooboys_grunt1_fmelee2rare_baseball_ma_rare
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1coat_shotgun2_palica_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt2coat_shotgun2_palica_wa
+      weight: 0.5
+  validSlotNames: [seat_front_right]
+
+Passengers.VoodooPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.bou_voodooboys_grunt1_fmelee2rare_baseball_ma_rare
+    #   weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt1coat_shotgun2_palica_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__bou_voodooboys_grunt2coat_shotgun2_palica_wa
+      weight: 0.5
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_ma:
+  $base: Character.con_voodooboys_grunt1_ranged2_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__con_voodooboys_grunt1_ranged2_saratoga_wa:
+  $base: Character.con_voodooboys_grunt1_ranged2_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_ma:
+  $base: Character.con_voodooboys_grunt1_ranged2_sidewinder_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__con_voodooboys_grunt1_ranged2_sidewinder_wa:
+  $base: Character.con_voodooboys_grunt1_ranged2_sidewinder_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_ma:
+  $base: Character.bou_voodooboys_grunt1_ranged2_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt1_ranged2_saratoga_wa:
+  $base: Character.bou_voodooboys_grunt1_ranged2_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_ma:
+  $base: Character.bou_voodooboys_grunt1_ranged2_sidewinder_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt1_ranged2_sidewinder_wa:
+  $base: Character.bou_voodooboys_grunt1_ranged2_sidewinder_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt1coat_shotgun2_palica_ma:
+  $base: Character.bou_voodooboys_grunt1coat_shotgun2_palica_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__bou_voodooboys_grunt2coat_shotgun2_palica_wa:
+  $base: Character.bou_voodooboys_grunt2coat_shotgun2_palica_wa
+  tags:
+    - !append pcf_GangerCanRetreat

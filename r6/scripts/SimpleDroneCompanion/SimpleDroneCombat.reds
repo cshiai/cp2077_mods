@@ -18,6 +18,14 @@ private func SDC_EnemyEngaged(owner: wref<ScriptedPuppet>, target: wref<GameObje
     || Equals(state, gamedataNPCHighLevelState.Alerted);
 }
 
+private func SDC_HostileTarget(target: wref<GameObject>) -> Bool {
+  let puppet: wref<ScriptedPuppet> = target as ScriptedPuppet;
+  if !IsDefined(puppet) || SDC_IsCompanion(puppet) || SDC_IsDeadLike(puppet) || puppet.IsPlayer() {
+    return false;
+  }
+  return puppet.IsHostile() || puppet.IsEnemy();
+}
+
 private func SDC_IsIgnoredDamage(hitEvent: ref<gameHitEvent>) -> Bool {
   return IsDefined(hitEvent)
     && IsDefined(hitEvent.attackData)
@@ -72,7 +80,7 @@ private final func Process(hitEvent: ref<gameHitEvent>, cache: ref<CacheData>) -
     };
 
     // A hostile hit on V is an event-driven attention handoff, not a global
-    // scan.  The bounded system owns at most two destination drones.
+    // scan.  The bounded system owns at most six destination drones.
     if target.IsPlayer() && !instDrone && !targetDrone && !ignored && instigator.IsHostile() {
       let system: ref<SDC_System> = SDC_System.Get(target.GetGame());
       if IsDefined(system) {
@@ -96,6 +104,16 @@ protected cb func OnDetectedEvent(evt: ref<OnDetectedEvent>) -> Bool {
   if IsDefined(evt) && IsDefined(evt.target) && evt.isVisible && SDC_IsCompanion(evt.target) {
     let owner: wref<ScriptedPuppet> = this.GetOwnerPuppet();
     if SDC_EnemyEngaged(owner, evt.target) {
+      TargetTrackingExtension.InjectThreat(owner, evt.target);
+    };
+  };
+  // Cerberus keeps a quest-oriented vanilla reaction preset in some 2.5
+  // builds.  Once the follower marker is attached, feed visible hostile
+  // detections into the same bounded target tracker used by Minotaurs and
+  // Octants so all six companions can acquire combat targets without a scan.
+  if IsDefined(evt) && IsDefined(evt.target) && evt.isVisible {
+    let owner: wref<ScriptedPuppet> = this.GetOwnerPuppet();
+    if SDC_IsCompanion(owner) && SDC_HostileTarget(evt.target) {
       TargetTrackingExtension.InjectThreat(owner, evt.target);
     };
   };

@@ -1,0 +1,82 @@
+BlackChrome.ThunderGod$(tier):
+  $instances:
+    - { tier: Rare, nextTier: BlackChrome.ThunderGodRarePlus, electricDamage: 6, shockChance: 10, electricityRes: 10 }
+    - { tier: RarePlus, nextTier: BlackChrome.ThunderGodEpic, electricDamage: 8, shockChance: 12, electricityRes: 12 }
+    - { tier: Epic, nextTier: BlackChrome.ThunderGodEpicPlus, electricDamage: 12, shockChance: 18, electricityRes: 18 }
+    - { tier: EpicPlus, nextTier: BlackChrome.ThunderGodLegendary, electricDamage: 14, shockChance: 20, electricityRes: 20 }
+    - { tier: Legendary, nextTier: BlackChrome.ThunderGodLegendaryPlus, electricDamage: 18, shockChance: 26, electricityRes: 26 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.ThunderGodLegendaryPlusPlus, electricDamage: 20, shockChance: 28, electricityRes: 28  }
+    - { tier: LegendaryPlusPlus, nextTier: None, electricDamage: 22, shockChance: 30, electricityRes: 30 }
+  $base: Items.AdvancedElectroshockMechanism$(tier)
+  displayName: LocKey#blackchrome_kashimo_name
+  localizedDescription: LocKey#blackchrome_kashimo_flavor
+  nextUpgradeItem: $(nextTier)
+  tags: ['IllegalItem', 'Cyberware', 'HideInBackpackUI']
+  objectActions: []
+  variants: [Variants.Humanity30CostTinkererVariant]
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_09
+  statModifiers:
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.Reflexes
+      statType: BaseStats.AttunementHelper
+      value: 0.25
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.IsItemIconic
+      value: 1
+    - Items.ItemArmorToArmor
+    - Items.AdvancedIntegumentarySystemModule_inline0
+    - Items.AdvancedBoringPlatingCommon_inline4
+    - Items.AdvancedBoringPlatingCommon_inline5
+    - Items.AdvancedBoringPlatingCommon_inline6
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_kashimo_description
+        floatValues: [$(electricDamage), $(shockChance), $(electricityRes)]
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.ElectricResistance
+          value: $(electricityRes)
+      effectors: 
+        - $type: ApplyStatGroupEffector
+          prereqRecord: Prereqs.MeleeWeaponHeldPrereq
+          applicationTarget: Weapon
+          effectorClassName: ApplyStatGroupEffector
+          statGroup:
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers:
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.ElectricDamage
+                value: $(electricDamage)
+              - $type: ConstantStatModifier
+                modifierType: Additive
+                statType: BaseStats.ElectrocutedApplicationRate
+                value: $(shockChance)
+    - $type: GameplayLogicPackage
+      stackable: true
+      stats: 
+        - $type: CombinedStatModifier
+          modifierType: Additive
+          opSymbol: '*'
+          refObject: Player
+          refStat: BaseStats.Reflexes
+          statType: BaseStats.SmartTargetingDisruptionProbability
+          value: 0.0025
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        iconPath: UIIcon.ReflexesSkill
+        floatValues: [0.5]
+        localizedDescription: LocKey#blackchrome_kashimo_attunment
+        localizedName: LocKey#94152
+        stats: 
+          - BaseStats.AttunementHelper

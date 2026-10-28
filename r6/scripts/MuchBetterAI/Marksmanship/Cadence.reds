@@ -71,6 +71,9 @@ public final static func SelectShootingPatternPackage(weaponOwner: wref<GameObje
     return wrappedMethod(weaponOwner, weapon, records);
   };
   let weaponRecord: ref<WeaponItem_Record> = TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(weapon.GetItemID()));
+  if !IsDefined(weaponRecord) || !IsDefined(weaponRecord.Evolution()) || !IsDefined(weaponRecord.ItemType()) {
+    return wrappedMethod(weaponOwner, weapon, records);
+  };
   if Equals(weaponRecord.Evolution().Type(), gamedataWeaponEvolution.Smart) {
     return wrappedMethod(weaponOwner, weapon, records);
   };
@@ -122,6 +125,9 @@ public final static func SelectShootingPatternPackage(weaponOwner: wref<GameObje
 @wrapMethod(AISubActionShootWithWeapon_Record_Implementation)
 public final static func QueueFirstShot(weapon: wref<WeaponObject>) -> Void {
   wrappedMethod(weapon);
+  if !IsDefined(weapon) {
+    return;
+  };
   let npc: ref<NPCPuppet> = weapon.GetOwner() as NPCPuppet;
   if !MBAI_EnemyEligible(npc) || npc.IsMechanical() {
     return;
@@ -138,6 +144,9 @@ public final static func QueueFirstShot(weapon: wref<WeaponObject>) -> Void {
     return;
   };
   let bb: ref<IBlackboard> = weapon.GetAIBlackboard();
+  if !IsDefined(bb) {
+    return;
+  };
   let base: Float = bb.GetFloat(GetAllBlackboardDefs().AIShooting.nextShotTimeStamp);
   let scaled: Float = ClampF(base * mult, 0.03, 1.1);
   bb.SetFloat(GetAllBlackboardDefs().AIShooting.nextShotTimeStamp, scaled);

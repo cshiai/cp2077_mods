@@ -6,7 +6,9 @@ SRC_DIR="$SCRIPT_DIR/r6/scripts/CustomRedscriptSuite"
 GAME="${GAME:-$HOME/.local/share/Steam/steamapps/common/Cyberpunk 2077}"
 DEST_DIR="$GAME/r6/scripts/CustomRedscriptSuite"
 if [[ -z "${PROTON:-}" ]]; then
-  if [[ -x "/usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton" ]]; then
+  if [[ -n "${PROTON_DIR:-}" && -x "$PROTON_DIR/proton" ]]; then
+    PROTON="$PROTON_DIR/proton"
+  elif [[ -x "/usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton" ]]; then
     PROTON="/usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton"
   else
     PROTON="$HOME/.local/share/Steam/steamapps/common/Proton - Experimental/proton"
@@ -17,6 +19,13 @@ export STEAM_COMPAT_DATA_PATH="${STEAM_COMPAT_DATA_PATH:-$HOME/.local/share/Stea
 export STEAM_COMPAT_CLIENT_INSTALL_PATH="${STEAM_COMPAT_CLIENT_INSTALL_PATH:-$HOME/.local/share/Steam}"
 
 mkdir -p "$DEST_DIR"
+# REDscript unresolved-reference hints are source-controlled inputs too.  Keep
+# them beside the game-side scripts so framework/API diagnostics remain
+# deterministic after a sync.
+if [[ -d "$SCRIPT_DIR/r6/config/redsUserHints" ]]; then
+  mkdir -p "$GAME/r6/config/redsUserHints"
+  cp -a "$SCRIPT_DIR/r6/config/redsUserHints/." "$GAME/r6/config/redsUserHints/"
+fi
 # Keep the imported Much Better AI profile deterministic.  This guard prevents
 # a future additive extraction from silently reintroducing its retired CET,
 # settings, or localization surface.
@@ -105,7 +114,8 @@ if [[ -f "$PLUGIN_DLL" ]]; then
 fi
 
 PATHS_FILE="$(mktemp)"
-trap 'rm -f "$PATHS_FILE"' EXIT
+SCC_OUTPUT="$(mktemp)"
+trap 'rm -f "$PATHS_FILE" "$SCC_OUTPUT"' EXIT
 for plugin_scripts in \
   "$GAME/red4ext/plugins/ArchiveXL/Scripts" \
   "$GAME/red4ext/plugins/Codeware/Scripts" \
@@ -119,6 +129,20 @@ for plugin_scripts in \
   fi
 done
 
-"$PROTON" runinprefix "$GAME/engine/tools/scc.exe" -compile "$GAME/r6/scripts" -compilePathsFile "$PATHS_FILE" -outputCacheFile "$GAME/r6/cache/final.redscripts.modded"
+if ! "$PROTON" runinprefix "$GAME/engine/tools/scc.exe" -compile "$GAME/r6/scripts" -compilePathsFile "$PATHS_FILE" -outputCacheFile "$GAME/r6/cache/final.redscripts.modded" >"$SCC_OUTPUT" 2>&1; then
+  tail -80 "$SCC_OUTPUT"
+  printf 'scc failed; see %s\n' "$GAME/r6/logs/redscript_rCURRENT.log" >&2
+  exit 1
+fi
 
-cat "$GAME/r6/logs/redscript_rCURRENT.log"
+# Keep normal sync output bounded while still surfacing every compiler
+# failure/warning and the authoritative success markers.  The complete log
+# remains at the printed path for focused diagnosis.
+LOG_PATH="$GAME/r6/logs/redscript_rCURRENT.log"
+if grep -Eiq 'compilation has failed|\[ERROR|\b(error|warning)\b' "$LOG_PATH"; then
+  grep -Ei 'compilation has failed|\[ERROR|\b(error|warning)\b|Compilation complete|Output successfully' "$LOG_PATH" | tail -80
+  printf 'log=%s\n' "$LOG_PATH"
+  exit 1
+fi
+grep -E 'Compilation complete|Output successfully|REDScript compilation has failed' "$LOG_PATH" | tail -12
+printf 'log=%s\n' "$LOG_PATH"

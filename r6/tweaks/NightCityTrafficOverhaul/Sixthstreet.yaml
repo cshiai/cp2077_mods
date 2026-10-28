@@ -1,0 +1,174 @@
+# BRENNAN APOLLO
+Vehicle.sixthstreet__brennan_apollo:
+  $base: Vehicle.v_sportbike3_brennan_apollo
+  randomPassengers: [Passengers.SixthstreetDriverEntry]
+  visualTags: [Standard]
+  affiliation: Factions.SixthStreet
+
+# VILLEFORT COLUMBUS
+Vehicle.sixthstreet__villefort_columbus:
+  $base: Vehicle.v_standard25_villefort_columbus_sixth_street
+  appearanceName: villefort_columbus__basic_6th_street_01
+  randomPassengers: [Passengers.SixthstreetDriverEntry, Passengers.SixthstreetPassengerFrontEntry]
+  affiliation: Factions.SixthStreet
+
+# THORTON MACKINAW
+Vehicle.sixthstreet__thorton_mackinaw:
+  $base: Vehicle.v_standard3_thorton_mackinaw_sixth_street
+  appearanceName: thorton_mackinaw__basic_sixth_street
+  randomPassengers: [Passengers.SixthstreetDriverEntry, Passengers.SixthstreetPassengerFrontEntry, Passengers.SixthstreetPassengerBackEntry]
+  affiliation: Factions.SixthStreet
+
+# ARCHER HELLA
+Vehicle.sixthstreet__archer_hella:
+  $base: Vehicle.v_standard2_archer_hella_sixth_street
+  appearanceName: archer_hella__basic_6th_street_01
+  randomPassengers: [Passengers.SixthstreetDriverEntry, Passengers.SixthstreetPassengerFrontEntry, Passengers.SixthstreetPassengerBackEntry]
+  entityTemplatePath: night_city_traffic_overhaul\entities\sixthstreet\archer_hella_sixthstreet.ent
+  affiliation: Factions.SixthStreet
+
+# CHEVALIER THRAX
+Vehicle.sixthstreet__chevalier_thrax:
+  $base: Vehicle.v_standard2_chevalier_thrax_sixth_street
+  appearanceName: chevalier_thrax__basic_6th_street_01
+  randomPassengers: [Passengers.SixthstreetDriverEntry, Passengers.SixthstreetPassengerFrontEntry, Passengers.SixthstreetPassengerBackEntry]
+  affiliation: Factions.SixthStreet
+
+# DRIVERS
+Passengers.SixthstreetDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_igla_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_tactician_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_veteran3_ranged2_ajax_ma
+      weight: 0.2
+  validSlotNames: [seat_front_left]
+
+# RANDOM FRONT PASSENGERS
+
+Passengers.SixthstreetPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.75
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_igla_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_tactician_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_veteran3_ranged2_ajax_ma
+      weight: 0.2
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.sixthstreet_patrol2_melee2_baseball_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.sixthstreet_patrol2_melee2_baton_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.sixthstreet_patrol2_melee2_baseball_wa
+    #   weight: 1
+    # - $type: gamedataWeightedCharacter_Record
+    #   character: Character.sixthstreet_patrol2_melee2_baton_wa
+    #   weight: 1
+  validSlotNames: [seat_front_right]
+
+# RANDOM BACK PASSENGERS
+
+Passengers.SixthstreetPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 0.5
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_nova_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_hooligan_ranged1_saratoga_wa
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_igla_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_menace1_shotgun2_tactician_ma
+      weight: 0.2
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__sixthstreet_veteran3_ranged2_ajax_ma
+      weight: 0.2
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__sixthstreet_hooligan_ranged1_nova_ma:
+  $base: Character.sixthstreet_hooligan_ranged1_nova_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_hooligan_ranged1_nova_wa:
+  $base: Character.sixthstreet_hooligan_ranged1_nova_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_hooligan_ranged1_saratoga_ma:
+  $base: Character.sixthstreet_hooligan_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_hooligan_ranged1_saratoga_wa:
+  $base: Character.sixthstreet_hooligan_ranged1_saratoga_wa
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_menace1_shotgun2_igla_ma:
+  $base: Character.sixthstreet_menace1_shotgun2_igla_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_menace1_shotgun2_tactician_ma:
+  $base: Character.sixthstreet_menace1_shotgun2_tactician_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__sixthstreet_veteran3_ranged2_ajax_ma:
+  $base: Character.sixthstreet_veteran3_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat

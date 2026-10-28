@@ -1,5 +1,7 @@
 module MuchBetterAI.PunishWindows
 
+import SimpleDroneCompanion.*
+
 import MuchBetterAI.Logging.*
 import MuchBetterAI.Core.*
 
@@ -41,6 +43,9 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
 
   private func OnAttach() -> Void {
     let playerSystem: ref<PlayerSystem> = GameInstance.GetPlayerSystem(this.GetGameInstance());
+    if !IsDefined(playerSystem) {
+      return;
+    }
     if this.m_playerAttachedCallbackID == 0u {
       this.m_playerAttachedCallbackID = playerSystem.RegisterPlayerPuppetAttachedCallback(this, n"MBAI_OnPlayerAttached");
     };
@@ -52,6 +57,9 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
   private func OnDetach() -> Void {
     this.MBAI_OnPlayerDetached(this.m_player);
     let playerSystem: ref<PlayerSystem> = GameInstance.GetPlayerSystem(this.GetGameInstance());
+    if !IsDefined(playerSystem) {
+      return;
+    }
     if this.m_playerAttachedCallbackID > 0u {
       playerSystem.UnregisterPlayerPuppetAttachedCallback(this.m_playerAttachedCallbackID);
       this.m_playerAttachedCallbackID = 0u;
@@ -69,9 +77,15 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
       return;
     };
     let bb: ref<IBlackboard> = this.m_player.GetPlayerStateMachineBlackboard();
+    if !IsDefined(bb) {
+      return;
+    };
     this.m_rightWeaponStateHandle = bb.RegisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.RightWeapon, this, n"MBAI_OnPlayerWeaponState");
     this.m_leftWeaponStateHandle = bb.RegisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.LeftWeapon, this, n"MBAI_OnPlayerWeaponState");
     let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
+    if !IsDefined(statPools) {
+      return;
+    };
     let playerStatsID: StatsObjectID = Cast<StatsObjectID>(this.m_player.GetEntityID());
     if !IsDefined(this.m_staminaListener) {
       this.m_staminaListener = new MBAI_StaminaListener();
@@ -85,16 +99,24 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
     if !IsDefined(this.m_player) || playerPuppet != this.m_player {
       return;
     };
+    let bb: ref<IBlackboard> = this.m_player.GetPlayerStateMachineBlackboard();
     if IsDefined(this.m_rightWeaponStateHandle) {
-      this.m_player.GetPlayerStateMachineBlackboard().UnregisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.RightWeapon, this.m_rightWeaponStateHandle);
+      if IsDefined(bb) {
+        bb.UnregisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.RightWeapon, this.m_rightWeaponStateHandle);
+      }
       this.m_rightWeaponStateHandle = null;
     };
     if IsDefined(this.m_leftWeaponStateHandle) {
-      this.m_player.GetPlayerStateMachineBlackboard().UnregisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.LeftWeapon, this.m_leftWeaponStateHandle);
+      if IsDefined(bb) {
+        bb.UnregisterListenerInt(GetAllBlackboardDefs().PlayerStateMachine.LeftWeapon, this.m_leftWeaponStateHandle);
+      }
       this.m_leftWeaponStateHandle = null;
     };
     if IsDefined(this.m_staminaListener) {
-      GameInstance.GetStatPoolsSystem(this.GetGameInstance()).RequestUnregisteringListener(Cast<StatsObjectID>(this.m_player.GetEntityID()), gamedataStatPoolType.Stamina, this.m_staminaListener);
+      let statPools: ref<StatPoolsSystem> = GameInstance.GetStatPoolsSystem(this.GetGameInstance());
+      if IsDefined(statPools) {
+        statPools.RequestUnregisteringListener(Cast<StatsObjectID>(this.m_player.GetEntityID()), gamedataStatPoolType.Stamina, this.m_staminaListener);
+      }
     };
     this.m_player = null;
   }
@@ -126,7 +148,10 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
     let cb: ref<MBAI_PunishEvalCallback> = new MBAI_PunishEvalCallback();
     cb.game = this.GetGameInstance();
     cb.minRank = minRank;
-    GameInstance.GetDelaySystem(this.GetGameInstance()).DelayCallback(cb, 0.02, false);
+    let delaySystem = GameInstance.GetDelaySystem(this.GetGameInstance());
+    if IsDefined(delaySystem) {
+      delaySystem.DelayCallback(cb, 0.02, false);
+    }
     MBAInfo("PunishWindows", "window opened source=" + source + " minRank=" + ToString(minRank));
   }
 
@@ -176,7 +201,10 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
         let applyCb: ref<MBAI_PunishApplyCallback> = new MBAI_PunishApplyCallback();
         applyCb.game = gi;
         applyCb.npcID = target.GetEntityID();
-        GameInstance.GetDelaySystem(gi).DelayCallback(applyCb, delay, false);
+        let delaySystem = GameInstance.GetDelaySystem(gi);
+        if IsDefined(delaySystem) {
+          delaySystem.DelayCallback(applyCb, delay, false);
+        }
         MBAInfo("PunishWindows", "push issued npc=" + ToString(target.GetEntityID()) + " rarity=" + ToString(target.GetNPCRarity()) + " posture=" + MBAI_TemperamentName(MBAI_GetTemperamentScale(target)) + " fast=" + ToString(fast) + " delay=" + ToString(delay) + " dist=" + ToString(bestDist));
         applied += 1;
       };
@@ -233,7 +261,7 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
     if npc.IsDead() || npc.IsMechanical() || !npc.IsEnemy() {
       return 1;
     };
-    if ScriptedPuppet.IsDefeated(npc) || ScriptedPuppet.IsUnconscious(npc) || ScriptedPuppet.IsPlayerCompanion(npc) || GameObject.IsFriendlyTowardsPlayer(npc) {
+    if ScriptedPuppet.IsDefeated(npc) || ScriptedPuppet.IsUnconscious(npc) || ScriptedPuppet.IsPlayerCompanion(npc) || SDC_IsCompanion(npc) || GameObject.IsFriendlyTowardsPlayer(npc) {
       return 1;
     };
     if MBAI_RarityRank(npc.GetNPCRarity()) < minRank {
@@ -248,7 +276,8 @@ public class MBAI_PunishWindowsSystem extends ScriptableSystem {
     if AIActionHelper.CheckAbility(npc, cautiousRec) || AIActionHelper.CheckAbility(npc, defensiveRec) {
       return 4;
     };
-    if !GameInstance.GetTargetingSystem(npc.GetGame()).IsVisibleTarget(npc, player) {
+    let targeting = GameInstance.GetTargetingSystem(npc.GetGame());
+    if !IsDefined(targeting) || !targeting.IsVisibleTarget(npc, player) {
       return 5;
     };
     return 0;
@@ -290,7 +319,8 @@ public class MBAI_PunishApplyCallback extends DelayCallback {
       return;
     };
     let player: ref<PlayerPuppet> = GetPlayer(this.game);
-    if !IsDefined(player) || !GameInstance.GetTargetingSystem(this.game).IsVisibleTarget(npc, player) {
+    let targeting = GameInstance.GetTargetingSystem(this.game);
+    if !IsDefined(player) || !IsDefined(targeting) || !targeting.IsVisibleTarget(npc, player) {
       return;
     };
     let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(this.game));

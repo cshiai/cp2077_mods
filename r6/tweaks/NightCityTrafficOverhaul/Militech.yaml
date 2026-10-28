@@ -1,0 +1,105 @@
+  
+# CHEVALIER EMPEROR
+Vehicle.militech__chevalier_emperor:
+  $base: Vehicle.v_standard3_chevalier_emperor_militech
+  randomPassengers: [Passengers.MilitechDriverEntry, Passengers.MilitechPassengerFrontEntry, Passengers.MilitechPassengerBackEntry]
+  affiliation: Factions.Militech
+
+# MILITECH BEHEMOTH
+Vehicle.utility__militech_behemoth:
+  $base: Vehicle.v_utility4_militech_behemoth
+  entityTemplatePath: night_city_traffic_overhaul\entities\utility\militech_behemoth_utility.ent
+  appearanceName: militech_behemoth_basic_base_01
+  randomPassengers: [Passengers.MilitechDriverEntry, Passengers.MilitechPassengerFrontEntry, Passengers.MilitechPassengerBackEntry]
+  affiliation: Factions.Militech
+
+# PATROL
+Passengers.MilitechDriverEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Driver
+  characterRecords:
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_lexington_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_saratoga_ma
+      weight: 1
+  validSlotNames: [seat_front_left]
+
+Passengers.MilitechPassengerFrontEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_lexington_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger2_ranged2_ajax_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger2_ranged2_omaha_ma
+      weight: 0.5
+  validSlotNames: [seat_front_right]
+
+Passengers.MilitechPassengerBackEntry:
+  $type: gamedataRandomPassengerEntry_Record
+  probability: 1
+  role: Passenger
+  characterRecords: 
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_lexington_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger1_ranged1_saratoga_ma
+      weight: 1
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger2_ranged2_ajax_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_ranger2_ranged2_omaha_ma
+      weight: 0.5
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_tech_franged2_omaha_ma_rare
+      weight: 0.25
+    - $type: gamedataWeightedCharacter_Record
+      character: Character.ncto__militech_tech_grenadier2_omaha_ma_rare
+      weight: 0.25
+  validSlotNames: [seat_back_left, seat_back_right]
+
+
+# CHARACTERS
+
+Character.ncto__militech_ranger1_ranged1_lexington_ma:
+  $base: Character.militech_ranger1_ranged1_lexington_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__militech_ranger1_ranged1_saratoga_ma:
+  $base: Character.militech_ranger1_ranged1_saratoga_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__militech_ranger2_ranged2_ajax_ma:
+  $base: Character.militech_ranger2_ranged2_ajax_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__militech_ranger2_ranged2_omaha_ma:
+  $base: Character.militech_ranger2_ranged2_omaha_ma
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__militech_tech_franged2_omaha_ma_rare:
+  $base: Character.militech_tech_franged2_omaha_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat
+
+Character.ncto__militech_tech_grenadier2_omaha_ma_rare:
+  $base: Character.militech_tech_grenadier2_omaha_ma_rare
+  tags:
+    - !append pcf_GangerCanRetreat

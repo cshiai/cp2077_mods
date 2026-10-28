@@ -268,8 +268,7 @@ public abstract class UniversalSlotsHelper {
 
   @if(ModuleExists("SlotsSlotsSlots.Core"))
   public final static func IsSSSRangedSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = SSS_Ids.Ranged();
-    return ArrayContains(slots, slotID);
+    return SSS_Ids.IsRanged(slotID);
   }
 
   @if(!ModuleExists("SlotsSlotsSlots.Core"))
@@ -279,8 +278,7 @@ public abstract class UniversalSlotsHelper {
 
   @if(ModuleExists("SlotsSlotsSlots.Core"))
   public final static func IsSSSMeleeSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = SSS_Ids.Melee();
-    return ArrayContains(slots, slotID);
+    return SSS_Ids.IsMelee(slotID);
   }
 
   @if(!ModuleExists("SlotsSlotsSlots.Core"))
@@ -290,8 +288,7 @@ public abstract class UniversalSlotsHelper {
 
   @if(ModuleExists("SlotsSlotsSlots.Core"))
   public final static func IsSSSArmsSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = SSS_Ids.Arms();
-    return ArrayContains(slots, slotID);
+    return SSS_Ids.IsArms(slotID);
   }
 
   @if(!ModuleExists("SlotsSlotsSlots.Core"))
@@ -300,21 +297,89 @@ public abstract class UniversalSlotsHelper {
   }
 
   public final static func IsRangedWeaponModSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = UniversalSlotsHelper.GetAllRangedWeaponModSlots();
-    return ArrayContains(slots, slotID)
-      || UniversalSlotsHelper.IsSSSRangedSlot(slotID);
+    switch slotID {
+      case t"AttachmentSlots.GenericWeaponMod1":
+      case t"AttachmentSlots.GenericWeaponMod2":
+      case t"AttachmentSlots.GenericWeaponMod3":
+      case t"AttachmentSlots.GenericWeaponMod4":
+      case t"AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1":
+      case t"AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2":
+      case t"AttachmentSlots.Power_AR_SMG_LMG_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Power_AR_SMG_LMG_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod1":
+      case t"AttachmentSlots.Tech_AR_SMG_LMG_WeaponMod2":
+      case t"AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod1":
+      case t"AttachmentSlots.Smart_AR_SMG_LMG_WeaponMod2":
+      case t"AttachmentSlots.Power_Handgun_WeaponMod1":
+      case t"AttachmentSlots.Power_Handgun_WeaponMod2":
+      case t"AttachmentSlots.Power_Handgun_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Power_Handgun_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Tech_Handgun_WeaponMod1":
+      case t"AttachmentSlots.Tech_Handgun_WeaponMod2":
+      case t"AttachmentSlots.Tech_Handgun_WeaponMod3":
+      case t"AttachmentSlots.Tech_Handgun_WeaponMod4":
+      case t"AttachmentSlots.Smart_Handgun_WeaponMod1":
+      case t"AttachmentSlots.Smart_Handgun_WeaponMod2":
+      case t"AttachmentSlots.Smart_Handgun_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Smart_Handgun_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod1":
+      case t"AttachmentSlots.Power_Precision_Sniper_Rifle_WeaponMod2":
+      case t"AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1":
+      case t"AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2":
+      case t"AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Tech_Precision_Sniper_Rifle_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1":
+      case t"AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2":
+      case t"AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Smart_Precision_Sniper_Rifle_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Power_Shotgun_WeaponMod1":
+      case t"AttachmentSlots.Power_Shotgun_WeaponMod2":
+      case t"AttachmentSlots.Power_Shotgun_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Power_Shotgun_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Tech_Shotgun_WeaponMod1":
+      case t"AttachmentSlots.Tech_Shotgun_WeaponMod2":
+      case t"AttachmentSlots.Smart_Shotgun_WeaponMod1":
+      case t"AttachmentSlots.Smart_Shotgun_WeaponMod2":
+        return true;
+      default:
+        return UniversalSlotsHelper.IsSSSRangedSlot(slotID);
+    }
   }
 
   public final static func IsMeleeWeaponModSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = UniversalSlotsHelper.GetAllMeleeWeaponModSlots();
-    return ArrayContains(slots, slotID)
-      || UniversalSlotsHelper.IsSSSMeleeSlot(slotID);
+    switch slotID {
+      case t"AttachmentSlots.MeleeWeaponMod1":
+      case t"AttachmentSlots.MeleeWeaponMod2":
+      case t"AttachmentSlots.MeleeWeaponMod3":
+      case t"AttachmentSlots.Blade_WeaponMod1":
+      case t"AttachmentSlots.Blade_WeaponMod2":
+      case t"AttachmentSlots.Blade_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Blade_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Blunt_WeaponMod1":
+      case t"AttachmentSlots.Blunt_WeaponMod2":
+      case t"AttachmentSlots.Blunt_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Blunt_WeaponMod2_Collectible":
+      case t"AttachmentSlots.Throwable_WeaponMod1":
+      case t"AttachmentSlots.Throwable_WeaponMod2":
+      case t"AttachmentSlots.Throwable_WeaponMod1_Collectible":
+      case t"AttachmentSlots.Throwable_WeaponMod2_Collectible":
+        return true;
+      default:
+        return UniversalSlotsHelper.IsSSSMeleeSlot(slotID);
+    }
   }
 
   public final static func IsCyberwareArmModSlot(slotID: TweakDBID) -> Bool {
-    let slots: array<TweakDBID> = UniversalSlotsHelper.GetAllCyberwareArmModSlots();
-    return ArrayContains(slots, slotID)
-      || UniversalSlotsHelper.IsSSSArmsSlot(slotID);
+    switch slotID {
+      case t"AttachmentSlots.StrongArmsBattery":
+      case t"AttachmentSlots.MantisBladesRotor":
+      case t"AttachmentSlots.NanoWiresBattery":
+      case t"AttachmentSlots.ProjectileLauncherWiring":
+      case t"AttachmentSlots.ArmsCyberwareGeneralSlot":
+        return true;
+      default:
+        return UniversalSlotsHelper.IsSSSArmsSlot(slotID);
+    }
   }
 
   public final static func IsUniversalPartCompatibleWithSlot(partType: gamedataItemType, slotID: TweakDBID) -> Bool {
@@ -353,8 +418,7 @@ public abstract class UniversalSlotsHelper {
   }
 
   public final static func NormalizeSlotForUI(slotID: TweakDBID) -> TweakDBID {
-    let vanillaArmSlots: array<TweakDBID> = UniversalSlotsHelper.GetAllCyberwareArmModSlots();
-    if ArrayContains(vanillaArmSlots, slotID) {
+    if UniversalSlotsHelper.IsCyberwareArmModSlot(slotID) {
       return t"AttachmentSlots.GenericWeaponMod1";
     }
     return slotID;
@@ -783,6 +847,53 @@ public final func GetPlayerInventoryPartsForItemRef(item: ItemID, const slotIDs:
     }
     slotIndex += 1;
   }
+
+  // The vanilla query also removes weapon mods that are absent from the
+  // weapon's SlotPartList.  SSS and the universal placement rules deliberately
+  // make every weapon-mod family interchangeable, so recover those parts from
+  // the complete player inventory as well (including duplicate stack IDs).
+  let allInventoryItems = this.GetPlayerInventoryData();
+  let inventoryIndex = 0;
+  while inventoryIndex < ArraySize(allInventoryItems) {
+    let candidate = allInventoryItems[inventoryIndex];
+    let partType = InventoryItemData.GetItemType(candidate);
+    let matchesRequestedSlot = false;
+    let requestedSlotIndex = 0;
+    while requestedSlotIndex < ArraySize(Deref(slotIDs)) {
+      if UniversalSlotsHelper.IsUniversalPartCompatibleWithSlot(partType, Deref(slotIDs)[requestedSlotIndex]) {
+        matchesRequestedSlot = true;
+        break;
+      }
+      requestedSlotIndex += 1;
+    }
+    if !InventoryItemData.IsEmpty(candidate)
+      && InventoryItemData.IsPart(candidate)
+      && matchesRequestedSlot
+      && (UniversalSlotsHelper.IsAnyWeaponModType(partType)
+        || UniversalSlotsHelper.IsScopePartType(partType)
+        || UniversalSlotsHelper.IsMuzzlePartType(partType)) {
+      let alreadyPresent = false;
+      let outputIndex = 0;
+      while outputIndex < ArraySize(Deref(outputItems)) {
+        if InventoryItemData.GetID(Deref(outputItems)[outputIndex]) == InventoryItemData.GetID(candidate) {
+          alreadyPresent = true;
+          break;
+        }
+        outputIndex += 1;
+      }
+
+      if !alreadyPresent {
+        let quantity = InventoryItemData.GetQuantity(candidate)
+          - this.GetQunatityToFilterOut(InventoryItemData.GetID(candidate), filteredItems);
+        if quantity > 0 {
+          InventoryItemData.SetQuantity(candidate, quantity);
+          InventoryItemData.SetIsRequirementMet(candidate, true);
+          ArrayPush(Deref(outputItems), candidate);
+        }
+      }
+    }
+    inventoryIndex += 1;
+  }
 }
 
 // ============================================================================
@@ -999,6 +1110,7 @@ private final func InstallItemPart(obj: ref<GameObject>, itemID: ItemID, partIte
   let partInstallRequest: ref<PartInstallRequest>;
   let previousItemType: gamedataItemType;
   let previousPartID: ItemID;
+  let previousPartStillInstalled: Bool;
   let result: Bool;
   if !IsDefined(obj) || !ItemID.IsValid(itemID) || !ItemID.IsValid(partItemID) {
     return false;
@@ -1022,7 +1134,22 @@ private final func InstallItemPart(obj: ref<GameObject>, itemID: ItemID, partIte
   itemData.GetItemPart(partData, slotID);
   previousPartID = InnerItemData.GetItemID(partData);
   if ItemID.IsValid(previousPartID) {
-    this.RemovePartEquipGLPs(obj, previousPartID);
+    // GLPs are keyed by ItemID, not by attachment slot.  Do not remove the
+    // package globally when another slot still contains the same deterministic
+    // mod; otherwise duplicate mods stop stacking after a replacement.
+    let allSlots = ItemModificationSystem.GetAllSlots(obj, itemID);
+    let slotIndex = 0;
+    while slotIndex < ArraySize(allSlots) {
+      if allSlots[slotIndex].slotID != slotID
+        && allSlots[slotIndex].installedPart == previousPartID {
+        previousPartStillInstalled = true;
+        break;
+      }
+      slotIndex += 1;
+    }
+    if !previousPartStillInstalled {
+      this.RemovePartEquipGLPs(obj, previousPartID);
+    }
   }
   result = ts.ForcePartInSlot(obj, itemID, partItemID, slotID);
   if Equals(itemType, gamedataItemType.Prt_Program) {

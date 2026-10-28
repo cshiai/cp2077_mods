@@ -13,7 +13,9 @@ public func MBAI_IsWeaponSilenced(weapon: ref<WeaponObject>, gi: GameInstance) -
   if !IsDefined(weapon) {
     return false;
   };
-  return GameInstance.GetStatsSystem(gi).GetStatValue(Cast<StatsObjectID>(weapon.GetEntityID()), gamedataStatType.CanSilentKill) > 0.0;
+  let stats = GameInstance.GetStatsSystem(gi);
+  return IsDefined(stats)
+    && stats.GetStatValue(Cast<StatsObjectID>(weapon.GetEntityID()), gamedataStatType.CanSilentKill) > 0.0;
 }
 
 public func MBAI_Silenced_HeardRange(wt: gamedataItemType) -> Float {

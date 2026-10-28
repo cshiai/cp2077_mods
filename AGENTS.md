@@ -21,13 +21,14 @@ Do not add new manifest/catalog/diagnostic files to “document” this policy. 
 
 Track source and intentionally shipped runtime payloads only:
 
-- `r6/scripts/` — 125 REDscript sources grouped by mod;
-- `r6/tweaks/` — the 52 active TweakXL YAML/YML inputs;
+- `r6/scripts/` — 150 REDscript sources grouped by mod;
+- `r6/tweaks/` — the 53 active TweakXL YAML/YML inputs;
+- `r6/config/redsUserHints/` — source-controlled redscript unresolved-reference hints;
 - `r6/storages/` — intentionally shipped documentation/config payloads when a current mod requires them;
 - `red4ext/plugins/` — bundled framework/plugin runtime files and their REDscript APIs;
 - `native_plugins/UniversalAimFlashlight/` — C++ source, build script, and the built plugin used by this profile;
 - `archive/pc/mod/` — intentionally selected game assets (`.archive`/`.xl`), not download archives;
-- `r6/scripts/SimpleDroneCompanion/` and `r6/tweaks/SimpleDroneCompanion.yaml` — the selected four-session-bound-drone companion profile (two Minotaurs plus two Octants); no CET/Lua/Mod Settings/localization/economy layer;
+- `r6/scripts/SimpleDroneCompanion/` and `r6/tweaks/SimpleDroneCompanion.yaml` — the selected six-session-bound-drone companion profile (two Minotaurs, two Octants, and two Cerberus units); no CET/Lua/Mod Settings/localization/economy layer;
 - `sync_and_compile.sh`, `README.md`, and design notes.
 - `launch-cyberpunk2077-proton-experimental.sh` — guarded Proton runtime entry; it must refuse unvalidated Steam builds.
 
@@ -42,13 +43,14 @@ The profile targets Cyberpunk 2077 2.5 on Steam/Proton and is source-first. The 
 - Keep the custom `UniversalAimFlashlight` RED4ext plugin and its REDscript companion coherent. Rebuild the DLL when `Main.cpp` or SDK-facing types change; do not hand-edit a generated binary.
 - RedFunctions is retired from this profile because its native plugin is incompatible with the current game build. Do not restore its DLL, name table, REDscript stubs, or configuration-framework documentation unless it receives a verified current-build release and an explicit reintroduction decision.
 - The imported Much Better AI profile is deliberately fixed and source-controlled: do not restore its upstream CET Lua bootstrap, Native Settings UI, JSON settings store, localization packages, runtime config class, or runtime parameter overrides. Its gameplay records belong in `r6/tweaks/MuchBetterAI/` and its constants belong in the REDscript source; tune them through Git only.
-- `SimpleDroneCompanion` is currently source/compile validated only. Do not launch the game or claim follower, combat, save/load, or performance success until the user explicitly requests its focused smoke test; keep its vanilla-record seam, fixed fallback interfaces, and four-slot lifecycle source-controlled.
+- `SimpleDroneCompanion` is currently source/compile validated only. Do not launch the game or claim follower, combat, save/load, or performance success until the user explicitly requests its focused smoke test; keep its vanilla-record seam, fixed fallback interfaces, and six-slot lifecycle source-controlled.
 - The former duplicate-quickhack/extra-cyberdeck-slot feature in `UniversalSlotsAndAttachments` and `SlotsSlotsSlots` is retired. Do not restore duplicate quickhack filters, cyberdeck program slots 9–16, or the monowire quickhack-slot bypass; vanilla quickhack inventory, deduplication, and installation paths are authoritative.
 - The Weather Probability Rebalance payload is archive-only (`archive/pc/mod/weather_probability_rebalance.archive`). Do not invent a settings/CET layer for it.
 - FX Begone and Load Begone are fixed source profiles: their upstream Mod Settings annotations/listeners were removed, no CET payload is installed, and their RED4ext native companions remain mandatory for the functionality they expose. Do not restore user.ini/Mod Settings overrides; change the fixed defaults in Git.
 - Blur Begone 2.6.0 and ReFRACT 1.5.0 are fixed source profiles: their upstream Mod Settings menus, hotkeys, and runtime tuning wrappers were removed. Keep the paired native DLLs and REDscript APIs together, apply reviewed constants from source, and do not restore Mod Settings/CET configuration layers.
 - Black Chrome is a fixed ArchiveXL/TweakXL profile: its CET reward bootstrap and optional Alternative Berserk bridge are retired, and its native/effector code must remain guarded and lifecycle-safe.
 - Night City Traffic Overhaul is a fixed source-controlled 2.50 fork: Mod Settings/listeners and RedLogger diagnostics are removed. Factions Evolved's 2.50 traffic/faction data is source-controlled under `r6/tweaks/zz_FactionsEvolved/`, but records whose external vehicle bases are absent from the current installation must stay pruned from the active TweakXL payload. The audited Reinforcements overlay remains quarantined/inactive because its vehicle/character references produced current-build TweakXL warnings; do not restore it until its dependencies are installed and revalidated. `StreetActivity` owns the narrow reaction bridge, quiet gang-seed scheduler, EMRS-shared encounter cloning, and PCF retreat integration.
+- Immersive Night City Fixes is a fixed 2.5 ArchiveXL/Codeware profile under `r6/scripts/INCF-CORE/`, `archive/pc/mod/#INCF-CORE.archive`, `archive/pc/mod/INCF.archive`, and `archive/pc/mod/INCF.xl`. Its upstream particle setting and dependency popup were removed; magazine-debris suppression is source-controlled, resource/entity callbacks are idempotent and detached on teardown, and missing-core popup retries are generation-bound/capped. It has no CET/Lua, Native Settings, runtime JSON, TweakDB records, or native DLL.
 - `CyberwareEx`, `QuestGuide`, `EnemyMultiplierRedscript`, and `SimpleDroneCompanion` use Codeware APIs. `CyberwareEx` also checks TweakXL; `SimpleDroneCompanion` uses Codeware's DynamicEntitySystem and its static weapon/subcharacter records require TweakXL. Tweak YAMLs require TweakXL; ArchiveXL supplies the bundled `.xl` resources and Mod Settings integration where present.
 - Do not silently replace a framework with a similarly named fork. Confirm API compatibility in source and compile output first.
 - Steam may update normally. Keep the existing build guard and NVIDIA/Proton launch policy; never bypass a guard or claim runtime compatibility solely from a successful local edit. Build `26161058` is the current reassessed baseline: the latest runtime log shows seven plugins loaded, RED4ext started, and `scc` invoked successfully. A future changed build requires a focused compile and runtime smoke test before enabling more code.

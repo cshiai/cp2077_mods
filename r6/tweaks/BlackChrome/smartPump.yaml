@@ -1,0 +1,93 @@
+BlackChrome.SmartBloodPump$(tier):
+  $instances:
+    - { tier: Uncommon, nextTier: BlackChrome.SmartBloodPumpUncommonPlus, instantHeal: 45, overTimeHeal: 9 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.SmartBloodPumpRare, instantHeal: 50, overTimeHeal: 10 }
+    - { tier: Rare, nextTier: BlackChrome.SmartBloodPumpRarePlus, instantHeal: 60, overTimeHeal: 12 }
+    - { tier: RarePlus, nextTier: BlackChrome.SmartBloodPumpEpic, instantHeal: 65, overTimeHeal: 13 }
+    - { tier: Epic, nextTier: BlackChrome.SmartBloodPumpEpicPlus, instantHeal: 70, overTimeHeal: 15 }
+    - { tier: EpicPlus, nextTier: BlackChrome.SmartBloodPumpLegendary, instantHeal: 75, overTimeHeal: 16 }    
+    - { tier: Legendary, nextTier: BlackChrome.SmartBloodPumpLegendaryPlus, instantHeal: 85, overTimeHeal: 17 }
+    - { tier: LegendaryPlus, nextTier: BlackChrome.SmartBloodPumpLegendaryPlusPlus, instantHeal: 100, overTimeHeal: 20 }   
+    - { tier: LegendaryPlusPlus, nextTier: None, instantHeal: 110, overTimeHeal: 23 }   
+  $base: Items.AdvancedBloodPump$(tier)
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_11
+  quality: Quality.$(tier)
+  displayName: LocKey#blackchrome_smartPump_name
+  localizedDescription: LocKey#blackchrome_smartPump_flavor
+  tags: ['Cyberware', 'HideInBackpackUI', 'BlackChrome.SmartPumps']
+  objectActions: 
+    - $base: CyberwareAction.UseBloodPump
+      completionEffects: 
+        - $base: CyberwareAction.UseBloodPump_inline6
+          statusEffect: 
+            $base: BaseStatusEffect.BloodPumpBuff
+            packages:
+              - $base: BaseStatusEffect.BloodPumpBuff_inline0
+                effectors: 
+                  - $base: BaseStatusEffect.BloodPumpBuff_inline1
+                    poolModifier: 
+                      $type: PoolValueModifier
+                      delayOnChange: true
+                      enabled: true
+                      rangeBegin: 0
+                      rangeEnd: 9999
+                      startDelay: 1
+                      usingPointValues: true
+                      valuePerSec: $(overTimeHeal)
+                  - Effectors.UsedHealingItemOrCyberwareEffector
+        - CyberwareAction.UseBloodPump_inline7
+        - CyberwareAction.UseBloodPump_inline11
+      startEffects: 
+        - ItemAction.UseHealCharge_inline0
+        - $base: CyberwareAction.UseBloodPump_inline2
+          effectorToTrigger: 
+            $base: CyberwareAction.UseBloodPump_inline3
+            statPoolUpdates: 
+              - $base: CyberwareAction.UseBloodPump_inline4
+                statModifiers: []
+                statPoolValue: $(instantHeal)
+        - CyberwareAction.BloodPumpSFXObjectActionEffect
+        - CyberwareAction.BloodPumpVFXObjectActionEffect
+  nextUpgradeItem: $(nextTier)
+  variants: [Variants.Humanity25Cost]
+  statModifiers:
+    - Items.ItemArmorToArmor
+    - Items.AdvancedCardiovascularSystemModule_inline0
+    - $base: Items.AdvancedBloodPumpCommon_inline8
+      value: 0.5
+  OnEquip: 
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        floatValues: [$(instantHeal), $(overTimeHeal), 6]
+        localizedDescription: LocKey#blackchrome_smartPump_description
+      stats: 
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BiomonEquipped
+          value: 1
+      effectors: 
+        - Items.HealthMonitorSFXEffector
+        - $base: Items.HealthMonitorEffector
+          effectorClassName: Phoenicia.BlackChrome.UseSmartPumpEffector
+          prereqRecord: 
+            $type: MultiPrereq
+            aggregationType: AND
+            prereqClassName: gameMultiPrereq
+            nestedPrereqs: 
+              - $base: Items.HealthMonitorEffector_inline1
+                valueToCheck: 
+                  - $type: ConstantStatModifier
+                    modifierType: Additive
+                    value: 40
+              - Items.HealthMonitorEffector_inline3
+              - Items.HealthMonitorEffector_inline5
+              - Items.HealthMonitorEffector_inline7
+              - Items.HealthMonitorEffector_inline8
+              - Items.HealthMonitorEffector_inline9
+              - Items.HealthMonitorEffector_inline10
+              - Items.HealthMonitorEffector_inline11
+              - Items.HealthMonitorEffector_inline12
+    - Attunements.BodyHealth

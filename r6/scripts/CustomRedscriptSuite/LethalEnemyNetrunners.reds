@@ -27,6 +27,19 @@ public class CENSettings {
   public let hackCooldownPercent: Float = 50.0;
 }
 
+// Fixed-profile constants.  Hot hooks (hack updates, hit handling, and
+// minimap refreshes) should not allocate a settings object just to read an
+// immutable value.
+public func CEN_LinkLineMode() -> CENRevealMode { return CENRevealMode.WhileRooted; }
+public func CEN_MinimapMarkerMode() -> CENRevealMode { return CENRevealMode.WhileRooted; }
+public func CEN_EarlyRelease() -> Bool { return true; }
+public func CEN_RootDuration() -> Float { return 2.0; }
+public func CEN_RootUploadPercent() -> Float { return 20.0; }
+public func CEN_ProximityCancelsHack() -> Bool { return true; }
+public func CEN_HitInterruptCount() -> Int32 { return 8; }
+public func CEN_HitInterruptCountNormal() -> Int32 { return 2; }
+public func CEN_HitWindow() -> Float { return 5.0; }
+
 public func CEN_ProximityRange() -> Float {
   return 6.0;
 }
@@ -104,7 +117,7 @@ private final func CEN_ClearRevealModifiers() -> Void {
   };
   if EntityID.IsDefined(this.m_cenRevealProxyID) {
     let proxy = GameInstance.FindEntityByID(this.GetGame(), this.m_cenRevealProxyID) as GameObject;
-    if IsDefined(proxy) { this.ForceVisionAppearanceNetrunner(proxy, this.m_cenRevealNetrunnerID, n"EnemyNetrunner", false); };
+    if IsDefined(proxy) { this.ForceVisionAppearanceNetrunner(proxy, this.m_cenRevealProxyID, n"EnemyNetrunner", false); };
   };
   let emptyID: EntityID;
   this.m_cenRevealNetrunnerID = emptyID;
@@ -119,7 +132,7 @@ public final func CEN_BeginRelease(now: Float) -> Void {
   this.m_cenCancelling = false;
   this.m_cenHitCount = 0;
   this.m_cenHitWindowStart = now;
-  if Equals((new CENSettings()).linkLine, CENRevealMode.WhileRooted) {
+  if Equals(CEN_LinkLineMode(), CENRevealMode.WhileRooted) {
     this.CEN_HideLink();
   };
 }
@@ -142,7 +155,11 @@ public final func CEN_CancelUpload() -> Void {
 
 @addMethod(ScriptedPuppet)
 public final func CEN_HideLink() -> Void {
-  let bb: ref<IBlackboard> = this.GetAIControllerComponent().GetActionBlackboard();
+  let ai = this.GetAIControllerComponent();
+  if !IsDefined(ai) {
+    return;
+  };
+  let bb: ref<IBlackboard> = ai.GetActionBlackboard();
   if !IsDefined(bb) {
     return;
   };
@@ -164,6 +181,9 @@ public final func CEN_HideLink() -> Void {
 }
 
 public func CEN_UploadTime(context: ScriptExecutionContext, record: wref<AISubActionQuickHack_Record>, caster: ref<ScriptedPuppet>) -> Float {
+  if !IsDefined(record) || !IsDefined(caster) {
+    return 0.0;
+  };
   let result: wref<ObjectAction_Record> = record.ActionResult();
   let target: wref<GameObject>;
   if !IsDefined(result) || !AIActionTarget.GetObject(context, record.Target(), target) {
@@ -179,8 +199,7 @@ public func CEN_UploadTime(context: ScriptExecutionContext, record: wref<AISubAc
 
 @wrapMethod(AISubActionQuickHack_Record_Implementation)
 public final static func Update(context: ScriptExecutionContext, record: wref<AISubActionQuickHack_Record>, const duration: Float) -> AIbehaviorUpdateOutcome {
-  let settings: ref<CENSettings> = new CENSettings();
-  if !settings.earlyRelease || CEN_IsRevealAction(record) {
+  if !CEN_EarlyRelease() || CEN_IsRevealAction(record) {
     return wrappedMethod(context, record, duration);
   };
   let vanilla: AIbehaviorUpdateOutcome = wrappedMethod(context, record, duration);
@@ -196,7 +215,7 @@ public final static func Update(context: ScriptExecutionContext, record: wref<AI
     caster.m_cenHackStart = now;
     caster.m_cenUploadTime = CEN_UploadTime(context, record, caster);
   };
-  if now - caster.m_cenHackStart < MaxF(settings.rootDuration, caster.m_cenUploadTime * settings.rootUploadPercent * 0.01) {
+  if now - caster.m_cenHackStart < MaxF(CEN_RootDuration(), caster.m_cenUploadTime * CEN_RootUploadPercent() * 0.01) {
     return vanilla;
   };
   if !caster.m_cenUploading {
@@ -207,15 +226,14 @@ public final static func Update(context: ScriptExecutionContext, record: wref<AI
 
 @wrapMethod(AISubActionQuickHack_Record_Implementation)
 public final static func CancelConnection(context: ScriptExecutionContext, record: wref<AISubActionQuickHack_Record>) -> Void {
-  let settings: ref<CENSettings> = new CENSettings();
-  if settings.earlyRelease && !CEN_IsRevealAction(record) {
+  if CEN_EarlyRelease() && !CEN_IsRevealAction(record) {
     let caster: ref<ScriptedPuppet> = ScriptExecutionContext.GetOwner(context) as ScriptedPuppet;
     if IsDefined(caster) {
       if caster.m_cenUploading {
         ScriptExecutionContext.SetArgumentObject(context, n"NetrunnerProxy", null);
         return;
       };
-      if !settings.proximityCancelsHack {
+      if !CEN_ProximityCancelsHack() {
         let player: ref<PlayerPuppet> = GetPlayer(caster.GetGame());
         if IsDefined(player) && Vector4.Distance(player.GetWorldPosition(), caster.GetWorldPosition()) <= CEN_ProximityRange() {
           caster.CEN_BeginRelease(EngineTime.ToFloat(GameInstance.GetSimTime(caster.GetGame())));
@@ -294,9 +312,8 @@ protected cb func OnHit(evt: ref<gameHitEvent>) -> Bool {
   if !IsDefined(evt.attackData) || !IsDefined(evt.attackData.GetInstigator() as PlayerPuppet) {
     return result;
   };
-  let settings: ref<CENSettings> = new CENSettings();
   let now: Float = EngineTime.ToFloat(GameInstance.GetSimTime(this.GetGame()));
-  if now - this.m_cenHitWindowStart > settings.hitWindow {
+  if now - this.m_cenHitWindowStart > CEN_HitWindow() {
     this.m_cenHitWindowStart = now;
     this.m_cenHitCount = 0;
   };
@@ -308,8 +325,8 @@ protected cb func OnHit(evt: ref<gameHitEvent>) -> Bool {
   };
   let rarity: gamedataNPCRarity = this.GetNPCRarity();
   let limit: Int32 = Equals(rarity, gamedataNPCRarity.Boss) || Equals(rarity, gamedataNPCRarity.MaxTac)
-      ? settings.hitInterruptCount
-      : settings.hitInterruptCountNormal;
+      ? CEN_HitInterruptCount()
+      : CEN_HitInterruptCountNormal();
   if this.m_cenHitCount >= limit {
     this.CEN_CancelUpload();
   };
@@ -319,9 +336,9 @@ protected cb func OnHit(evt: ref<gameHitEvent>) -> Bool {
 @replaceMethod(ScriptedPuppet)
 protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent>) -> Bool {
   if !IsDefined(evt) { return false; }
-  let settings: ref<CENSettings> = new CENSettings();
   let statMod: ref<gameStatModifierData>;
-  let bb: ref<IBlackboard> = this.GetAIControllerComponent().GetActionBlackboard();
+  let ai = this.GetAIControllerComponent();
+  let bb: ref<IBlackboard> = IsDefined(ai) ? ai.GetActionBlackboard() : null;
   if IsDefined(bb) {
     bb.SetVariant(GetAllBlackboardDefs().AIAction.netrunner, ToVariant(evt.netrunnerID));
     bb.SetVariant(GetAllBlackboardDefs().AIAction.netrunnerProxy, ToVariant(evt.proxyID));
@@ -332,10 +349,10 @@ protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent
   if IsDefined(player) && IsDefined(stats) && evt.targetID == player.GetEntityID() {
     this.CEN_ClearRevealModifiers();
     this.ToggleForcedVisibilityInAnimSystem(n"pingNetworkLink", true, 0.00, evt.from);
-    if NotEquals(settings.linkLine, CENRevealMode.Hidden) {
+    if NotEquals(CEN_LinkLineMode(), CENRevealMode.Hidden) {
       this.GetPS().DrawBetweenEntities(true, false, this.GetFxResourceByKey(n"pingNetworkLink"), evt.to, evt.from, false, false, false, false, true);
     };
-    if GameInstance.GetStatsSystem(this.GetGame()).GetStatValue(Cast<StatsObjectID>(evt.targetID), gamedataStatType.RevealNetrunnerWhenHacked) > 0.00 {
+    if stats.GetStatValue(Cast<StatsObjectID>(evt.targetID), gamedataStatType.RevealNetrunnerWhenHacked) > 0.00 {
       let netrunner = GameInstance.FindEntityByID(this.GetGame(), evt.netrunnerID) as GameObject;
       if IsDefined(netrunner) && EntityID.IsDefined(evt.netrunnerID) {
         this.ForceVisionAppearanceNetrunner(netrunner, evt.netrunnerID, n"EnemyNetrunner", true);
@@ -367,7 +384,7 @@ protected func Update() -> Void {
   if !this.m_isNetrunner {
     return;
   };
-  let mode: CENRevealMode = (new CENSettings()).minimapMarker;
+  let mode: CENRevealMode = CEN_MinimapMarkerMode();
   if Equals(mode, CENRevealMode.Shown) || (Equals(mode, CENRevealMode.WhileRooted) && this.m_isHacking) {
     return;
   };
@@ -377,7 +394,9 @@ protected func Update() -> Void {
 
 @replaceMethod(SensorDevice)
 protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent>) -> Bool {
-  let settings: ref<CENSettings> = new CENSettings();
+  if !IsDefined(evt) {
+    return false;
+  };
   let ps: ref<SensorDeviceControllerPS> = this.GetDevicePS();
   if !IsDefined(ps) {
     return false;
@@ -385,7 +404,7 @@ protected cb func OnNetworkLinkQuickhackEvent(evt: ref<NetworkLinkQuickhackEvent
   ps.SetNetrunnerID(evt.netrunnerID);
   ps.SetNetrunnerProxyID(evt.proxyID);
   ps.SetNetrunnerTargetID(evt.targetID);
-  if NotEquals(settings.linkLine, CENRevealMode.Hidden) {
+  if NotEquals(CEN_LinkLineMode(), CENRevealMode.Hidden) {
     ps.DrawBetweenEntities(true, false, this.GetFxResourceByKey(n"pingNetworkLink"), evt.to, evt.from, false, false, false, false);
   };
   this.ToggleForcedVisibilityInAnimSystem(n"pingNetworkLink", true, 0.00, evt.from);
@@ -485,7 +504,11 @@ protected cb func OnHackTargetEvent(evt: ref<HackTargetEvent>) -> Bool {
   if IsDefined(evt.objectRecord) {
     netrunner = GameInstance.FindEntityByID(this.GetGame(), evt.netrunnerID) as ScriptedPuppet;
     if IsDefined(netrunner) && AIActionHelper.CheckAbility(netrunner, TweakDBInterface.GetGameplayAbilityRecord(t"Ability.IsAVMaxTac")) {
-      swapped = EQF_DifficultyHack(evt.objectRecord.GetID(), GameInstance.GetStatsDataSystem(this.GetGame()).GetDifficulty());
+      let statsData = GameInstance.GetStatsDataSystem(this.GetGame());
+      if !IsDefined(statsData) {
+        return wrappedMethod(evt);
+      }
+      swapped = EQF_DifficultyHack(evt.objectRecord.GetID(), statsData.GetDifficulty());
       if TDBID.IsValid(swapped) && IsDefined(TweakDBInterface.GetObjectActionRecord(swapped)) {
         evt.objectRecord = TweakDBInterface.GetObjectActionRecord(swapped);
       };

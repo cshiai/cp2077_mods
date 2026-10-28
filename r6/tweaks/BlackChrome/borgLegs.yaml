@@ -1,0 +1,197 @@
+BaseStats.BorgDamageReductionFront:
+  $type: Stat
+  enumName: BorgDamageReductionFront
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1 
+
+BaseStats.BorgDamageReductionSide:
+  $type: Stat
+  enumName: BorgDamageReductionSide
+  flags: []
+  max: 1
+  min: 0
+  decimalPlaces: 1 
+
+BlackChrome.BorgLegs$(tier):
+  $instances:
+    - { tier: Uncommon, nextTier: BlackChrome.BorgLegsUncommonPlus, drF: 0.9, drS: 0.95, drDescFront: 10, drDescSide: 5 }
+    - { tier: UncommonPlus, nextTier: BlackChrome.BorgLegsRare, drF: 0.88, drS: 0.94, drDescFront: 12, drDescSide: 6}
+    - { tier: Rare, nextTier: BlackChrome.BorgLegsRarePlus, drF: 0.85, drS: 0.925, drDescFront: 15, drDescSide: 7.5}
+    - { tier: RarePlus, nextTier: BlackChrome.BorgLegsEpic, drF: 0.83, drS: 0.915, drDescFront: 17, drDescSide: 8.5}
+    - { tier: Epic, nextTier: BlackChrome.BorgLegsEpicPlus, drF: 0.8, drS: 0.9, drDescFront: 20, drDescSide: 10}
+    - { tier: EpicPlus, nextTier: BlackChrome.BorgLegsLegendary, drF: 0.78, drS: 0.89, drDescFront: 22, drDescSide: 11}
+    - { tier: Legendary, nextTier: BlackChrome.BorgLegsLegendaryPlus, drF: 0.75, drS: 0.875, drDescFront: 25, drDescSide: 12.5}
+    - { tier: LegendaryPlus, nextTier: BlackChrome.BorgLegsLegendaryPlusPlus, drF: 0.73, drS: 0.865, drDescFront: 27, drDescSide: 13.5}
+    - { tier: LegendaryPlusPlus, nextTier: None, drF: 0.7, drS: 0.85, drDescFront: 30, drDescSide: 15 }
+  $base: Items.IconicJenkinsTendons$(tier)
+  cyberwareType: BorgLegs
+  displayName: LocKey#blackchrome_borgLegs_name
+  localizedDescription: LocKey#blackchrome_borgLegs_flavor
+  nextUpgradeItem: $(nextTier)
+  variants: [Variants.Humanity18Cost]
+  tags: ['Cyberware', 'HideInBackpackUI']
+  icon:
+    atlasResourcePath: phoenicia\blackchrome\icons\preview_icons.inkatlas
+    atlasPartName: slot_02
+  buyPrice:
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Price.BuyPrice_StreetCred_Discount
+    - Items.AdvancedBoostedTendonsUncommon_inline4
+  sellPrice:
+    - Price.BaseCyberwarePrice
+    - Price.ItemQualityMultiplier
+    - Price.PlusTierMultiplier
+    - Price.CyberwareMultiplier
+    - Price.CyberwareSellMultiplier
+    - Items.AdvancedBoostedTendonsUncommon_inline3
+  statModifiers: 
+    - Items.ItemArmorToArmor
+    - Items.AdvancedLegsModule_inline0
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.IsItemIconic
+      value: 1
+    - $type: ConstantStatModifier
+      modifierType: Additive
+      statType: BaseStats.Armor
+      value: 80
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Self
+      refStat: BaseStats.Quality
+      statType: BaseStats.Armor
+      value: 30
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Self
+      refStat: BaseStats.IsItemPlus
+      statType: BaseStats.Armor
+      value: 30    
+    - $type: CombinedStatModifier
+      modifierType: Additive
+      opSymbol: '*'
+      refObject: Player
+      refStat: BaseStats.TechnicalAbility
+      statType: BaseStats.AttunementHelper
+      value: 1
+  OnEquip:
+    - $type: GameplayLogicPackage
+      effectors:
+        - $type: Effector
+          effectorClassName: Phoenicia.BlackChrome.FortressLegsEffector
+          prereqRecord: 
+            $type: HitPrereq
+            callbackType: HitReceived
+            conditions: 
+              - $type: HitPrereqCondition
+                type: Prereqs.AttackType
+                attackType: Ranged
+              - $type: HitPrereqCondition
+                type: Prereqs.WeaponType
+                weaponType: Ranged
+            ignoreSelfInflictedPressureWave: true
+            isSynchronous: true
+            pipelineStage: Process
+            pipelineType: Damage
+            prereqClassName: HitReceivedPrereq      
+        - $type: ApplyStatGroupEffector
+          applicationTarget: None
+          effectorClassName: ApplyStatGroupEffector
+          prereqRecord: Perks.IsPlayerCrouching
+          removeWithEffector: true
+          statGroup: 
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers:
+              - $type: ConstantStatModifier
+                modifierType: Multiplier
+                statType: BaseStats.MaxSpeed
+                value: 0.5
+        - $type: ApplyStatGroupEffector
+          applicationTarget: Weapon
+          effectorClassName: ApplyStatGroupEffector
+          prereqRecord: Perks.PlayerIsAiming
+          removeWithEffector: true
+          statGroup: 
+            $type: StatModifierGroup
+            statModsLimit: -1
+            statModifiers:
+              - $type: CombinedStatModifier
+                modifierType: AdditiveMultiplier
+                opSymbol: '*'
+                refObject: Player
+                refStat: BaseStats.TechnicalAbility
+                statType: BaseStats.RecoilKickMax
+                value: -0.01
+              - $type: CombinedStatModifier
+                modifierType: AdditiveMultiplier
+                opSymbol: '*'
+                refObject: Player
+                refStat: BaseStats.TechnicalAbility
+                statType: BaseStats.RecoilKickMin
+                value: -0.01   
+      stats:
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BorgDamageReductionFront
+          value: $(drF)
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.BorgDamageReductionSide
+          value: $(drS)         
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.CanUseCovers
+          value: 0
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.CanSprint
+          value: 0
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.HasDodge
+          value: 0
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.HasDodgeAir
+          value: 0
+        - $type: ConstantStatModifier
+          modifierType: Additive
+          statType: BaseStats.KnockdownImmunity
+          value: 1
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.MaxSpeed
+          value: 1.4
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.Acceleration
+          value: 0.15
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.Deceleration
+          value: 0.5
+        - $type: ConstantStatModifier
+          modifierType: Multiplier
+          statType: BaseStats.BrakeDot
+          value: 0.33
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        localizedDescription: LocKey#blackchrome_borgLegs_description
+        floatValues: [40, $(drDescFront), $(drDescSide)]
+    - $type: GameplayLogicPackage
+      UIData: 
+        $type: GameplayLogicPackageUIData
+        iconPath: UIIcon.TechnicalAbility
+        floatValues: [1]
+        localizedDescription: LocKey#blackchrome_borgLegs_attunement_description
+        localizedName: LocKey#94153
+        stats: 
+          - BaseStats.AttunementHelper

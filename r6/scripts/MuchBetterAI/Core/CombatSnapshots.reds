@@ -89,7 +89,14 @@ public class MBAI_CombatSnapshotSystem extends ScriptableSystem {
     query.includeSecondaryTargets = false;
     query.ignoreInstigator = true;
     let parts: array<TS_TargetPartInfo>;
-    GameInstance.GetTargetingSystem(this.GetGameInstance()).GetTargetParts(player, query, parts);
+    let targeting = GameInstance.GetTargetingSystem(this.GetGameInstance());
+    if !IsDefined(targeting) {
+      this.m_enemyCapturedAt = now;
+      this.m_enemyRefreshes += 1;
+      this.m_enemyValid = true;
+      return;
+    }
+    targeting.GetTargetParts(player, query, parts);
     let seen: array<EntityID>;
     let i: Int32 = 0;
     while i < ArraySize(parts) {
